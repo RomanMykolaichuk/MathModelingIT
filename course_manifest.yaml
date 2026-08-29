@@ -101,9 +101,9 @@ lessons:
     topic: 2
     lesson: 6
     title: "Системи комп'ютерної математики та їх можливості для математичного моделювання"
-    python_focus: [sympy, numpy, scipy, matplotlib]
-    practical_result: "Символьне рішення, чисельна перевірка та графічна інтерпретація"
-    status: planned
+    python_focus: [sympy, symbolic_algebra, differentiation, integration, lambdify, numpy, scipy.integrate, solve_ivp, matplotlib, pytest]
+    practical_result: "Symbolic ODE model -> equilibrium/closed-form solution -> differentiation/integration -> symbolic residual verification -> lambdify -> independent SciPy solve_ivp verification -> sensitivity experiment"
+    status: content_stable
 
   - id: t2_l7
     topic: 2
