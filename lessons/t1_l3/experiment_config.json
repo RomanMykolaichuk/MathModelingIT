@@ -1,0 +1,10 @@
+{
+  "seed": 2026,
+  "replications": 200,
+  "model": {
+    "baseline": 20.0,
+    "resource_gain": 1.8,
+    "load_penalty": 1.2,
+    "noise_sd": 4.0
+  }
+}
