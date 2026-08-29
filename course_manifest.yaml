@@ -93,9 +93,9 @@ lessons:
     topic: 2
     lesson: 5
     title: "Засоби розв’язування задач множинного вибору"
-    python_focus: [numpy, pandas, matplotlib]
-    practical_result: "Weighted Sum / TOPSIS та аналіз чутливості до ваг"
-    status: planned
+    python_focus: [numpy, pandas, matplotlib, wsm, topsis, mcda, sensitivity_analysis, dirichlet_robustness, pytest]
+    practical_result: "Decision matrix -> benefit/cost criteria -> normalization -> WSM/TOPSIS -> ranking comparison -> one-factor weight sensitivity -> stochastic robustness of top choice"
+    status: content_stable
 
   - id: t2_l6
     topic: 2
