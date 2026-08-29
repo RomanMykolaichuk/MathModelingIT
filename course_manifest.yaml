@@ -61,9 +61,9 @@ lessons:
     topic: 2
     lesson: 1
     title: "Задачі оптимізації в середовищі VS Code"
-    python_focus: [scipy.optimize, pulp, ortools, matplotlib]
-    practical_result: "Оптимальний розподіл обмежених ресурсів"
-    status: planned
+    python_focus: [numpy, scipy.optimize, pandas, matplotlib, pytest]
+    practical_result: "Оптимальний розподіл обмежених ресурсів, verification та sensitivity analysis"
+    status: content_stable
 
   - id: t2_l2
     topic: 2
