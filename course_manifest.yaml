@@ -85,9 +85,9 @@ lessons:
     topic: 2
     lesson: 4
     title: "Математичне моделювання із застосуванням методів мережевого планування"
-    python_focus: [networkx, pandas, matplotlib]
-    practical_result: "CPM/PERT, критичний шлях, резерви часу та сценарій затримки"
-    status: planned
+    python_focus: [networkx, pandas, numpy, cpm, pert, beta_pert, monte_carlo, matplotlib, pytest]
+    practical_result: "DAG -> CPM schedule -> critical path/slack -> delay scenarios -> PERT -> Monte Carlo project duration -> deadline probability and critical-path frequency"
+    status: content_stable
 
   - id: t2_l5
     topic: 2
