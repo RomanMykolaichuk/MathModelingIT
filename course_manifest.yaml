@@ -37,9 +37,9 @@ lessons:
     topic: 1
     lesson: 2
     title: "Класифікація математичних моделей"
-    python_focus: [numpy, random, matplotlib]
-    practical_result: "Порівняння детермінованої, стохастичної та динамічної моделей"
-    status: planned
+    python_focus: [numpy, random, matplotlib, monte_carlo, pytest]
+    practical_result: "Один об’єкт у детермінованій, стохастичній, дискретній динамічній та Monte Carlo моделях; comparison, reproducibility та scenario analysis"
+    status: content_stable
 
   - id: t1_l3
     topic: 1
