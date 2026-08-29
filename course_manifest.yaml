@@ -77,9 +77,9 @@ lessons:
     topic: 2
     lesson: 3
     title: "Математичні моделі задач нелінійного програмування"
-    python_focus: [scipy.optimize, sympy, matplotlib]
-    practical_result: "Нелінійна оптимізація, contour/surface visualization та sensitivity experiment"
-    status: planned
+    python_focus: [numpy, scipy.optimize, slsqp, multistart, grid_search, pandas, matplotlib, pytest]
+    practical_result: "Нелінійний розподіл ресурсу з diminishing returns -> SLSQP -> feasibility checks -> sensitivity analysis; non-convex multi-start -> grid-search verification -> contour visualization"
+    status: content_stable
 
   - id: t2_l4
     topic: 2
