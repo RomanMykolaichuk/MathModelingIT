@@ -1,0 +1,5 @@
+direction,effectiveness,unit_cost,minimum,maximum
+A,8,3,10,40
+B,6,2,15,35
+C,9,4,10,30
+D,5,1,5,25
