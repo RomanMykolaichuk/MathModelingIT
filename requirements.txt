@@ -7,5 +7,6 @@ networkx
 pulp
 ortools
 jupyter
+nbformat
 nbclient
 pytest
