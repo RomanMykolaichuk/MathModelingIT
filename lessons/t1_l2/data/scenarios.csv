@@ -1,0 +1,5 @@
+scenario,initial_stock,mean_consumption,std_consumption,horizon
+baseline,120,6.0,1.5,21
+stable_low_variance,120,6.0,0.5,21
+high_variance,120,6.0,3.0,21
+higher_mean,120,7.0,1.5,21
