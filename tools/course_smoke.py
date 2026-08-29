@@ -96,18 +96,24 @@ def execute_notebook(path: Path, root: Path, timeout: int) -> dict:
         resources={'metadata': {'path': str(path.parent)}},
         allow_errors=False,
     )
-    old = os.environ.get('MPLBACKEND')
+    old_backend = os.environ.get('MPLBACKEND')
+    old_pythonpath = os.environ.get('PYTHONPATH')
     os.environ['MPLBACKEND'] = 'Agg'
+    os.environ['PYTHONPATH'] = str(root) + (os.pathsep + old_pythonpath if old_pythonpath else '')
     try:
         client.execute()
         return {'notebook': str(path.relative_to(root)), 'ok': True, 'error': None}
     except Exception as exc:
         return {'notebook': str(path.relative_to(root)), 'ok': False, 'error': repr(exc)}
     finally:
-        if old is None:
+        if old_backend is None:
             os.environ.pop('MPLBACKEND', None)
         else:
-            os.environ['MPLBACKEND'] = old
+            os.environ['MPLBACKEND'] = old_backend
+        if old_pythonpath is None:
+            os.environ.pop('PYTHONPATH', None)
+        else:
+            os.environ['PYTHONPATH'] = old_pythonpath
 
 
 def run_notebooks(root: Path, timeout: int) -> list[dict]:
