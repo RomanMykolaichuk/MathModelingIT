@@ -1,0 +1,5 @@
+scenario,total_resource
+low,60
+medium,80
+baseline,100
+high,120
