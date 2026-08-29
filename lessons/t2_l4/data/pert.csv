@@ -1,0 +1,8 @@
+task,optimistic,most_likely,pessimistic
+A,3,4,6
+B,2,3,5
+C,4,5,8
+D,3,4,7
+E,4,6,9
+F,2,3,5
+G,1,2,4
