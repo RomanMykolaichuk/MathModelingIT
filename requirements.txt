@@ -1,0 +1,11 @@
+numpy
+pandas
+scipy
+matplotlib
+sympy
+networkx
+pulp
+ortools
+jupyter
+nbclient
+pytest
