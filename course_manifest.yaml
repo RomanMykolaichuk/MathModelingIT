@@ -3,7 +3,7 @@ course:
   audience: adjuncts
   language: uk
   computational_environment: Python
-  development_status: planning
+  development_status: in_development
   principle: "problem -> mathematical model -> Python model -> experiment -> visualization -> interpretation -> research conclusion"
 
 stack:
@@ -31,7 +31,7 @@ lessons:
     title: "Форма і принципи представлення математичних моделей"
     python_focus: [numpy, matplotlib, functions]
     practical_result: "Параметрична модель y=f(x, parameters) та серія обчислювальних експериментів"
-    status: planned
+    status: content_stable
 
   - id: t1_l2
     topic: 1
