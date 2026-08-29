@@ -2,6 +2,13 @@
 
 Навчальний репозиторій дисципліни з математичного моделювання для **ад’юнктів**.
 
+## Поточний статус
+
+- **11/11 офіційних занять:** `content_stable`;
+- **capstone:** сформований і локально перевірений;
+- **course-level QA:** автоматизований через GitHub Actions;
+- **presentation phase:** готова до початку після зеленого course-level CI.
+
 ## Концепція
 
 Дисципліна не перетворюється на окремий курс програмування Python. Python використовується як наскрізний інструмент реалізації та дослідження математичних моделей:
@@ -39,13 +46,18 @@
 1. **Навчально-обчислювальний контур** — зміст занять, Python-код, notebooks, дані, завдання, результати та мініпроєкти.
 2. **Презентаційний контур** — окремі презентації до кожного заняття, які створюються тільки після стабілізації змісту та практики відповідного заняття.
 
+Окремо сформований **capstone**, який інтегрує калібрування, оптимізацію, independent verification, sensitivity, uncertainty та reproducibility metadata в одному mini-research project.
+
 Докладніше:
 
 - [`docs/COURSE_TASK.md`](docs/COURSE_TASK.md) — зафіксоване завдання на розроблення дисципліни;
 - [`docs/DEVELOPMENT_PLAN.md`](docs/DEVELOPMENT_PLAN.md) — поетапний план реалізації;
 - [`docs/LESSON_STANDARD.md`](docs/LESSON_STANDARD.md) — єдиний стандарт одного заняття;
 - [`docs/PRESENTATION_WORKFLOW.md`](docs/PRESENTATION_WORKFLOW.md) — окремий процес створення презентацій;
-- [`course_manifest.yaml`](course_manifest.yaml) — перелік усіх 11 занять та їх програмна спрямованість.
+- [`docs/COURSE_QA.md`](docs/COURSE_QA.md) — course-level QA та reproducibility gate;
+- [`course_manifest.yaml`](course_manifest.yaml) — перелік усіх 11 занять, capstone і поточний статус;
+- [`capstone/`](capstone/) — підсумковий інтеграційний mini-research project;
+- [`tools/course_smoke.py`](tools/course_smoke.py) — повна структурна, тестова та notebook-перевірка курсу.
 
 ## Принцип розроблення
 
@@ -58,3 +70,21 @@
 `lesson content → slide narrative → presentation → visual QA`.
 
 Це дозволяє підтримувати відповідність між математичною моделлю, кодом, практичним завданням і презентаційним матеріалом.
+
+## Course-level QA
+
+Повна перевірка запускається командою:
+
+```bash
+python tools/course_smoke.py
+```
+
+GitHub Actions workflow `.github/workflows/course-ci.yml` перевіряє:
+
+- структуру всіх 11 lesson packages;
+- усі lesson tests;
+- виконання всіх `demo.ipynb`;
+- capstone tests і notebook;
+- відповідність manifest статусам `content_stable`.
+
+До презентацій переходять тільки після проходження цього gate.
