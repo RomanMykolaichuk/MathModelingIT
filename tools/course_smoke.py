@@ -57,8 +57,13 @@ def check_structure(root: Path) -> list[dict]:
         })
 
     manifest = (root / 'course_manifest.yaml').read_text(encoding='utf-8')
-    stable_count = len(re.findall(r'^\s*status:\s*content_stable\s*$', manifest, flags=re.MULTILINE))
-    results.append({'check': 'manifest_content_stable_count', 'value': stable_count, 'expected': 11, 'ok': stable_count == 11})
+    lesson_section = manifest.split('lessons:', 1)[1].split('capstone:', 1)[0]
+    stable_count = len(re.findall(r'^\s*status:\s*content_stable\s*$', lesson_section, flags=re.MULTILINE))
+    results.append({'check': 'lesson_content_stable_count', 'value': stable_count, 'expected': 11, 'ok': stable_count == 11})
+
+    capstone_section = manifest.split('capstone:', 1)[1].split('quality_gate:', 1)[0] if 'capstone:' in manifest else ''
+    capstone_status_ok = bool(re.search(r'^\s*status:\s*content_stable\s*$', capstone_section, flags=re.MULTILINE))
+    results.append({'check': 'capstone_manifest_status', 'expected': 'content_stable', 'ok': capstone_status_ok})
 
     capstone_required = [
         'README.md','CAPSTONE_TASK.md','RUBRIC.md','RESEARCH_PROTOCOL.md',
