@@ -1,0 +1,7 @@
+scenario,q,k,s0,horizon
+baseline,12,0.10,20,30
+low_loss,12,0.05,20,30
+moderate_loss,12,0.08,20,30
+high_loss,12,0.12,20,30
+very_high_loss,12,0.15,20,30
+high_inflow,15,0.10,20,30
