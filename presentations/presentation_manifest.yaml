@@ -1,0 +1,76 @@
+presentation_phase:
+  status: initial_pptx_pack_generated
+  language: uk
+  audience: adjuncts
+  style: academic_clean_minimal
+  deck_count: 11
+  slides_per_deck: 8
+  source_of_truth: lessons
+  generated_artifact: MathModelingIT_presentations_11_pptx.zip
+  visual_qa:
+    sampled_decks:
+      - t1_l1
+      - t2_l7
+    status: sampled_render_ok
+  deck_structure:
+    - title
+    - lesson_logic
+    - mathematical_model
+    - python_implementation
+    - computational_experiment
+    - verification_reproducibility
+    - practice_research_transfer
+    - summary
+
+decks:
+  - id: t1_l1
+    title: "Форма і принципи представлення математичних моделей"
+    status: initial_pptx_generated
+    core_message: "Від словесної постановки до Python-функції та інтерпретації результату."
+  - id: t1_l2
+    title: "Класифікація математичних моделей"
+    status: initial_pptx_generated
+    core_message: "Один об’єкт може мати детерміновану, стохастичну, дискретну та Monte Carlo реалізації."
+  - id: t1_l3
+    title: "Організація математичного моделювання"
+    status: initial_pptx_generated
+    core_message: "Відтворюваність є властивістю всього computational workflow."
+  - id: t1_l4
+    title: "Класифікація методів математичного моделювання"
+    status: initial_pptx_generated
+    core_message: "Метод обирається за структурою дослідницького питання і типом потрібного результату."
+  - id: t2_l1
+    title: "Задачі оптимізації в середовищі VS Code"
+    status: initial_pptx_generated
+    core_message: "Оптимізація вимагає цільової функції, обмежень і незалежної перевірки допустимості."
+  - id: t2_l2
+    title: "Математична модель транспортної задачі"
+    status: initial_pptx_generated
+    core_message: "Оптимальний транспортний план має задовольняти баланси й мінімізувати витрати."
+  - id: t2_l3
+    title: "Математичні моделі задач нелінійного програмування"
+    status: initial_pptx_generated
+    core_message: "Для нелінійних моделей success=True не гарантує глобальний оптимум."
+  - id: t2_l4
+    title: "Математичне моделювання із застосуванням методів мережевого планування"
+    status: initial_pptx_generated
+    core_message: "CPM дає критичний шлях, а PERT/Monte Carlo — ризик строків."
+  - id: t2_l5
+    title: "Засоби розв’язування задач множинного вибору"
+    status: initial_pptx_generated
+    core_message: "Рейтинг альтернатив залежить від критеріїв, ваг, нормалізації та методу."
+  - id: t2_l6
+    title: "Системи комп'ютерної математики та їх можливості для математичного моделювання"
+    status: initial_pptx_generated
+    core_message: "SymPy, NumPy і SciPy дають єдиний контур символічного та чисельного дослідження."
+  - id: t2_l7
+    title: "Використання систем комп’ютерної математики в наукових дослідженнях"
+    status: initial_pptx_generated
+    core_message: "Фінальний результат — відтворюваний ланцюг доказу від питання до висновку."
+
+next_steps:
+  - review_initial_decks
+  - replace generic charts with lesson-generated figures where needed
+  - expand speaker narratives
+  - run visual QA for all 11 decks
+  - decide whether to commit final pptx binaries or attach them as release artifacts
