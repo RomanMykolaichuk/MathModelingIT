@@ -1,0 +1,7 @@
+case,problem,expected_result,uncertainty,constraints,network_structure,multiple_criteria,recommended_method,python_tool
+A,Find zero of nonlinear function,number,no,no,no,no,numerical root,SciPy root_scalar
+B,Obtain exact roots of equation,formula,no,no,no,no,symbolic,SymPy
+C,Maximize benefit under resource constraints,optimum,no,yes,no,no,linear optimization,SciPy linprog
+D,Estimate probability of exceeding capacity,probability/ distribution,yes,no,no,no,Monte Carlo,NumPy
+E,Identify critical route in dependency graph,path,no,no,yes,no,network method,NetworkX
+F,Rank alternatives by cost time reliability,ranking,no,no,no,yes,MCDA weighted sum,pandas/NumPy
