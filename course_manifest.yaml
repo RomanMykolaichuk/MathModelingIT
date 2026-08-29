@@ -3,7 +3,9 @@ course:
   audience: adjuncts
   language: uk
   computational_environment: Python
-  development_status: in_development
+  development_status: content_complete
+  qa_status: automated_ci_enabled
+  presentation_status: ready_to_start
   principle: "problem -> mathematical model -> Python model -> experiment -> visualization -> interpretation -> research conclusion"
 
 stack:
@@ -112,6 +114,23 @@ lessons:
     python_focus: [numpy, pandas, scipy.optimize, least_squares, scipy.integrate, solve_ivp, bootstrap, sensitivity_analysis, matplotlib, jupyter, metadata, hashing, pytest, git]
     practical_result: "Research question -> hypothesis -> synthetic observations -> parameter calibration -> analytical prediction -> independent numerical verification -> batch scenarios -> bootstrap uncertainty -> sensitivity -> figures/tables/metadata -> reproducible scientific conclusion"
     status: content_stable
+
+capstone:
+  path: capstone
+  status: content_stable
+  practical_result: "Integrated mini-research project: calibration -> constrained optimization -> independent verification -> sensitivity -> bootstrap uncertainty -> reproducibility metadata -> scientific conclusion"
+
+quality_gate:
+  runner: tools/course_smoke.py
+  workflow: .github/workflows/course-ci.yml
+  checks:
+    - lesson_structure
+    - lesson_pytest
+    - demo_notebook_execution
+    - capstone_structure
+    - capstone_pytest
+    - capstone_notebook_execution
+  report_artifact: course-smoke-report
 
 presentation_policy:
   source_of_truth: lessons
