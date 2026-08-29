@@ -109,9 +109,9 @@ lessons:
     topic: 2
     lesson: 7
     title: "Використання систем комп’ютерної математики в наукових дослідженнях"
-    python_focus: [numpy, pandas, scipy, matplotlib, jupyter, git]
-    practical_result: "Завершений відтворюваний computational experiment"
-    status: planned
+    python_focus: [numpy, pandas, scipy.optimize, least_squares, scipy.integrate, solve_ivp, bootstrap, sensitivity_analysis, matplotlib, jupyter, metadata, hashing, pytest, git]
+    practical_result: "Research question -> hypothesis -> synthetic observations -> parameter calibration -> analytical prediction -> independent numerical verification -> batch scenarios -> bootstrap uncertainty -> sensitivity -> figures/tables/metadata -> reproducible scientific conclusion"
+    status: content_stable
 
 presentation_policy:
   source_of_truth: lessons
