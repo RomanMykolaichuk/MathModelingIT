@@ -45,9 +45,9 @@ lessons:
     topic: 1
     lesson: 3
     title: "Організація математичного моделювання"
-    python_focus: [python, pandas, jupyter, git]
-    practical_result: "Шаблон відтворюваного computational modeling project"
-    status: planned
+    python_focus: [python, numpy, pandas, jupyter, json_config, metadata, hashing, pytest, git]
+    practical_result: "Research question -> data/config -> model -> reproducible experiment -> verification -> outputs/metadata -> Git traceability"
+    status: content_stable
 
   - id: t1_l4
     topic: 1
