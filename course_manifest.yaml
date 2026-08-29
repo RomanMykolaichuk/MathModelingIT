@@ -69,9 +69,9 @@ lessons:
     topic: 2
     lesson: 2
     title: "Математична модель транспортної задачі"
-    python_focus: [pandas, numpy, pulp, ortools, matplotlib]
-    practical_result: "Оптимальний план перевезень і візуалізація потоків"
-    status: planned
+    python_focus: [pandas, numpy, pulp, scipy.optimize, matplotlib, pytest]
+    practical_result: "CSV -> транспортна LP-модель -> оптимальні потоки -> independent verification -> scenario analysis -> visualization"
+    status: content_stable
 
   - id: t2_l3
     topic: 2
