@@ -53,9 +53,9 @@ lessons:
     topic: 1
     lesson: 4
     title: "Класифікація методів математичного моделювання"
-    python_focus: [scipy, numpy, pandas, networkx]
-    practical_result: "Вибір методу та Python-інструменту за постановкою задачі"
-    status: planned
+    python_focus: [scipy.optimize, sympy, numpy, pandas, networkx, monte_carlo, mcda, pytest]
+    practical_result: "Method selection laboratory: problem structure -> method -> Python tool -> verification -> interpretation"
+    status: content_stable
 
   - id: t2_l1
     topic: 2
