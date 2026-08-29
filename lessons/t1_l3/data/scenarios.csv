@@ -1,0 +1,6 @@
+scenario_id,resource,load
+baseline,40,50
+resource_low,30,50
+resource_high,50,50
+load_low,40,35
+load_high,40,65
