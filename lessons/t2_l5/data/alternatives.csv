@@ -1,0 +1,5 @@
+alternative,cost,time,reliability,capacity,risk
+A,82,18,0.92,75,0.18
+B,70,22,0.88,90,0.25
+C,92,15,0.96,80,0.12
+D,76,20,0.90,85,0.20
