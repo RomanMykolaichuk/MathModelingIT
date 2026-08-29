@@ -1,0 +1,124 @@
+course:
+  id: math-modeling-it
+  audience: adjuncts
+  language: uk
+  computational_environment: Python
+  development_status: planning
+  principle: "problem -> mathematical model -> Python model -> experiment -> visualization -> interpretation -> research conclusion"
+
+stack:
+  core:
+    - python
+    - numpy
+    - pandas
+    - scipy
+    - matplotlib
+    - sympy
+    - networkx
+  optimization:
+    - pulp
+    - ortools
+  workflow:
+    - jupyter
+    - vscode
+    - git
+    - github
+
+lessons:
+  - id: t1_l1
+    topic: 1
+    lesson: 1
+    title: "Форма і принципи представлення математичних моделей"
+    python_focus: [numpy, matplotlib, functions]
+    practical_result: "Параметрична модель y=f(x, parameters) та серія обчислювальних експериментів"
+    status: planned
+
+  - id: t1_l2
+    topic: 1
+    lesson: 2
+    title: "Класифікація математичних моделей"
+    python_focus: [numpy, random, matplotlib]
+    practical_result: "Порівняння детермінованої, стохастичної та динамічної моделей"
+    status: planned
+
+  - id: t1_l3
+    topic: 1
+    lesson: 3
+    title: "Організація математичного моделювання"
+    python_focus: [python, pandas, jupyter, git]
+    practical_result: "Шаблон відтворюваного computational modeling project"
+    status: planned
+
+  - id: t1_l4
+    topic: 1
+    lesson: 4
+    title: "Класифікація методів математичного моделювання"
+    python_focus: [scipy, numpy, pandas, networkx]
+    practical_result: "Вибір методу та Python-інструменту за постановкою задачі"
+    status: planned
+
+  - id: t2_l1
+    topic: 2
+    lesson: 1
+    title: "Задачі оптимізації в середовищі VS Code"
+    python_focus: [scipy.optimize, pulp, ortools, matplotlib]
+    practical_result: "Оптимальний розподіл обмежених ресурсів"
+    status: planned
+
+  - id: t2_l2
+    topic: 2
+    lesson: 2
+    title: "Математична модель транспортної задачі"
+    python_focus: [pandas, numpy, pulp, ortools, matplotlib]
+    practical_result: "Оптимальний план перевезень і візуалізація потоків"
+    status: planned
+
+  - id: t2_l3
+    topic: 2
+    lesson: 3
+    title: "Математичні моделі задач нелінійного програмування"
+    python_focus: [scipy.optimize, sympy, matplotlib]
+    practical_result: "Нелінійна оптимізація, contour/surface visualization та sensitivity experiment"
+    status: planned
+
+  - id: t2_l4
+    topic: 2
+    lesson: 4
+    title: "Математичне моделювання із застосуванням методів мережевого планування"
+    python_focus: [networkx, pandas, matplotlib]
+    practical_result: "CPM/PERT, критичний шлях, резерви часу та сценарій затримки"
+    status: planned
+
+  - id: t2_l5
+    topic: 2
+    lesson: 5
+    title: "Засоби розв’язування задач множинного вибору"
+    python_focus: [numpy, pandas, matplotlib]
+    practical_result: "Weighted Sum / TOPSIS та аналіз чутливості до ваг"
+    status: planned
+
+  - id: t2_l6
+    topic: 2
+    lesson: 6
+    title: "Системи комп'ютерної математики та їх можливості для математичного моделювання"
+    python_focus: [sympy, numpy, scipy, matplotlib]
+    practical_result: "Символьне рішення, чисельна перевірка та графічна інтерпретація"
+    status: planned
+
+  - id: t2_l7
+    topic: 2
+    lesson: 7
+    title: "Використання систем комп’ютерної математики в наукових дослідженнях"
+    python_focus: [numpy, pandas, scipy, matplotlib, jupyter, git]
+    practical_result: "Завершений відтворюваний computational experiment"
+    status: planned
+
+presentation_policy:
+  source_of_truth: lessons
+  create_after_status: content_stable
+  required_artifacts:
+    - presentation_brief
+    - slide_plan
+    - narrative
+    - generated_figures
+    - pptx
