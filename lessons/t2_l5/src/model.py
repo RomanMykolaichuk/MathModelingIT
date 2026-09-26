@@ -28,8 +28,17 @@ def validate_inputs(
 ) -> None:
     if decision_matrix.empty:
         raise ValueError("Decision matrix must not be empty.")
-    if decision_matrix.isna().any().any():
-        raise ValueError("Decision matrix contains missing values.")
+
+    try:
+        matrix_values = decision_matrix.to_numpy(dtype=float)
+        weight_values = weights.to_numpy(dtype=float)
+    except (TypeError, ValueError) as exc:
+        raise ValueError("Decision matrix and weights must be numeric.") from exc
+
+    if not np.isfinite(matrix_values).all():
+        raise ValueError("Decision matrix must contain only finite values.")
+    if not np.isfinite(weight_values).all():
+        raise ValueError("Weights must contain only finite values.")
     if set(decision_matrix.columns) != set(weights.index):
         raise ValueError("Weights must match decision-matrix criteria.")
     if set(decision_matrix.columns) != set(criterion_types.keys()):
