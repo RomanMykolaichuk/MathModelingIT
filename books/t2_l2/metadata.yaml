@@ -1,0 +1,35 @@
+book_id: t2_l2
+title: "Математична модель транспортної задачі"
+subtitle: "Як перетворити мережу джерел і потреб на оптимальний потік"
+lesson_path: lessons/t2_l2
+language: uk
+audience: adjuncts
+status: validated_draft
+theory_level: intermediate
+estimated_reading_minutes: 75
+web_path: web/books/t2_l2/index.html
+python_package: lessons/t2_l2
+military_context: synthetic_non_sensitive
+canonical_source: books/t2_l2/book.md
+source_of_truth:
+  - lessons/t2_l2/README.md
+  - lessons/t2_l2/assignment.md
+  - lessons/t2_l2/src/model.py
+  - lessons/t2_l2/tests/test_model.py
+baseline:
+  total_supply: 125
+  total_demand: 125
+  total_cost: 515.0
+  plan:
+    S1: [30, 5, 0, 0]
+    S2: [0, 20, 30, 0]
+    S3: [0, 0, 5, 35]
+scenarios:
+  forbidden_S2_D3:
+    total_cost: 570.0
+  increase_S2_D3_cost_by_4:
+    total_cost: 570.0
+  increase_all_D4_costs_by_2:
+    total_cost: 585.0
+  shift_10_supply_S1_to_S3:
+    total_cost: 520.0
