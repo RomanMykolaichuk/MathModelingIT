@@ -163,3 +163,43 @@ body[data-mode="instructor"] .instructor-only { display: block; }
   .cycle-strip { grid-template-columns: 1fr; }
   .metric-row.two { grid-template-columns: 1fr; }
 }
+
+
+/* Mandatory pre-lab resources */
+.lab-resources {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: -8px 0 18px;
+  padding: 13px 15px;
+}
+.lab-resources-label {
+  margin-right: auto;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.resource-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 9px 13px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #0a1726;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 800;
+}
+.resource-button:hover { border-color: var(--accent-2); background: #10253a; }
+.resource-button.pdf-button { border-color: rgba(242,201,76,.5); }
+.resource-button.pdf-button:hover { border-color: var(--accent); }
+@media (max-width: 700px) {
+  .lab-resources { align-items: stretch; }
+  .lab-resources-label { width: 100%; }
+  .resource-button { width: 100%; }
+}
