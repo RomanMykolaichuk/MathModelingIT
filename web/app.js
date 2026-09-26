@@ -221,7 +221,7 @@ function topsis(weights) {
   names.forEach(n => {
     const db=Math.sqrt(keys.reduce((s,k)=>s+Math.pow(weighted[n][k]-best[k],2),0));
     const dw=Math.sqrt(keys.reduce((s,k)=>s+Math.pow(weighted[n][k]-worst[k],2),0));
-    scores[n]=(db+dw)===0?.5:dw/(db+dw);
+    scores[n]=(db+dw)===0 ? 0.5 : dw/(db+dw);
   });
   return scores;
 }
