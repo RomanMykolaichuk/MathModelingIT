@@ -14,3 +14,4 @@ nbclient==0.11.0
 pytest==9.1.1
 # Web PDF instruction generation
 reportlab==4.4.9
+Markdown==3.9
