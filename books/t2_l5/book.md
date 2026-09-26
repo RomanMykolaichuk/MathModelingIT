@@ -1830,6 +1830,318 @@ P(C\ objectively\ best).
   <figcaption><strong>Рис. 8.</strong> Сильний висновок MCDA пов’язує data, criterion types, weights і method із sensitivity/robustness та завершується allowed conclusion, а не абсолютним ярликом «best».</figcaption>
 </figure>
 
+## Поглиблення: один набір ваг — не завжди одна позиція організації
+
+У реальній організації weights можуть відображати не одну думку.
+
+Наприклад:
+
+- технічний фахівець може більше цінувати reliability;
+- фінансовий — cost;
+- користувач — time або usability;
+- керівник — risk та strategic fit.
+
+Якщо просто усереднити всі preferences, можна приховати конфлікт.
+
+Припустимо:
+
+\[
+w^{(1)}
+\]
+
+— weights групи 1,
+
+а:
+
+\[
+w^{(2)}
+\]
+
+— weights групи 2.
+
+Якщо rankings різні, це важливий результат.
+
+Проблема не обов’язково в тому, що «хтось неправий».
+
+Можливо, groups мають різні value models.
+
+Тоді MCDA корисна як інструмент:
+
+> зробити disagreement явним.
+
+---
+
+## Поглиблення: group decision і scenario families
+
+Замість одного average vector можна створити кілька scenarios.
+
+### Scenario A — cost focused
+
+Вищі weights:
+
+- cost;
+- time.
+
+### Scenario B — reliability focused
+
+Вищі:
+
+- reliability;
+- risk.
+
+### Scenario C — balanced
+
+Baseline-like weights.
+
+Потім порівнюємо:
+
+- winner;
+- ranking;
+- score gaps;
+- stability.
+
+Якщо одна alternative top у всіх scenarios, conclusion stronger.
+
+Якщо winner змінюється, decision залежить від stakeholder priorities.
+
+Це не слабкість MCDA.
+
+Це **інформація про структуру рішення**.
+
+---
+
+## Поглиблення: score gap важливий не менше за місце
+
+Припустимо:
+
+\[
+S_C=0.617,
+\]
+
+\[
+S_D=0.616.
+\]
+
+Формально:
+
+\[
+C>D.
+\]
+
+Але difference:
+
+\[
+0.001.
+\]
+
+Такий ranking значно менш стійкий, ніж ситуація:
+
+\[
+0.617\ vs\ 0.420.
+\]
+
+Тому поряд із rank варто показувати:
+
+- score;
+- score gap;
+- sensitivity;
+- uncertainty.
+
+Позиція «1 місце» без distance to runner-up може перебільшувати впевненість.
+
+---
+
+## Поглиблення: missing values
+
+Що робити, якщо для alternative немає оцінки за criterion?
+
+Наприклад:
+
+\[
+x_{A,risk}=NaN.
+\]
+
+Найгірший підхід:
+
+> тихо замінити NaN нулем.
+
+Бо нуль може означати:
+
+- найкращий risk;
+- найгірший;
+- реальне measured value.
+
+Missingness — окрема інформація.
+
+Можливі стратегії:
+
+- зібрати data;
+- виключити criterion;
+- виключити alternative;
+- imputation з явним method;
+- scenario bounds.
+
+У будь-якому випадку рішення повинно бути задокументоване.
+
+Current Python implementation правильно відхиляє non-finite input, замість того щоб мовчки створити ranking.
+
+---
+
+## Поглиблення: data quality і false precision
+
+Припустимо reliability записана:
+
+\[
+0.9237.
+\]
+
+Але її джерело — експертна оцінка «приблизно 0.92».
+
+Тоді чотири decimal places у matrix не означають чотири decimal places knowledge.
+
+Це **false precision**.
+
+Кількість цифр у model input повинна відповідати якості джерела.
+
+Те саме стосується weights.
+
+Якщо stakeholder сказав:
+
+> reliability десь удвічі важливіша за risk,
+
+можливо, sensitivity interval чесніший за:
+
+\[
+w_{rel}=0.247,\quad
+w_{risk}=0.123.
+\]
+
+---
+
+## Поглиблення: provenance criteria
+
+Для кожного criterion корисно мати mini-passport:
+
+~~~text
+Criterion:
+Meaning:
+Unit:
+Type: benefit/cost
+Data source:
+Measurement date:
+Uncertainty:
+Aggregation:
+Missing-data rule:
+Reason for inclusion:
+Potential overlap with other criteria:
+~~~
+
+Це особливо важливо для dissertation work.
+
+Decision matrix без provenance — лише числа.
+
+Decision matrix з provenance — частина reproducible research artifact.
+
+---
+
+## Поглиблення: model audit перед recommendation
+
+Перед фінальним conclusion перевірте чотири рівні.
+
+### 1. Semantic audit
+
+- criterion names зрозумілі?
+- directions correct?
+- немає double counting?
+- alternatives порівнювані?
+
+### 2. Numerical audit
+
+- values finite?
+- weights sum to 1?
+- normalization verified?
+- baseline tests pass?
+
+### 3. Stability audit
+
+- sensitivity виконано?
+- alternative set changes tested?
+- uncertainty model documented?
+
+### 4. Interpretation audit
+
+- ranking не названий objective truth?
+- robustness share не названо probability of real-world correctness?
+- limitations stated?
+
+Такий audit робить MCDA defensible.
+
+---
+
+## Поглиблення: людський контроль після ranking
+
+Після отримання:
+
+\[
+C>D>B>A
+\]
+
+не потрібно автоматично завершувати analysis.
+
+Навпаки, ranking відкриває нові питання.
+
+### Чому C перша?
+
+Через які contributions?
+
+### Чому A і D міняються місцями між methods?
+
+Яка геометрія TOPSIS і linear aggregation WSM це створила?
+
+### Що має змінитися, щоб B стала першою?
+
+Sensitivity дає відповідь.
+
+### Які assumptions найслабші?
+
+Можливо, weights.
+
+### Чи є constraints поза MCDA?
+
+Якщо так, ranking — лише частина decision support.
+
+У цьому сенсі алгоритм не закриває decision process.
+
+Він робить його більш структурованим.
+
+---
+
+## Поглиблення: напівхудожнє повернення до сцени
+
+На нараді знову звучить:
+
+> «То C найкраща?»
+
+Аналітик уже не відповідає одним словом.
+
+Він каже:
+
+> «C перша за baseline WSM і TOPSIS. Але methods по-різному розташовують A, D і B. Якщо weight reliability знизити до 0.10, WSM ставить B першою. При stochastic perturbation weights C залишається першою приблизно у 94% WSM і 85% TOPSIS runs».
+
+Тепер рішення виглядає інакше.
+
+Не:
+
+> «Комп’ютер вибрав C».
+
+А:
+
+> «Модель показала, за яких preference assumptions C є стійким leader і де цей conclusion починає змінюватися».
+
+Саме це є зрілою аналітичною відповіддю.
+
+---
+
 ## 41. Типові помилки мислення
 
 ### Помилка 1. «C — об’єктивно найкраща»
