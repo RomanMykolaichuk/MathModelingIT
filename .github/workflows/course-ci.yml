@@ -33,6 +33,13 @@ jobs:
           test -s web/lab-engine.js
           test -s web/app.js
           test -s web/control-cases.json
+          test -s web/instructions/t1_l1_lab_instruction.pdf
+          test -s web/instructions/t2_l4_lab_instruction.pdf
+          test -s web/instructions/t2_l5_lab_instruction.pdf
+          grep -q 'target="_blank".*Теоретичний матеріал' web/index.html || grep -q 'Теоретичний матеріал ↗' web/index.html
+          grep -q 'instructions/t1_l1_lab_instruction.pdf' web/index.html
+          grep -q 'instructions/t2_l4_lab_instruction.pdf' web/index.html
+          grep -q 'instructions/t2_l5_lab_instruction.pdf' web/index.html
           node --check web/course-catalog.js
           node --check web/lab-engine.js
           node --check web/app.js
