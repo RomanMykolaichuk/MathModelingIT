@@ -1,0 +1,37 @@
+book_id: t2_l4
+title: "Математичне моделювання із застосуванням методів мережевого планування"
+subtitle: "Критичний шлях, резерв часу і невизначені строки"
+lesson_path: lessons/t2_l4
+language: uk
+audience: adjuncts
+status: validated_draft
+theory_level: intermediate
+estimated_reading_minutes: 70
+lab_anchor: network
+web_path: web/books/t2_l4/index.html
+python_package: lessons/t2_l4
+military_context: synthetic_non_sensitive
+canonical_source: books/t2_l4/book.md
+source_of_truth:
+  - lessons/t2_l4/README.md
+  - lessons/t2_l4/assignment.md
+  - lessons/t2_l4/src/model.py
+  - lessons/t2_l4/tests/test_network.py
+baseline:
+  project_duration: 17
+  critical_path: "A -> C -> E -> G"
+  slack:
+    B: 6
+    D: 4
+    F: 4
+delay_scenarios:
+  C_plus_3:
+    project_duration: 20
+  D_plus_3:
+    project_duration: 17
+monte_carlo:
+  n: 3000
+  seed: 2026
+  mean_project_duration_approx: 17.86
+  p90_approx: 19.69
+  probability_finish_by_19_approx: 0.79
