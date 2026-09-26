@@ -6,6 +6,10 @@ on:
       - main
     paths:
       - "web/**"
+      - "books/**"
+      - "tools/build_minibooks.py"
+      - "tools/generate_lab_pdfs.py"
+      - "requirements.txt"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -38,8 +42,9 @@ jobs:
       - name: Generate PDF lab instructions
         run: |
           python -m pip install --upgrade pip
-          pip install reportlab==4.4.9
+          pip install reportlab==4.4.9 Markdown==3.9
           python tools/generate_lab_pdfs.py
+          python tools/build_minibooks.py
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
