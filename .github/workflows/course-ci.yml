@@ -28,6 +28,7 @@ jobs:
       - name: Validate web lab
         run: |
           python tools/generate_lab_pdfs.py
+          python tools/build_minibooks.py
           test -s web/index.html
           test -s web/styles.css
           test -s web/course-catalog.js
@@ -37,7 +38,12 @@ jobs:
           test -s web/instructions/t1_l1_lab_instruction.pdf
           test -s web/instructions/t2_l4_lab_instruction.pdf
           test -s web/instructions/t2_l5_lab_instruction.pdf
-          grep -q 'target="_blank".*Теоретичний матеріал' web/index.html || grep -q 'Теоретичний матеріал ↗' web/index.html
+          grep -q 'Конспект ↗' web/index.html
+          grep -q 'Теорія · MiniBook ↗' web/index.html
+          test -s books/t1_l1/book.md
+          test -s books/t1_l1/metadata.yaml
+          test -s web/books/t1_l1/index.html
+          test -s web/books/t1_l1/figures/fig_03_baseline_scenario.svg
           grep -q 'instructions/t1_l1_lab_instruction.pdf' web/index.html
           grep -q 'instructions/t2_l4_lab_instruction.pdf' web/index.html
           grep -q 'instructions/t2_l5_lab_instruction.pdf' web/index.html
