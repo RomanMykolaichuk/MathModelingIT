@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="MathModelingIT Lab — інтерактивний браузерний пілот математичного моделювання.">
+  <title>MathModelingIT Lab</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <div>
+        <p class="eyebrow">MATHMODELINGIT · INTERACTIVE PILOT</p>
+        <h1>Від припущення до доказу</h1>
+        <p class="lead">Прогнозуйте результат, змінюйте модель, спостерігайте наслідки та пояснюйте, коли висновку вже не можна довіряти.</p>
+      </div>
+      <div class="hero-badge">
+        <strong>3 лабораторії</strong>
+        <span>GitHub Pages · без бекенду</span>
+      </div>
+    </div>
+  </header>
+
+  <nav class="lab-nav" aria-label="Навігація лабораторіями">
+    <a href="#resource">T1.L1 · Ресурс</a>
+    <a href="#network">T2.L4 · Мережа</a>
+    <a href="#mcda">T2.L5 · Вибір</a>
+    <a href="#passport">Паспорт моделі</a>
+  </nav>
+
+  <main>
+    <section class="intro panel">
+      <div>
+        <span class="step">1</span><strong>Спрогнозуйте</strong><p>Що станеться до запуску?</p>
+      </div>
+      <div>
+        <span class="step">2</span><strong>Експериментуйте</strong><p>Змінюйте один параметр за раз.</p>
+      </div>
+      <div>
+        <span class="step">3</span><strong>Поясніть</strong><p>Чому результат змінився?</p>
+      </div>
+      <div>
+        <span class="step">4</span><strong>Зламайте модель</strong><p>Знайдіть межу її придатності.</p>
+      </div>
+    </section>
+
+    <section id="resource" class="lab-section">
+      <div class="section-heading">
+        <div><p class="eyebrow">T1.L1</p><h2>Ресурсна модель</h2></div>
+        <p>Коли математично правильна формула дає беззмістовний результат?</p>
+      </div>
+      <div class="grid-two">
+        <article class="panel controls">
+          <h3>Керування параметрами</h3>
+          <label>Початковий запас S₀ <output id="resource-s0-out"></output>
+            <input id="resource-s0" type="range" min="20" max="200" step="5" value="120">
+          </label>
+          <label>Базова витрата v₁ <output id="resource-rate-a-out"></output>
+            <input id="resource-rate-a" type="range" min="0" max="16" step="1" value="8">
+          </label>
+          <label>Сценарій v₂ <output id="resource-rate-b-out"></output>
+            <input id="resource-rate-b" type="range" min="0" max="16" step="1" value="5">
+          </label>
+          <label>Горизонт t <output id="resource-horizon-out"></output>
+            <input id="resource-horizon" type="range" min="5" max="40" step="1" value="20">
+          </label>
+          <label class="toggle"><input id="resource-clamp" type="checkbox" checked> Заборонити від’ємний ресурс</label>
+          <div class="prediction">
+            <label>Ваш прогноз перед запуском
+              <input id="resource-prediction" type="text" placeholder="Напр.: v₂ продовжить час роботи">
+            </label>
+          </div>
+          <button data-export="resource">Експорт JSON</button>
+        </article>
+        <article class="panel">
+          <div class="metric-row">
+            <div><span>t* базовий</span><strong id="resource-ta">—</strong></div>
+            <div><span>t* сценарій</span><strong id="resource-tb">—</strong></div>
+            <div><span>Δ часу</span><strong id="resource-delta">—</strong></div>
+          </div>
+          <div id="resource-chart" class="chart" aria-label="Графік ресурсу"></div>
+          <p id="resource-insight" class="insight"></p>
+          <details><summary>Формула і припущення</summary>
+            <p><code>S(t)=max(0,S₀-vt)</code> у фізично обмеженій версії.</p>
+            <p>Припущення: стала витрата, немає поповнення, параметри відомі точно.</p>
+          </details>
+        </article>
+      </div>
+      <label class="done"><input type="checkbox" data-progress="resource"> Я можу пояснити, коли ця модель стає непридатною.</label>
+    </section>
+
+    <section id="network" class="lab-section">
+      <div class="section-heading">
+        <div><p class="eyebrow">T2.L4</p><h2>Мережеве планування</h2></div>
+        <p>Чому затримка однієї роботи змінює весь проєкт, а іншої — ні?</p>
+      </div>
+      <div class="grid-two">
+        <article class="panel controls">
+          <h3>Delay experiment</h3>
+          <label>Робота
+            <select id="delay-task">
+              <option>A</option><option>B</option><option selected>C</option>
+              <option>D</option><option>E</option><option>F</option><option>G</option>
+            </select>
+          </label>
+          <label>Додаткова затримка <output id="delay-out"></output>
+            <input id="delay-value" type="range" min="0" max="8" step="1" value="0">
+          </label>
+          <div class="challenge">
+            <strong>Перед запуском:</strong>
+            <p>Чи збільшить обрана затримка загальну тривалість проєкту?</p>
+          </div>
+          <button data-export="network">Експорт JSON</button>
+        </article>
+        <article class="panel">
+          <div class="metric-row">
+            <div><span>Тривалість</span><strong id="project-duration">—</strong></div>
+            <div><span>Критичний шлях</span><strong id="critical-path">—</strong></div>
+          </div>
+          <div id="network-svg" class="chart network-chart"></div>
+          <div id="gantt" class="gantt"></div>
+          <p id="network-insight" class="insight"></p>
+        </article>
+      </div>
+      <label class="done"><input type="checkbox" data-progress="network"> Я можу пояснити різницю між тривалістю роботи та її резервом.</label>
+    </section>
+
+    <section id="mcda" class="lab-section">
+      <div class="section-heading">
+        <div><p class="eyebrow">T2.L5</p><h2>Множинний вибір</h2></div>
+        <p>Наскільки «переможець» залежить від ваг і методу агрегування?</p>
+      </div>
+      <div class="grid-two">
+        <article class="panel controls">
+          <h3>Чутливість до ваги reliability</h3>
+          <label>Вага reliability <output id="reliability-out"></output>
+            <input id="reliability-weight" type="range" min="0.10" max="0.45" step="0.01" value="0.25">
+          </label>
+          <div id="weights-view" class="weights-view"></div>
+          <div class="challenge">
+            <strong>Зламай рішення:</strong>
+            <p>Знайдіть вагу, за якої WSM змінить лідера. Чи зробить те саме TOPSIS?</p>
+          </div>
+          <button data-export="mcda">Експорт JSON</button>
+        </article>
+        <article class="panel">
+          <div class="ranking-grid">
+            <div><span>WSM</span><ol id="wsm-ranking"></ol></div>
+            <div><span>TOPSIS</span><ol id="topsis-ranking"></ol></div>
+          </div>
+          <div id="mcda-bars" class="bar-chart"></div>
+          <p id="mcda-insight" class="insight"></p>
+          <details><summary>Чому методи можуть не погоджуватися?</summary>
+            <p>WSM агрегує нормалізовані оцінки лінійно. TOPSIS оцінює відстані до ідеальної та антиідеальної точок. Тому однакові дані й ваги не гарантують однакового ranking.</p>
+          </details>
+        </article>
+      </div>
+      <label class="done"><input type="checkbox" data-progress="mcda"> Я можу сформулювати висновок без твердження «об’єктивно найкраща альтернатива».</label>
+    </section>
+
+    <section id="passport" class="lab-section">
+      <div class="section-heading">
+        <div><p class="eyebrow">CAPSTONE THREAD</p><h2>Паспорт власної моделі</h2></div>
+        <p>Накопичуйте дослідницьку логіку протягом курсу.</p>
+      </div>
+      <article class="panel passport">
+        <label>Дослідницьке питання<textarea id="p-question"></textarea></label>
+        <label>Змінні та параметри<textarea id="p-variables"></textarea></label>
+        <label>Ключові припущення<textarea id="p-assumptions"></textarea></label>
+        <label>Дані / джерело даних<textarea id="p-data"></textarea></label>
+        <label>Як перевірятиму модель<textarea id="p-verification"></textarea></label>
+        <label>Межі застосовності<textarea id="p-limits"></textarea></label>
+        <div class="actions">
+          <button id="passport-save">Зберегти локально</button>
+          <button id="passport-export" class="secondary">Експорт паспорта</button>
+          <span id="passport-status" aria-live="polite"></span>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <p><strong>MathModelingIT Lab</strong> · браузерний шар для швидкого експерименту. Повні дослідження та source of truth залишаються у Python/notebooks репозиторію.</p>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>
