@@ -1664,6 +1664,218 @@ Allowed conclusion повинен зберігати умови.
 
 ---
 
+## Поглиблення: criticality не дорівнює управлінській важливості
+
+У CPM слово **critical** має дуже конкретний математичний зміст:
+
+\[
+Slack_i=0.
+\]
+
+Але в реальному управлінні робота може бути надзвичайно важливою й водночас мати positive slack.
+
+Наприклад, робота B може бути пов’язана з quality assurance або безпековою перевіркою. У baseline network вона має:
+
+\[
+Slack_B=6.
+\]
+
+Це не означає:
+
+> B неважлива.
+
+Це означає лише:
+
+> її календарний старт/finish у поточному baseline має часову гнучкість без збільшення project duration.
+
+Тому потрібно розрізняти:
+
+- **schedule criticality**;
+- **mission/business importance**;
+- **risk importance**;
+- **resource importance**.
+
+CPM вимірює перше.
+
+Він не автоматично вимірює інші три.
+
+Це особливо важливо в військових і організаційних процесах: робота може не визначати строк, але визначати якість, відповідність вимогам або безпечність результату.
+
+---
+
+## Поглиблення: near-critical path
+
+Припустимо, є два шляхи:
+
+\[
+P_1=17,
+\]
+
+\[
+P_2=16.8.
+\]
+
+Формально critical path:
+
+\[
+P_1.
+\]
+
+Але різниця лише:
+
+\[
+0.2.
+\]
+
+За uncertainty durations другий шлях дуже легко стане найдовшим.
+
+Тому в stochastic setting корисно дивитися не лише на:
+
+- strict critical path;
+
+а й на:
+
+- near-critical paths;
+- small-slack tasks;
+- frequency of path criticality.
+
+У науковій інтерпретації це дозволяє уникнути надмірної категоричності:
+
+> baseline critical path A-C-E-G, однак декілька near-critical routes можуть конкурувати за stochastic durations.
+
+---
+
+## Поглиблення: модель і дані про тривалість
+
+Duration \(d_i\) може походити з різних джерел:
+
+- норматив;
+- historical data;
+- expert estimate;
+- experimental measurement;
+- simulation;
+- synthetic teaching assumption.
+
+Ці джерела не еквівалентні.
+
+Якщо duration — expert estimate, потрібно зберігати:
+
+- хто оцінював;
+- за яких умов;
+- який horizon;
+- яка uncertainty;
+- чи були comparable cases.
+
+Якщо duration — historical mean, варто перевірити:
+
+- distribution;
+- outliers;
+- sample size;
+- regime changes.
+
+Якщо duration synthetic — це потрібно явно зазначити.
+
+Отже, хороша мережева модель має не лише graph, а **data provenance**.
+
+---
+
+## Поглиблення: що означає «deadline = 19»
+
+Deadline у моделі повинен мати предметний зміст.
+
+Можливі варіанти:
+
+- жорстка зовнішня дата;
+- внутрішня ціль;
+- threshold для comparison scenarios;
+- умовний навчальний benchmark.
+
+Якщо deadline обраний довільно лише для того, щоб порахувати probability, результат має слабку практичну інтерпретацію.
+
+Тому перед:
+
+\[
+P(T\le19)
+\]
+
+потрібно пояснити:
+
+> чому саме 19 є meaningful threshold.
+
+У навчальному dataset 19 — контрольний deadline для демонстрації методу.
+
+У research transfer threshold має бути обґрунтований предметно.
+
+---
+
+## Поглиблення: model audit перед висновком
+
+Перед фінальною фразою про строки пройдіть audit.
+
+### Structure audit
+
+- усі tasks включені?
+- dependencies повні?
+- немає циклів?
+- dependencies мають зрозумілу семантику?
+
+### Parameter audit
+
+- durations мають джерело?
+- uncertainty intervals обґрунтовані?
+- PERT assumptions зрозумілі?
+
+### Computation audit
+
+- baseline tests проходять?
+- seed зафіксований?
+- n simulations достатній для стабільного estimate?
+
+### Interpretation audit
+
+- probability не називається guarantee?
+- slack не називається «вільним часом у будь-якому сценарії»?
+- criticality не підміняє предметну importance?
+
+### Reproducibility audit
+
+- data;
+- config;
+- code;
+- version;
+- outputs
+
+збережені?
+
+Якщо на ці питання є відповіді, network model стає не просто планувальним графіком, а науково контрольованим computational artifact.
+
+---
+
+## Поглиблення: напівхудожнє повернення до сцени
+
+Повернімося до навчального заходу.
+
+Керівник бачить число 17 і каже:
+
+> «Добре. Значить, закінчимо за 17».
+
+Аналітик відповідає:
+
+> «За baseline durations — так. Але C не має резерву. D має чотири одиниці baseline slack. Якщо durations uncertain, mean уже близько 17.86, а P90 — близько 19.69. Для deadline 19 наш model estimate близько 0.79».
+
+Тепер у розмові є кілька рівнів:
+
+- deterministic plan;
+- local reserve;
+- uncertainty;
+- deadline risk.
+
+Це і є зріле використання моделі.
+
+Не «одне число замість думання», а **структура для кращого думання**.
+
+---
+
 ## 30. Типові помилки мислення
 
 ### Помилка 1. «Найдовша робота є критичною»
