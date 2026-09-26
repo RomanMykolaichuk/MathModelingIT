@@ -5,6 +5,8 @@ globalThis.MathModelingCatalog = [
     id:"t1_l1", code:"T1.L1", topic:1,
     title:"Форма і принципи представлення математичних моделей",
     status:"interactive", anchor:"#resource",
+    theoryUrl:"https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t1_l1/README.md",
+    instructionPdf:"instructions/t1_l1_lab_instruction.pdf",
     challenge:"Коли математично правильна формула дає беззмістовний результат?",
     transfer:"Виділіть змінні, параметри, припущення та межі власної дослідницької моделі."
   },
@@ -54,6 +56,8 @@ globalThis.MathModelingCatalog = [
     id:"t2_l4", code:"T2.L4", topic:2,
     title:"Математичне моделювання із застосуванням методів мережевого планування",
     status:"interactive", anchor:"#network",
+    theoryUrl:"https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t2_l4/README.md",
+    instructionPdf:"instructions/t2_l4_lab_instruction.pdf",
     challenge:"Чому затримка однієї роботи змінює строк проєкту, а іншої — ні?",
     transfer:"Перетворіть етапи власного дослідження на DAG і знайдіть bottleneck."
   },
@@ -61,6 +65,8 @@ globalThis.MathModelingCatalog = [
     id:"t2_l5", code:"T2.L5", topic:2,
     title:"Засоби розв’язування задач множинного вибору",
     status:"interactive", anchor:"#mcda",
+    theoryUrl:"https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t2_l5/README.md",
+    instructionPdf:"instructions/t2_l5_lab_instruction.pdf",
     challenge:"Наскільки лідер залежить від ваг і способу агрегування?",
     transfer:"Перевірте, чи є ваш висновок стійким до зміни ваг і методу."
   },
