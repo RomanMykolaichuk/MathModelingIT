@@ -25,12 +25,19 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Validate web pilot
+      - name: Validate web lab
         run: |
           test -s web/index.html
           test -s web/styles.css
+          test -s web/course-catalog.js
+          test -s web/lab-engine.js
           test -s web/app.js
+          test -s web/control-cases.json
+          node --check web/course-catalog.js
+          node --check web/lab-engine.js
           node --check web/app.js
+          node web/control-cases.test.js
+          python tools/verify_web_control_cases.py
 
       - name: Run full course smoke check
         env:
