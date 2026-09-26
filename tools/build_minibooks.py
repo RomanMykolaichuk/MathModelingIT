@@ -10,6 +10,28 @@ ROOT = Path(__file__).resolve().parents[1]
 BOOKS = ROOT / "books"
 WEB = ROOT / "web"
 
+MATH_DELIMITER_TOKENS = {
+    r"\[": "MMITMATHDISPLAYOPEN9X",
+    r"\]": "MMITMATHDISPLAYCLOSE9X",
+    r"\(": "MMITMATHINLINEOPEN9X",
+    r"\)": "MMITMATHINLINECLOSE9X",
+}
+
+
+def protect_math_delimiters(text: str) -> str:
+    """Protect MathJax delimiters from Python-Markdown backslash escaping."""
+    for delimiter, token in MATH_DELIMITER_TOKENS.items():
+        text = text.replace(delimiter, token)
+    return text
+
+
+def restore_math_delimiters(text: str) -> str:
+    """Restore MathJax delimiters after Markdown conversion."""
+    for delimiter, token in MATH_DELIMITER_TOKENS.items():
+        text = text.replace(token, delimiter)
+    return text
+
+
 PUBLISHED = {
     "t1_l1": {
         "title": "T1.L1 — Форма і принципи представлення математичних моделей",
@@ -39,8 +61,9 @@ def build_book(book_id: str, config: dict[str, str]) -> Path:
         extension_configs={"toc": {"permalink": True, "toc_depth": "1-3"}},
         output_format="html5",
     )
-    body = md.convert(source.read_text(encoding="utf-8"))
-    toc = md.toc
+    source_text = protect_math_delimiters(source.read_text(encoding="utf-8"))
+    body = restore_math_delimiters(md.convert(source_text))
+    toc = restore_math_delimiters(md.toc)
 
     html = f"""<!doctype html>
 <html lang="uk">
