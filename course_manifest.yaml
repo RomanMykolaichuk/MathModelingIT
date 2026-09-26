@@ -143,6 +143,33 @@ web_lab:
   python_parity_check: tools/verify_web_control_cases.py
   node_parity_check: web/control-cases.test.js
 
+minibooks:
+  path: books
+  count: 11
+  language: uk
+  audience: adjuncts
+  technical_spec: books/TECHNICAL_SPEC.md
+  canonical_source: book.md
+  style: semi_literary_explanatory
+  context: synthetic_non_sensitive_military_examples
+  required_elements:
+    - problem_scene
+    - intuitive_model
+    - formalization
+    - formulas_with_explanations
+    - graphs_and_visualizations
+    - military_case
+    - computational_experiment
+    - short_python_examples
+    - break_the_model
+    - common_misconceptions
+    - lab_bridge
+    - python_bridge
+    - research_transfer
+    - one_page_summary
+  planned_outputs: [web, pdf]
+  development_order: [t1_l1, t2_l4, t2_l5, t2_l1, t2_l2, t2_l3, t1_l2, t1_l3, t2_l6, t1_l4, t2_l7]
+
 quality_gate:
   runner: tools/course_smoke.py
   workflow: .github/workflows/course-ci.yml

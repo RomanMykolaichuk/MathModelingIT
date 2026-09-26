@@ -100,3 +100,20 @@ GitHub Actions workflow `.github/workflows/course-ci.yml` перевіряє:
 Ключовий принцип: Python/notebooks залишаються source of truth. Файл `web/control-cases.json` задає спільні контрольні сценарії, які Course CI перевіряє і через Node, і через Python (`tools/verify_web_control_cases.py`).
 
 Докладніше: [`web/README.md`](web/README.md).
+
+
+## MathModelingIT MiniBooks
+
+Окремий каталог `books/` призначений для глибокого теоретичного шару курсу: **11 мінікниг — по одній на кожне заняття**.
+
+Мінікнига не є розширеним README. Це самодостатній навчальний текст у напівхудожньому пояснювальному стилі:
+
+> **військова проблемна сцена → інтуїція → формалізація → формули → графіки → computational experiment → “зламай модель” → Lab → Python → Research Transfer**
+
+Військові приклади мають бути синтетичними, неопераційними та без чутливих даних. Формули пояснюються словами, графіки інтерпретуються, а результати узгоджуються з Python source of truth і lesson tests.
+
+Єдиний стандарт усієї серії:
+
+- [`books/TECHNICAL_SPEC.md`](books/TECHNICAL_SPEC.md) — технічне завдання на структуру, стиль, формули, графіки, Python-фрагменти, військові приклади, QA та Definition of Done кожної мінікниги.
+
+Після появи MiniBook відповідна кнопка **«Теоретичний матеріал»** у MathModelingIT Lab має вести на web-версію книги, а lesson README залишатиметься технічним паспортом заняття.
