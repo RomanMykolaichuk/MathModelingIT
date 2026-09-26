@@ -94,7 +94,7 @@ def test_nan_and_infinite_weights_are_rejected():
 
 
 def test_infinite_decision_value_is_rejected():
-    bad = M.copy()
+    bad = M.astype(float).copy()
     bad.loc["A", "cost"] = np.inf
     with pytest.raises(ValueError):
         weighted_sum(bad, W, T)
