@@ -27,6 +27,7 @@ jobs:
 
       - name: Validate web lab
         run: |
+          python tools/generate_lab_pdfs.py
           test -s web/index.html
           test -s web/styles.css
           test -s web/course-catalog.js
