@@ -51,12 +51,13 @@ A slider plus a chart is therefore **not** sufficient to count as a completed in
 
 Every full interactive laboratory must begin with a visible **pre-lab resource bar** placed before the Predict → Run → Explain → Break → Transfer cycle.
 
-It must contain exactly these learner-facing resources:
+The resource vocabulary is fixed:
 
-1. **Theory** — a button that opens the lesson theoretical material in a **new browser tab**. The theoretical source is the lesson `README.md` (or a future versioned theory page derived from it).
-2. **Lab instruction (PDF)** — a button that opens a versioned PDF instruction in a **new browser tab**. PDF files live under `web/instructions/`.
+1. **Конспект** — a button that opens the lesson `README.md` in a **new browser tab**. README is the concise technical/thematic note, not the deep theory.
+2. **Теорія** — a button that opens the lesson **MathModelingIT MiniBook** web edition in a **new browser tab**. A link may be shown only when that MiniBook exists; it must never point to README.
+3. **Lab instruction (PDF)** — a button that opens a versioned PDF instruction in a **new browser tab**. PDF files live under `web/instructions/`.
 
-This is a release requirement, not an optional UX enhancement. A lesson cannot be marked `interactive` unless both resources exist and are linked.
+During the MiniBook rollout, existing interactive labs without a completed MiniBook expose **Конспект + PDF**. Once a MiniBook is published, the lab exposes **Конспект + Теорія + PDF**. The target state for all 11 lessons is the three-resource pattern.
 
 PDF instructions must:
 - be derived from the lesson `README.md` and `assignment.md`;
@@ -79,8 +80,9 @@ A lesson may move from `python` to `interactive` in `web/course-catalog.js` only
 - Node verification;
 - Python verification;
 - an instructor checkpoint;
-- a theory link that opens in a new tab;
-- a versioned PDF lab instruction under `web/instructions/`.
+- a notes/Конспект link to lesson README;
+- a versioned PDF lab instruction under `web/instructions/`;
+- when a MiniBook is published, a Theory link to its generated web edition.
 
 ## Proposed expansion order
 
@@ -125,4 +127,5 @@ A release candidate requires:
 - three current interactive labs reproduce their baseline Python results;
 - Student and Instructor modes remain progressive enhancement, not separate codebases;
 - the site remains functional as a static GitHub Pages deployment;
-- every interactive lab exposes its theory and PDF instruction before the interactive cycle.
+- every interactive lab exposes its Конспект and PDF instruction before the interactive cycle;
+- every published MiniBook is linked as Теорія and never masquerades README as deep theory.

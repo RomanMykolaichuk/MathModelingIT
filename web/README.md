@@ -18,7 +18,8 @@
 
 Кожна повна інтерактивна лабораторія починається з двох кнопок **до** циклу Predict → Run → Explain → Break → Transfer:
 
-- **Теоретичний матеріал** — відкриває відповідний lesson `README.md` у новій вкладці;
+- **Конспект** — відкриває короткий lesson `README.md` у новій вкладці;
+- **Теорія** — відкриває web-версію MathModelingIT MiniBook, якщо книга вже опублікована;
 - **Інструкція до лабораторної (PDF)** — відкриває версіонований PDF з `web/instructions/` у новій вкладці.
 
 PDF-інструкція формується на основі чинних `README.md` та `assignment.md`, описує саме браузерний сценарій роботи та окремо зазначає, де повний Python assignment має ширший обсяг.
@@ -78,3 +79,18 @@ Course CI виконує:
 3. counterexample / “break the model” case;
 4. research-transfer question;
 5. Python↔JavaScript parity check.
+
+
+## MiniBooks build
+
+MiniBook має canonical source у `books/<lesson>/book.md`.
+
+Web-версії генерує:
+
+```bash
+python tools/build_minibooks.py
+```
+
+Наразі опубліковано T1.L1. Згенерована сторінка: `web/books/t1_l1/index.html`.
+
+GitHub Pages workflow виконує MiniBook build перед публікацією, тому кнопка **Теорія** завжди веде на web-видання, а **Конспект** — на lesson README.
