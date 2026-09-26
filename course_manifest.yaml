@@ -126,6 +126,16 @@ web_lab:
   deployment: github_pages
   modes: [student, instructor]
   learning_cycle: [predict, run, explain, break, transfer]
+  pre_lab_resources:
+    required: true
+    placement: before_learning_cycle
+    theory:
+      source: lesson_readme
+      open_in_new_tab: true
+    lab_instruction:
+      format: pdf
+      path: web/instructions
+      open_in_new_tab: true
   interactive_lessons: [t1_l1, t2_l4, t2_l5]
   course_map_lessons: 11
   source_of_truth: python_lesson_packages
@@ -141,6 +151,8 @@ quality_gate:
     - web_javascript_syntax
     - web_node_control_cases
     - web_python_parity
+    - web_pre_lab_resources
+    - web_pdf_instructions
     - lesson_structure
     - lesson_pytest
     - demo_notebook_execution
