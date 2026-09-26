@@ -25,6 +25,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Validate web pilot
+        run: |
+          test -s web/index.html
+          test -s web/styles.css
+          test -s web/app.js
+          node --check web/app.js
+
       - name: Run full course smoke check
         env:
           MPLBACKEND: Agg
