@@ -203,3 +203,6 @@ body[data-mode="instructor"] .instructor-only { display: block; }
   .lab-resources-label { width: 100%; }
   .resource-button { width: 100%; }
 }
+
+.resource-button.theory-button { border-color: rgba(112,183,255,.55); }
+.resource-button.theory-button:hover { border-color: var(--accent-2); background: rgba(112,183,255,.10); }
