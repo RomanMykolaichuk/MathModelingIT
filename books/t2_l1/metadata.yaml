@@ -1,0 +1,31 @@
+book_id: t2_l1
+title: "Задачі оптимізації в середовищі VS Code"
+subtitle: "Як перетворити обмежений ресурс на перевірювану оптимізаційну модель"
+lesson_path: lessons/t2_l1
+language: uk
+audience: adjuncts
+status: validated_draft
+theory_level: intermediate
+estimated_reading_minutes: 75
+web_path: web/books/t2_l1/index.html
+python_package: lessons/t2_l1
+military_context: synthetic_non_sensitive
+canonical_source: books/t2_l1/book.md
+source_of_truth:
+  - lessons/t2_l1/README.md
+  - lessons/t2_l1/assignment.md
+  - lessons/t2_l1/src/model.py
+  - lessons/t2_l1/tests/test_model.py
+baseline:
+  total_resource: 100
+  total_budget: 250
+  allocation: [40.0, 17.5, 17.5, 25.0]
+  objective: 707.5
+  resource_used: 100.0
+  budget_used: 250.0
+manual_candidate:
+  allocation: [25.0, 25.0, 25.0, 25.0]
+  objective: 700.0
+sensitivity:
+  budget_plateau_approx: 295
+  plateau_objective: 765.0
