@@ -76,9 +76,15 @@ def numerical_trajectory(
     def rhs(_t: float, y: np.ndarray) -> list[float]:
         return [q - k * y[0]]
 
+    # s0 is defined at t=0, exactly as in analytical_trajectory().
+    # Integrating from t[0] would silently reinterpret the initial condition
+    # whenever the requested observation grid starts after zero.
+    if float(t[-1]) == 0.0:
+        return np.full_like(t, float(s0), dtype=float)
+
     sol = solve_ivp(
         rhs,
-        (float(t[0]), float(t[-1])),
+        (0.0, float(t[-1])),
         [s0],
         t_eval=t,
         rtol=1e-10,
@@ -224,20 +230,43 @@ def bootstrap_calibration(
     return pd.DataFrame(rows)
 
 
-def quantile_summary(df: pd.DataFrame, column: str) -> dict[str, float]:
+def quantile_summary(df: pd.DataFrame, column: str) -> dict[str, float | int]:
+    """Summarize finite outcomes without hiding non-finite cases.
+
+    The legacy mean/quantile keys are conditional on a finite outcome. The
+    finite/non-finite shares make that conditioning explicit. For a
+    time-to-threshold variable, finite_share is the empirical probability that
+    the threshold is reached.
+    """
     if column not in df.columns:
         raise ValueError(f"missing column: {column}")
-    values = pd.to_numeric(df[column], errors="coerce").dropna().to_numpy(dtype=float)
-    values = values[np.isfinite(values)]
-    if len(values) == 0:
+
+    raw = pd.to_numeric(df[column], errors="coerce").to_numpy(dtype=float)
+    numeric = raw[~np.isnan(raw)]
+    if len(numeric) == 0:
+        raise ValueError("no numeric values")
+
+    finite = numeric[np.isfinite(numeric)]
+    if len(finite) == 0:
         raise ValueError("no finite values")
-    q025, q50, q975 = np.quantile(values, [0.025, 0.5, 0.975])
-    return {
-        "mean": float(np.mean(values)),
+
+    q025, q50, q975 = np.quantile(finite, [0.025, 0.5, 0.975])
+    mean = float(np.mean(finite))
+    summary: dict[str, float | int] = {
+        "mean": mean,
         "median": float(q50),
         "p2_5": float(q025),
         "p97_5": float(q975),
+        "conditional_mean": mean,
+        "conditional_median": float(q50),
+        "finite_share": float(len(finite) / len(numeric)),
+        "nonfinite_share": float(1.0 - len(finite) / len(numeric)),
+        "positive_infinity_share": float(np.isposinf(numeric).mean()),
+        "negative_infinity_share": float(np.isneginf(numeric).mean()),
+        "n_total": int(len(numeric)),
+        "n_finite": int(len(finite)),
     }
+    return summary
 
 
 def experiment_hash(payload: dict) -> str:
