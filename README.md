@@ -91,12 +91,12 @@ GitHub Actions workflow `.github/workflows/course-ci.yml` перевіряє:
 До презентацій переходять тільки після проходження цього gate.
 
 
-## MathModelingIT Lab — interactive pilot
+## MathModelingIT Lab — interactive course layer
 
-Пілотний веб-інтерфейс у `web/` не замінює Python/notebooks. Він додає швидкий браузерний рівень «прогноз → експеримент → пояснення → зламай модель» для трьох занять:
+Каталог `web/` тепер є єдиним браузерним шаром для всіх 11 занять. Три лабораторії — **T1.L1, T2.L4, T2.L5** — мають повний інтерактивний цикл **Predict → Run → Explain → Break → Transfer**; решта занять представлені в course map і ведуть до Python lesson packages.
 
-- **T1.L1** — ресурсна модель та межі фізичного змісту;
-- **T2.L4** — CPM, критичний шлях, резерв і затримки;
-- **T2.L5** — WSM/TOPSIS та чутливість до ваг.
+Платформа має режими **Student / Instructor**, локальне збереження прогресу та рефлексій, export JSON і накопичуваний model passport. Математичні функції винесені у `web/lab-engine.js`.
 
-GitHub Pages виконує лише HTML/CSS/JavaScript. Python залишається обчислювальним і дослідницьким source of truth для повних експериментів.
+Ключовий принцип: Python/notebooks залишаються source of truth. Файл `web/control-cases.json` задає спільні контрольні сценарії, які Course CI перевіряє і через Node, і через Python (`tools/verify_web_control_cases.py`).
+
+Докладніше: [`web/README.md`](web/README.md).
