@@ -1,0 +1,28 @@
+book_id: t1_l1
+title: "Форма і принципи представлення математичних моделей"
+subtitle: "Від реальної ситуації до моделі, яку можна перевірити"
+lesson_path: lessons/t1_l1
+language: uk
+audience: adjuncts
+status: validated_draft
+theory_level: introductory
+estimated_reading_minutes: 55
+lab_anchor: resource
+web_path: web/books/t1_l1/index.html
+python_package: lessons/t1_l1
+military_context: synthetic_non_sensitive
+canonical_source: books/t1_l1/book.md
+source_of_truth:
+  - lessons/t1_l1/README.md
+  - lessons/t1_l1/assignment.md
+  - lessons/t1_l1/src/model.py
+  - lessons/t1_l1/tests/test_model.py
+baseline:
+  s0: 120
+  rate: 8
+  depletion_time: 15
+scenario:
+  s0: 120
+  rate: 5
+  depletion_time: 24
+sensitivity_rates: [4, 6, 8, 10, 12]
