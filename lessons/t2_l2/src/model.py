@@ -45,6 +45,23 @@ def validate_problem(
         )
 
 
+def validate_forbidden_routes(
+    costs: pd.DataFrame,
+    forbidden_routes: Iterable[tuple[str, str]] | None,
+) -> set[tuple[str, str]]:
+    """Return validated forbidden routes shared by all solver backends."""
+    forbidden = set(forbidden_routes or [])
+    suppliers = set(costs.index)
+    consumers = set(costs.columns)
+    unknown = sorted(
+        (i, j) for i, j in forbidden
+        if i not in suppliers or j not in consumers
+    )
+    if unknown:
+        raise ValueError(f"Unknown forbidden route(s): {unknown}")
+    return forbidden
+
+
 def total_cost(plan: pd.DataFrame, costs: pd.DataFrame) -> float:
     """Return sum_ij x_ij * c_ij."""
     return float((plan * costs).to_numpy(dtype=float).sum())
@@ -92,7 +109,7 @@ def solve_transport_pulp(
             "with: pip install -r requirements.txt"
         ) from exc
 
-    forbidden = set(forbidden_routes or [])
+    forbidden = validate_forbidden_routes(costs, forbidden_routes)
     suppliers = list(costs.index)
     consumers = list(costs.columns)
 
@@ -112,8 +129,6 @@ def solve_transport_pulp(
         problem += pulp.lpSum(x[i, j] for i in suppliers) == float(demand.loc[j]), f"demand_{j}"
 
     for i, j in forbidden:
-        if i not in suppliers or j not in consumers:
-            raise ValueError(f"Unknown forbidden route: {(i, j)}")
         problem += x[i, j] == 0, f"forbidden_{i}_{j}"
 
     problem.solve(pulp.PULP_CBC_CMD(msg=False))
@@ -159,7 +174,7 @@ def solve_transport_scipy(
         A_eq.append(row)
         b_eq.append(float(demand.iloc[j]))
 
-    forbidden = set(forbidden_routes or [])
+    forbidden = validate_forbidden_routes(costs, forbidden_routes)
     bounds = []
     for i in suppliers:
         for j in consumers:

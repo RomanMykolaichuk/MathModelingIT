@@ -7,7 +7,8 @@
 - **11/11 офіційних занять:** `content_stable`;
 - **capstone:** сформований і локально перевірений;
 - **course-level QA:** автоматизований через GitHub Actions;
-- **presentation phase:** готова до початку після зеленого course-level CI.
+- **presentation phase:** manifest фіксує згенерований початковий пакет; PPTX/ZIP не зберігаються у поточному дереві репозиторію;
+- **interactive lab pilot:** розробляється окремий статичний інтерфейс у `web/` для GitHub Pages.
 
 ## Концепція
 
@@ -88,3 +89,14 @@ GitHub Actions workflow `.github/workflows/course-ci.yml` перевіряє:
 - відповідність manifest статусам `content_stable`.
 
 До презентацій переходять тільки після проходження цього gate.
+
+
+## MathModelingIT Lab — interactive course layer
+
+Каталог `web/` тепер є єдиним браузерним шаром для всіх 11 занять. Три лабораторії — **T1.L1, T2.L4, T2.L5** — мають повний інтерактивний цикл **Predict → Run → Explain → Break → Transfer**; решта занять представлені в course map і ведуть до Python lesson packages.
+
+Платформа має режими **Student / Instructor**, локальне збереження прогресу та рефлексій, export JSON і накопичуваний model passport. Математичні функції винесені у `web/lab-engine.js`.
+
+Ключовий принцип: Python/notebooks залишаються source of truth. Файл `web/control-cases.json` задає спільні контрольні сценарії, які Course CI перевіряє і через Node, і через Python (`tools/verify_web_control_cases.py`).
+
+Докладніше: [`web/README.md`](web/README.md).

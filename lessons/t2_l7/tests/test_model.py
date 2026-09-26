@@ -92,3 +92,23 @@ def test_invalid_parameters_are_rejected():
         analytical_trajectory([0, 1], s0=20.0, q=12.0, k=-0.1)
     with pytest.raises(ValueError):
         time_to_threshold(s0=20.0, q=12.0, k=0.1, threshold=-1.0)
+
+
+def test_numerical_nonzero_start_uses_initial_state_at_zero():
+    t = np.array([5.0, 6.0, 7.0])
+    a = analytical_trajectory(t, s0=20.0, q=10.0, k=0.1)
+    n = numerical_trajectory(t, s0=20.0, q=10.0, k=0.1)
+    assert np.max(np.abs(a - n)) < 1e-6
+    assert n[0] == pytest.approx(51.4775, rel=1e-4)
+
+
+def test_quantile_summary_exposes_unreached_share():
+    df = pd.DataFrame({"time_to_threshold": [10.0, 20.0, np.inf, np.inf, np.inf]})
+    summary = quantile_summary(df, "time_to_threshold")
+    assert summary["mean"] == pytest.approx(15.0)
+    assert summary["conditional_mean"] == pytest.approx(15.0)
+    assert summary["finite_share"] == pytest.approx(0.4)
+    assert summary["nonfinite_share"] == pytest.approx(0.6)
+    assert summary["positive_infinity_share"] == pytest.approx(0.6)
+    assert summary["n_total"] == 5
+    assert summary["n_finite"] == 2

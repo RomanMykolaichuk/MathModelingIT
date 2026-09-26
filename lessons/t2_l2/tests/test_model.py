@@ -8,7 +8,13 @@ import pytest
 SRC = Path(__file__).resolve().parents[1] / "src"
 sys.path.insert(0, str(SRC))
 
-from model import check_solution, solve_transport_scipy, total_cost, validate_problem
+from model import (
+    check_solution,
+    solve_transport_pulp,
+    solve_transport_scipy,
+    total_cost,
+    validate_problem,
+)
 
 
 def problem():
@@ -63,3 +69,10 @@ def test_total_cost_matches_solver_value():
     costs, supply, demand = problem()
     result = solve_transport_scipy(costs, supply, demand)
     assert total_cost(result.plan, costs) == pytest.approx(result.total_cost)
+
+
+@pytest.mark.parametrize("solver", [solve_transport_scipy, solve_transport_pulp])
+def test_unknown_forbidden_route_is_rejected_by_all_solvers(solver):
+    costs, supply, demand = problem()
+    with pytest.raises(ValueError, match="Unknown forbidden route"):
+        solver(costs, supply, demand, forbidden_routes=[("S2", "D99")])

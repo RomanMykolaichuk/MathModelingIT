@@ -1,0 +1,25 @@
+{
+  "resource": {
+    "baseline": {"s0": 120, "rate": 8, "time": 20, "clamp_zero": true, "expected_value": 0, "expected_depletion_time": 15},
+    "scenario": {"s0": 120, "rate": 5, "time": 20, "clamp_zero": true, "expected_value": 20, "expected_depletion_time": 24}
+  },
+  "network": {
+    "baseline": {"expected_duration": 17, "expected_path": ["A", "C", "E", "G"]},
+    "delay_c3": {"task": "C", "delay": 3, "expected_duration": 20, "expected_path": ["A", "C", "E", "G"]},
+    "delay_d3": {"task": "D", "delay": 3, "expected_duration": 17}
+  },
+  "mcda": {
+    "baseline": {
+      "reliability_weight": 0.25,
+      "expected_wsm_ranking": ["C", "D", "B", "A"],
+      "expected_topsis_ranking": ["C", "A", "D", "B"],
+      "expected_wsm_c": 0.6166666667,
+      "expected_topsis_c": 0.5868840374
+    },
+    "low_reliability": {
+      "reliability_weight": 0.10,
+      "expected_wsm_top": "B",
+      "expected_topsis_top": "C"
+    }
+  }
+}

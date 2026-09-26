@@ -79,3 +79,22 @@ def test_cost_benefit_classification_matters():
     wrong_result = weighted_sum(M, W, wrong)
     assert not np.allclose(right.scores.values, wrong_result.scores.values)
     assert right.ranking != wrong_result.ranking
+
+
+def test_nan_and_infinite_weights_are_rejected():
+    bad_nan = W.copy()
+    bad_nan.iloc[0] = np.nan
+    with pytest.raises(ValueError):
+        weighted_sum(M, bad_nan, T)
+
+    bad_inf = W.copy()
+    bad_inf.iloc[0] = np.inf
+    with pytest.raises(ValueError):
+        weighted_sum(M, bad_inf, T)
+
+
+def test_infinite_decision_value_is_rejected():
+    bad = M.astype(float).copy()
+    bad.loc["A", "cost"] = np.inf
+    with pytest.raises(ValueError):
+        weighted_sum(bad, W, T)

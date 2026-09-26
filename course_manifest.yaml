@@ -5,7 +5,7 @@ course:
   computational_environment: Python
   development_status: content_complete
   qa_status: automated_ci_enabled
-  presentation_status: ready_to_start
+  presentation_status: initial_pptx_pack_generated
   principle: "problem -> mathematical model -> Python model -> experiment -> visualization -> interpretation -> research conclusion"
 
 stack:
@@ -120,10 +120,27 @@ capstone:
   status: content_stable
   practical_result: "Integrated mini-research project: calibration -> constrained optimization -> independent verification -> sensitivity -> bootstrap uncertainty -> reproducibility metadata -> scientific conclusion"
 
+web_lab:
+  path: web
+  status: interactive_pilot
+  deployment: github_pages
+  modes: [student, instructor]
+  learning_cycle: [predict, run, explain, break, transfer]
+  interactive_lessons: [t1_l1, t2_l4, t2_l5]
+  course_map_lessons: 11
+  source_of_truth: python_lesson_packages
+  shared_control_cases: web/control-cases.json
+  python_parity_check: tools/verify_web_control_cases.py
+  node_parity_check: web/control-cases.test.js
+
 quality_gate:
   runner: tools/course_smoke.py
   workflow: .github/workflows/course-ci.yml
   checks:
+    - web_static_files
+    - web_javascript_syntax
+    - web_node_control_cases
+    - web_python_parity
     - lesson_structure
     - lesson_pytest
     - demo_notebook_execution
