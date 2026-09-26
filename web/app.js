@@ -71,6 +71,8 @@ function renderCatalog() {
       '<p class="instructor-only"><strong>Transfer:</strong> '+item.transfer+'</p>'+
       '<div class="catalog-actions">'+
       (item.status==="interactive"?'<a class="primary" href="'+item.anchor+'">Відкрити Lab</a>':'')+
+      (item.theoryUrl?'<a href="'+item.theoryUrl+'" target="_blank" rel="noopener noreferrer">Теорія ↗</a>':'')+
+      (item.instructionPdf?'<a href="'+item.instructionPdf+'" target="_blank" rel="noopener noreferrer">PDF-інструкція ↗</a>':'')+
       '<a href="'+source+'" target="_blank" rel="noopener">Python package</a>'+
       '</div>';
     root.appendChild(card);
