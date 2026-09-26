@@ -192,6 +192,8 @@ quality_gate:
     - web_python_parity
     - web_pre_lab_resources
     - web_pdf_instructions
+    - web_minibook_build
+    - web_minibook_resources
     - lesson_structure
     - lesson_pytest
     - demo_notebook_execution
