@@ -47,6 +47,26 @@ Every full browser laboratory must implement:
 
 A slider plus a chart is therefore **not** sufficient to count as a completed interactive lab.
 
+## Mandatory pre-lab resources
+
+Every full interactive laboratory must begin with a visible **pre-lab resource bar** placed before the Predict → Run → Explain → Break → Transfer cycle.
+
+It must contain exactly these learner-facing resources:
+
+1. **Theory** — a button that opens the lesson theoretical material in a **new browser tab**. The theoretical source is the lesson `README.md` (or a future versioned theory page derived from it).
+2. **Lab instruction (PDF)** — a button that opens a versioned PDF instruction in a **new browser tab**. PDF files live under `web/instructions/`.
+
+This is a release requirement, not an optional UX enhancement. A lesson cannot be marked `interactive` unless both resources exist and are linked.
+
+PDF instructions must:
+- be derived from the lesson `README.md` and `assignment.md`;
+- describe the browser workflow and its control cases;
+- explicitly separate the browser teaching subset from the full Python assignment when the scopes differ;
+- include completion criteria and research-transfer expectations;
+- be visually QA-checked before commit.
+
+Course CI must verify that every PDF referenced by the current interactive labs exists and is non-empty.
+
 ## Admission criteria for a new interactive lab
 
 A lesson may move from `python` to `interactive` in `web/course-catalog.js` only when all of the following exist:
@@ -58,7 +78,9 @@ A lesson may move from `python` to `interactive` in `web/course-catalog.js` only
 - a pure function in the Lab Engine or an explicitly precomputed scenario;
 - Node verification;
 - Python verification;
-- an instructor checkpoint.
+- an instructor checkpoint;
+- a theory link that opens in a new tab;
+- a versioned PDF lab instruction under `web/instructions/`.
 
 ## Proposed expansion order
 
@@ -102,4 +124,5 @@ A release candidate requires:
 - existing full course smoke check passes;
 - three current interactive labs reproduce their baseline Python results;
 - Student and Instructor modes remain progressive enhancement, not separate codebases;
-- the site remains functional as a static GitHub Pages deployment.
+- the site remains functional as a static GitHub Pages deployment;
+- every interactive lab exposes its theory and PDF instruction before the interactive cycle.
