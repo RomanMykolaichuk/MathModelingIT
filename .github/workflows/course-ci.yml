@@ -29,6 +29,7 @@ jobs:
         run: |
           python tools/generate_lab_pdfs.py
           python tools/build_minibooks.py
+          python tools/verify_minibook_math.py
           test -s web/index.html
           test -s web/styles.css
           test -s web/course-catalog.js
