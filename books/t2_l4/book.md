@@ -1112,6 +1112,558 @@ Monte Carlo може генерувати тривалості робіт нез
 
 ---
 
+## Поглиблення: topological order — правильний порядок обчислення
+
+У DAG не існує циклів, тому роботи можна розташувати в **topological order**: кожен predecessor стоїть раніше за successor.
+
+Для нашої мережі один можливий порядок:
+
+\[
+A,\ B,\ C,\ D,\ E,\ F,\ G.
+\]
+
+Але він не є єдиним.
+
+Наприклад, A і B незалежні на старті, тому порядок:
+
+\[
+B,\ A,\ D,\ C,\ F,\ E,\ G
+\]
+
+також може бути topologically valid, якщо кожна залежність зберігається.
+
+Це важлива відмінність:
+
+> topological order не є календарним планом і не означає, що роботи виконуються строго одна за одною.
+
+Він лише гарантує:
+
+> коли алгоритм переходить до певної роботи, всі її predecessors уже були опрацьовані.
+
+Саме тому forward pass зручно реалізувати через topological sorting.
+
+### Чому це важливо для Python
+
+У коді:
+
+~~~python
+topo = list(nx.topological_sort(G))
+~~~
+
+далі можна обчислювати:
+
+~~~python
+for task in topo:
+    ES[task] = max(EF[p] for p in predecessors)
+~~~
+
+Якщо ж граф містить цикл, topological order не існує.
+
+Це ще один спосіб побачити, чому cycle — не просто software exception, а логічна суперечність у моделі процесу.
+
+---
+
+## Поглиблення: повна baseline-таблиця CPM
+
+Корисно бачити не лише duration і critical path, а весь schedule.
+
+Для baseline:
+
+| Task | d | ES | EF | LS | LF | Slack | Critical |
+|---|---:|---:|---:|---:|---:|---:|---|
+| A | 4 | 0 | 4 | 0 | 4 | 0 | yes |
+| B | 3 | 0 | 3 | 6 | 9 | 6 | no |
+| C | 5 | 4 | 9 | 4 | 9 | 0 | yes |
+| D | 4 | 4 | 8 | 8 | 12 | 4 | no |
+| E | 6 | 9 | 15 | 9 | 15 | 0 | yes |
+| F | 3 | 8 | 11 | 12 | 15 | 4 | no |
+| G | 2 | 15 | 17 | 15 | 17 | 0 | yes |
+
+Ця таблиця дає значно більше, ніж просто:
+
+\[
+T=17.
+\]
+
+Вона показує **часову геометрію проєкту**.
+
+### Як читати B
+
+B може початися в 0.
+
+Ранній finish:
+
+\[
+EF_B=3.
+\]
+
+Але E чекає C до моменту 9.
+
+Тому B може бути зміщена так, щоб завершитися аж у 9:
+
+\[
+LF_B=9.
+\]
+
+Відповідно:
+
+\[
+LS_B=6.
+\]
+
+І:
+
+\[
+Slack_B=6.
+\]
+
+Це не означає, що B «неважлива».
+
+Це означає, що в поточній мережі її раннє завершення не визначає момент старту E, бо C завершується пізніше.
+
+### Як читати D і F
+
+D завершується baseline у 8.
+
+F завершується в 11.
+
+А G все одно чекає E до 15.
+
+Тому гілка:
+
+\[
+A\rightarrow D\rightarrow F
+\]
+
+має сукупний простір до моменту 15.
+
+Саме звідси виникає slack.
+
+---
+
+## Поглиблення: резерв належить не роботі «в абсолюті»
+
+Розглянемо вислів:
+
+> D має резерв 4.
+
+Це скорочення.
+
+Повніше:
+
+> У baseline network із поточними durations і dependencies D має total slack 4 відносно current project duration 17.
+
+Якщо зміниться C або E, зміниться «часова стіна», відносно якої визначається резерв гілки D→F.
+
+Тому slack — **scenario-dependent output**.
+
+Це особливо важливо в research transfer.
+
+Якщо ад’юнкт переносить CPM на власний процес і записує:
+
+> «етап X має резерв 2 дні»,
+
+то потрібно додати:
+
+> за baseline durations та baseline dependency structure.
+
+Без цього висновок звучить сильніше, ніж підтримує модель.
+
+---
+
+## Поглиблення: поріг, після якого D стає системно важливою
+
+Baseline для гілки D→F:
+
+\[
+A=4,\quad D=4,\quad F=3.
+\]
+
+Сумарний шлях:
+
+\[
+4+4+3=11.
+\]
+
+Гілка A→C→E до моменту об’єднання перед G має:
+
+\[
+4+5+6=15.
+\]
+
+Різниця:
+
+\[
+15-11=4.
+\]
+
+Саме це пояснює slack гілки D→F.
+
+Якщо D затримати на 3:
+
+\[
+11+3=14<15.
+\]
+
+Project duration не зміниться.
+
+Якщо D затримати на 4:
+
+\[
+11+4=15.
+\]
+
+Гілки зрівняються.
+
+Якщо D затримати на 5:
+
+\[
+11+5=16>15.
+\]
+
+Тепер перед G уже довше чекати гілку D→F.
+
+Отже, після перевищення baseline slack може:
+
+- змінитися project duration;
+- з’явитися інший critical path;
+- або виникнути кілька critical paths однакової довжини.
+
+Це сильніша інтуїція, ніж проста фраза «slack = 4».
+
+---
+
+## Поглиблення: кілька критичних шляхів
+
+У навчальному baseline один домінуючий шлях:
+
+\[
+A\rightarrow C\rightarrow E\rightarrow G.
+\]
+
+Але мережа може мати два або більше шляхів однакової максимальної тривалості.
+
+Тоді:
+
+- кілька гілок мають zero slack;
+- локальна затримка в будь-якій із них може впливати на строк;
+- управлінська гнучкість зменшується.
+
+У проєкті з кількома near-critical paths варто аналізувати не лише strict zero slack, а й **малий резерв**.
+
+Наприклад, slack 0.2 у моделі з uncertainty durations може практично означати майже критичну роботу.
+
+Тому deterministic label:
+
+> critical / noncritical
+
+іноді занадто грубий.
+
+Stochastic critical-path frequency дає багатшу картину.
+
+---
+
+## Поглиблення: deterministic CPM і stochastic network — це різні запитання
+
+CPM baseline відповідає:
+
+> який мінімальний строк за заданих fixed durations?
+
+Monte Carlo відповідає:
+
+> який розподіл строків виникає, якщо durations випадкові за заданими distributions?
+
+Це різні питання.
+
+Тому якщо:
+
+\[
+T_{CPM}=17
+\]
+
+і:
+
+\[
+E[T_{MC}]\approx17.86,
+\]
+
+це не суперечність.
+
+У stochastic runs деякі durations:
+
+- менші за baseline;
+- більші;
+- змінюють relative path lengths;
+- іноді перемикають critical path.
+
+Отже, stochastic result не «уточнює число 17» у простому сенсі.
+
+Він змінює тип відповіді:
+
+> з точкового результату на розподіл.
+
+---
+
+## Поглиблення: звідки береться емпірична ймовірність
+
+Припустимо, виконано:
+
+\[
+n=3000
+\]
+
+симуляцій.
+
+Для кожної маємо duration:
+
+\[
+T_1,T_2,\ldots,T_{3000}.
+\]
+
+Deadline:
+
+\[
+D=19.
+\]
+
+Тоді оцінка:
+
+\[
+\hat P(T\le19)=
+\frac{1}{n}
+\sum_{k=1}^{n}
+I(T_k\le19),
+\]
+
+де indicator:
+
+\[
+I(condition)=
+\begin{cases}
+1,& condition\ true,\\
+0,& condition\ false.
+\end{cases}
+\]
+
+Тобто ми буквально рахуємо:
+
+> скільки simulated projects завершилися не пізніше 19,
+
+і ділимо на кількість simulations.
+
+Це проста емпірична частка.
+
+Її сила — прозорість.
+
+Її обмеження — вона умовна відносно всієї stochastic model.
+
+---
+
+## Поглиблення: P50, P80, P90 як operational language моделі
+
+Quantiles зручні, бо дозволяють говорити не лише про average.
+
+Наприклад:
+
+\[
+P90\approx19.69.
+\]
+
+Це означає:
+
+> приблизно 90% simulated durations не перевищують 19.69.
+
+Але не означає:
+
+> 19.69 — гарантовано безпечний строк.
+
+Якщо decision-maker потребує більш conservative planning point, P90 може бути кориснішим за mean.
+
+Якщо задача дослідницька, варто показувати кілька quantiles:
+
+- P50;
+- P80;
+- P90.
+
+Тоді читач бачить форму uncertainty не лише через одну statistic.
+
+---
+
+## Поглиблення: залежність між тривалостями
+
+Базовий Monte Carlo часто зручно починати з independent samples.
+
+Але в реальному процесі durations можуть бути пов’язані.
+
+Наприклад, одна зовнішня причина може одночасно впливати на:
+
+- B;
+- D;
+- F.
+
+Тоді:
+
+\[
+Corr(T_B,T_D)>0.
+\]
+
+Якщо ігнорувати correlation, model може недооцінити probability simultaneous delays.
+
+Це важливий Research Transfer question:
+
+> чи існує shared cause, що впливає на кілька етапів одночасно?
+
+Якщо так, independent Beta-PERT — baseline, а не фінальна модель.
+
+---
+
+## Поглиблення: resource constraints — приховане припущення CPM
+
+У CPM дві роботи можуть виконуватися паралельно, якщо між ними немає dependency.
+
+Але припустимо:
+
+- C і D формально незалежні;
+- обидві потребують одного й того самого specialist;
+- specialist може працювати лише над однією задачею.
+
+Тоді фактичної паралельності немає.
+
+Мережева модель dependencies каже:
+
+> можна паралельно.
+
+Resource reality каже:
+
+> не можна.
+
+Це вже інша задача — resource-constrained project scheduling.
+
+Отже, один із ключових assumptions CPM:
+
+> sufficient resources are available to realize allowed parallelism.
+
+Це припущення обов’язково потрібно перевіряти при перенесенні моделі.
+
+---
+
+## Поглиблення: verification, validation і calibration в мережевій моделі
+
+### Verification
+
+Чи правильно реалізований CPM?
+
+Приклади:
+
+- forward pass;
+- backward pass;
+- slack;
+- critical path;
+- DAG rejection.
+
+### Calibration
+
+Чи відповідають duration estimates даним?
+
+Наприклад, чи справді:
+
+\[
+d_C=5?
+\]
+
+Це вже питання оцінювання параметра.
+
+### Validation / adequacy
+
+Чи достатньо network structure описує реальний процес?
+
+Наприклад:
+
+- чи всі dependencies враховані;
+- чи немає resource conflicts;
+- чи адекватна assumption independence;
+- чи не змінюється workflow залежно від стану.
+
+Можна мати:
+
+- ідеально verified code;
+- добре calibrated durations;
+- але structurally inadequate network.
+
+Ці рівні не можна змішувати.
+
+---
+
+## Поглиблення: сценарний дизайн для T2.L4
+
+Сильний експеримент не складається з випадкового збільшення duration.
+
+Корисно спланувати набір:
+
+| Run | Зміна | Очікування | Що перевіряємо |
+|---|---|---|---|
+| Baseline | none | T=17 | контроль |
+| Critical delay | C+3 | T=20 | zero-slack effect |
+| Noncritical small | D+3 | T=17 | slack absorption |
+| Boundary | D+4 | T≈17 | exhaustion of slack |
+| Beyond slack | D+5 | T>17 | path competition |
+| Stochastic | PERT/MC | distribution | uncertainty |
+
+Ця таблиця перетворює «покрутимо параметри» на planned computational experiment.
+
+---
+
+## Поглиблення: рівні допустимого висновку
+
+### Рівень 1 — computational fact
+
+> Baseline CPM duration = 17.
+
+### Рівень 2 — structural interpretation
+
+> За поточної network structure A→C→E→G визначає project duration.
+
+### Рівень 3 — scenario statement
+
+> У baseline D має slack 4; затримка +3 поглинається резервом.
+
+### Рівень 4 — stochastic statement
+
+> За заданими Beta-PERT distributions та seed=2026 Monte Carlo дає mean близько 17.86 та приблизно 0.79 simulated probability завершення до 19.
+
+### Надмірний рівень
+
+> Реальний процес із імовірністю 79% завершиться до 19.
+
+Це твердження сильніше за модель.
+
+Allowed conclusion повинен зберігати умови.
+
+---
+
+## Поглиблення: reproducibility package мережевого експерименту
+
+Для наукової роботи недостатньо зберегти screenshot histogram.
+
+Мінімальний package:
+
+- tasks.csv;
+- pert.csv;
+- model code;
+- seed;
+- number of simulations;
+- deadline;
+- software versions;
+- output table;
+- critical path frequency;
+- figures;
+- metadata;
+- commit reference.
+
+Тоді інший дослідник може не лише побачити картинку, а відтворити computational experiment.
+
+---
+
 ## 30. Типові помилки мислення
 
 ### Помилка 1. «Найдовша робота є критичною»
