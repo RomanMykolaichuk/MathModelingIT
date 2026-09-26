@@ -58,6 +58,7 @@ globalThis.MathModelingCatalog = [
     title:"Математичне моделювання із застосуванням методів мережевого планування",
     status:"interactive", anchor:"#network",
     notesUrl:"https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t2_l4/README.md",
+    theoryUrl:"books/t2_l4/index.html",
     instructionPdf:"instructions/t2_l4_lab_instruction.pdf",
     challenge:"Чому затримка однієї роботи змінює строк проєкту, а іншої — ні?",
     transfer:"Перетворіть етапи власного дослідження на DAG і знайдіть bottleneck."
@@ -67,6 +68,7 @@ globalThis.MathModelingCatalog = [
     title:"Засоби розв’язування задач множинного вибору",
     status:"interactive", anchor:"#mcda",
     notesUrl:"https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t2_l5/README.md",
+    theoryUrl:"books/t2_l5/index.html",
     instructionPdf:"instructions/t2_l5_lab_instruction.pdf",
     challenge:"Наскільки лідер залежить від ваг і способу агрегування?",
     transfer:"Перевірте, чи є ваш висновок стійким до зміни ваг і методу."
