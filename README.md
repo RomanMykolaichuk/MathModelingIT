@@ -7,7 +7,8 @@
 - **11/11 офіційних занять:** `content_stable`;
 - **capstone:** сформований і локально перевірений;
 - **course-level QA:** автоматизований через GitHub Actions;
-- **presentation phase:** готова до початку після зеленого course-level CI.
+- **presentation phase:** manifest фіксує згенерований початковий пакет; PPTX/ZIP не зберігаються у поточному дереві репозиторію;
+- **interactive lab pilot:** розробляється окремий статичний інтерфейс у `web/` для GitHub Pages.
 
 ## Концепція
 
@@ -88,3 +89,14 @@ GitHub Actions workflow `.github/workflows/course-ci.yml` перевіряє:
 - відповідність manifest статусам `content_stable`.
 
 До презентацій переходять тільки після проходження цього gate.
+
+
+## MathModelingIT Lab — interactive pilot
+
+Пілотний веб-інтерфейс у `web/` не замінює Python/notebooks. Він додає швидкий браузерний рівень «прогноз → експеримент → пояснення → зламай модель» для трьох занять:
+
+- **T1.L1** — ресурсна модель та межі фізичного змісту;
+- **T2.L4** — CPM, критичний шлях, резерв і затримки;
+- **T2.L5** — WSM/TOPSIS та чутливість до ваг.
+
+GitHub Pages виконує лише HTML/CSS/JavaScript. Python залишається обчислювальним і дослідницьким source of truth для повних експериментів.
