@@ -1249,6 +1249,587 @@ NaN,\quad +\infty,\quad -\infty.
 
 ---
 
+## Поглиблення: повна baseline-матриця після нормалізації
+
+Нормалізацію корисно бачити не лише у формулі, а як повну таблицю.
+
+Для baseline:
+
+| Alternative | cost | time | reliability | capacity | risk |
+|---|---:|---:|---:|---:|---:|
+| A | 0.455 | 0.571 | 0.500 | 0.000 | 0.538 |
+| B | 1.000 | 0.000 | 0.000 | 1.000 | 0.000 |
+| C | 0.000 | 1.000 | 1.000 | 0.333 | 1.000 |
+| D | 0.727 | 0.286 | 0.250 | 0.667 | 0.385 |
+
+Ця таблиця вже містить важливу інтерпретацію.
+
+### B
+
+B сильна за:
+
+- cost;
+- capacity.
+
+Але слабка за:
+
+- time;
+- reliability;
+- risk.
+
+### C
+
+C сильна за:
+
+- time;
+- reliability;
+- risk.
+
+Але найгірша за cost.
+
+### D
+
+D ніде не є абсолютним максимумом, але має помірно сильний профіль.
+
+Саме тому D у WSM посідає друге місце.
+
+MCDA часто винагороджує не «найкращий окремий показник», а **збалансований профіль**.
+
+---
+
+## Поглиблення: WSM як сума criterion contributions
+
+Для кожної alternative можна розкласти score:
+
+\[
+S_i=
+w_1r_{i1}+
+w_2r_{i2}+
+\cdots+
+w_mr_{im}.
+\]
+
+Для C:
+
+\[
+S_C=
+0.25\cdot0+
+0.20\cdot1+
+0.25\cdot1+
+0.20\cdot0.333+
+0.10\cdot1.
+\]
+
+Окремі contributions:
+
+- cost: 0;
+- time: 0.20;
+- reliability: 0.25;
+- capacity: ≈0.0667;
+- risk: 0.10.
+
+Разом:
+
+\[
+S_C\approx0.6167.
+\]
+
+Це корисніше за одне число 0.6167.
+
+Ми бачимо **звідки взявся score**.
+
+Такий decomposition особливо важливий для explainability.
+
+Якщо stakeholder не погоджується з ranking, можна показати:
+
+- який criterion дав найбільший внесок;
+- який criterion «покарав» alternative;
+- які weights сформували результат.
+
+---
+
+## Поглиблення: WSM і компенсація
+
+Розглянемо extreme thought experiment.
+
+Альтернатива X має:
+
+- дуже низьку reliability;
+- дуже низький risk;
+- дуже низький cost.
+
+WSM може дати їй високий total score, якщо cost/risk weights достатньо великі.
+
+Тобто:
+
+> poor performance за одним criterion може бути компенсована good performance за іншими.
+
+Це не завжди прийнятно.
+
+Якщо reliability має hard minimum:
+
+\[
+reliability_i\ge0.90,
+\]
+
+спочатку потрібно filtering.
+
+Тоді MCDA працює вже серед admissible alternatives.
+
+Отже, корисна структура:
+
+\[
+Constraints\rightarrow MCDA.
+\]
+
+Не завжди:
+
+\[
+MCDA\rightarrow winner.
+\]
+
+---
+
+## Поглиблення: звідки беруться weights
+
+Weights — найвпливовіша і водночас найчастіше недооцінена частина MCDA.
+
+Можна виділити кілька джерел.
+
+### Direct assignment
+
+Експерт одразу задає:
+
+\[
+w=(0.25,0.20,0.25,0.20,0.10).
+\]
+
+Просто, але потребує пояснення.
+
+### Pairwise comparison
+
+Експерти порівнюють criteria парами.
+
+Це може бути реалізовано через AHP або інші процедури.
+
+### Rank-based methods
+
+Спочатку criteria упорядковуються за importance, потім ranking перетворюється на weights.
+
+### Data-driven methods
+
+Іноді використовують entropy або інші statistical approaches.
+
+Але такі weights відображають властивості data, а не обов’язково stakeholder values.
+
+### Policy-defined weights
+
+Weights можуть бути задані нормативно або управлінським рішенням.
+
+У будь-якому випадку книга й дослідження повинні відповісти:
+
+> **що означають weights і звідки вони взялися?**
+
+---
+
+## Поглиблення: weight normalization не створює обґрунтованість
+
+Нехай експерт дав:
+
+\[
+(5,4,5,4,2).
+\]
+
+Можна нормувати:
+
+\[
+w_j=
+\frac{a_j}
+{\sum_k a_k}.
+\]
+
+Отримаємо:
+
+\[
+(0.25,0.20,0.25,0.20,0.10).
+\]
+
+Математично все добре.
+
+Але якщо числа 5,4,5,4,2 взяті довільно, normalization не робить їх науково обґрунтованими.
+
+Це загальний принцип:
+
+> **математична обробка не виправляє слабке походження input assumptions.**
+
+---
+
+## Поглиблення: TOPSIS distances як окрема таблиця
+
+Для baseline:
+
+| Alternative | \(D^+\) | \(D^-\) | \(C_i\) |
+|---|---:|---:|---:|
+| C | 0.0363 | 0.0515 | 0.5869 |
+| A | 0.0346 | 0.0323 | 0.4830 |
+| D | 0.0363 | 0.0324 | 0.4719 |
+| B | 0.0512 | 0.0387 | 0.4307 |
+
+Зверніть увагу на A і D.
+
+Їхні \(C_i\) близькі.
+
+Невелика зміна:
+
+- weights;
+- score;
+- normalization assumptions
+
+може змінити їх relative order.
+
+Це ще одна причина не писати ranking як абсолютну істину.
+
+---
+
+## Поглиблення: що означає ideal solution
+
+Ideal best у TOPSIS часто не є реальною alternative.
+
+Це synthetic point.
+
+Вона складається з найкращих criterion values:
+
+- найкращий cost;
+- найкращий time;
+- найкраща reliability;
+- найкраща capacity;
+- найкращий risk.
+
+Можливо, жодна реальна alternative не має такого набору.
+
+Тому ideal point — **reference**, а не «секретний п’ятий варіант».
+
+Це важливо для інтерпретації.
+
+---
+
+## Поглиблення: sensitivity threshold
+
+У нашому one-factor experiment змінюється reliability weight.
+
+Baseline:
+
+\[
+w_{rel}=0.25.
+\]
+
+При:
+
+\[
+w_{rel}=0.10
+\]
+
+WSM leader — B.
+
+При трохи більшому значенні baseline dataset уже повертає C на перше місце.
+
+Це означає:
+
+> WSM ranking має boundary region поблизу low reliability weight.
+
+Такий threshold — сильніша інформація, ніж один screenshot.
+
+У звіті корисно писати:
+
+> leader змінюється при переході через певний діапазон weight.
+
+А не лише:
+
+> при 0.10 B, при 0.25 C.
+
+---
+
+## Поглиблення: sensitivity map замість одного slider
+
+One-factor analysis — лише перший крок.
+
+У складнішому дослідженні можна змінювати два weights одночасно.
+
+Наприклад:
+
+\[
+w_{cost},
+\quad
+w_{reliability}.
+\]
+
+Тоді простір можна поділити на області:
+
+- тут leader A;
+- тут B;
+- тут C;
+- тут D.
+
+Це вже **decision stability map**.
+
+Вона відповідає:
+
+> які preference configurations підтримують кожну alternative?
+
+Таке представлення часто інформативніше за одну baseline ranking.
+
+---
+
+## Поглиблення: uncertainty не лише у weights
+
+Current robustness model perturb weights.
+
+Але uncertainty може бути і в raw scores.
+
+Наприклад:
+
+\[
+reliability_C=0.96
+\]
+
+може бути estimate.
+
+Реально:
+
+\[
+reliability_C\in[0.93,0.97].
+\]
+
+Тоді stochastic model може perturb:
+
+- weights;
+- criterion values;
+- або обидва.
+
+Це вже значно ширша robustness analysis.
+
+Але її не слід додавати автоматично.
+
+Спершу треба визначити:
+
+> де саме в decision model знаходиться реальна uncertainty?
+
+---
+
+## Поглиблення: correlations між criteria
+
+Criteria можуть бути статистично або концептуально пов’язані.
+
+Наприклад:
+
+- cost і capacity;
+- reliability і risk;
+- time і cost.
+
+Якщо два criteria майже дублюють одне одного, model може double-count one dimension.
+
+Перед MCDA корисно провести:
+
+- conceptual review;
+- correlation analysis, якщо є sufficient data;
+- stakeholder review of criterion definitions.
+
+MCDA не повинна починатися з weights.
+
+Вона повинна починатися з **якісного набору criteria**.
+
+---
+
+## Поглиблення: dominated alternative
+
+Альтернатива \(A\) домінується \(B\), якщо B не гірша за всіма criteria й краща хоча б за одним.
+
+Якщо alternative dominated, її присутність у ranking може бути малоінформативною.
+
+Але в нашій baseline matrix немає очевидної alternative, яка повністю домінує іншу за всіма criterion directions.
+
+Це добре для навчання:
+
+> alternatives мають реальні trade-offs.
+
+Перед запуском MCDA корисно зробити dominance check.
+
+---
+
+## Поглиблення: rank reversal як нагадування про залежність від model set
+
+У деяких MCDA methods ranking може змінитися після:
+
+- додавання нової alternative;
+- видалення alternative;
+- зміни normalization context.
+
+Причина в тому, що normalization або ideal points залежать від set of alternatives.
+
+Це означає:
+
+> ranking іноді є властивістю не лише alternative, а всього comparison set.
+
+Тому якщо decision set змінюється, analysis потрібно повторювати.
+
+Не слід вважати старі scores «вічними характеристиками» alternatives.
+
+---
+
+## Поглиблення: verification, validation і decision validity
+
+### Verification
+
+Чи правильно реалізовані formulas?
+
+- min-max;
+- WSM;
+- TOPSIS;
+- reweighting;
+- Dirichlet sampling.
+
+### Input validation
+
+Чи:
+
+- weights finite;
+- values finite;
+- criterion types valid;
+- columns aligned?
+
+### Model validity
+
+Чи:
+
+- criteria справді релевантні;
+- weights обґрунтовані;
+- compensation допустима;
+- method відповідає decision logic?
+
+### Decision usefulness
+
+Чи допомагає model реально пояснити trade-offs?
+
+Можна мати mathematically perfect MCDA, яка не відповідає реальному decision question.
+
+---
+
+## Поглиблення: scenario design для T2.L5
+
+Корисний planned experiment:
+
+| Run | Зміна | Очікування | Що перевіряємо |
+|---|---|---|---|
+| Baseline | none | C top | контроль |
+| Low reliability | \(w_r=0.10\) | WSM may switch | sensitivity |
+| High reliability | \(w_r=0.40\) | C stronger | stability |
+| Wrong type | cost→benefit | ranking changes | semantic failure |
+| Robustness | Dirichlet | C often top | uncertain weights |
+| Constraint | risk≤0.20 | B excluded | non-compensation |
+
+Це значно сильніше за один ranking.
+
+---
+
+## Поглиблення: conditional conclusion як структура
+
+Сильний висновок можна будувати за шаблоном:
+
+> За [data], [criterion types], [weights] та [method] alternative X має [result]. Sensitivity показує [stability/change]. Robustness under [uncertainty model] показує [share/range]. Висновок обмежений [limitations].
+
+Наприклад:
+
+> За baseline matrix, benefit/cost classification та weights C є першою за WSM і TOPSIS. При reliability weight 0.10 WSM leader змінюється на B, тоді як TOPSIS залишає C. У Dirichlet robustness з concentration=80 C посідає перше місце приблизно у 94% WSM і 85% TOPSIS runs. Це свідчить про високу, але не абсолютну stability у межах заданої uncertainty model.
+
+Такий conclusion значно науковіший, ніж:
+
+> C — найкраща.
+
+---
+
+## Поглиблення: MCDA і людське рішення
+
+MCDA не повинна замінювати decision-maker.
+
+Вона:
+
+- структурує data;
+- робить weights явними;
+- показує trade-offs;
+- виявляє sensitivity;
+- документує reasoning.
+
+Але остаточне рішення може враховувати:
+
+- constraints поза model;
+- нову information;
+- qualitative considerations;
+- policy requirements.
+
+Тому модель — **decision support**, а не автоматичний носій істини.
+
+Це особливо важливо у військовій організації, де decision accountability залишається за людиною.
+
+---
+
+## Поглиблення: reproducibility package MCDA
+
+Для наукового результату збережіть:
+
+- decision matrix;
+- criterion definitions;
+- benefit/cost types;
+- weights;
+- weight rationale;
+- normalization method;
+- WSM/TOPSIS implementation;
+- sensitivity grid;
+- robustness seed;
+- concentration;
+- n_runs;
+- result tables;
+- figures;
+- commit/version metadata.
+
+Тоді інший дослідник може відтворити не лише winner, а **весь шлях до conclusion**.
+
+---
+
+## Поглиблення: interpretation of robustness shares
+
+Для WSM:
+
+\[
+P_{sim}(C\ top)\approx0.942.
+\]
+
+Для TOPSIS:
+
+\[
+P_{sim}(C\ top)\approx0.851.
+\]
+
+Позначення \(P_{sim}\) корисне саме педагогічно.
+
+Воно нагадує:
+
+> це probability/share у simulated model space.
+
+Не:
+
+\[
+P(C\ objectively\ best).
+\]
+
+Ця різниця принципова.
+
+---
+
+<figure>
+  <img src="figures/fig_08_conditional_conclusion.svg" alt="Структура умовного MCDA висновку">
+  <figcaption><strong>Рис. 8.</strong> Сильний висновок MCDA пов’язує data, criterion types, weights і method із sensitivity/robustness та завершується allowed conclusion, а не абсолютним ярликом «best».</figcaption>
+</figure>
+
 ## 41. Типові помилки мислення
 
 ### Помилка 1. «C — об’єктивно найкраща»
