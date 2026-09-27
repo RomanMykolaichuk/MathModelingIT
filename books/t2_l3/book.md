@@ -2493,6 +2493,23 @@ Independent coarse verification.
 
 ---
 
+## Поглиблення: optimization landscape як частина наукового аргументу
+
+У nonlinear research важливо зберігати не лише final point, а й evidence про landscape:
+
+- кілька starts;
+- contour/surface;
+- objective values local solutions;
+- boundary checks;
+- independent grid result;
+- sensitivity.
+
+Тоді читач може побачити, чи conclusion залежить від одного lucky run.
+
+Саме ця evidence bundle робить фразу «best solution found» науково перевірюваною.
+
+---
+
 ## 69. Одна сторінка підсумку
 
 ### П’ять ідей
