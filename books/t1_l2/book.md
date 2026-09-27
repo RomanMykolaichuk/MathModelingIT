@@ -1966,6 +1966,282 @@ The mathematical lesson survives without operational detail.
 
 ---
 
+## Поглиблення: вибір класу моделі як наукове рішення
+
+Клас моделі не слід обирати за принципом:
+
+> «Monte Carlo сучасніше, тому використаємо Monte Carlo».
+
+Правильніший порядок:
+
+1. research question;
+2. type of uncertainty;
+3. time representation;
+4. available data;
+5. required output;
+6. verification strategy.
+
+Наприклад, якщо question:
+
+> яка nominal trajectory при fixed rate?
+
+Monte Carlo зайва.
+
+If question:
+
+> яка ймовірність depletion before horizon?
+
+Deterministic model alone insufficient.
+
+Method complexity повинна відповідати information need.
+
+---
+
+## Поглиблення: epistemic і aleatory uncertainty
+
+Корисно розрізняти два conceptual types.
+
+### Aleatory
+
+Variability modeled as inherent randomness.
+
+Example:
+
+\[
+C_k\sim distribution.
+\]
+
+### Epistemic
+
+Uncertainty because we do not know parameters/model structure well.
+
+Example:
+
+\[
+\mu\in[5.5,6.5].
+\]
+
+Monte Carlo over \(C_k\) captures aleatory layer.
+
+It does not automatically capture uncertainty about \(\mu\), \(\sigma\) or distribution family.
+
+This distinction becomes important in dissertation conclusions.
+
+---
+
+## Поглиблення: deterministic scenario can represent epistemic alternatives
+
+Suppose uncertain mean:
+
+\[
+\mu\in\{5,6,7\}.
+\]
+
+Instead of one stochastic model, run three parameter scenarios.
+
+Then within each scenario optionally perform Monte Carlo.
+
+This creates nested structure:
+
+\[
+Parameter\ scenario
+\rightarrow
+Stochastic\ realizations.
+\]
+
+This is clearer than mixing all uncertainty into one undifferentiated distribution.
+
+---
+
+## Поглиблення: ensemble mean trajectory
+
+With many Monte Carlo paths compute:
+
+\[
+\bar S_k=
+\frac{1}{N}
+\sum_{r=1}^{N}S_k^{(r)}.
+\]
+
+Also quantiles:
+
+\[
+Q_{0.1}(S_k),
+\quad
+Q_{0.9}(S_k).
+\]
+
+Then plot band over time.
+
+This answers:
+
+> how does uncertainty of state evolve?
+
+It is richer than only exhaustion histogram.
+
+---
+
+## Поглиблення: uncertainty band is not confidence interval by default
+
+A 10–90% simulation quantile band describes model-generated outcome distribution.
+
+It is not automatically:
+
+> 80% confidence interval for true state.
+
+Confidence terminology relates to inferential uncertainty of estimated quantities.
+
+Use precise language.
+
+---
+
+## Поглиблення: event definition matters
+
+Event:
+
+\[
+T\le21
+\]
+
+differs from:
+
+\[
+S_{21}<10.
+\]
+
+Both can be risk metrics.
+
+Before simulation define event precisely.
+
+Otherwise same model can produce multiple “probabilities” that answer different questions.
+
+---
+
+## Поглиблення: baseline as reference, not truth
+
+Deterministic T=20 is useful because:
+
+- easy to compute;
+- easy to verify;
+- provides scale.
+
+But stochastic analysis may show wide distribution.
+
+Do not use baseline as truth and stochastic values as “errors”.
+
+They are outputs of different model classes.
+
+---
+
+## Поглиблення: scenario comparison design
+
+Good table:
+
+| Scenario | \(\mu\) | \(\sigma\) | Horizon | Question |
+|---|---:|---:|---:|---|
+| baseline | 6 | 1.5 | 21 | control |
+| stable | 6 | 0.5 | 21 | variability ↓ |
+| high_var | 6 | 3 | 21 | variability ↑ |
+| high_mean | 7 | 1.5 | 21 | level shift |
+| long_horizon | 6 | 1.5 | 30 | censoring effect |
+
+This makes each run interpretable.
+
+---
+
+## Поглиблення: comparing distributions
+
+Beyond mean/median, compare:
+
+- probability by horizon;
+- quantiles;
+- spread;
+- tail frequency.
+
+Two scenarios can have same mean exhaustion but different tails.
+
+Risk analysis often cares about tails.
+
+---
+
+## Поглиблення: tail risk
+
+Suppose two models have mean depletion step 20.
+
+Model A tightly clustered around 20.
+
+Model B sometimes depletes at 15 and sometimes at 25.
+
+Same mean, different early-failure risk.
+
+Therefore mean alone can hide operationally relevant uncertainty.
+
+---
+
+## Поглиблення: stochastic model verification
+
+Verification can include:
+
+- same seed same draws;
+- different seeds usually differ;
+- sample length correct;
+- nonnegative draws after clipping;
+- state monotone non-increasing when no replenishment;
+- exhaustion step first zero;
+- NaN only if no exhaustion.
+
+These are invariants.
+
+---
+
+## Поглиблення: validation with data
+
+If real authorized data available, inspect:
+
+- histogram;
+- autocorrelation;
+- time trend;
+- seasonal/regime effects;
+- fit of candidate distributions.
+
+Then choose stochastic structure.
+
+Simulation should come after data understanding.
+
+---
+
+## Поглиблення: model comparison as dissertation evidence
+
+One useful research design:
+
+1. deterministic baseline;
+2. iid stochastic model;
+3. autocorrelated stochastic model;
+4. compare predictive/diagnostic performance.
+
+Then classification itself becomes substantive research tool.
+
+---
+
+## Поглиблення: military-safe synthetic scenario
+
+Suppose resource is “computational capacity units” for a training exercise.
+
+Consumption varies by simulation load.
+
+This preserves:
+
+- depletion logic;
+- uncertainty;
+- state transition;
+- Monte Carlo risk,
+
+without revealing real operational stocks.
+
+This is appropriate for an open teaching repository.
+
+---
+
 ## 56. Одна сторінка підсумку
 
 ### П’ять головних ідей
