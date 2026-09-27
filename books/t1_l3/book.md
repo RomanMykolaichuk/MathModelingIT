@@ -2290,6 +2290,213 @@ This small package gives large benefit.
 
 ---
 
+## Поглиблення: publication-grade experiment
+
+A classroom experiment is reproducible when files rerun.
+
+A publication-grade experiment should additionally answer:
+
+- which result entered which table/figure?
+- who/what generated it?
+- under which code state?
+- was the repository clean?
+- were dependencies recorded?
+- were source data immutable?
+- can artifact be regenerated automatically?
+
+This adds traceability from computation to publication.
+
+---
+
+## Поглиблення: artifact manifest
+
+Create manifest:
+
+~~~text
+artifact_id:
+experiment_id:
+source_output:
+generation_script:
+git_commit:
+created_at:
+checksum:
+publication_target:
+~~~
+
+Then figure/table becomes first-class research artifact.
+
+---
+
+## Поглиблення: pipeline idempotence
+
+Run pipeline twice with same inputs.
+
+Expected:
+
+- same raw results;
+- same summary;
+- same metadata;
+- same figures, modulo non-semantic metadata.
+
+This property is called idempotent/repeatable behavior in practical terms.
+
+If rerun accumulates duplicate rows or changes result, workflow needs correction.
+
+---
+
+## Поглиблення: side effects
+
+Dangerous experiment script may:
+
+- overwrite raw data;
+- modify config;
+- depend on current working directory;
+- append to old output.
+
+Good runner should minimize side effects.
+
+Outputs should go to designated location only.
+
+---
+
+## Поглиблення: relative paths
+
+Using paths relative to script/project improves portability.
+
+Hard-coded:
+
+~~~text
+C:\Users\Name\Desktop\data.csv
+~~~
+
+breaks on another machine.
+
+Project-relative path supports cloning.
+
+---
+
+## Поглиблення: timestamp is not identity
+
+Timestamp tells when run happened.
+
+It does not tell what parameters were used.
+
+So:
+
+~~~text
+run_2026_09_27
+~~~
+
+is weaker than config/data/code hash identity.
+
+Timestamp can supplement, not replace provenance.
+
+---
+
+## Поглиблення: human-readable label + hash
+
+Best of both:
+
+~~~text
+baseline_noise4_0c5d08ed47eb
+~~~
+
+Human understands purpose.
+
+Hash ensures exact config identity.
+
+---
+
+## Поглиблення: automated report generation
+
+Future improvement:
+
+experiment runner creates:
+
+- results;
+- summary;
+- metadata;
+- figures;
+- short Markdown report.
+
+Then publication draft references generated artifacts.
+
+This reduces manual transcription errors.
+
+---
+
+## Поглиблення: provenance as graph database idea
+
+For large research program provenance could be represented as graph:
+
+- data node;
+- model node;
+- experiment node;
+- artifact node;
+- publication node.
+
+Edges:
+
+- uses;
+- generated;
+- derived_from;
+- cited_in.
+
+You do not need Neo4j for T1.L3.
+
+But thinking in graph terms clarifies traceability.
+
+---
+
+## Поглиблення: reproducibility review before submission
+
+Before submitting article/dissertation chapter:
+
+1. clone repository fresh;
+2. create environment from requirements;
+3. run tests;
+4. run experiment;
+5. regenerate outputs;
+6. compare key metrics/artifacts;
+7. verify citations point to correct run.
+
+This is practical pre-publication QA.
+
+---
+
+## Поглиблення: archival longevity
+
+GitHub repository may change.
+
+For final research archive consider:
+
+- tagged release;
+- DOI archive;
+- institutional repository;
+- checksum bundle.
+
+Course repository teaches workflow; dissertation preservation may require longer-term archive.
+
+---
+
+## Поглиблення: reproducibility and human-readable documentation
+
+Machine metadata alone insufficient.
+
+README should explain:
+
+- purpose;
+- command;
+- inputs;
+- outputs;
+- limitations.
+
+Future researcher may understand JSON hash but not why experiment exists.
+
+Scientific reproducibility requires technical and conceptual documentation.
+
+---
+
 ## 77. Одна сторінка підсумку
 
 ### П’ять головних ідей
