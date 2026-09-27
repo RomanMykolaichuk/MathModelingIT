@@ -1,0 +1,27 @@
+book_id: t1_l4
+title: "Класифікація методів математичного моделювання"
+subtitle: "Метод обирає задача, а не бібліотека"
+lesson_path: lessons/t1_l4
+language: uk
+audience: adjuncts
+status: validated_draft
+theory_level: intermediate
+estimated_reading_minutes: 80
+web_path: web/books/t1_l4/index.html
+python_package: lessons/t1_l4
+military_context: synthetic_non_sensitive
+canonical_source: books/t1_l4/book.md
+source_of_truth:
+  - lessons/t1_l4/README.md
+  - lessons/t1_l4/assignment.md
+  - lessons/t1_l4/src/methods.py
+  - lessons/t1_l4/tests/test_methods.py
+controls:
+  numerical_root: 13.7228132327
+  symbolic_positive_root: "-15 + 5*sqrt(33)"
+  lp_allocation: [40.0, 60.0]
+  lp_objective: 680.0
+  monte_carlo_risk_approx: 0.5021
+  critical_path: ["Start", "A", "C", "Finish"]
+  critical_path_length: 12.0
+  mcda_ranking: ["C", "A", "B"]
