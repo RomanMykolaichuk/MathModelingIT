@@ -1708,6 +1708,588 @@ Git
 
 ---
 
+## Поглиблення: reproducibility має кілька рівнів identity
+
+У baseline experiment_id залежить від config.
+
+Але повний computational result depends on broader state.
+
+Корисно мислити шарами.
+
+### Config identity
+
+\[
+ID_{config}=Hash(config).
+\]
+
+### Data identity
+
+\[
+ID_{data}=Hash(input\ files).
+\]
+
+### Code identity
+
+Git commit:
+
+\[
+ID_{code}=commit\ SHA.
+\]
+
+### Environment identity
+
+Dependency lock / container digest.
+
+### Run identity
+
+Може комбінувати:
+
+\[
+ID_{run}
+=
+f(
+ID_{config},
+ID_{data},
+ID_{code},
+ID_{env}
+).
+\]
+
+Course implementation intentionally simpler.
+
+Але ця hierarchy показує шлях розвитку dissertation infrastructure.
+
+---
+
+## Поглиблення: why Git commit alone is not enough
+
+Git commit tells exact repository state only if:
+
+- all relevant files tracked;
+- no uncommitted changes;
+- external data version known;
+- environment known.
+
+If local script modified but not committed, commit SHA points to another state.
+
+Therefore a publication run should ideally start from a clean working tree.
+
+If not, this is a reproducibility limitation.
+
+---
+
+## Поглиблення: dirty working tree
+
+Imagine:
+
+- commit = abc123;
+- model.py edited locally;
+- experiment run;
+- change not committed.
+
+Metadata records abc123.
+
+Later checkout abc123 gives old model.
+
+Result cannot be reproduced exactly.
+
+Possible improvement:
+
+- refuse publication run when repo dirty;
+- record diff;
+- auto-capture patch.
+
+For course, awareness is enough.
+
+---
+
+## Поглиблення: input data hashing
+
+Config hash protects config.
+
+Add:
+
+\[
+h_{data}=SHA256(file\ bytes).
+\]
+
+Then metadata can include a scenario-data checksum.
+
+Now scenario change detectable even if filename same.
+
+This directly fixes one break-the-workflow case.
+
+---
+
+## Поглиблення: code version in metadata
+
+Current metadata note says reproducible for same code/config/data/environment.
+
+A stronger implementation could automatically query the Git commit and store it.
+
+If Git unavailable, metadata should state:
+
+~~~text
+git_commit: unavailable
+~~~
+
+rather than invent certainty.
+
+---
+
+## Поглиблення: dependency snapshot
+
+Pinned requirements in repository help.
+
+But installed environment can still differ if user ignores them.
+
+A run can record:
+
+~~~text
+python --version
+pip freeze
+~~~
+
+or selected critical versions.
+
+For scientific work useful fields include:
+
+- Python;
+- NumPy;
+- pandas;
+- SciPy;
+- SymPy;
+- Matplotlib.
+
+For GPU workflows also backend versions.
+
+---
+
+## Поглиблення: environment reproducibility vs portability
+
+Exact environment replication is strong but can become brittle over years.
+
+Alternative goal:
+
+> portable reproducibility.
+
+That means code works under a documented version range, with tests verifying outputs/tolerances.
+
+There is a trade-off between freezing everything exactly and maintaining a portable tested package.
+
+Course chooses pinned stack for educational stability.
+
+---
+
+## Поглиблення: raw data should be immutable
+
+A strong rule:
+
+> raw input is never overwritten by experiment.
+
+Why?
+
+If the same file is modified in-place, historical result loses source.
+
+Prefer:
+
+~~~text
+data/raw/
+data/processed/
+outputs/
+~~~
+
+Transformation script creates processed data from raw.
+
+Then provenance is explicit.
+
+---
+
+## Поглиблення: preprocessing is part of model pipeline
+
+Researchers sometimes think:
+
+> preprocessing is just preparation.
+
+But filtering, imputation, normalization and aggregation can change results.
+
+Therefore preprocessing code belongs in reproducibility chain.
+
+If a CSV is manually cleaned in a spreadsheet and overwritten, provenance weakens.
+
+---
+
+## Поглиблення: experiment config schema
+
+JSON config is useful, but can contain invalid types.
+
+For larger project define schema:
+
+- required keys;
+- type constraints;
+- allowed ranges;
+- defaults.
+
+Current validate_config checks:
+
+- seed;
+- replications;
+- model;
+- positive replications;
+- nonnegative noise_sd.
+
+This is first step toward schema validation.
+
+---
+
+## Поглиблення: why explicit validation matters
+
+Without validation a negative replication count or negative noise value could fail strangely later.
+
+Validation creates early, meaningful error.
+
+This is part of scientific quality.
+
+Bad inputs should be rejected before expensive computation.
+
+---
+
+## Поглиблення: output determinism
+
+For same config/data/code/seed baseline raw DataFrame should be identical.
+
+Test:
+
+~~~python
+pd.testing.assert_frame_equal(a, b)
+~~~
+
+This is stronger than saying that means are close.
+
+It checks exact computational repeatability.
+
+For some parallel/GPU workflows bitwise identity may not be realistic.
+
+Then reproducibility criterion must use tolerances.
+
+---
+
+## Поглиблення: exact vs statistical reproducibility
+
+### Exact
+
+Same raw numbers.
+
+Appropriate for this CPU pseudo-random workflow.
+
+### Numerical
+
+Differences within tolerance.
+
+Common for floating-point solvers.
+
+### Statistical
+
+Different draws but same distribution-level conclusions.
+
+Common for stochastic HPC.
+
+Before claiming reproducibility define which level intended.
+
+---
+
+## Поглиблення: experiment registry design
+
+When dissertation has many runs, one metadata file per output directory is not enough for overview.
+
+Create registry:
+
+| experiment_id | commit | config | data | purpose | status |
+|---|---|---|---|---|---|
+| exp001 | abc | cfg1 | d1 | baseline | accepted |
+| exp002 | def | cfg2 | d1 | sensitivity | exploratory |
+
+This prevents “which run was final?” confusion.
+
+---
+
+## Поглиблення: exploratory vs confirmatory runs
+
+During exploration researcher tries many configs.
+
+Later select analysis plan.
+
+It is useful to mark:
+
+- exploratory;
+- validation;
+- final/publication.
+
+Otherwise result selection can be opaque.
+
+Metadata can include purpose tag.
+
+---
+
+## Поглиблення: publication artifact mapping
+
+Suppose dissertation contains:
+
+- Table 3.2;
+- Figure 3.4;
+- metric in paragraph.
+
+Create mapping:
+
+~~~text
+Figure 3.4 -> experiment_id X -> script Y -> output Z
+Table 3.2  -> experiment_id Q -> summary.csv
+~~~
+
+Then revision becomes manageable.
+
+---
+
+## Поглиблення: one source of truth for figures
+
+Do not copy values manually from terminal into Excel, then chart.
+
+Better:
+
+\[
+data
+\rightarrow
+script
+\rightarrow
+figure.
+\]
+
+If style adjustment needed, script controls it.
+
+This keeps numbers linked to computation.
+
+---
+
+## Поглиблення: checksums for publication artifacts
+
+For final figure or table, optional checksum can prove file identity.
+
+For example:
+
+\[
+SHA256(figure.png).
+\]
+
+This may be overkill for classroom use.
+
+But useful in audited pipelines.
+
+---
+
+## Поглиблення: reproducibility under closed-data constraints
+
+Military and defence research may have data that cannot leave secure environment.
+
+Reproducibility can still be designed.
+
+Inside secure network preserve:
+
+- exact raw data;
+- version/hash;
+- scripts;
+- config;
+- environment;
+- outputs;
+- access rules.
+
+Outside secure network publish:
+
+- synthetic dataset;
+- schema;
+- method;
+- limitations.
+
+Do not confuse public reproducibility with internal reproducibility.
+
+---
+
+## Поглиблення: synthetic twin dataset
+
+A useful pattern:
+
+1. confidential real dataset used in secure analysis;
+2. synthetic dataset preserves structure, not sensitive values;
+3. public repo demonstrates workflow;
+4. secure metadata links internal result to real data version.
+
+This supports teaching and method transparency without disclosing sensitive content.
+
+---
+
+## Поглиблення: provenance graph
+
+Conceptually provenance forms graph:
+
+\[
+Data
+\rightarrow
+Experiment
+\rightarrow
+Output
+\rightarrow
+Publication.
+\]
+
+And:
+
+\[
+Code+Config
+\rightarrow
+Experiment.
+\]
+
+Metadata stores the edges.
+
+This graph is a useful mental model for dissertation computational work.
+
+---
+
+## Поглиблення: why notebook outputs should not be trusted blindly
+
+Notebook cell can display result from old kernel state even if code cell later edited.
+
+Therefore final notebook should be:
+
+1. restart kernel;
+2. run all;
+3. verify no error;
+4. compare key outputs;
+5. save executed version.
+
+Course smoke execution supports this discipline.
+
+---
+
+## Поглиблення: CI is not a substitute for local provenance
+
+CI says repository version passes checks.
+
+But if publication result was produced locally with uncommitted changes, CI cannot know.
+
+Thus CI and metadata complement each other.
+
+---
+
+## Поглиблення: failure recovery
+
+Reproducible workflow also helps when experiment fails.
+
+If run produces unexpected result, compare:
+
+- config diff;
+- data diff;
+- commit diff;
+- dependency diff.
+
+Without provenance troubleshooting becomes guessing.
+
+---
+
+## Поглиблення: experiment comparison
+
+Two experiments should be compared by explicit differences.
+
+Example:
+
+~~~text
+A: seed=2026, noise_sd=4, reps=200
+B: seed=2026, noise_sd=8, reps=200
+~~~
+
+Then causal interpretation is clearer because only one factor changed.
+
+If many parameters change simultaneously, attribution weakens.
+
+This is computational experimental design.
+
+---
+
+## Поглиблення: controlled change principle
+
+One-factor change is not always scientifically sufficient, but pedagogically useful.
+
+It allows:
+
+\[
+\Delta output
+\]
+
+to be associated with one parameter change.
+
+For complex interactions use factorial or scenario designs.
+
+The key is explicit design.
+
+---
+
+## Поглиблення: metadata should describe purpose, not only mechanics
+
+Technical metadata:
+
+- seed;
+- hash;
+- versions.
+
+Scientific metadata:
+
+- research question;
+- scenario meaning;
+- expected effect;
+- acceptance criterion.
+
+Both matter.
+
+A perfectly identified run with unknown purpose is still hard to interpret.
+
+---
+
+## Поглиблення: reproducibility debt
+
+Just as software has technical debt, research can accumulate reproducibility debt.
+
+Examples:
+
+- unnamed files;
+- manual changes;
+- missing seeds;
+- undocumented configs;
+- screenshots without source;
+- notebooks with hidden state.
+
+Debt grows with time.
+
+T1.L3 aims to prevent it early in PhD workflow.
+
+---
+
+## Поглиблення: minimum viable reproducibility package
+
+If time limited, preserve at least:
+
+1. README command;
+2. code;
+3. input data;
+4. config;
+5. seed;
+6. tests;
+7. metadata;
+8. commit SHA;
+9. dependency file.
+
+This small package gives large benefit.
+
+---
+
 ## 77. Одна сторінка підсумку
 
 ### П’ять головних ідей
