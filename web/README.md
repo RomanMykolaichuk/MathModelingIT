@@ -91,9 +91,12 @@ Web-версії генерує:
 python tools/build_minibooks.py
 ```
 
-Наразі опубліковано три MiniBooks:
+Наразі опубліковано шість MiniBooks:
 
 - T1.L1 — `web/books/t1_l1/index.html`;
+- T2.L1 — `web/books/t2_l1/index.html`;
+- T2.L2 — `web/books/t2_l2/index.html`;
+- T2.L3 — `web/books/t2_l3/index.html`;
 - T2.L4 — `web/books/t2_l4/index.html`;
 - T2.L5 — `web/books/t2_l5/index.html`.
 
