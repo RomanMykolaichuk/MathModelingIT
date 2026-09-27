@@ -2316,6 +2316,99 @@ Formula без предметного пояснення не робить resea
 
 ---
 
+## Поглиблення: що саме означає «надійний nonlinear optimum»
+
+Для nonlinear optimization слово «надійний» повинно мати конкретний зміст.
+
+### Numerical reliability
+
+Solver converged repeatedly.
+
+### Feasibility reliability
+
+Constraints independently verified.
+
+### Start reliability
+
+Several starts lead to same or comparable best region.
+
+### Cross-method reliability
+
+Independent grid or another method supports the same region.
+
+### Model reliability
+
+Functional form and parameters have domain/data justification.
+
+Ці levels утворюють evidence hierarchy.
+
+Якщо є лише перший рівень:
+
+> solver success,
+
+висновок слабкий.
+
+Якщо є всі п’ять, computational claim значно сильніший.
+
+---
+
+## Поглиблення: synthetic military interpretation без operational claims
+
+Applied case можна уявити як allocation умовного навчального ресурсу між двома напрямами підготовки.
+
+Кожен напрям має saturation:
+
+> після певного рівня додаткове вкладення дає дедалі менший ефект.
+
+Interaction term означає:
+
+> певна частина корисності виникає лише коли обидва напрями підтримуються разом.
+
+Це не реальна оцінка combat effectiveness.
+
+Це pedagogical mechanism для пояснення:
+
+- diminishing returns;
+- synergy;
+- constrained nonlinear allocation.
+
+Nonconvex case взагалі не має domain semantics.
+
+Він навмисно є **mathematical stress test** для optimizer.
+
+Це теж важлива академічна дисципліна:
+
+> не кожен teaching example потрібно маскувати під «реалістичний military case».
+
+---
+
+## Поглиблення: checklist перед claim про global optimum
+
+Перед словами:
+
+> «знайдено глобальний optimum»
+
+перевірте:
+
+1. Чи problem convex/concave у relevant sense?
+2. Чи theorem гарантує local=global?
+3. Якщо ні — які globality checks виконані?
+4. Скільки starts?
+5. Як вони обрані?
+6. Чи перевірені boundaries?
+7. Чи є independent method?
+8. Який unresolved optimality gap?
+
+Якщо formal guarantee немає, коректніше писати:
+
+> best solution found under specified search and verification procedure.
+
+Це не слабкість.
+
+Це точність.
+
+---
+
 ## 67. Мінісловник T2.L3
 
 ### Nonlinear function
