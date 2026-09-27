@@ -39,6 +39,22 @@ PUBLISHED = {
         "lab": "../../index.html#resource",
         "notes": "https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t1_l1/README.md",
     },
+    "t1_l2": {
+        "code": "T1.L2",
+        "title": "T1.L2 — Класифікація математичних моделей",
+        "lab": "https://github.com/RomanMykolaichuk/MathModelingIT/tree/main/lessons/t1_l2",
+        "lab_label": "До Python-заняття",
+        "cta_label": "Відкрити Python-заняття →",
+        "notes": "https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t1_l2/README.md",
+    },
+    "t1_l3": {
+        "code": "T1.L3",
+        "title": "T1.L3 — Організація математичного моделювання",
+        "lab": "https://github.com/RomanMykolaichuk/MathModelingIT/tree/main/lessons/t1_l3",
+        "lab_label": "До Python-заняття",
+        "cta_label": "Відкрити Python-заняття →",
+        "notes": "https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t1_l3/README.md",
+    },
     "t2_l1": {
         "code": "T2.L1",
         "title": "T2.L1 — Задачі оптимізації в середовищі VS Code",
@@ -74,6 +90,14 @@ PUBLISHED = {
         "title": "T2.L5 — Засоби розв’язування задач множинного вибору",
         "lab": "../../index.html#mcda",
         "notes": "https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t2_l5/README.md",
+    },
+    "t2_l6": {
+        "code": "T2.L6",
+        "title": "T2.L6 — Системи комп'ютерної математики та їх можливості для математичного моделювання",
+        "lab": "https://github.com/RomanMykolaichuk/MathModelingIT/tree/main/lessons/t2_l6",
+        "lab_label": "До Python-заняття",
+        "cta_label": "Відкрити Python-заняття →",
+        "notes": "https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t2_l6/README.md",
     },
 }
 
