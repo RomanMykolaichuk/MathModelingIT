@@ -91,14 +91,17 @@ Web-версії генерує:
 python tools/build_minibooks.py
 ```
 
-Наразі опубліковано шість MiniBooks:
+Наразі опубліковано дев’ять MiniBooks:
 
 - T1.L1 — `web/books/t1_l1/index.html`;
+- T1.L2 — `web/books/t1_l2/index.html`;
+- T1.L3 — `web/books/t1_l3/index.html`;
 - T2.L1 — `web/books/t2_l1/index.html`;
 - T2.L2 — `web/books/t2_l2/index.html`;
 - T2.L3 — `web/books/t2_l3/index.html`;
 - T2.L4 — `web/books/t2_l4/index.html`;
-- T2.L5 — `web/books/t2_l5/index.html`.
+- T2.L5 — `web/books/t2_l5/index.html`;
+- T2.L6 — `web/books/t2_l6/index.html`.
 
 Усі web-версії будуються з canonical `books/<lesson>/book.md`. PDF-версія MiniBook за технічним стандартом також повинна бути 1:1 конвертацією canonical Markdown без скорочення змісту.
 
