@@ -1498,6 +1498,701 @@ Term:
 
 ---
 
+## Поглиблення: зведення constrained problem до однієї змінної
+
+У baseline resource constraint active:
+
+\[
+x+y=R.
+\]
+
+Тому:
+
+\[
+y=R-x.
+\]
+
+Підставимо в objective:
+
+\[
+H_R(x)=F(x,R-x).
+\]
+
+Feasible interval:
+
+\[
+0\le x\le R.
+\]
+
+Це дуже корисний conceptual step.
+
+Двовимірна constrained optimization problem стає one-dimensional problem.
+
+Ми можемо:
+
+- побудувати graph \(H_R(x)\);
+- побачити максимум;
+- порівняти numerical solution;
+- перевірити shape.
+
+Для \(R=100\) maximum \(H_{100}(x)\) лежить поблизу:
+
+\[
+x\approx48.66.
+\]
+
+Тоді:
+
+\[
+y\approx51.34.
+\]
+
+Це independent interpretation of solver result.
+
+Важливо:
+
+> reduction works because we know active equality-like structure in optimum.
+
+Не кожну constrained problem можна так просто reduce.
+
+---
+
+## Поглиблення: gradient як локальний компас
+
+Для smooth function gradient:
+
+\[
+\nabla F(x,y)
+=
+\left(
+\frac{\partial F}{\partial x},
+\frac{\partial F}{\partial y}
+\right)
+\]
+
+показує direction найшвидшого local increase.
+
+У unconstrained maximization stationary candidate задовольняє:
+
+\[
+\nabla F=0.
+\]
+
+Але в constrained problem optimum може лежати на boundary, де gradient не zero.
+
+Baseline саме такий випадок.
+
+Resource boundary:
+
+\[
+x+y=R.
+\]
+
+Тому важливо не застосовувати правило:
+
+> «optimum там, де derivative = 0»
+
+без урахування constraints.
+
+---
+
+## Поглиблення: marginal balance на boundary
+
+Якщо:
+
+\[
+y=R-x,
+\]
+
+то small increase \(dx\) автоматично означає:
+
+\[
+dy=-dx.
+\]
+
+У optimum local gain from x має балансувати local loss from y з урахуванням interaction.
+
+Тобто:
+
+\[
+\frac{dH_R}{dx}=0.
+\]
+
+Інтуїтивно:
+
+> якщо перенести дуже малу unit ресурсу з y у x, objective майже не зміниться.
+
+Це глибша причина того, чому allocation близький до balance.
+
+Не «solver любить 50/50», а:
+
+> marginal trade-off balanced.
+
+---
+
+## Поглиблення: curvature пояснює saturation
+
+Перша derivative показує marginal gain.
+
+Друга derivative:
+
+\[
+\frac{d^2F}{dx^2}
+\]
+
+описує curvature.
+
+Для exponential saturation component:
+
+\[
+F_x(x)=40(1-e^{-0.05x}),
+\]
+
+маємо:
+
+\[
+\frac{d^2F_x}{dx^2}
+=
+-0.1e^{-0.05x}<0.
+\]
+
+Negative second derivative означає concavity цього component.
+
+Тобто slope зменшується.
+
+Це математичний signature diminishing returns.
+
+---
+
+## Поглиблення: concavity не треба плутати з «кривою вниз на картинці»
+
+Graphical intuition корисна.
+
+Але formal property важливіша.
+
+Concave objective over convex feasible set для maximization дає сильну гарантію:
+
+> будь-який local optimum є global.
+
+Саме тому classification problem geometry має практичне значення.
+
+У non-convex case такої гарантії немає.
+
+---
+
+## Поглиблення: scaling variables
+
+Numerical optimization може поводитися гірше, якщо variables мають дуже різні scales.
+
+Наприклад:
+
+\[
+x\in[0,1],
+\]
+
+\[
+y\in[0,10^6].
+\]
+
+Тоді gradient components можуть мати radically different magnitudes.
+
+Корисно масштабувати:
+
+\[
+\tilde x=\frac{x-x_{min}}{x_{max}-x_{min}}.
+\]
+
+У нашому teaching case x і y одного порядку, тому issue мінімальна.
+
+Але для Research Transfer scaling потрібно перевіряти.
+
+---
+
+## Поглиблення: scaling objective
+
+Так само objective components можуть мати різні magnitudes.
+
+Якщо one component ~0.01, а інший ~100000, small component numerical solver майже «не бачить».
+
+Це не обов’язково означає, що він предметно неважливий.
+
+Потрібно distinguish:
+
+- numerical scale;
+- conceptual importance.
+
+Особливо це важливо в weighted nonlinear objectives.
+
+---
+
+## Поглиблення: stopping tolerance
+
+Solver зупиняється не тоді, коли досягнуто mathematically exact optimum.
+
+Він використовує tolerances.
+
+Наприклад:
+
+- gradient norm small;
+- step small;
+- objective change small;
+- maximum iterations.
+
+Тому два runs можуть дати:
+
+\[
+74.49684
+\]
+
+і:
+
+\[
+74.49685.
+\]
+
+Це не meaningful scientific difference.
+
+Потрібно reporting precision узгоджувати з numerical tolerance та data quality.
+
+---
+
+## Поглиблення: false precision nonlinear result
+
+Якщо parameters synthetic:
+
+\[
+0.05,\ 0.04,\ 0.15,
+\]
+
+то reporting:
+
+\[
+x^*=48.659312487
+\]
+
+створює false precision.
+
+У teaching interpretation достатньо:
+
+\[
+x^*\approx48.66,
+\]
+
+\[
+y^*\approx51.34.
+\]
+
+Точніші digits потрібні для tests, але не обов’язково для scientific narrative.
+
+Це важливе розділення:
+
+- computational precision;
+- reporting precision.
+
+---
+
+## Поглиблення: design of multi-start experiment
+
+Multi-start не повинен бути випадковим списком start points.
+
+Корисно включити:
+
+### Center
+
+\[
+(0,0)
+\]
+
+або center domain.
+
+### Corners
+
+\[
+(-4,-4),\ (-4,4),\ (4,-4),\ (4,4).
+\]
+
+### Interior points
+
+кілька locations.
+
+### Random sample
+
+за потреби.
+
+Мета:
+
+> покрити різні basins.
+
+У course використовується невеликий deterministic set, щоб experiment був reproducible.
+
+---
+
+## Поглиблення: deterministic starts vs random starts
+
+Deterministic starts:
+
+- reproducible;
+- easy to compare;
+- можуть miss region systematically.
+
+Random starts:
+
+- broader exploration;
+- require seed;
+- results vary with sample.
+
+Комбінований design:
+
+1. fixed canonical starts;
+2. random starts with seed.
+
+Це часто practical compromise.
+
+---
+
+## Поглиблення: best-of-multistart as lower bound on global optimum
+
+У maximization якщо знайдено best value:
+
+\[
+G_{best}=1.1145,
+\]
+
+то ми знаємо:
+
+\[
+G_{global}\ge1.1145.
+\]
+
+Бо global optimum не може бути гіршим за знайдений feasible solution.
+
+Але не знаємо:
+
+\[
+G_{global}=1.1145
+\]
+
+без stronger proof.
+
+Тобто best found value дає **lower bound on global maximum value**.
+
+Це коректна логічна позиція.
+
+---
+
+## Поглиблення: grid search як upper-proof не працює
+
+Coarse grid знаходить best among grid points.
+
+Це не upper bound на continuous maximum.
+
+Між grid nodes може бути вищий point.
+
+Отже:
+
+\[
+G_{grid}
+\]
+
+— ще один feasible lower bound.
+
+Якщо:
+
+\[
+G_{grid}\approx G_{multistart},
+\]
+
+confidence grows.
+
+Але formal gap unknown.
+
+---
+
+## Поглиблення: branch-and-bound / global methods як наступний рівень
+
+Для деяких non-convex problems існують global optimization methods:
+
+- branch-and-bound;
+- interval methods;
+- deterministic global solvers;
+- evolutionary algorithms;
+- basin hopping;
+- differential evolution.
+
+Але їх застосування залежить від:
+
+- dimension;
+- smoothness;
+- bounds;
+- derivative availability;
+- computational budget.
+
+На T2.L3 головне не перелік algorithms.
+
+Головне:
+
+> local method потребує explicit verification strategy.
+
+---
+
+## Поглиблення: boundary optimum
+
+Nonconvex best region у course близький до:
+
+\[
+y\approx0.
+\]
+
+Тобто best solution лежить біля boundary.
+
+Це важливий reminder.
+
+Optimum не обов’язково «в центрі красивого peak».
+
+Bounds самі формують feasible landscape.
+
+Тому visualization повинна показувати не лише objective, а й feasible domain.
+
+---
+
+## Поглиблення: active bounds і interpretation
+
+Якщо optimum має:
+
+\[
+y=0,
+\]
+
+це active lower bound.
+
+Предметна interpretation:
+
+> у цій synthetic landscape model allocation y не дає достатньої marginal benefit near best region.
+
+Але це не означає:
+
+> real direction y «не потрібний».
+
+Toy landscape не має direct domain semantics.
+
+Це teaching example of local/global behavior.
+
+---
+
+## Поглиблення: parameter sensitivity нелінійної форми
+
+Можна змінити coefficient interaction:
+
+\[
+0.15\rightarrow0.05,\ 0.30.
+\]
+
+Question:
+
+> як stronger/weaker synergy змінює allocation?
+
+Або saturation rate:
+
+\[
+0.05\rightarrow0.03.
+\]
+
+Question:
+
+> як slower saturation x змінює optimum?
+
+Такі experiments допомагають визначити:
+
+> які nonlinear assumptions найбільше формують decision.
+
+---
+
+## Поглиблення: structural uncertainty
+
+Parameter uncertainty:
+
+> coefficient 0.05 неточний.
+
+Structural uncertainty:
+
+> можливо exponential saturation взагалі неправильна function family.
+
+Це глибша проблема.
+
+Можливі alternatives:
+
+- logarithmic;
+- Michaelis–Menten;
+- logistic;
+- piecewise linear.
+
+У research model варто порівнювати plausible structures, якщо data не підтримує одну однозначно.
+
+---
+
+## Поглиблення: calibration before optimization
+
+Небезпечний workflow:
+
+1. invent nonlinear formula;
+2. optimize;
+3. report optimum.
+
+Сильніший:
+
+1. formulate mechanism hypothesis;
+2. collect/prepare data;
+3. estimate parameters;
+4. validate response function;
+5. quantify uncertainty;
+6. only then optimize;
+7. evaluate robustness decision.
+
+Optimization should sit **after** model calibration, not replace it.
+
+---
+
+## Поглиблення: fixed-decision robustness
+
+Припустимо baseline optimum:
+
+\[
+d_0=(48.66,51.34).
+\]
+
+Parameters uncertainty.
+
+Є два experiments.
+
+### Reoptimize each draw
+
+Для кожного parameter sample знаходимо new optimum.
+
+Отримуємо distribution:
+
+\[
+d^*(\theta).
+\]
+
+### Keep \(d_0\) fixed
+
+Для кожного parameter sample оцінюємо:
+
+\[
+F(d_0;\theta).
+\]
+
+Це показує robustness actual chosen decision.
+
+Для decision support другий experiment часто не менш важливий.
+
+---
+
+## Поглиблення: regret
+
+Можна визначити regret:
+
+\[
+Regret(\theta)
+=
+F(d^*(\theta);\theta)
+-
+F(d_0;\theta).
+\]
+
+Він відповідає:
+
+> скільки performance ми втрачаємо, якщо використовуємо baseline decision замість scenario-specific optimum?
+
+Це сильний bridge до robust decision making.
+
+---
+
+## Поглиблення: model audit T2.L3
+
+### Mathematical audit
+
+- domain correct?
+- objective finite?
+- constraints explicit?
+- smoothness understood?
+
+### Numerical audit
+
+- starts logged?
+- tolerance known?
+- scaling acceptable?
+- convergence checked?
+
+### Globality audit
+
+- convexity/concavity known?
+- multi-start performed?
+- independent check available?
+
+### Scientific audit
+
+- formula justified?
+- parameters calibrated?
+- uncertainty acknowledged?
+- allowed conclusion conditional?
+
+---
+
+## Поглиблення: reproducibility package
+
+Для nonlinear experiment збережіть:
+
+- function definition;
+- parameter values;
+- bounds;
+- constraints;
+- solver/method;
+- initial points;
+- tolerances;
+- random seed, якщо є;
+- all local solutions;
+- best objective;
+- grid resolution;
+- sensitivity results;
+- figures;
+- code version;
+- package versions.
+
+Особливо важливо зберігати starts.
+
+Без них colleague може не відтворити local solution.
+
+---
+
+## Поглиблення: напівхудожнє повернення до сцени
+
+Керівник бачить:
+
+\[
+x=48.66,\quad y=51.34
+\]
+
+і питає:
+
+> «Чому не 50 на 50?»
+
+Аналітик відповідає:
+
+> «Бо два напрями мають різні saturation rates, а interaction винагороджує спільне використання. На boundary \(x+y=100\) optimum виникає там, де marginal trade-off balance. Якщо ресурс збільшувати, objective росте, але все повільніше».
+
+Потім керівник дивиться на non-convex case:
+
+> «А тут solver теж написав success. Чому ви запускаєте його шість разів?»
+
+Аналітик:
+
+> «Бо success означає local convergence. Різні starts приводять до різних peaks. Ми використовуємо multi-start і independent grid, щоб не переплутати локальний максимум із найкращим знайденим region».
+
+Саме ця друга відповідь і є сутністю T2.L3.
+
+---
+
 ## 62. Scenario design nonlinear
 
 Корисний plan:
