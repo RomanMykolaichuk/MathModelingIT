@@ -1,0 +1,29 @@
+book_id: t2_l6
+title: "Системи комп'ютерної математики та їх можливості для математичного моделювання"
+subtitle: "Від формули SymPy до незалежної чисельної перевірки"
+lesson_path: lessons/t2_l6
+language: uk
+audience: adjuncts
+status: validated_draft
+theory_level: intermediate
+estimated_reading_minutes: 80
+web_path: web/books/t2_l6/index.html
+python_package: lessons/t2_l6
+military_context: synthetic_non_sensitive
+canonical_source: books/t2_l6/book.md
+source_of_truth:
+  - lessons/t2_l6/README.md
+  - lessons/t2_l6/assignment.md
+  - lessons/t2_l6/src/model.py
+  - lessons/t2_l6/src/experiment.py
+  - lessons/t2_l6/tests/test_model.py
+baseline:
+  q: 12.0
+  k: 0.10
+  s0: 20.0
+  equilibrium: 120.0
+  state_t10: 83.2120558829
+  cumulative_0_10: 567.8794411714
+  threshold: 80.0
+  threshold_time: 9.1629073187
+  max_symbolic_numeric_error_lt: 1e-6
