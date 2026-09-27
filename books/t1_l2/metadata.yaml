@@ -1,0 +1,28 @@
+book_id: t1_l2
+title: "Класифікація математичних моделей"
+subtitle: "Один об’єкт — чотири способи побачити невизначеність"
+lesson_path: lessons/t1_l2
+language: uk
+audience: adjuncts
+status: validated_draft
+theory_level: introductory
+estimated_reading_minutes: 75
+web_path: web/books/t1_l2/index.html
+python_package: lessons/t1_l2
+military_context: synthetic_non_sensitive
+canonical_source: books/t1_l2/book.md
+source_of_truth:
+  - lessons/t1_l2/README.md
+  - lessons/t1_l2/assignment.md
+  - lessons/t1_l2/src/model.py
+  - lessons/t1_l2/tests/test_model.py
+baseline:
+  initial_stock: 120
+  mean_consumption: 6
+  std_consumption: 1.5
+  horizon: 21
+  monte_carlo_runs: 3000
+  seed: 2026
+  deterministic_exhaustion_time: 20.0
+  probability_exhausted_approx: 0.80
+  conditional_mean_exhaustion_step_approx: 20.1
