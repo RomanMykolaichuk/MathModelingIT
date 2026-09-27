@@ -1445,6 +1445,527 @@ Transfer to real work requires separate data governance and domain validation.
 
 ---
 
+## Поглиблення: однаковий mean не означає однаковий risk
+
+Розглянемо дві hypothetical consumption models.
+
+### Model A
+
+\[
+C_k\sim N(6,0.5^2).
+\]
+
+### Model B
+
+\[
+C_k\sim N(6,3^2).
+\]
+
+В обох:
+
+\[
+E[C_k]=6.
+\]
+
+Якщо дивитися лише на mean, вони здаються однаковими.
+
+Але distribution of cumulative consumption:
+
+\[
+\sum_{k=1}^{n}C_k
+\]
+
+відрізняється.
+
+У Model B значно вища variability.
+
+Отже, risk early exhaustion може змінюватися навіть при незмінному expected consumption.
+
+Це фундаментальна причина, чому deterministic mean-based model не може автоматично замінити stochastic analysis.
+
+---
+
+## Поглиблення: law of large numbers не робить один run representative
+
+Можна почути:
+
+> «Якщо mean = 6, то за 21 step average consumption буде майже 6».
+
+У середньому across many experiments — так.
+
+Але один finite realization може відхилитися.
+
+Law of large numbers говорить про convergence sample average при великому n.
+
+Вона не гарантує:
+
+> кожна коротка realization близька до mean.
+
+Для horizon=21 variability все ще може суттєво впливати на depletion.
+
+---
+
+## Поглиблення: uncertainty accumulates
+
+State:
+
+\[
+S_n=
+\max\left(
+0,
+S_0-\sum_{k=1}^{n}C_k
+\right).
+\]
+
+Навіть якщо each \(C_k\) має modest variability, sum variability accumulates.
+
+Для independent variables without clipping approximately:
+
+\[
+Var\left(\sum C_k\right)
+=
+n\sigma^2.
+\]
+
+Standard deviation sum:
+
+\[
+\sigma_{sum}=\sqrt n\,\sigma.
+\]
+
+Тобто uncertainty grows with horizon.
+
+Це пояснює, чому stochastic paths diverge from deterministic baseline as time proceeds.
+
+---
+
+## Поглиблення: correlation changes accumulated uncertainty
+
+If consumptions correlated:
+
+\[
+Var\left(\sum C_k\right)
+=
+\sum Var(C_k)
++
+2\sum_{i<j}Cov(C_i,C_j).
+\]
+
+Positive covariance increases cumulative variance.
+
+Thus iid assumption matters.
+
+Two models can have same:
+
+- \(\mu\);
+- \(\sigma\);
+
+but different autocorrelation and therefore different depletion risk.
+
+This is a powerful example of hidden structural assumption.
+
+---
+
+## Поглиблення: normal distribution and domain
+
+Why normal?
+
+It is mathematically convenient.
+
+But consumption is non-negative.
+
+Normal has support:
+
+\[
+(-\infty,\infty).
+\]
+
+Clipping repairs impossible negative draws operationally, but changes distribution.
+
+Alternative positive distributions:
+
+- lognormal;
+- gamma;
+- truncated normal.
+
+Which one is appropriate depends on data and mechanism.
+
+No distribution should be chosen only because NumPy makes it easy.
+
+---
+
+## Поглиблення: probability as model-conditional frequency
+
+When we report:
+
+\[
+\hat p\approx0.80,
+\]
+
+the full statement should mentally include:
+
+> conditional on \(S_0=120\), clipped-normal iid consumption with \(\mu=6,\sigma=1.5\), horizon 21, and this implementation.
+
+This long condition often disappears in prose.
+
+MiniBook trains habit of keeping it visible.
+
+---
+
+## Поглиблення: Monte Carlo sampling error
+
+Even if stochastic model fixed, estimated probability varies with finite N.
+
+If true model probability is \(p\), approximate standard error:
+
+\[
+SE(\hat p)
+\approx
+\sqrt{\frac{p(1-p)}{N}}.
+\]
+
+For:
+
+\[
+p\approx0.8,
+\quad
+N=3000,
+\]
+
+roughly:
+
+\[
+SE\approx
+\sqrt{\frac{0.8\cdot0.2}{3000}}
+\approx0.0073.
+\]
+
+This does not measure model uncertainty.
+
+It measures simulation sampling uncertainty.
+
+Very important distinction:
+
+- parameter/model uncertainty;
+- Monte Carlo error.
+
+---
+
+## Поглиблення: increasing N
+
+If N increases fourfold:
+
+\[
+N\rightarrow4N,
+\]
+
+Monte Carlo standard error halves approximately because:
+
+\[
+SE\propto\frac{1}{\sqrt N}.
+\]
+
+So precision improves slowly.
+
+To reduce SE by factor 10, need about 100× runs.
+
+This is why number of simulations should be justified, not chosen mystically.
+
+---
+
+## Поглиблення: convergence diagnostic
+
+A useful computational experiment:
+
+1. run N=100;
+2. N=300;
+3. N=1000;
+4. N=3000;
+5. N=10000.
+
+Plot:
+
+\[
+\hat p_N
+\]
+
+versus N.
+
+If estimate stabilizes, simulation numerical precision improving.
+
+But again:
+
+> convergence of \(\hat p_N\) does not validate the stochastic assumptions.
+
+---
+
+## Поглиблення: horizon and censoring
+
+Suppose true depletion time exceeds 21 in some runs.
+
+We observe only:
+
+\[
+T>21.
+\]
+
+That is right-censoring conceptually.
+
+If horizon extended to 30:
+
+- more runs become finite;
+- probability_exhausted increases or stays same;
+- conditional mean finite times changes.
+
+Therefore summary depends on horizon.
+
+Horizon is not merely a plotting choice.
+
+It is part of research question.
+
+---
+
+## Поглиблення: compare probability across horizons
+
+Define:
+
+\[
+p(H)=P(T\le H).
+\]
+
+Then:
+
+\[
+p(H)
+\]
+
+is cumulative distribution function of depletion time under model.
+
+Instead of one horizon 21, evaluate:
+
+\[
+H=18,19,20,21,22,24.
+\]
+
+This gives richer risk curve.
+
+A single 0.80 becomes a function.
+
+---
+
+## Поглиблення: quantile of exhaustion time
+
+If enough runs exhausted, one may estimate:
+
+\[
+Q_{0.5},
+Q_{0.9}
+\]
+
+for finite or full time-to-event representation.
+
+But handling non-exhausted runs needs care.
+
+Simply dropping them changes interpretation.
+
+This is why advanced analysis may use survival methods.
+
+---
+
+## Поглиблення: deterministic model as expected-value proxy
+
+It is tempting to say:
+
+\[
+S_{det}(t)=E[S_{stoch}(t)].
+\]
+
+With clipping and nonlinear state boundary this is not generally exact.
+
+Because:
+
+\[
+E[\max(0,X)]\ne \max(0,E[X]).
+\]
+
+This is a key nonlinear expectation issue.
+
+Thus deterministic path using mean consumption is not automatically mean stochastic stock path.
+
+---
+
+## Поглиблення: Jensen-style intuition
+
+Nonlinear transformations mean:
+
+\[
+E[f(X)]\ne f(E[X]).
+\]
+
+Clipping:
+
+\[
+f(x)=\max(0,x)
+\]
+
+is nonlinear.
+
+Therefore deterministic substitution of mean parameters can differ from ensemble mean.
+
+This is one reason simulation adds information.
+
+---
+
+## Поглиблення: scenario table for model classes
+
+| Research need | Suitable baseline class | Main output |
+|---|---|---|
+| nominal depletion | deterministic continuous | one time |
+| state by step | discrete dynamic | one trajectory |
+| one possible uncertain path | stochastic dynamic | realization |
+| risk by horizon | Monte Carlo | probability |
+| distribution of timing | Monte Carlo | distribution |
+| choose best reserve | optimization extension | decision |
+
+This table is not universal.
+
+It is a decision aid.
+
+---
+
+## Поглиблення: model hierarchy instead of model competition
+
+Do not replace deterministic model with stochastic and throw first away.
+
+Use hierarchy:
+
+1. deterministic baseline;
+2. stochastic extension;
+3. dynamic simulation;
+4. uncertainty analysis.
+
+Each layer answers new questions.
+
+The simpler model remains useful for sanity checks.
+
+---
+
+## Поглиблення: calibration question
+
+Where do:
+
+\[
+\mu=6,\sigma=1.5
+\]
+
+come from?
+
+In course — synthetic.
+
+In research they might be estimated from historical data.
+
+Then uncertainty in estimates matters.
+
+If sample small, \(\mu,\sigma\) themselves uncertain.
+
+Monte Carlo with fixed estimated parameters underrepresents total uncertainty.
+
+---
+
+## Поглиблення: posterior/predictive idea
+
+Advanced extension:
+
+Instead of fixed:
+
+\[
+\mu,\sigma,
+\]
+
+sample parameters from uncertainty distribution, then sample consumption.
+
+This creates predictive uncertainty including parameter uncertainty.
+
+Not required in T1.L2.
+
+But conceptually important:
+
+> stochastic observations and uncertain parameters are different layers.
+
+---
+
+## Поглиблення: break-the-model map
+
+<figure>
+  <img src="figures/fig_08_limits.svg" alt="Межі baseline stochastic model">
+  <figcaption><strong>Рис. 8.</strong> Baseline iid clipped-normal model can fail when consumption is autocorrelated, parameters change over time, replenishment exists, or horizon creates strong censoring.</figcaption>
+</figure>
+
+A mature model description should state which failure modes are plausible.
+
+---
+
+## Поглиблення: verification vs validation
+
+Verification asks:
+
+> did we implement equations correctly?
+
+Examples:
+
+- manual path;
+- same seed;
+- nonnegative stock.
+
+Validation asks:
+
+> do assumptions represent target process sufficiently?
+
+Examples:
+
+- distribution fit;
+- autocorrelation;
+- parameter stability;
+- replenishment dynamics.
+
+Monte Carlo can be perfectly verified and poorly validated.
+
+---
+
+## Поглиблення: reproducibility of stochastic results
+
+To reproduce probability estimate preserve:
+
+- code;
+- seed;
+- N;
+- parameters;
+- horizon;
+- RNG library/version if exact identity matters.
+
+If only statistical reproducibility needed, exact same raw draws may be less important.
+
+But course emphasizes exact computational traceability.
+
+---
+
+## Поглиблення: safe military interpretation
+
+In real military research, stochastic resource modeling may involve sensitive data.
+
+This MiniBook deliberately avoids:
+
+- actual stock levels;
+- real consumption rates;
+- location;
+- mission timelines.
+
+Transfer should preserve mathematical pattern while using authorized or synthetic data.
+
+The mathematical lesson survives without operational detail.
+
+---
+
 ## 56. Одна сторінка підсумку
 
 ### П’ять головних ідей
