@@ -2287,6 +2287,46 @@ Budget перестає бути bottleneck.
 
 ---
 
+## Поглиблення: від optimum до рішення
+
+Останній conceptual step — відокремити математичний optimum від реального organizational decision.
+
+Модель каже:
+
+\[
+x^*=(40,17.5,17.5,25).
+\]
+
+Але людина, яка приймає рішення, може додатково враховувати фактори, яких у model немає:
+
+- implementation time;
+- switching cost;
+- organizational readiness;
+- legal restrictions;
+- qualitative risk;
+- data uncertainty;
+- requirement for reserve.
+
+Тому optimization output краще трактувати як:
+
+> **структурований аргумент для decision support**, а не автоматичний наказ.
+
+Якщо final decision відрізняється від \(x^*\), це не обов’язково означає, що model «марна».
+
+Потрібно задокументувати:
+
+1. що рекомендувала model;
+2. які factors були поза model;
+3. чому decision-maker відхилився від optimum;
+4. який очікуваний cost цього відхилення;
+5. чи треба додати missed factor у наступну version model.
+
+Це створює learning loop між modeling і practice.
+
+У research context така прозорість особливо важлива: модель не приховує людське рішення, а робить його аргументацію чіткішою.
+
+---
+
 ## 53. Одна сторінка підсумку
 
 ### П’ять ідей
