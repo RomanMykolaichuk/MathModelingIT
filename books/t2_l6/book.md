@@ -2448,6 +2448,384 @@ This table prevents overclaiming.
 
 ---
 
+## Поглиблення: від symbolic insight до research design
+
+Symbolic analysis can change not only how we solve model, but what experiment we design.
+
+For baseline:
+
+\[
+S^*=\frac{q}{k}.
+\]
+
+This tells us equilibrium identifies ratio \(q/k\), not parameters separately.
+
+Transient:
+
+\[
+e^{-kt}
+\]
+
+tells us early-time data contain information about \(k\).
+
+Thus symbolic structure suggests:
+
+- collect equilibrium-like late data;
+- collect transient early data.
+
+This is an example of mathematics guiding measurement strategy.
+
+---
+
+## Поглиблення: sensitivity as experimental priority
+
+If:
+
+\[
+\left|\frac{\partial output}{\partial \theta}\right|
+\]
+
+is very small across relevant range, precise estimation of \(\theta\) may matter less for that output.
+
+If derivative large, parameter uncertainty strongly affects prediction.
+
+Sensitivity can guide where to invest measurement effort.
+
+---
+
+## Поглиблення: local vs global sensitivity
+
+Symbolic derivative is local.
+
+For larger parameter changes, nonlinear effect may differ.
+
+Therefore pair:
+
+- symbolic derivative;
+- parameter sweep.
+
+This combination appears repeatedly in good modeling practice.
+
+---
+
+## Поглиблення: parameter sweep matrix
+
+For q and k:
+
+| q | k | S* | S(10) |
+|---:|---:|---:|---:|
+| 8 | .08 | 100 | ... |
+| 12 | .08 | 150 | ... |
+| 16 | .08 | 200 | ... |
+| 8 | .12 | 66.7 | ... |
+| 12 | .12 | 100 | ... |
+
+This table shows both structural formula and finite-time effect.
+
+---
+
+## Поглиблення: symbolic limit analysis
+
+We can inspect limits.
+
+As:
+
+\[
+t\rightarrow\infty,
+\]
+
+\[
+S(t)\rightarrow q/k.
+\]
+
+As:
+
+\[
+k\rightarrow\infty
+\]
+
+for fixed q and t>0, equilibrium tends to zero.
+
+As:
+
+\[
+k\rightarrow0^+,
+\]
+
+current closed-form expression has terms that look singular, but limit corresponds to linear-growth ODE.
+
+Limit analysis can expose alternative branches.
+
+---
+
+## Поглиблення: checking limit k→0
+
+Original ODE with k=0:
+
+\[
+S=S_0+qt.
+\]
+
+A symbolic limit of closed-form expression can recover this.
+
+This is a powerful consistency check and a good CAS exercise.
+
+---
+
+## Поглиблення: series expansion
+
+For small \(kt\):
+
+\[
+e^{-kt}
+\approx
+1-kt+\frac{(kt)^2}{2}-\cdots.
+\]
+
+Substitute into solution to get short-time approximation.
+
+Leading behavior:
+
+\[
+S(t)\approx
+S_0+(q-kS_0)t.
+\]
+
+That matches initial derivative from ODE.
+
+Another symbolic consistency check.
+
+---
+
+## Поглиблення: local linearization of nonlinear models
+
+In future nonlinear ODE:
+
+\[
+\dot x=f(x),
+\]
+
+equilibrium \(x^*\) can be studied using derivative/Jacobian:
+
+\[
+J=\frac{\partial f}{\partial x}\Big|_{x^*}.
+\]
+
+T2.L6 linear example prepares this idea.
+
+---
+
+## Поглиблення: Jacobian for current model
+
+\[
+f(S)=q-kS.
+\]
+
+Derivative:
+
+\[
+\frac{df}{dS}=-k.
+\]
+
+Because:
+
+\[
+-k<0,
+\]
+
+equilibrium stable.
+
+This is simplest possible Jacobian stability analysis.
+
+---
+
+## Поглиблення: symbolic matrix models
+
+For vector state:
+
+\[
+\dot{\mathbf x}=A\mathbf x+\mathbf b.
+\]
+
+CAS can help:
+
+- eigenvalues;
+- equilibrium;
+- matrix exponential;
+- symbolic Jacobian.
+
+Numerical methods then handle larger systems.
+
+T2.L6 scalar case is foundation.
+
+---
+
+## Поглиблення: stiffness preview
+
+Some ODE systems contain very different time scales.
+
+Then explicit numerical integrators may struggle.
+
+Solver choice becomes important.
+
+Current model is not stiff.
+
+But hybrid symbolic/numerical reasoning helps detect time scales.
+
+---
+
+## Поглиблення: event detection instead of closed-form threshold
+
+For complex ODE where threshold formula unavailable, solve_ivp can detect event:
+
+\[
+S(t)-H=0.
+\]
+
+Thus threshold_time concept generalizes from analytic algebra to numerical event functions.
+
+---
+
+## Поглиблення: comparing threshold methods
+
+For baseline:
+
+1. analytical threshold formula;
+2. numerical event detection.
+
+If they agree, event implementation verified.
+
+This can become future extension.
+
+---
+
+## Поглиблення: cumulative integral numerically
+
+Similarly compare:
+
+- symbolic cumulative_state();
+- numerical quadrature of trajectory.
+
+This provides another independent verification channel.
+
+---
+
+## Поглиблення: triangulation design
+
+A rich validation matrix:
+
+| Quantity | Symbolic | Direct NumPy | SciPy |
+|---|---|---|---|
+| S(t) | closed form | analytical_solution | solve_ivp |
+| integral | integrate | cumulative_state | quadrature |
+| threshold | solve algebra | threshold_time | event detection |
+| sensitivity | diff | finite difference | scenario sweep |
+
+Agreement across rows strengthens implementation evidence.
+
+---
+
+## Поглиблення: finite-difference sensitivity check
+
+Symbolic:
+
+\[
+dS^*/dk=-q/k^2.
+\]
+
+Numerical finite difference:
+
+\[
+\frac{S^*(k+h)-S^*(k-h)}{2h}.
+\]
+
+Compare for small h.
+
+This checks symbolic derivative and numerical implementation.
+
+---
+
+## Поглиблення: choosing h
+
+Too large:
+
+- truncation error.
+
+Too small:
+
+- floating-point cancellation.
+
+This is a classic numerical analysis trade-off.
+
+CAS derivative avoids finite-difference approximation when exact expression available.
+
+---
+
+## Поглиблення: documentation of assumptions beside formulas
+
+A formula should not travel alone.
+
+For:
+
+\[
+S(t)=S^*+(S_0-S^*)e^{-kt}
+\]
+
+store assumptions:
+
+- q constant;
+- k constant >0;
+- one-dimensional state;
+- no delays;
+- initial condition S0;
+- deterministic dynamics.
+
+This prevents later misuse.
+
+---
+
+## Поглиблення: symbolic notebooks and source files
+
+Notebook is ideal for displaying SymPy derivation.
+
+But reusable functions should live in src/model.py.
+
+Same principle as T1.L3.
+
+This enables tests and CI.
+
+---
+
+## Поглиблення: CAS versioning
+
+SymPy simplification/printing can change across versions.
+
+Mathematical equivalence may remain.
+
+Therefore tests should prefer structural equivalence:
+
+\[
+simplify(expr_1-expr_2)=0
+\]
+
+rather than exact string formatting.
+
+---
+
+## Поглиблення: publication formula verification
+
+Before placing formula in article:
+
+1. derive symbolically;
+2. simplify;
+3. residual check;
+4. render LaTeX;
+5. compare notation with manuscript.
+
+This reduces transcription errors between code and paper.
+
+---
+
 ## 74. One-page summary
 
 ### П’ять головних ідей
