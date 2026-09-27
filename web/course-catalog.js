@@ -36,6 +36,8 @@ globalThis.MathModelingCatalog = [
     id:"t2_l1", code:"T2.L1", topic:2,
     title:"Задачі оптимізації в середовищі VS Code",
     status:"python",
+    notesUrl:"https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t2_l1/README.md",
+    theoryUrl:"books/t2_l1/index.html",
     challenge:"Коли додатковий ресурс перестає змінювати оптимальне рішення?",
     transfer:"Визначте цільову функцію, обмеження та критерій незалежної перевірки."
   },
@@ -43,6 +45,8 @@ globalThis.MathModelingCatalog = [
     id:"t2_l2", code:"T2.L2", topic:2,
     title:"Математична модель транспортної задачі",
     status:"python",
+    notesUrl:"https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t2_l2/README.md",
+    theoryUrl:"books/t2_l2/index.html",
     challenge:"Як одна заборонена ланка змінює весь оптимальний план?",
     transfer:"Виділіть вузли, потоки, обмеження балансу і сценарні відмови."
   },
@@ -50,6 +54,8 @@ globalThis.MathModelingCatalog = [
     id:"t2_l3", code:"T2.L3", topic:2,
     title:"Математичні моделі задач нелінійного програмування",
     status:"python",
+    notesUrl:"https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t2_l3/README.md",
+    theoryUrl:"books/t2_l3/index.html",
     challenge:"Чому success=True ще не доводить, що знайдено глобальний оптимум?",
     transfer:"Заплануйте multistart або незалежну перевірку розв’язку."
   },
