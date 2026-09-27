@@ -1,0 +1,31 @@
+book_id: t1_l3
+title: "Організація математичного моделювання"
+subtitle: "Як перетворити код на відтворюваний дослідницький процес"
+lesson_path: lessons/t1_l3
+language: uk
+audience: adjuncts
+status: validated_draft
+theory_level: intermediate
+estimated_reading_minutes: 80
+web_path: web/books/t1_l3/index.html
+python_package: lessons/t1_l3
+military_context: synthetic_non_sensitive
+canonical_source: books/t1_l3/book.md
+source_of_truth:
+  - lessons/t1_l3/README.md
+  - lessons/t1_l3/assignment.md
+  - lessons/t1_l3/REPRODUCIBILITY_CHECKLIST.md
+  - lessons/t1_l3/experiment_config.json
+  - lessons/t1_l3/src/model.py
+  - lessons/t1_l3/src/experiment.py
+  - lessons/t1_l3/tests/test_workflow.py
+baseline:
+  seed: 2026
+  replications: 200
+  model:
+    baseline: 20.0
+    resource_gain: 1.8
+    load_penalty: 1.2
+    noise_sd: 4.0
+  experiment_id: t1_l3_0c5d08ed47eb
+  deterministic_baseline: 32.0

@@ -1,0 +1,2892 @@
+# MathModelingIT MiniBook T2.L6
+
+## Системи комп'ютерної математики та їх можливості для математичного моделювання
+
+### Від формули SymPy до незалежної чисельної перевірки
+
+> **Головна ідея книги:** система комп’ютерної математики цінна не тим, що «вміє рахувати формули», а тим, що дозволяє пройти повний цикл: записати модель символічно, вивести структуру розв’язку, перевірити його алгебраїчно, перетворити на чисельну функцію, незалежно перевірити SciPy та провести параметричний експеримент.
+
+---
+
+## 0. Паспорт книги
+
+**Код заняття:** T2.L6  
+**Тема:** системи комп’ютерної математики та їх можливості  
+**Рівень:** середній  
+**Орієнтовний час читання:** 70–85 хвилин  
+**Попередні знання:** похідна, інтеграл, просте ODE, Python functions, NumPy.
+
+Після книги ви повинні вміти:
+
+- задавати symbolic variables/functions у SymPy;
+- формулювати differential equation;
+- виводити equilibrium;
+- читати closed-form solution;
+- виконувати symbolic residual verification;
+- інтегрувати symbolic expression;
+- обчислювати symbolic sensitivity;
+- використовувати lambdify;
+- незалежно перевіряти trajectory через solve_ivp;
+- оцінювати numerical error;
+- знаходити threshold time;
+- проводити parameter sensitivity;
+- пояснювати, коли symbolic solution є перевагою, а коли numerical method необхідний.
+
+---
+
+## 1. Сцена: «Формула є. Але чому ми їй довіряємо?»
+
+Уявімо synthetic dynamic system.
+
+Є state \(S(t)\).
+
+У систему постійно надходить resource with rate \(q\).
+
+Втрати proportional to current state:
+
+\[
+kS.
+\]
+
+Модель:
+
+\[
+\frac{dS}{dt}=q-kS.
+\]
+
+Початковий стан:
+
+\[
+S(0)=S_0.
+\]
+
+Хтось запускає SymPy й отримує formula.
+
+І каже:
+
+> «Готово. Комп’ютер дав розв’язок».
+
+Але сильніший researcher запитає:
+
+- чи formula satisfies ODE?
+- чи initial condition виконується?
+- що означає equilibrium?
+- як parameter \(k\) впливає на state?
+- чи numerical integrator дає ту саму trajectory?
+- що буде, якщо symbolic solution unavailable?
+
+Саме ці questions перетворюють CAS із «калькулятора» на research tool.
+
+<figure>
+  <img src="figures/fig_01_symbolic_numeric_pipeline.svg" alt="Symbolic-to-numeric pipeline">
+  <figcaption><strong>Рис. 1.</strong> Сильний workflow: formulation → symbolic solution → symbolic verification → lambdify → independent numerical solve → sensitivity → interpretation.</figcaption>
+</figure>
+
+---
+
+## 2. Центральна модель
+
+\[
+\frac{dS}{dt}=q-kS,
+\qquad
+S(0)=S_0.
+\]
+
+Де:
+
+- \(S(t)\) — state;
+- \(q\) — constant inflow;
+- \(k>0\) — proportional loss coefficient;
+- \(S_0\) — initial state.
+
+Model is linear first-order ODE.
+
+---
+
+## 3. Інтуїція balance law
+
+Right side:
+
+\[
+q-kS.
+\]
+
+Це:
+
+> inflow − loss.
+
+Якщо:
+
+\[
+q>kS,
+\]
+
+state grows.
+
+Якщо:
+
+\[
+q<kS,
+\]
+
+state decreases.
+
+If equal:
+
+\[
+q=kS,
+\]
+
+state stops changing.
+
+That gives equilibrium.
+
+---
+
+## 4. Equilibrium
+
+At equilibrium:
+
+\[
+\frac{dS}{dt}=0.
+\]
+
+Thus:
+
+\[
+q-kS^*=0.
+\]
+
+Therefore:
+
+\[
+S^*=\frac{q}{k}.
+\]
+
+Baseline:
+
+\[
+q=12,
+\]
+
+\[
+k=0.10.
+\]
+
+So:
+
+\[
+S^*=\frac{12}{0.1}=120.
+\]
+
+---
+
+## 5. Why equilibrium matters
+
+Equilibrium is not just an algebraic intermediate.
+
+It answers:
+
+> to what level does the system tend if parameters remain constant?
+
+If:
+
+\[
+S_0<S^*,
+\]
+
+state rises.
+
+If:
+
+\[
+S_0>S^*,
+\]
+
+state falls.
+
+Baseline:
+
+\[
+S_0=20<120.
+\]
+
+Hence trajectory rises toward 120.
+
+<figure>
+  <img src="figures/fig_02_equilibrium_direction.svg" alt="Direction toward equilibrium">
+  <figcaption><strong>Рис. 2.</strong> Знак \(q-kS\) визначає напрям руху state: нижче equilibrium trajectory зростає, вище — спадає.</figcaption>
+</figure>
+
+---
+
+## 6. Closed-form solution
+
+Аналітичний розв’язок:
+
+\[
+S(t)=
+\frac{q}{k}
++
+\left(
+S_0-\frac{q}{k}
+\right)e^{-kt}.
+\]
+
+Його структура дуже інформативна.
+
+Перша частина:
+
+\[
+\frac{q}{k}=S^*
+\]
+
+— equilibrium.
+
+Друга:
+
+\[
+\left(S_0-S^*\right)e^{-kt}
+\]
+
+— transient deviation.
+
+---
+
+## 7. What exponential term means
+
+\[
+e^{-kt}
+\]
+
+decays toward zero.
+
+Thus:
+
+\[
+S(t)\rightarrow S^*.
+\]
+
+Parameter \(k\) controls decay speed.
+
+Large \(k\):
+
+- stronger proportional loss;
+- faster convergence;
+- lower equilibrium \(q/k\).
+
+So \(k\) affects both level and speed.
+
+---
+
+## 8. Initial condition check
+
+At:
+
+\[
+t=0,
+\]
+
+\[
+e^0=1.
+\]
+
+Therefore:
+
+\[
+S(0)=
+\frac{q}{k}
++
+\left(S_0-\frac{q}{k}\right)=S_0.
+\]
+
+This is simple manual verification.
+
+---
+
+## 9. Baseline trajectory
+
+Parameters:
+
+\[
+q=12,\quad
+k=0.10,\quad
+S_0=20.
+\]
+
+Solution:
+
+\[
+S(t)=120-100e^{-0.1t}.
+\]
+
+At:
+
+\[
+t=10
+\]
+
+we get:
+
+\[
+S(10)\approx83.2121.
+\]
+
+This is a source-of-truth test value.
+
+<figure>
+  <img src="figures/fig_03_baseline_trajectory.svg" alt="Baseline trajectory toward equilibrium">
+  <figcaption><strong>Рис. 3.</strong> Baseline state starts at 20 and monotonically approaches equilibrium 120. At \(t=10\), \(S\approx83.2121\).</figcaption>
+</figure>
+
+---
+
+## 10. SymPy model
+
+Symbolic setup:
+
+~~~python
+t = sp.symbols("t", nonnegative=True)
+q, k = sp.symbols("q k", positive=True)
+S0 = sp.symbols("S0", nonnegative=True)
+S = sp.Function("S")
+~~~
+
+ODE:
+
+~~~python
+ode = sp.Eq(
+    sp.diff(S(t), t),
+    q - k*S(t),
+)
+~~~
+
+This code mirrors notation.
+
+---
+
+## 11. Why symbolic assumptions matter
+
+We declare:
+
+\[
+k>0.
+\]
+
+Why?
+
+Because:
+
+- equilibrium requires division by \(k\);
+- model meaning says proportional loss positive;
+- simplification can use positivity.
+
+Symbolic systems reason better when assumptions explicit.
+
+---
+
+## 12. Symbolic equilibrium
+
+SymPy solves:
+
+\[
+q-kS_{eq}=0.
+\]
+
+Result:
+
+\[
+S_{eq}=\frac{q}{k}.
+\]
+
+This is not difficult manually.
+
+The point is not convenience.
+
+The point is creating a symbolic object usable later.
+
+---
+
+## 13. Symbolic verification
+
+Take candidate solution \(S_c(t)\).
+
+Compute residual:
+
+\[
+R(t)=
+\frac{dS_c}{dt}
+-
+(q-kS_c).
+\]
+
+If candidate is exact:
+
+\[
+R(t)=0.
+\]
+
+In code:
+
+~~~python
+residual = sp.simplify(
+    sp.diff(solution, t)
+    - (q - k*solution)
+)
+assert residual == 0
+~~~
+
+<figure>
+  <img src="figures/fig_04_residual_verification.svg" alt="Symbolic residual verification">
+  <figcaption><strong>Рис. 4.</strong> Residual check verifies the equation structurally for symbolic parameters, not only at several numerical points.</figcaption>
+</figure>
+
+---
+
+## 14. Why residual check stronger than spot checks
+
+Suppose we test:
+
+\[
+t=0,5,10.
+\]
+
+Candidate matches three points.
+
+Could still be wrong elsewhere.
+
+Symbolic residual:
+
+\[
+R(t)\equiv0
+\]
+
+checks identity under stated symbolic assumptions.
+
+This is stronger evidence for algebraic correctness.
+
+---
+
+## 15. But symbolic residual does not validate the real model
+
+Residual zero proves:
+
+> formula solves equation.
+
+It does not prove:
+
+- equation describes real process;
+- q constant;
+- k constant;
+- proportional-loss assumption true.
+
+Again:
+
+> verification ≠ validation.
+
+---
+
+## 16. Symbolic differentiation
+
+Equilibrium:
+
+\[
+S^*=\frac{q}{k}.
+\]
+
+Sensitivity to \(q\):
+
+\[
+\frac{\partial S^*}{\partial q}
+=
+\frac{1}{k}.
+\]
+
+Sensitivity to \(k\):
+
+\[
+\frac{\partial S^*}{\partial k}
+=
+-\frac{q}{k^2}.
+\]
+
+These formulas show structure before any numbers.
+
+---
+
+## 17. Interpreting \(\partial S^*/\partial q\)
+
+\[
+\frac{1}{k}>0.
+\]
+
+Equilibrium grows when inflow grows.
+
+At:
+
+\[
+k=0.1,
+\]
+
+\[
+\frac{\partial S^*}{\partial q}=10.
+\]
+
+Locally, +1 in q changes equilibrium by +10.
+
+---
+
+## 18. Interpreting \(\partial S^*/\partial k\)
+
+\[
+-\frac{q}{k^2}<0.
+\]
+
+Increasing loss coefficient lowers equilibrium.
+
+Baseline:
+
+\[
+-\frac{12}{0.1^2}=-1200.
+\]
+
+This large derivative reflects units and scale.
+
+Do not interpret magnitude without units.
+
+---
+
+## 19. Relative sensitivity
+
+Absolute derivative may look huge.
+
+A dimensionless elasticity is often useful:
+
+\[
+E_k=
+\frac{\partial S^*}{\partial k}
+\frac{k}{S^*}.
+\]
+
+For:
+
+\[
+S^*=\frac{q}{k},
+\]
+
+we get:
+
+\[
+E_k=-1.
+\]
+
+So 1% increase in \(k\) gives approximately 1% decrease in equilibrium.
+
+This is often more interpretable.
+
+---
+
+## 20. Symbolic integration
+
+Sometimes question is not state at a moment.
+
+We need cumulative exposure:
+
+\[
+A(T)=\int_0^T S(t)\,dt.
+\]
+
+Analytically:
+
+\[
+A(T)=
+\frac{q}{k}T
++
+\left(
+S_0-\frac{q}{k}
+\right)
+\frac{1-e^{-kT}}{k}.
+\]
+
+Baseline:
+
+\[
+A(10)\approx567.8794.
+\]
+
+---
+
+## 21. What cumulative state means
+
+Depends on domain.
+
+Could represent:
+
+- accumulated availability;
+- cumulative load;
+- total exposure;
+- area under state curve.
+
+In synthetic lesson no operational interpretation is imposed.
+
+The important idea:
+
+> symbolic solution enables derived quantities.
+
+---
+
+## 22. Threshold time
+
+Question:
+
+> when does \(S(t)\) first reach target \(H\)?
+
+Solve:
+
+\[
+H=
+S^*+
+(S_0-S^*)e^{-kt}.
+\]
+
+Then:
+
+\[
+e^{-kt}
+=
+\frac{H-S^*}{S_0-S^*}.
+\]
+
+Therefore:
+
+\[
+t=
+-\frac{1}{k}
+\ln
+\left(
+\frac{H-S^*}{S_0-S^*}
+\right).
+\]
+
+For:
+
+\[
+H=80
+\]
+
+baseline:
+
+\[
+t\approx9.1629.
+\]
+
+---
+
+## 23. Threshold validity
+
+Target must lie between:
+
+\[
+S_0
+\]
+
+and:
+
+\[
+S^*.
+\]
+
+If target 150:
+
+\[
+150>120,
+\]
+
+baseline trajectory never reaches it.
+
+Model raises ValueError.
+
+This is semantic validation.
+
+---
+
+## 24. Equilibrium threshold
+
+If target exactly:
+
+\[
+H=S^*,
+\]
+
+trajectory approaches asymptotically.
+
+It does not reach in finite time.
+
+Thus:
+
+\[
+t=\infty.
+\]
+
+This is a beautiful example where mathematical nuance matters.
+
+---
+
+## 25. Lambdify bridge
+
+Symbolic expression useful for reasoning.
+
+But to plot arrays, use:
+
+~~~python
+fn = sp.lambdify(
+    (t,q,k,S0),
+    solution,
+    modules="numpy",
+)
+~~~
+
+Now:
+
+~~~python
+values = fn(times, 12, 0.1, 20)
+~~~
+
+This bridges symbolic and numerical worlds.
+
+---
+
+## 26. Why not rewrite formula manually
+
+We could manually code:
+
+~~~python
+seq = q/k
+return seq + (s0-seq)*np.exp(-k*t)
+~~~
+
+Current package has analytical_solution() exactly like that.
+
+But lambdify adds verification:
+
+> symbolic expression and direct numerical implementation agree.
+
+Test checks it.
+
+---
+
+## 27. Independent numerical solution
+
+Use solve_ivp on:
+
+\[
+\frac{dS}{dt}=q-kS.
+\]
+
+Numerical integrator does not use closed-form solution.
+
+Therefore it is partially independent computational pathway.
+
+If trajectories agree, confidence increases.
+
+---
+
+## 28. solve_ivp setup
+
+~~~python
+def rhs(t, y):
+    return [q - k*y[0]]
+
+result = solve_ivp(
+    rhs,
+    (t0, t1),
+    [s0],
+    t_eval=times,
+    rtol=1e-10,
+    atol=1e-12,
+)
+~~~
+
+Strict tolerances support high agreement.
+
+---
+
+## 29. Error metric
+
+Compare:
+
+\[
+e_i=
+|S_{analytical}(t_i)-S_{numerical}(t_i)|.
+\]
+
+Maximum:
+
+\[
+e_{max}=\max_i e_i.
+\]
+
+Test requires:
+
+\[
+e_{max}<10^{-6}.
+\]
+
+<figure>
+  <img src="figures/fig_05_three_trajectories.svg" alt="Analytical, lambdified and solve_ivp trajectories">
+  <figcaption><strong>Рис. 5.</strong> Analytical NumPy, lambdified SymPy and independent solve_ivp trajectories should overlap within numerical tolerance.</figcaption>
+</figure>
+
+---
+
+## 30. Agreement is evidence, not proof of adequacy
+
+Three implementations agree.
+
+This supports:
+
+- derivation;
+- coding;
+- numerical integration.
+
+Does not prove:
+
+- model structure correct for real system.
+
+This distinction repeats across course.
+
+---
+
+## 31. Parameter experiment in k
+
+Fix:
+
+\[
+q=12,
+\]
+
+\[
+S_0=20.
+\]
+
+Vary:
+
+\[
+k\in
+\{0.05,0.08,0.10,0.12,0.15\}.
+\]
+
+Results:
+
+| k | S* | S(10) |
+|---:|---:|---:|
+| 0.05 | 240 | 106.56 |
+| 0.08 | 150 | 91.59 |
+| 0.10 | 120 | 83.21 |
+| 0.12 | 100 | 75.90 |
+| 0.15 | 80 | 66.61 |
+
+---
+
+## 32. Why equilibrium decreases
+
+Formula:
+
+\[
+S^*=\frac{q}{k}.
+\]
+
+Increasing denominator reduces ratio.
+
+Derivative confirms:
+
+\[
+\frac{\partial S^*}{\partial k}<0.
+\]
+
+Thus numerical table, formula and derivative tell same story.
+
+<figure>
+  <img src="figures/fig_06_k_sensitivity.svg" alt="Sensitivity to loss coefficient k">
+  <figcaption><strong>Рис. 6.</strong> Increasing \(k\) lowers both equilibrium and \(S(10)\). Symbolic sensitivity explains the direction before numerical experiment.</figcaption>
+</figure>
+
+---
+
+## 33. Why S(10) is not simply equilibrium
+
+At finite time:
+
+\[
+S(10)\ne S^*
+\]
+
+unless system already at equilibrium or enough time passed.
+
+Transient term still matters.
+
+Therefore:
+
+- equilibrium sensitivity;
+- finite-horizon sensitivity
+
+are related but distinct.
+
+---
+
+## 34. Time scale
+
+Exponential decay characteristic time:
+
+\[
+\tau=\frac{1}{k}.
+\]
+
+Baseline:
+
+\[
+\tau=10.
+\]
+
+This gives intuition.
+
+After several \(\tau\), transient becomes small.
+
+Higher \(k\):
+
+- smaller \(\tau\);
+- faster convergence.
+
+---
+
+## 35. Half-life of deviation
+
+Deviation:
+
+\[
+D(t)=S(t)-S^*.
+\]
+
+Then:
+
+\[
+D(t)=D(0)e^{-kt}.
+\]
+
+Time for deviation halve:
+
+\[
+t_{1/2}=
+\frac{\ln2}{k}.
+\]
+
+Baseline:
+
+\[
+t_{1/2}\approx6.93.
+\]
+
+This is another derived symbolic insight.
+
+---
+
+## 36. CAS as structure explorer
+
+SymPy helps ask:
+
+- equilibrium?
+- derivative?
+- integral?
+- threshold equation?
+- asymptotic behavior?
+- simplification?
+
+This is more valuable than only numerical substitution.
+
+---
+
+## 37. Symbolic expression growth
+
+Not every model yields elegant closed form.
+
+For nonlinear or coupled systems SymPy may:
+
+- return implicit form;
+- return special functions;
+- fail to solve;
+- generate huge expression.
+
+This is not failure of modeling.
+
+It signals need for numerical methods.
+
+---
+
+## 38. Numerical methods are not second-class
+
+If symbolic solution unavailable, solve_ivp may still be correct tool.
+
+The goal is not:
+
+> always find closed form.
+
+The goal:
+
+> choose representation suitable for question and verify it.
+
+---
+
+## 39. Symbolic vs numerical comparison
+
+### Symbolic strengths
+
+- exact structure;
+- derivatives;
+- integrals;
+- simplification;
+- parameter dependence.
+
+### Numerical strengths
+
+- complex models;
+- nonlinear systems;
+- time-varying coefficients;
+- large systems;
+- direct simulation.
+
+Best workflow often combines both.
+
+---
+
+## 40. Зламай модель: k=0
+
+Model assumes:
+
+\[
+k>0.
+\]
+
+If:
+
+\[
+k=0,
+\]
+
+equilibrium formula:
+
+\[
+q/k
+\]
+
+undefined.
+
+But ODE becomes:
+
+\[
+\frac{dS}{dt}=q.
+\]
+
+Solution:
+
+\[
+S=S_0+qt.
+\]
+
+So k=0 is not impossible process.
+
+It is outside current formula branch.
+
+---
+
+## 41. Зламай модель: q changes with time
+
+Suppose:
+
+\[
+q=q(t).
+\]
+
+Then:
+
+\[
+\frac{dS}{dt}=q(t)-kS.
+\]
+
+Closed form may still exist for simple q(t), but baseline formula no longer valid.
+
+Need re-derive.
+
+---
+
+## 42. Зламай модель: nonlinear loss
+
+Suppose:
+
+\[
+\frac{dS}{dt}=q-kS^2.
+\]
+
+Equilibrium:
+
+\[
+S^*=\sqrt{q/k}.
+\]
+
+Dynamics nonlinear.
+
+Different sensitivity and trajectory.
+
+This is genuine model-class change.
+
+---
+
+## 43. Зламай модель: delay
+
+Suppose loss depends on past:
+
+\[
+\frac{dS}{dt}
+=
+q-kS(t-\tau).
+\]
+
+Now delay differential equation.
+
+Baseline ODE tools insufficient.
+
+---
+
+## 44. Зламай model: threshold process
+
+Loss may activate only when:
+
+\[
+S>S_c.
+\]
+
+Then piecewise model.
+
+Symbolic and numerical approach changes.
+
+---
+
+## 45. Validation hierarchy
+
+<figure>
+  <img src="figures/fig_07_verification_hierarchy.svg" alt="Verification hierarchy">
+  <figcaption><strong>Рис. 7.</strong> Mathematical derivation, residual check, lambdify agreement and solve_ivp agreement verify computation at different levels; domain adequacy remains a separate question.</figcaption>
+</figure>
+
+Levels:
+
+1. formulate ODE;
+2. derive solution;
+3. residual=0;
+4. initial condition;
+5. lambdify agreement;
+6. solve_ivp agreement;
+7. parameter experiment plausibility;
+8. domain validation.
+
+---
+
+## 46. Python без страху: equilibrium
+
+~~~python
+value = equilibrium(
+    q=12,
+    k=0.1,
+)
+assert value == 120
+~~~
+
+Control test.
+
+---
+
+## 47. Python без страху: state t=10
+
+~~~python
+s10 = analytical_solution(
+    10,
+    q=12,
+    k=0.1,
+    s0=20,
+)
+~~~
+
+Expected:
+
+\[
+83.2120558829.
+\]
+
+---
+
+## 48. Python без страху: cumulative
+
+~~~python
+area = cumulative_state(
+    10,
+    q=12,
+    k=0.1,
+    s0=20,
+)
+~~~
+
+Expected:
+
+\[
+567.8794411714.
+\]
+
+---
+
+## 49. Python без страху: threshold
+
+~~~python
+t80 = threshold_time(
+    80,
+    q=12,
+    k=0.1,
+    s0=20,
+)
+~~~
+
+Expected:
+
+\[
+9.1629073187.
+\]
+
+---
+
+## 50. Python без страху: verification error
+
+~~~python
+err = max_symbolic_numeric_error(
+    times,
+    q=12,
+    k=0.1,
+    s0=20,
+)
+assert err < 1e-6
+~~~
+
+This is explicit numerical criterion.
+
+---
+
+## 51. Predict before Run
+
+Before sensitivity table, predict.
+
+If \(k\) increases:
+
+1. equilibrium?
+2. convergence speed?
+3. S(10)?
+4. threshold time to 80?
+
+Think before computation.
+
+---
+
+## 52. k affects two mechanisms
+
+Increasing \(k\):
+
+- lowers \(S^*=q/k\);
+- makes exponent \(e^{-kt}\) decay faster.
+
+These effects can pull finite-horizon state in nontrivial ways across different initial conditions.
+
+Baseline both support lower S(10).
+
+---
+
+## 53. Scenario: S0 above equilibrium
+
+Suppose:
+
+\[
+S_0=180>S^*=120.
+\]
+
+Then trajectory decreases toward 120.
+
+Same formula.
+
+This illustrates how initial state changes direction but not equilibrium.
+
+---
+
+## 54. Scenario: S0 exactly equilibrium
+
+\[
+S_0=S^*.
+\]
+
+Then transient coefficient zero:
+
+\[
+S_0-S^*=0.
+\]
+
+Hence:
+
+\[
+S(t)=S^*
+\]
+
+for all t.
+
+This is valuable control case.
+
+---
+
+## 55. Scenario: q increase
+
+If:
+
+\[
+q\uparrow,
+\]
+
+equilibrium increases linearly:
+
+\[
+S^*=\frac{q}{k}.
+\]
+
+Derivative constant for fixed k:
+
+\[
+1/k.
+\]
+
+This is simpler sensitivity than k.
+
+---
+
+## 56. Parameter identifiability intuition
+
+Suppose only equilibrium observed:
+
+\[
+S^*=120.
+\]
+
+Many pairs satisfy:
+
+\[
+q/k=120.
+\]
+
+For example:
+
+\[
+q=12,k=0.1
+\]
+
+and:
+
+\[
+q=24,k=0.2.
+\]
+
+Equilibrium alone cannot identify both.
+
+Trajectory speed helps identify k.
+
+This is a deep research insight from symbolic structure.
+
+---
+
+## 57. Why time-series data matters
+
+Transient term:
+
+\[
+e^{-kt}
+\]
+
+contains k directly.
+
+Thus observations over time can distinguish parameter pairs with same equilibrium.
+
+Symbolic model helps design data collection.
+
+---
+
+## 58. From solving to experimental design
+
+This is why CAS matters in research.
+
+It can reveal:
+
+- which quantities depend on parameters;
+- which observations identify them;
+- which derivative is zero/nonzero;
+- which measurement horizon informative.
+
+Symbolic analysis informs experiment design.
+
+---
+
+## 59. Reproducibility
+
+A complete T2.L6 experiment should save:
+
+- symbolic form;
+- baseline parameters;
+- time grid;
+- solve_ivp tolerances;
+- comparison table;
+- sensitivity table;
+- summary;
+- code commit.
+
+Then agreement can be rebuilt.
+
+---
+
+## 60. Numerical tolerance
+
+solve_ivp uses:
+
+\[
+rtol=10^{-10},
+\]
+
+\[
+atol=10^{-12}.
+\]
+
+These are algorithm settings.
+
+They influence numerical error and runtime.
+
+Therefore they are part of reproducibility.
+
+---
+
+## 61. Error threshold vs exact equality
+
+Do not assert:
+
+\[
+S_{analytical}=S_{numerical}
+\]
+
+bit-for-bit.
+
+Numerical integration approximates.
+
+Use tolerance:
+
+\[
+e_{max}<10^{-6}.
+\]
+
+This is correct computational reasoning.
+
+---
+
+## 62. Floating point
+
+Even analytical NumPy evaluation uses floating point.
+
+Symbolic expression exact in algebraic form.
+
+Numerical substitution approximate.
+
+This difference matters.
+
+---
+
+## 63. Symbolic simplification hazards
+
+Equivalent expressions may look different.
+
+Example:
+
+\[
+S^*+(S_0-S^*)e^{-kt}
+\]
+
+and expanded form.
+
+String comparison is weak.
+
+Use:
+
+\[
+sp.simplify(expr_1-expr_2)==0.
+\]
+
+This checks equivalence structurally.
+
+---
+
+## 64. Model audit
+
+### Symbolic audit
+
+- assumptions explicit?
+- residual zero?
+- initial condition?
+
+### Numerical audit
+
+- time grid valid?
+- solver success?
+- tolerance adequate?
+- max error?
+
+### Sensitivity audit
+
+- parameter range meaningful?
+- trend explained by formulas?
+
+### Scientific audit
+
+- q/k meanings justified?
+- constant coefficients plausible?
+- linear loss adequate?
+
+---
+
+## 65. Synthetic military context
+
+Imagine \(S(t)\) as abstract readiness-support state in a training simulation.
+
+\(q\) — synthetic replenishment intensity.
+
+\(kS\) — synthetic proportional loss.
+
+No actual readiness metric, logistics stock or operational coefficient is implied.
+
+The purpose is mathematical structure only.
+
+---
+
+## 66. Research Transfer
+
+Question:
+
+> Яку частину мого dissertation model варто спочатку formalize symbolically, а яку verify numerically?
+
+Template:
+
+~~~text
+Research question:
+
+State variable:
+
+Parameters:
+
+Differential / algebraic relation:
+
+Initial / boundary conditions:
+
+Symbolic operations:
+
+Expected equilibrium:
+
+Sensitivity derivative:
+
+Derived integral / threshold:
+
+Numerical method:
+
+Independent verification metric:
+
+Parameter scenarios:
+
+Data needed:
+
+Limitations:
+
+Allowed conclusion:
+~~~
+
+---
+
+## 67. Example Research Transfer
+
+Suppose process:
+
+\[
+\frac{dY}{dt}=a-bY.
+\]
+
+Symbolically derive:
+
+- equilibrium;
+- transient;
+- derivative wrt parameters.
+
+Numerically:
+
+- solve_ivp;
+- compare;
+- sensitivity.
+
+Then calibrate a,b from data in later work.
+
+---
+
+## 68. When symbolic method is especially useful
+
+- small ODE;
+- algebraic equilibrium;
+- exact derivatives;
+- parameter relations;
+- transformations;
+- asymptotic analysis.
+
+---
+
+## 69. When numerical method is especially useful
+
+- nonlinear coupled systems;
+- time-varying coefficients;
+- discontinuities;
+- no closed form;
+- large state dimension;
+- data-driven simulation.
+
+---
+
+## 70. Hybrid workflow
+
+<figure>
+  <img src="figures/fig_08_hybrid_method_map.svg" alt="Hybrid symbolic-numeric method map">
+  <figcaption><strong>Рис. 8.</strong> Symbolic and numerical methods are complementary: symbolic reasoning exposes structure, numerical computation explores cases where closed form is unavailable or inconvenient.</figcaption>
+</figure>
+
+Best practice:
+
+\[
+Symbolic
+\leftrightarrow
+Numerical
+\]
+
+not competition.
+
+---
+
+## 71. Typical thinking errors
+
+### «SymPy gave formula → model correct»
+
+No.
+
+Formula may solve wrong equation.
+
+### «Residual zero → real system validated»
+
+No.
+
+Only equation verification.
+
+### «solve_ivp matches → two independent truths»
+
+They share same model assumptions.
+
+### «More digits → more scientific»
+
+No.
+
+Reporting precision must reflect data/model quality.
+
+### «Numerical method worse because approximate»
+
+No.
+
+Often it is the only practical method.
+
+---
+
+## 72. Allowed conclusion
+
+Strong:
+
+> For synthetic ODE \(dS/dt=q-kS\) with \(q=12,k=0.1,S_0=20\), symbolic solution gives equilibrium 120, \(S(10)\approx83.2121\), cumulative state over [0,10] ≈567.8794 and threshold time to 80 ≈9.1629. Symbolic residual is exactly zero, and independent solve_ivp trajectory agrees with the analytical solution within \(10^{-6}\) on the tested grid.
+
+Then limitation:
+
+> These checks verify the mathematical/computational implementation, not the adequacy of constant inflow and proportional-loss assumptions for a real system.
+
+---
+
+## 73. Від MiniBook до practice
+
+Practical sequence:
+
+1. define symbols;
+2. write ODE;
+3. derive solution;
+4. residual check;
+5. equilibrium;
+6. sensitivity derivatives;
+7. integral;
+8. lambdify;
+9. solve_ivp;
+10. error;
+11. k scenarios;
+12. interpretation.
+
+---
+
+## Поглиблення: dimensional analysis before symbolic manipulation
+
+Перед тим як натискати \`solve\`, корисно перевірити units.
+
+ODE:
+
+\[
+\frac{dS}{dt}=q-kS.
+\]
+
+If \(S\) measured in state units and \(t\) in time, then:
+
+\[
+[q]=\frac{S}{t},
+\]
+
+and because:
+
+\[
+[kS]=\frac{S}{t},
+\]
+
+we need:
+
+\[
+[k]=\frac{1}{t}.
+\]
+
+Therefore:
+
+\[
+\frac{q}{k}
+\]
+
+has units \(S\), as required for equilibrium.
+
+This simple check catches many formulation errors before any CAS work.
+
+---
+
+## Поглиблення: nondimensionalization
+
+Define:
+
+\[
+s=\frac{S}{S^*},
+\qquad
+\tau=kt.
+\]
+
+Because:
+
+\[
+S^*=\frac{q}{k},
+\]
+
+the ODE becomes:
+
+\[
+\frac{ds}{d\tau}=1-s.
+\]
+
+Now parameter \(q\) and \(k\) disappear from the dimensionless dynamics.
+
+Solution:
+
+\[
+s(\tau)=1+(s_0-1)e^{-\tau}.
+\]
+
+This reveals a universal structure.
+
+Different \(q,k\) cases are scaled versions of the same normalized process.
+
+Symbolic tools help expose such simplifications.
+
+---
+
+## Поглиблення: why nondimensionalization matters
+
+It can show:
+
+- which parameter combinations truly matter;
+- natural time scale;
+- natural state scale;
+- how many independent dimensionless groups remain.
+
+In baseline:
+
+\[
+\tau=kt
+\]
+
+shows \(1/k\) is time scale.
+
+\[
+S^*=q/k
+\]
+
+is state scale.
+
+This is deeper than just computing numbers.
+
+---
+
+## Поглиблення: stability of equilibrium
+
+Let:
+
+\[
+u(t)=S(t)-S^*.
+\]
+
+Then:
+
+\[
+\frac{du}{dt}=-ku.
+\]
+
+Solution:
+
+\[
+u(t)=u(0)e^{-kt}.
+\]
+
+Since \(k>0\):
+
+\[
+u(t)\rightarrow0.
+\]
+
+Therefore equilibrium is asymptotically stable.
+
+This conclusion follows directly from transformed equation.
+
+CAS can support algebra, but stability interpretation remains researcher’s task.
+
+---
+
+## Поглиблення: if k < 0
+
+Current model rejects \(k\le0\).
+
+Why?
+
+If \(k<0\), equation becomes:
+
+\[
+\frac{dS}{dt}=q+|k|S.
+\]
+
+State grows exponentially.
+
+The supposed “loss coefficient” becomes gain.
+
+So input validation encodes domain meaning.
+
+This is a good example of semantic validation, not only numeric hygiene.
+
+---
+
+## Поглиблення: identifiability from equilibrium only
+
+If only long-run equilibrium observed:
+
+\[
+S^*=120,
+\]
+
+then any pair satisfying:
+
+\[
+q=120k
+\]
+
+fits equilibrium.
+
+Examples:
+
+\[
+(12,0.1),
+\]
+
+\[
+(24,0.2),
+\]
+
+\[
+(6,0.05).
+\]
+
+Therefore equilibrium data alone cannot identify both parameters.
+
+This is **structural identifiability intuition**.
+
+---
+
+## Поглиблення: transient data identify k
+
+Normalized deviation:
+
+\[
+\frac{S(t)-S^*}{S_0-S^*}
+=
+e^{-kt}.
+\]
+
+Take log:
+
+\[
+\ln
+\left|
+\frac{S(t)-S^*}{S_0-S^*}
+\right|
+=
+-kt.
+\]
+
+Thus transient slope can reveal \(k\) when equilibrium known.
+
+Then:
+
+\[
+q=kS^*.
+\]
+
+This connects symbolic derivation to experimental design.
+
+---
+
+## Поглиблення: choosing observation times
+
+If all observations are taken very late:
+
+\[
+t\gg1/k,
+\]
+
+then:
+
+\[
+e^{-kt}\approx0.
+\]
+
+Data mostly show equilibrium.
+
+Information about \(k\) from transient shape is weak.
+
+If all observations are too early, equilibrium poorly constrained.
+
+Therefore symbolic structure suggests collecting data across multiple time scales.
+
+---
+
+## Поглиблення: threshold time sensitivity
+
+Threshold formula:
+
+\[
+t_H=
+-\frac1k
+\ln
+\left(
+\frac{H-S^*}{S_0-S^*}
+\right).
+\]
+
+This depends on \(k\) both:
+
+- directly through \(1/k\);
+- indirectly through \(S^*=q/k\).
+
+So threshold sensitivity can be more complex than equilibrium sensitivity.
+
+Numerical parameter sweep can complement symbolic differentiation.
+
+---
+
+## Поглиблення: cumulative state as objective or constraint
+
+\[
+A(T)=\int_0^T S(t)\,dt.
+\]
+
+In a future optimization problem, \(A(T)\) could become:
+
+- objective;
+- constraint;
+- exposure metric.
+
+Thus symbolic integration is not isolated exercise.
+
+It can generate a derived quantity used downstream.
+
+---
+
+## Поглиблення: analytical solution as benchmark
+
+When closed form exists, it provides excellent benchmark for numerical solver.
+
+This is rare privilege.
+
+Use it to test:
+
+- tolerance;
+- step choices;
+- interpolation;
+- implementation.
+
+Then later, for a model with no closed form, you already trust the numerical pipeline more.
+
+---
+
+## Поглиблення: numerical error budget
+
+Agreement criterion:
+
+\[
+e_{max}<10^{-6}.
+\]
+
+But total computational discrepancy can have components:
+
+- truncation error;
+- solver tolerance;
+- interpolation;
+- floating point;
+- time grid.
+
+A single tolerance does not explain all error.
+
+For baseline smooth ODE, solve_ivp with strict tolerances makes these tiny.
+
+---
+
+## Поглиблення: convergence study
+
+A stronger numerical check:
+
+1. solve with tolerance set A;
+2. solve with tighter set B;
+3. compare trajectories;
+4. check stability of key outputs.
+
+If results stop changing materially, confidence increases.
+
+This is numerical convergence evidence.
+
+---
+
+## Поглиблення: time-grid independence
+
+solve_ivp internally chooses adaptive steps.
+
+\`t_eval\` only requests output points.
+
+If user changes output grid from 121 to 61 points, underlying integration may still remain accurate.
+
+But max error evaluated on grid may change slightly.
+
+Thus verification metric itself depends on evaluation design.
+
+---
+
+## Поглиблення: symbolic expression complexity
+
+For larger systems, CAS can produce an expression so large that it is:
+
+- hard to read;
+- slow to evaluate;
+- numerically unstable.
+
+A closed form is not automatically the best computational representation.
+
+Sometimes numerical solution is more useful and reliable.
+
+---
+
+## Поглиблення: catastrophic cancellation
+
+Two algebraically equivalent expressions can behave differently numerically.
+
+For very small \(kt\), expression:
+
+\[
+1-e^{-kt}
+\]
+
+can lose precision.
+
+Special numerical functions like \`expm1\` may be better.
+
+This is an advanced reminder:
+
+> symbolic equivalence does not guarantee identical floating-point stability.
+
+---
+
+## Поглиблення: symbolic verification with assumptions
+
+Simplification may depend on assumptions such as:
+
+\[
+k>0.
+\]
+
+Without assumptions, SymPy may keep conditional expressions or fail to reduce.
+
+Therefore symbolic model should declare known domain restrictions.
+
+This makes mathematics explicit.
+
+---
+
+## Поглиблення: exact vs floating-point constants
+
+SymPy distinguishes:
+
+\[
+\frac{1}{10}
+\]
+
+from floating:
+
+\[
+0.1.
+\]
+
+Exact rationals preserve algebraic exactness longer.
+
+For symbolic derivation, use exact objects where possible.
+
+For numerical evaluation, convert intentionally.
+
+---
+
+## Поглиблення: solving ODE with dsolve
+
+One can ask SymPy:
+
+~~~python
+sp.dsolve(ode)
+~~~
+
+But course model constructs known closed form directly after finding equilibrium.
+
+Why?
+
+Because pedagogical goal is to understand structure:
+
+\[
+equilibrium + transient.
+\]
+
+Automatic dsolve can hide this reasoning.
+
+CAS should support thinking, not replace it.
+
+---
+
+## Поглиблення: residual as reusable pattern
+
+Residual verification generalizes.
+
+For algebraic equation:
+
+\[
+f(x)=0,
+\]
+
+check:
+
+\[
+f(x^*)\approx0.
+\]
+
+For PDE/ODE candidate:
+
+\[
+R=\mathcal L(u)-f.
+\]
+
+For optimization constraints:
+
+\[
+g(x)\le0.
+\]
+
+Residual thinking is a universal verification habit.
+
+---
+
+## Поглиблення: comparing independent representations
+
+T2.L6 intentionally uses three representations:
+
+1. symbolic expression;
+2. hand-coded analytical NumPy;
+3. solve_ivp numerical integration.
+
+If all agree, common coding errors less likely.
+
+Yet they still share the same mathematical assumptions.
+
+This is **implementation triangulation**, not empirical validation.
+
+---
+
+## Поглиблення: model validation would require data
+
+To validate the ODE for a real process, we would need observations:
+
+\[
+(t_i,S_i).
+\]
+
+Then compare:
+
+- predicted trajectory;
+- residuals;
+- parameter estimates;
+- out-of-sample performance.
+
+That moves beyond T2.L6 into calibration and research workflow.
+
+---
+
+## Поглиблення: model calibration link to T2.L7
+
+Suppose \(q,k\) unknown.
+
+Given data, estimate:
+
+\[
+\hat q,\hat k.
+\]
+
+Then:
+
+1. calibrate;
+2. assess residuals;
+3. quantify uncertainty;
+4. verify numerical solution;
+5. predict thresholds/integrals.
+
+This is exactly how symbolic structure becomes part of scientific modeling.
+
+---
+
+## Поглиблення: sensitivity beyond one parameter
+
+Current experiment varies \(k\) with fixed \(q\).
+
+Could build grid:
+
+\[
+q\in\{8,12,16\},
+\quad
+k\in\{0.05,0.1,0.15\}.
+\]
+
+Then study response surface:
+
+\[
+S(10;q,k).
+\]
+
+This exposes interactions in finite-time output even though ODE linear in S.
+
+---
+
+## Поглиблення: contour map
+
+A contour of:
+
+\[
+S(10;q,k)
+\]
+
+shows combinations yielding same finite-horizon state.
+
+This can reveal parameter trade-offs.
+
+It also helps explain identifiability: one observation may correspond to many parameter pairs.
+
+---
+
+## Поглиблення: uncertainty propagation
+
+If:
+
+\[
+q\sim distribution,
+\quad
+k\sim distribution,
+\]
+
+then even exact formula produces uncertain:
+
+\[
+S(t),S^*,t_H.
+\]
+
+Symbolic solution makes repeated evaluation cheap.
+
+Thus symbolic work can accelerate Monte Carlo uncertainty propagation.
+
+---
+
+## Поглиблення: symbolic sensitivity and Monte Carlo complement each other
+
+Derivative gives local effect:
+
+\[
+\frac{\partial S^*}{\partial k}.
+\]
+
+Monte Carlo parameter uncertainty gives global distribution.
+
+Use derivative for local understanding.
+
+Use simulation for broader uncertainty.
+
+Neither universally replaces the other.
+
+---
+
+## Поглиблення: break-the-model checklist
+
+Ask:
+
+1. Is q constant?
+2. Is k constant?
+3. Are losses proportional to S?
+4. Is there delay?
+5. Are there thresholds?
+6. Is system one-dimensional?
+7. Are observations noisy?
+8. Are parameters known?
+9. Is state continuous?
+
+Each “no” suggests a model extension.
+
+---
+
+## Поглиблення: research-safe military example
+
+One may describe \(S(t)\) as a synthetic training-support indicator.
+
+Do not map q, k, S0 to actual operational capacities without authorized data and domain justification.
+
+The transferable lesson is:
+
+\[
+balance\ law
+\rightarrow
+equilibrium
+\rightarrow
+transient
+\rightarrow
+verification
+\rightarrow
+sensitivity.
+\]
+
+---
+
+## Поглиблення: reporting precision
+
+Tests store:
+
+\[
+83.2120558829.
+\]
+
+Text reports:
+
+\[
+83.2121.
+\]
+
+This is intentional.
+
+Regression tests need tight values.
+
+Human interpretation does not need ten decimal places.
+
+Precision should match purpose.
+
+---
+
+## Поглиблення: a compact evidence table
+
+| Claim | Evidence |
+|---|---|
+| formula solves ODE | symbolic residual = 0 |
+| initial condition correct | substitution \(t=0\) |
+| equilibrium 120 | \(q/k\) |
+| numerical implementation correct | lambdify/direct agreement |
+| ODE integration correct | solve_ivp error < \(10^{-6}\) |
+| k trend understood | derivative + scenario table |
+| real system adequate | **not established by lesson** |
+
+This table prevents overclaiming.
+
+---
+
+## Поглиблення: від symbolic insight до research design
+
+Symbolic analysis can change not only how we solve model, but what experiment we design.
+
+For baseline:
+
+\[
+S^*=\frac{q}{k}.
+\]
+
+This tells us equilibrium identifies ratio \(q/k\), not parameters separately.
+
+Transient:
+
+\[
+e^{-kt}
+\]
+
+tells us early-time data contain information about \(k\).
+
+Thus symbolic structure suggests:
+
+- collect equilibrium-like late data;
+- collect transient early data.
+
+This is an example of mathematics guiding measurement strategy.
+
+---
+
+## Поглиблення: sensitivity as experimental priority
+
+If:
+
+\[
+\left|\frac{\partial output}{\partial \theta}\right|
+\]
+
+is very small across relevant range, precise estimation of \(\theta\) may matter less for that output.
+
+If derivative large, parameter uncertainty strongly affects prediction.
+
+Sensitivity can guide where to invest measurement effort.
+
+---
+
+## Поглиблення: local vs global sensitivity
+
+Symbolic derivative is local.
+
+For larger parameter changes, nonlinear effect may differ.
+
+Therefore pair:
+
+- symbolic derivative;
+- parameter sweep.
+
+This combination appears repeatedly in good modeling practice.
+
+---
+
+## Поглиблення: parameter sweep matrix
+
+For q and k:
+
+| q | k | S* | S(10) |
+|---:|---:|---:|---:|
+| 8 | .08 | 100 | ... |
+| 12 | .08 | 150 | ... |
+| 16 | .08 | 200 | ... |
+| 8 | .12 | 66.7 | ... |
+| 12 | .12 | 100 | ... |
+
+This table shows both structural formula and finite-time effect.
+
+---
+
+## Поглиблення: symbolic limit analysis
+
+We can inspect limits.
+
+As:
+
+\[
+t\rightarrow\infty,
+\]
+
+\[
+S(t)\rightarrow q/k.
+\]
+
+As:
+
+\[
+k\rightarrow\infty
+\]
+
+for fixed q and t>0, equilibrium tends to zero.
+
+As:
+
+\[
+k\rightarrow0^+,
+\]
+
+current closed-form expression has terms that look singular, but limit corresponds to linear-growth ODE.
+
+Limit analysis can expose alternative branches.
+
+---
+
+## Поглиблення: checking limit k→0
+
+Original ODE with k=0:
+
+\[
+S=S_0+qt.
+\]
+
+A symbolic limit of closed-form expression can recover this.
+
+This is a powerful consistency check and a good CAS exercise.
+
+---
+
+## Поглиблення: series expansion
+
+For small \(kt\):
+
+\[
+e^{-kt}
+\approx
+1-kt+\frac{(kt)^2}{2}-\cdots.
+\]
+
+Substitute into solution to get short-time approximation.
+
+Leading behavior:
+
+\[
+S(t)\approx
+S_0+(q-kS_0)t.
+\]
+
+That matches initial derivative from ODE.
+
+Another symbolic consistency check.
+
+---
+
+## Поглиблення: local linearization of nonlinear models
+
+In future nonlinear ODE:
+
+\[
+\dot x=f(x),
+\]
+
+equilibrium \(x^*\) can be studied using derivative/Jacobian:
+
+\[
+J=\frac{\partial f}{\partial x}\Big|_{x^*}.
+\]
+
+T2.L6 linear example prepares this idea.
+
+---
+
+## Поглиблення: Jacobian for current model
+
+\[
+f(S)=q-kS.
+\]
+
+Derivative:
+
+\[
+\frac{df}{dS}=-k.
+\]
+
+Because:
+
+\[
+-k<0,
+\]
+
+equilibrium stable.
+
+This is simplest possible Jacobian stability analysis.
+
+---
+
+## Поглиблення: symbolic matrix models
+
+For vector state:
+
+\[
+\dot{\mathbf x}=A\mathbf x+\mathbf b.
+\]
+
+CAS can help:
+
+- eigenvalues;
+- equilibrium;
+- matrix exponential;
+- symbolic Jacobian.
+
+Numerical methods then handle larger systems.
+
+T2.L6 scalar case is foundation.
+
+---
+
+## Поглиблення: stiffness preview
+
+Some ODE systems contain very different time scales.
+
+Then explicit numerical integrators may struggle.
+
+Solver choice becomes important.
+
+Current model is not stiff.
+
+But hybrid symbolic/numerical reasoning helps detect time scales.
+
+---
+
+## Поглиблення: event detection instead of closed-form threshold
+
+For complex ODE where threshold formula unavailable, solve_ivp can detect event:
+
+\[
+S(t)-H=0.
+\]
+
+Thus threshold_time concept generalizes from analytic algebra to numerical event functions.
+
+---
+
+## Поглиблення: comparing threshold methods
+
+For baseline:
+
+1. analytical threshold formula;
+2. numerical event detection.
+
+If they agree, event implementation verified.
+
+This can become future extension.
+
+---
+
+## Поглиблення: cumulative integral numerically
+
+Similarly compare:
+
+- symbolic cumulative_state();
+- numerical quadrature of trajectory.
+
+This provides another independent verification channel.
+
+---
+
+## Поглиблення: triangulation design
+
+A rich validation matrix:
+
+| Quantity | Symbolic | Direct NumPy | SciPy |
+|---|---|---|---|
+| S(t) | closed form | analytical_solution | solve_ivp |
+| integral | integrate | cumulative_state | quadrature |
+| threshold | solve algebra | threshold_time | event detection |
+| sensitivity | diff | finite difference | scenario sweep |
+
+Agreement across rows strengthens implementation evidence.
+
+---
+
+## Поглиблення: finite-difference sensitivity check
+
+Symbolic:
+
+\[
+dS^*/dk=-q/k^2.
+\]
+
+Numerical finite difference:
+
+\[
+\frac{S^*(k+h)-S^*(k-h)}{2h}.
+\]
+
+Compare for small h.
+
+This checks symbolic derivative and numerical implementation.
+
+---
+
+## Поглиблення: choosing h
+
+Too large:
+
+- truncation error.
+
+Too small:
+
+- floating-point cancellation.
+
+This is a classic numerical analysis trade-off.
+
+CAS derivative avoids finite-difference approximation when exact expression available.
+
+---
+
+## Поглиблення: documentation of assumptions beside formulas
+
+A formula should not travel alone.
+
+For:
+
+\[
+S(t)=S^*+(S_0-S^*)e^{-kt}
+\]
+
+store assumptions:
+
+- q constant;
+- k constant >0;
+- one-dimensional state;
+- no delays;
+- initial condition S0;
+- deterministic dynamics.
+
+This prevents later misuse.
+
+---
+
+## Поглиблення: symbolic notebooks and source files
+
+Notebook is ideal for displaying SymPy derivation.
+
+But reusable functions should live in src/model.py.
+
+Same principle as T1.L3.
+
+This enables tests and CI.
+
+---
+
+## Поглиблення: CAS versioning
+
+SymPy simplification/printing can change across versions.
+
+Mathematical equivalence may remain.
+
+Therefore tests should prefer structural equivalence:
+
+\[
+simplify(expr_1-expr_2)=0
+\]
+
+rather than exact string formatting.
+
+---
+
+## Поглиблення: publication formula verification
+
+Before placing formula in article:
+
+1. derive symbolically;
+2. simplify;
+3. residual check;
+4. render LaTeX;
+5. compare notation with manuscript.
+
+This reduces transcription errors between code and paper.
+
+---
+
+## 74. One-page summary
+
+### П’ять головних ідей
+
+1. CAS exposes mathematical structure.
+2. Residual zero verifies symbolic solution.
+3. Lambdify bridges symbolic and numerical representations.
+4. solve_ivp provides independent numerical verification.
+5. Verification of equation is not validation of real-world assumptions.
+
+### Три формули
+
+\[
+S^*=\frac{q}{k}.
+\]
+
+\[
+S(t)=S^*+(S_0-S^*)e^{-kt}.
+\]
+
+\[
+\frac{\partial S^*}{\partial k}
+=
+-\frac{q}{k^2}.
+\]
+
+### Дві помилки
+
+- «SymPy solved it = research complete»;
+- «numerical match = real model adequate».
+
+### Одне питання
+
+> Яку structural information моя symbolic model can reveal before I launch a numerical experiment?
+
+### Наступний крок
+
+Reproduce baseline, verify residual, compare solve_ivp and run k-sensitivity.
+
+---
+
+## 75. Фінальна думка
+
+Computer algebra and numerical methods are strongest together.
+
+Symbolic layer answers:
+
+> what does the model imply structurally?
+
+Numerical layer answers:
+
+> what happens for these parameters and scenarios?
+
+Verification layer asks:
+
+> do independent representations agree?
+
+Research layer asks:
+
+> are assumptions meaningful for the object?
+
+A mature computational model moves through all four layers.
+
+That is the real capability T2.L6 is designed to build.

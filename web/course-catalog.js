@@ -15,6 +15,8 @@ globalThis.MathModelingCatalog = [
     id:"t1_l2", code:"T1.L2", topic:1,
     title:"Класифікація математичних моделей",
     status:"python",
+    notesUrl:"https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t1_l2/README.md",
+    theoryUrl:"books/t1_l2/index.html",
     challenge:"Чи достатньо однієї детермінованої траєкторії, якщо параметри випадкові?",
     transfer:"Порівняйте детерміновану і стохастичну версії однієї задачі."
   },
@@ -22,6 +24,8 @@ globalThis.MathModelingCatalog = [
     id:"t1_l3", code:"T1.L3", topic:1,
     title:"Організація математичного моделювання",
     status:"python",
+    notesUrl:"https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t1_l3/README.md",
+    theoryUrl:"books/t1_l3/index.html",
     challenge:"Чому колега не отримав ваш результат за тим самим описом експерименту?",
     transfer:"Сформуйте мінімальний reproducibility package для власного дослідження."
   },
@@ -83,6 +87,8 @@ globalThis.MathModelingCatalog = [
     id:"t2_l6", code:"T2.L6", topic:2,
     title:"Системи комп'ютерної математики та їх можливості для математичного моделювання",
     status:"python",
+    notesUrl:"https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t2_l6/README.md",
+    theoryUrl:"books/t2_l6/index.html",
     challenge:"Що саме доводить збіг символічного та чисельного розв’язків?",
     transfer:"Заплануйте independent verification різними математичними представленнями."
   },
