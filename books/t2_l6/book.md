@@ -42,7 +42,7 @@
 
 У систему постійно надходить ресурс з rate \(q\).
 
-Втрати proportional до поточний стан:
+Втрати пропорційний до поточний стан:
 
 \[
 kS.
@@ -66,20 +66,20 @@ S(0)=S_0.
 
 > «Готово. Комп’ютер дав розв’язок».
 
-Але сильніший researcher запитає:
+Але сильніший дослідник запитає:
 
 - чи формула satisfies ODE?
 - чи початковий умова виконується?
 - що означає рівновага?
 - як параметр \(k\) впливає на стан?
 - чи чисельний integrator дає ту саму траєкторія?
-- що буде, якщо символьний розв’язок unavailable?
+- що буде, якщо символьний розв’язок недоступний?
 
-Саме ці питання перетворюють CAS із «калькулятора» на дослідження tool.
+Саме ці питання перетворюють CAS із «калькулятора» на дослідження інструмент.
 
 <figure>
- <img src="figures/fig_01_symbolic_numeric_pipeline.svg" alt="Symbolic-to-numeric pipeline">
- <figcaption><strong>Рис. 1.</strong> Сильний workflow: formulation → символьний розв’язок → символьний перевірка → lambdify → незалежний чисельний розв’язати → чутливість → інтерпретація.</figcaption>
+ <img src="figures/fig_01_symbolic_numeric_pipeline.svg" alt="Symbolic-to-numeric ланцюжок">
+ <figcaption><strong>Рис. 1.</strong> Сильний робочий процес: formulation → символьний розв’язок → символьний перевірка → lambdify → незалежний чисельний розв’язати → чутливість → інтерпретація.</figcaption>
 </figure>
 
 ---
@@ -96,7 +96,7 @@ S(0)=S_0.
 
 - \(S(t)\) — стан;
 - \(q\) — сталий надходження;
-- \(k>0\) — proportional втрата коефіцієнт;
+- \(k>0\) — пропорційний втрата коефіцієнт;
 - \(S_0\) — початковий стан.
 
 модель є лінійний first-order ODE.
@@ -163,7 +163,7 @@ q-kS^*=0.
 S^*=\frac{q}{k}.
 \]
 
-Baseline:
+базовий сценарій:
 
 \[
 q=12,
@@ -183,11 +183,11 @@ S^*=\frac{12}{0.1}=120.
 
 ## 5. чому рівновага має значення
 
-рівновага є не just algebraic intermediate.
+рівновага є не just алгебраїчний intermediate.
 
-це answers:
+це відповідає:
 
-> до що рівень робить система tend якщо параметри remain сталий?
+> до що рівень робить система tend якщо параметри залишатися сталий?
 
 якщо:
 
@@ -205,16 +205,16 @@ S_0>S^*,
 
 стан falls.
 
-Baseline:
+базовий сценарій:
 
 \[
 S_0=20<120.
 \]
 
-Hence траєкторія rises toward 120.
+Hence траєкторія rises до 120.
 
 <figure>
- <img src="figures/fig_02_equilibrium_direction.svg" alt="напрям toward рівновага">
+ <img src="figures/fig_02_equilibrium_direction.svg" alt="напрям до рівновага">
  <figcaption><strong>Рис. 2.</strong> Знак \(q-kS\) визначає напрям руху стан: нижче рівновага траєкторія зростає, вище — спадає.</figcaption>
 </figure>
 
@@ -249,17 +249,17 @@ S_0-\frac{q}{k}
 \left(S_0-S^*\right)e^{-kt}
 \]
 
-— перехідний deviation.
+— перехідний відхилення.
 
 ---
 
-## 7. що exponential term means
+## 7. що exponential term означає
 
 \[
 e^{-kt}
 \]
 
-decays toward нуля.
+decays до нуля.
 
 отже:
 
@@ -271,7 +271,7 @@ S(t)\rightarrow S^*.
 
 великий \(k\):
 
-- сильніший proportional втрата;
+- сильніший пропорційний втрата;
 - faster збіжність;
 - lower рівновага \(q/k\).
 
@@ -281,7 +281,7 @@ S(t)\rightarrow S^*.
 
 ## 8. початковий умова перевірка
 
-At:
+при:
 
 \[
 t=0,
@@ -300,11 +300,11 @@ S(0)=
 \left(S_0-\frac{q}{k}\right)=S_0.
 \]
 
-Це simple ручний перевірка.
+Це простий ручний перевірка.
 
 ---
 
-## 9. Baseline траєкторія
+## 9. базовий сценарій траєкторія
 
 параметри:
 
@@ -320,7 +320,7 @@ S_0=20.
 S(t)=120-100e^{-0.1t}.
 \]
 
-At:
+при:
 
 \[
 t=10
@@ -335,8 +335,8 @@ S(10)\approx83.2121.
 Це source-of-truth перевірка значення.
 
 <figure>
- <img src="figures/fig_03_baseline_trajectory.svg" alt="Baseline траєкторія toward рівновага">
- <figcaption><strong>Рис. 3.</strong> Baseline стан починається з 20 і монотонно наближається до рівновага 120. At \(t=10\), \(S\approx83.2121\).</figcaption>
+ <img src="figures/fig_03_baseline_trajectory.svg" alt="базовий сценарій траєкторія до рівновага">
+ <figcaption><strong>Рис. 3.</strong> базовий сценарій стан починається з 20 і монотонно наближається до рівновага 120. при \(t=10\), \(S\approx83.2121\).</figcaption>
 </figure>
 
 ---
@@ -365,7 +365,7 @@ ode = sp.Eq(
 
 ---
 
-## 11. чому символьний припущення matter
+## 11. чому символьний припущення має значення
 
 ми declare:
 
@@ -378,8 +378,8 @@ k>0.
 оскільки:
 
 - рівновага потребує ділення на \(k\);
-- модель зміст says proportional втрата додатний;
-- simplification може use positivity.
+- модель зміст означає пропорційний втрата додатний;
+- спрощення може використовувати positivity.
 
 символьні системи дають змогу краще міркувати коли припущення записані явно.
 
@@ -399,7 +399,7 @@ q-kS_{eq}=0.
 S_{eq}=\frac{q}{k}.
 \]
 
-Це не difficult manually.
+Це не difficult вручну.
 
  точка є не convenience.
 
@@ -411,7 +411,7 @@ S_{eq}=\frac{q}{k}.
 
 Take кандидатний розв’язок \(S_c(t)\).
 
-Compute нев’язка:
+обчислити нев’язка:
 
 \[
 R(t)=
@@ -438,12 +438,12 @@ assert residual == 0
 
 <figure>
  <img src="figures/fig_04_residual_verification.svg" alt="символьний нев’язка перевірка">
- <figcaption><strong>Рис. 4.</strong> нев’язка перевірка verifies рівняння structurally для символьний параметри, не лише at кількох числових точках.</figcaption>
+ <figcaption><strong>Рис. 4.</strong> нев’язка перевірка verifies рівняння structurally для символьний параметри, не лише при кількох числових точках.</figcaption>
 </figure>
 
 ---
 
-## 14. чому нев’язка перевірка сильніший than точкові перевірки
+## 14. чому нев’язка перевірка сильніший ніж точкові перевірки
 
 Припустімо, ми перевіряємо:
 
@@ -461,19 +461,19 @@ t=0,5,10.
 R(t)\equiv0
 \]
 
-перевірки identity за stated символьний припущення.
+перевірки ідентичність за stated символьний припущення.
 
 Це сильніший свідчення для алгебраїчної коректності.
 
 ---
 
-## 15. але символьний нев’язка не validate реальний модель
+## 15. але символьний нев’язка не перевіряти реальний модель
 
 нев’язка нуля proves:
 
 > формула solves рівняння.
 
-це не prove:
+це не доводити:
 
 - рівняння describes реальний процес;
 - q сталий;
@@ -510,7 +510,7 @@ S^*=\frac{q}{k}.
 -\frac{q}{k^2}.
 \]
 
-ці formulas show структура до any числа.
+ці formulas показує структура до any числа.
 
 ---
 
@@ -520,9 +520,9 @@ S^*=\frac{q}{k}.
 \frac{1}{k}>0.
 \]
 
-рівновага grows коли надходження grows.
+рівновага зростає коли надходження зростає.
 
-At:
+при:
 
 \[
 k=0.1,
@@ -542,17 +542,17 @@ Locally, +1 у q зміни рівновага за +10.
 -\frac{q}{k^2}<0.
 \]
 
-Increasing втрата коефіцієнт lowers рівновага.
+зростаючий втрата коефіцієнт lowers рівновага.
 
-Baseline:
+базовий сценарій:
 
 \[
 -\frac{12}{0.1^2}=-1200.
 \]
 
-це великий похідна reflects units і масштаб.
+це великий похідна reflects одиниці і масштаб.
 
-не інтерпретувати magnitude без units.
+не інтерпретувати magnitude без одиниці.
 
 ---
 
@@ -580,17 +580,17 @@ S^*=\frac{q}{k},
 E_k=-1.
 \]
 
-тому 1% increase у \(k\) gives approximately 1% decrease у рівновага.
+тому 1% increase у \(k\) даєpproximately 1% decrease у рівновага.
 
 Це часто більше interpretable.
 
 ---
 
-## 20. символьний integration
+## 20. символьний інтеграція
 
-Sometimes питання є не стан at moment.
+іноді питання є не стан при moment.
 
-ми need cumulative exposure:
+ми потрібно накопичений exposure:
 
 \[
 A(T)=\int_0^T S(t)\,dt.
@@ -608,7 +608,7 @@ S_0-\frac{q}{k}
 \frac{1-e^{-kT}}{k}.
 \]
 
-Baseline:
+базовий сценарій:
 
 \[
 A(10)\approx567.8794.
@@ -616,20 +616,20 @@ A(10)\approx567.8794.
 
 ---
 
-## 21. що cumulative стан means
+## 21. що накопичений стан означає
 
-Depends на область.
+залежить на область.
 
-може represent:
+може представляти:
 
 - accumulated availability;
-- cumulative load;
+- накопичений навантаження;
 - загальний exposure;
-- area за стан curve.
+- area за стан крива.
 
 у синтетичний заняття немає операційний інтерпретація є imposed.
 
- важливий idea:
+ важливий ідея:
 
 > символьний розв’язок enables derived quantities.
 
@@ -639,7 +639,7 @@ Depends на область.
 
 питання:
 
-> коли робить \(S(t)\) перший reach target \(H\)?
+> коли робить \(S(t)\) перший досягати ціль \(H\)?
 
 розв’язати:
 
@@ -674,7 +674,7 @@ t=
 H=80
 \]
 
-baseline:
+базовий сценарій:
 
 \[
 t\approx9.1629.
@@ -682,9 +682,9 @@ t\approx9.1629.
 
 ---
 
-## 23. поріг validity
+## 23. поріг валідність
 
-Target має lie між:
+ціль має lie між:
 
 \[
 S_0
@@ -696,13 +696,13 @@ S_0
 S^*.
 \]
 
-якщо target 150:
+якщо ціль 150:
 
 \[
 150>120,
 \]
 
-baseline траєкторія never досягає це.
+базовий сценарій траєкторія never досягає це.
 
 модель raises ValueError.
 
@@ -712,7 +712,7 @@ baseline траєкторія never досягає це.
 
 ## 24. рівновага поріг
 
-якщо target точно:
+якщо ціль точно:
 
 \[
 H=S^*,
@@ -720,7 +720,7 @@ H=S^*,
 
 траєкторія approaches asymptotically.
 
-це не reach у скінченний time.
+це не досягати у скінченний час.
 
 отже:
 
@@ -728,15 +728,15 @@ H=S^*,
 t=\infty.
 \]
 
-Це beautiful приклад where математичний nuance має значення.
+Це beautiful приклад де математичний nuance має значення.
 
 ---
 
 ## 25. Lambdify bridge
 
-символьний вираз корисний для reasoning.
+символьний вираз корисний для міркування.
 
-але до plot arrays, use:
+але до plot arrays, використовувати:
 
 ~~~python
 fn = sp.lambdify(
@@ -746,7 +746,7 @@ fn = sp.lambdify(
 )
 ~~~
 
-Now:
+тепер:
 
 ~~~python
 values = fn(times, 12, 0.1, 20)
@@ -756,9 +756,9 @@ values = fn(times, 12, 0.1, 20)
 
 ---
 
-## 26. чому не rewrite формула manually
+## 26. чому не rewrite формула вручну
 
-ми може manually код:
+ми може вручну код:
 
 ~~~python
 seq = q/k
@@ -767,9 +767,9 @@ return seq + (s0-seq)*np.exp(-k*t)
 
 поточний пакет має analytical_solution() точно like це.
 
-але lambdify adds перевірка:
+але lambdify додає перевірка:
 
-> символьний вираз і direct чисельний реалізація agree.
+> символьний вираз і прямий чисельний реалізація узгоджуються.
 
 перевірка перевірки це.
 
@@ -777,17 +777,17 @@ return seq + (s0-seq)*np.exp(-k*t)
 
 ## 27. незалежний чисельний розв’язок
 
-Use solve_ivp на:
+використовувати solve_ivp на:
 
 \[
 \frac{dS}{dt}=q-kS.
 \]
 
-чисельний integrator не use у замкненій формі розв’язок.
+чисельний integrator не використовувати у замкненій формі розв’язок.
 
-тому це є partially незалежний computational pathway.
+тому це є partially незалежний обчислювальний шлях.
 
-якщо trajectories agree, довірчий зростає.
+якщо траєкторії узгоджуються, довірчий зростає.
 
 ---
 
@@ -807,11 +807,11 @@ result = solve_ivp(
 )
 ~~~
 
-Strict tolerances support високий agreement.
+Strict допуски підтримка високий збіг.
 
 ---
 
-## 29. похибка metric
+## 29. похибка метрика
 
 порівняти:
 
@@ -826,34 +826,34 @@ e_i=
 e_{max}=\max_i e_i.
 \]
 
-перевірка requires:
+перевірка потребує:
 
 \[
 e_{max}<10^{-6}.
 \]
 
 <figure>
- <img src="figures/fig_05_three_trajectories.svg" alt="аналітичний, lambdified і solve_ivp trajectories">
- <figcaption><strong>Рис. 5.</strong> аналітичний NumPy, lambdified SymPy і незалежний solve_ivp trajectories слід overlap within чисельний допуск.</figcaption>
+ <img src="figures/fig_05_three_trajectories.svg" alt="аналітичний, lambdified і solve_ivp траєкторії">
+ <figcaption><strong>Рис. 5.</strong> аналітичний NumPy, lambdified SymPy і незалежний solve_ivp траєкторії слід overlap у межах чисельний допуск.</figcaption>
 </figure>
 
 ---
 
-## 30. Agreement є свідчення, не proof адекватність
+## 30. збіг є свідчення, не proof адекватність
 
-три implementations agree.
+три implementations узгоджуються.
 
-це supports:
+це підтримує:
 
-- derivation;
+- виведення;
 - coding;
-- чисельний integration.
+- чисельний інтеграція.
 
-не prove:
+не доводити:
 
 - модель структура коректний для реальний система.
 
-це distinction repeats через курс.
+це відмінність repeats через курс.
 
 ---
 
@@ -869,7 +869,7 @@ q=12,
 S_0=20.
 \]
 
-Vary:
+змінювати:
 
 \[
 k\in
@@ -896,7 +896,7 @@ k\in
 S^*=\frac{q}{k}.
 \]
 
-Increasing denominator reduces ratio.
+зростаючий denominator зменшує ratio.
 
 похідна confirms:
 
@@ -904,24 +904,24 @@ Increasing denominator reduces ratio.
 \frac{\partial S^*}{\partial k}<0.
 \]
 
-отже чисельний table, формула і похідна tell той самий story.
+отже чисельний таблиця, формула і похідна tell той самий story.
 
 <figure>
  <img src="figures/fig_06_k_sensitivity.svg" alt="чутливість до втрата коефіцієнт k">
- <figcaption><strong>Рис. 6.</strong> Increasing \(k\) lowers обидва рівновага і \(S(10)\). символьний чутливість explains напрям до чисельний експеримент.</figcaption>
+ <figcaption><strong>Рис. 6.</strong> зростаючий \(k\) lowers обидва рівновага і \(S(10)\). символьний чутливість explains напрям до чисельний експеримент.</figcaption>
 </figure>
 
 ---
 
 ## 33. чому S(10) є не simply рівновага
 
-At скінченний time:
+при скінченний час:
 
 \[
 S(10)\ne S^*
 \]
 
-unless система already У стані рівноваги або enough time passed.
+unless система already У стані рівноваги або достатньо час passed.
 
 перехідний term усе ще має значення.
 
@@ -934,21 +934,21 @@ unless система already У стані рівноваги або enough tim
 
 ---
 
-## 34. Time масштаб
+## 34. час масштаб
 
-Exponential decay characteristic time:
+Exponential decay characteristic час:
 
 \[
 \tau=\frac{1}{k}.
 \]
 
-Baseline:
+базовий сценарій:
 
 \[
 \tau=10.
 \]
 
-це gives інтуїція.
+це дає інтуїція.
 
 після several \(\tau\), перехідний стає малий.
 
@@ -959,9 +959,9 @@ Higher \(k\):
 
 ---
 
-## 35. Half-life deviation
+## 35. Half-life відхилення
 
-Deviation:
+відхилення:
 
 \[
 D(t)=S(t)-S^*.
@@ -973,35 +973,35 @@ D(t)=S(t)-S^*.
 D(t)=D(0)e^{-kt}.
 \]
 
-Time для deviation halve:
+час для відхилення halve:
 
 \[
 t_{1/2}=
 \frac{\ln2}{k}.
 \]
 
-Baseline:
+базовий сценарій:
 
 \[
 t_{1/2}\approx6.93.
 \]
 
-Це another derived символьний insight.
+Це інший derived символьний insight.
 
 ---
 
 ## 36. CAS як структура explorer
 
-SymPy helps ask:
+SymPy допомагає запитати:
 
 - рівновага?
 - похідна?
-- integral?
+- інтеграл?
 - поріг рівняння?
 - asymptotic поведінка?
-- simplification?
+- спрощення?
 
-Це більше valuable than лише чисельний substitution.
+Це більше valuable ніж лише чисельний підстановка.
 
 ---
 
@@ -1009,22 +1009,22 @@ SymPy helps ask:
 
 не every модель yields elegant замкнений форма.
 
-для нелінійний або coupled systems SymPy може:
+для нелінійний або coupled системи SymPy може:
 
 - return implicit форма;
 - return special функції;
-- fail до розв’язати;
+- зазнати невдачі до розв’язати;
 - generate huge вираз.
 
-Це не відмова modeling.
+Це не відмова моделювання.
 
-це signals need для чисельний методи.
+це signals потрібно для чисельний методи.
 
 ---
 
 ## 38. чисельний методи є не second-class
 
-якщо символьний розв’язок unavailable, solve_ivp може усе ще бути коректний tool.
+якщо символьний розв’язок недоступний, solve_ivp може усе ще бути коректний інструмент.
 
  goal є не:
 
@@ -1032,29 +1032,29 @@ SymPy helps ask:
 
  goal:
 
-> choose representation suitable для питання і перевірити це.
+> обрати представлення suitable для питання і перевірити це.
 
 ---
 
-## 39. символьний порівняно з чисельний comparison
+## 39. символьний порівняно з чисельний порівняння
 
 ### символьний strengths
 
 - точний структура;
-- derivatives;
+- похідні;
 - integrals;
-- simplification;
+- спрощення;
 - параметр dependence.
 
 ### чисельний strengths
 
 - complex моделі;
-- нелінійний systems;
+- нелінійний системи;
 - time-varying коефіцієнти;
-- великий systems;
-- direct моделювання.
+- великий системи;
+- прямий моделювання.
 
-найкращий workflow часто combines обидва.
+найкращий робочий процес часто combines обидва.
 
 ---
 
@@ -1098,7 +1098,7 @@ S=S_0+qt.
 
 ---
 
-## 41. Зламай модель: q зміни з time
+## 41. Зламай модель: q зміни з час
 
 припустімо:
 
@@ -1112,9 +1112,9 @@ q=q(t).
 \frac{dS}{dt}=q(t)-kS.
 \]
 
-замкнений форма може усе ще exist для simple q(t), але baseline формула немає longer valid.
+замкнений форма може усе ще exist для простий q(t), але базовий сценарій формула немає довше коректний.
 
-Need re-derive.
+потрібно re-derive.
 
 ---
 
@@ -1142,7 +1142,7 @@ Dynamics нелінійний.
 
 ## 43. Зламай модель: затримка
 
-припустімо втрата depends на past:
+припустімо втрата залежить на past:
 
 \[
 \frac{dS}{dt}
@@ -1150,9 +1150,9 @@ Dynamics нелінійний.
 q-kS(t-\tau).
 \]
 
-Now затримка differential рівняння.
+тепер затримка differential рівняння.
 
-Baseline ODE tools insufficient.
+базовий сценарій ODE tools insufficient.
 
 ---
 
@@ -1170,21 +1170,21 @@ S>S_c.
 
 ---
 
-## 45. валідація hierarchy
+## 45. валідація ієрархія
 
 <figure>
- <img src="figures/fig_07_verification_hierarchy.svg" alt="перевірка hierarchy">
- <figcaption><strong>Рис. 7.</strong> математичний derivation, нев’язка перевірка, lambdify agreement і solve_ivp agreement перевірити обчислення at інший levels; область адекватність remains separate питання.</figcaption>
+ <img src="figures/fig_07_verification_hierarchy.svg" alt="перевірка ієрархія">
+ <figcaption><strong>Рис. 7.</strong> математичний виведення, нев’язка перевірка, lambdify збіг і solve_ivp збіг перевірити обчислення при інший рівні; область адекватність залишається separate питання.</figcaption>
 </figure>
 
-Levels:
+рівні:
 
 1. formulate ODE;
-2. derive розв’язок;
+2. вивести розв’язок;
 3. нев’язка=0;
 4. початковий умова;
-5. lambdify agreement;
-6. solve_ivp agreement;
+5. lambdify збіг;
+6. solve_ivp збіг;
 7. параметр експеримент plausibility;
 8. область валідація.
 
@@ -1223,7 +1223,7 @@ s10 = analytical_solution(
 
 ---
 
-## 48. Python без страху: cumulative
+## 48. Python без страху: накопичений
 
 ~~~python
 area = cumulative_state(
@@ -1279,7 +1279,7 @@ assert err < 1e-6
 
 ## 51. прогнозувати до запуск
 
-до чутливість table, прогнозувати.
+до чутливість таблиця, прогнозувати.
 
 якщо \(k\) зростає:
 
@@ -1294,14 +1294,14 @@ Think до обчислення.
 
 ## 52. k affects два mechanisms
 
-Increasing \(k\):
+зростаючий \(k\):
 
 - lowers \(S^*=q/k\);
-- makes експонента \(e^{-kt}\) decay faster.
+- робить експонента \(e^{-kt}\) decay faster.
 
-ці effects може pull скінченний-стан на заданому горизонті у nontrivial ways через інший початковий conditions.
+ці ефекти може pull скінченний-стан на заданому горизонті у nontrivial ways через інший початковий conditions.
 
-Baseline обидва support lower S(10).
+базовий сценарій обидва підтримка lower S(10).
 
 ---
 
@@ -1313,7 +1313,7 @@ Baseline обидва support lower S(10).
 S_0=180>S^*=120.
 \]
 
-тоді траєкторія decreases toward 120.
+тоді траєкторія decreases до 120.
 
 той самий формула.
 
@@ -1365,7 +1365,7 @@ S^*=\frac{q}{k}.
 1/k.
 \]
 
-Це simpler чутливість than k.
+Це simpler чутливість ніж k.
 
 ---
 
@@ -1395,9 +1395,9 @@ q=12,k=0.1
 q=24,k=0.2.
 \]
 
-рівновага сам по собі не може identify обидва.
+рівновага сам по собі не може визначити обидва.
 
-траєкторія speed helps identify k.
+траєкторія speed допомагає визначити k.
 
 Це deep дослідження insight від символьний структура.
 
@@ -1411,11 +1411,11 @@ q=24,k=0.2.
 e^{-kt}
 \]
 
-contains k directly.
+contains k безпосередньо.
 
-отже спостереження над time може distinguish параметр pairs з той самий рівновага.
+отже спостереження над час може distinguish параметр pairs з той самий рівновага.
 
-символьний модель helps дизайн дані collection.
+символьний модель допомагає дизайн дані collection.
 
 ---
 
@@ -1425,8 +1425,8 @@ contains k directly.
 
 це може reveal:
 
-- який quantities depend на параметри;
-- який спостереження identify them;
+- який quantities залежати на параметри;
+- який спостереження визначитиm;
 - який похідна є нуля/nonzero;
 - який measurement горизонт informative.
 
@@ -1439,21 +1439,21 @@ contains k directly.
  complete T2.L6 експеримент слід save:
 
 - символьний форма;
-- baseline параметри;
-- time сітка;
-- solve_ivp tolerances;
-- comparison table;
-- чутливість table;
+- базовий сценарій параметри;
+- час сітка;
+- solve_ivp допуски;
+- порівняння таблиця;
+- чутливість таблиця;
 - підсумок;
 - код коміт.
 
-тоді agreement може бути rebuilt.
+тоді збіг може бути rebuilt.
 
 ---
 
 ## 60. чисельний допуск
 
-solve_ivp uses:
+solve_ivp використовує:
 
 \[
 rtol=10^{-10},
@@ -1467,7 +1467,7 @@ atol=10^{-12}.
 
 вони influence чисельний похибка і runtime.
 
-тому вони є part відтворюваність.
+тому вони є частина відтворюваність.
 
 ---
 
@@ -1481,31 +1481,31 @@ S_{analytical}=S_{numerical}
 
 bit-for-bit.
 
-чисельний integration approximates.
+чисельний інтеграція approximates.
 
-Use допуск:
+використовувати допуск:
 
 \[
 e_{max}<10^{-6}.
 \]
 
-Це коректний computational reasoning.
+Це коректний обчислювальний міркування.
 
 ---
 
 ## 62. Floating точка
 
-Even аналітичний NumPy evaluation uses floating точка.
+навіть аналітичний NumPy evaluation використовує floating точка.
 
-символьний вираз точний у algebraic форма.
+символьний вираз точний у алгебраїчний форма.
 
-чисельний substitution approximate.
+чисельний підстановка approximate.
 
-це difference має значення.
+це відмінність має значення.
 
 ---
 
-## 63. символьний simplification hazards
+## 63. символьний спрощення hazards
 
 Equivalent expressions може look інший.
 
@@ -1517,9 +1517,9 @@ S^*+(S_0-S^*)e^{-kt}
 
 і expanded форма.
 
-String comparison є weak.
+String порівняння є weak.
 
-Use:
+використовувати:
 
 \[
 sp.simplify(expr_1-expr_2)==0.
@@ -1539,21 +1539,21 @@ sp.simplify(expr_1-expr_2)==0.
 
 ### чисельний аудит
 
-- time сітка valid?
+- час сітка коректний?
 - розв’язувач успіх?
-- допуск adequate?
+- допуск адекватний?
 - max похибка?
 
 ### чутливість аудит
 
-- параметр range meaningful?
+- параметр діапазон meaningful?
 - trend explained за formulas?
 
 ### науковий аудит
 
-- q/k meanings justified?
+- q/k meanings обґрунтований?
 - сталий коефіцієнти правдоподібний?
-- лінійний втрата adequate?
+- лінійний втрата адекватний?
 
 ---
 
@@ -1561,21 +1561,21 @@ sp.simplify(expr_1-expr_2)==0.
 
 Imagine \(S(t)\) як abstract readiness-support стан у training моделювання.
 
-\(q\) — синтетичний replenishment intensity.
+\(q\) — синтетичний поповнення intensity.
 
-\(kS\) — синтетичний proportional втрата.
+\(kS\) — синтетичний пропорційний втрата.
 
-немає actual readiness metric, logistics запас або операційний коефіцієнт є implied.
+немає фактичний readiness метрика, logistics запас або операційний коефіцієнт є implied.
 
- purpose є математичну структуру лише.
+ призначення є математичну структуру лише.
 
 ---
 
-## 66. дослідження Transfer
+## 66. дослідження перенесення
 
 питання:
 
-> Яку частину мого dissertation модель варто спочатку formalize symbolically, а яку перевірити numerically?
+> Яку частину мого дисертація модель варто спочатку formalize symbolically, а яку перевірити numerically?
 
 Template:
 
@@ -1613,7 +1613,7 @@ Allowed conclusion:
 
 ---
 
-## 67. приклад дослідження Transfer
+## 67. приклад дослідження перенесення
 
 припустімо процес:
 
@@ -1621,7 +1621,7 @@ Allowed conclusion:
 \frac{dY}{dt}=a-bY.
 \]
 
-Symbolically derive:
+Symbolically вивести:
 
 - рівновага;
 - перехідний;
@@ -1633,15 +1633,15 @@ Numerically:
 - порівняти;
 - чутливість.
 
-тоді calibrate,b від дані у later work.
+тоді calibrate,b від дані у пізніше робота.
 
 ---
 
 ## 68. коли символьний метод є especially корисний
 
 - малий ODE;
-- algebraic рівновага;
-- точний derivatives;
+- алгебраїчний рівновага;
+- точний похідні;
 - параметр relations;
 - transformations;
 - asymptotic аналіз.
@@ -1650,7 +1650,7 @@ Numerically:
 
 ## 69. коли чисельний метод є especially корисний
 
-- нелінійний coupled systems;
+- нелінійний coupled системи;
 - time-varying коефіцієнти;
 - discontinuities;
 - немає замкнений форма;
@@ -1659,11 +1659,11 @@ Numerically:
 
 ---
 
-## 70. Hybrid workflow
+## 70. Hybrid робочий процес
 
 <figure>
  <img src="figures/fig_08_hybrid_method_map.svg" alt="Hybrid symbolic-numeric метод map">
- <figcaption><strong>Рис. 8.</strong> символьний і чисельний методи є complementary: символьний reasoning exposes структура, чисельний обчислення explores приклади where замкнений форма є unavailable або inconvenient.</figcaption>
+ <figcaption><strong>Рис. 8.</strong> символьний і чисельний методи є complementary: символьний міркування exposes структура, чисельний обчислення explores приклади де замкнений форма є недоступний або inconvenient.</figcaption>
 </figure>
 
 найкращий practice:
@@ -1678,7 +1678,7 @@ Numerical
 
 ---
 
-## 71. Typical thinking похибки
+## 71. Typical мислення похибки
 
 ### «SymPy gave формула → модель коректний»
 
@@ -1710,40 +1710,40 @@ Reporting точність має reflect дані/модель якість.
 
 ---
 
-## 72. Allowed висновок
+## 72. допустимий висновок
 
-Strong:
+сильний:
 
-> для синтетичний ODE \(dS/dt=q-kS\) з \(q=12,k=0.1,S_0=20\), символьний розв’язок gives рівновага 120, \(S(10)\approx83.2121\), cumulative стан над [0,10] ≈567.8794 і час досягнення порогу до 80 ≈9.1629. символьний нев’язка є точно нуля, і незалежний solve_ivp траєкторія agrees з аналітичний розв’язок within \(10^{-6}\) на tested сітка.
+> для синтетичний ODE \(dS/dt=q-kS\) з \(q=12,k=0.1,S_0=20\), символьний розв’язок дає рівновага 120, \(S(10)\approx83.2121\), накопичений стан над [0,10] ≈567.8794 і час досягнення порогу до 80 ≈9.1629. символьний нев’язка є точно нуля, і незалежний solve_ivp траєкторія agrees з аналітичний розв’язок у межах \(10^{-6}\) на tested сітка.
 
 тоді limitation:
 
-> ці перевірки перевірити математичний/computational реалізація, не адекватність сталий надходження і proportional-loss припущення для реальний система.
+> ці перевірки перевірити математичний/обчислювальний реалізація, не адекватність сталий надходження і proportional-loss припущення для реальний система.
 
 ---
 
 ## 73. Від мінікнига до practice
 
-практичний sequence:
+практичний послідовність:
 
-1. define symbols;
+1. визначити symbols;
 2. write ODE;
-3. derive розв’язок;
+3. вивести розв’язок;
 4. нев’язка перевірка;
 5. рівновага;
-6. чутливість derivatives;
-7. integral;
+6. чутливість похідні;
+7. інтеграл;
 8. lambdify;
 9. solve_ivp;
 10. похибка;
-11. k scenarios;
+11. k сценарії;
 12. інтерпретація.
 
 ---
 
 ## Поглиблення: dimensional аналіз до символьний manipulation
 
-Перед тим як натискати \`solve\`, корисно перевірити units.
+Перед тим як натискати \`solve\`, корисно перевірити одиниці.
 
 ODE:
 
@@ -1751,7 +1751,7 @@ ODE:
 \frac{dS}{dt}=q-kS.
 \]
 
-якщо \(S\) measured у стан units і \(t\) у time, тоді:
+якщо \(S\) measured у стан одиниці і \(t\) у час, тоді:
 
 \[
 [q]=\frac{S}{t},
@@ -1763,7 +1763,7 @@ ODE:
 [kS]=\frac{S}{t},
 \]
 
-ми need:
+ми потрібно:
 
 \[
 [k]=\frac{1}{t}.
@@ -1775,15 +1775,15 @@ ODE:
 \frac{q}{k}
 \]
 
-має units \(S\), як required для рівновага.
+має одиниці \(S\), як потрібний для рівновага.
 
-це simple перевірка catches багато formulation похибки до any CAS work.
+це простий перевірка catches багато formulation похибки до any CAS робота.
 
 ---
 
 ## Поглиблення: nondimensionalization
 
-Define:
+визначити:
 
 \[
 s=\frac{S}{S^*},
@@ -1803,7 +1803,7 @@ S^*=\frac{q}{k},
 \frac{ds}{d\tau}=1-s.
 \]
 
-Now параметр \(q\) і \(k\) disappear від dimensionless dynamics.
+тепер параметр \(q\) і \(k\) disappear від dimensionless dynamics.
 
 розв’язок:
 
@@ -1811,7 +1811,7 @@ Now параметр \(q\) і \(k\) disappear від dimensionless dynamics.
 s(\tau)=1+(s_0-1)e^{-\tau}.
 \]
 
-це reveals universal структура.
+це виявляє універсальний структура.
 
 інший \(q,k\) приклади є scaled версії той самий normalized процес.
 
@@ -1821,20 +1821,20 @@ s(\tau)=1+(s_0-1)e^{-\tau}.
 
 ## Поглиблення: чому nondimensionalization має значення
 
-це може show:
+це може показує:
 
-- який параметр combinations truly matter;
-- natural time масштаб;
-- natural стан масштаб;
-- як багато незалежний dimensionless groups remain.
+- який параметр combinations truly має значення;
+- природний час масштаб;
+- природний стан масштаб;
+- як багато незалежний dimensionless groups залишатися.
 
-у baseline:
+у базовому сценарії:
 
 \[
 \tau=kt
 \]
 
-shows \(1/k\) є time масштаб.
+shows \(1/k\) є час масштаб.
 
 \[
 S^*=q/k
@@ -1842,7 +1842,7 @@ S^*=q/k
 
 є стан масштаб.
 
-Це deeper than just computing числа.
+Це deeper ніж just computing числа.
 
 ---
 
@@ -1874,9 +1874,9 @@ u(t)\rightarrow0.
 
 тому рівновага є asymptotically стійкий.
 
-це висновок follows directly від transformed рівняння.
+це висновок follows безпосередньо від transformed рівняння.
 
-CAS може support algebra, але стійкість інтерпретація remains researcher’s робота.
+CAS може підтримка algebra, але стійкість інтерпретація залишається дослідник’s робота.
 
 ---
 
@@ -1898,7 +1898,7 @@ CAS може support algebra, але стійкість інтерпретаці
 
 тому вхідні дані валідація encodes область зміст.
 
-Це good приклад semantic валідація, не лише numeric hygiene.
+Це добрий приклад semantic валідація, не лише numeric hygiene.
 
 ---
 
@@ -1918,7 +1918,7 @@ q=120k
 
 fits рівновага.
 
-Examples:
+приклади:
 
 \[
 (12,0.1),
@@ -1932,15 +1932,15 @@ Examples:
 (6,0.05).
 \]
 
-тому рівновага дані сам по собі не може identify обидва параметри.
+тому рівновага дані сам по собі не може визначити обидва параметри.
 
 Це **структурний identifiability інтуїція**.
 
 ---
 
-## Поглиблення: перехідний дані identify k
+## Поглиблення: перехідний дані визначити k
 
-Normalized deviation:
+Normalized відхилення:
 
 \[
 \frac{S(t)-S^*}{S_0-S^*}
@@ -1967,13 +1967,13 @@ Take log:
 q=kS^*.
 \]
 
-це connects символьний derivation до experimental дизайн.
+це connects символьний виведення до experimental дизайн.
 
 ---
 
 ## Поглиблення: choosing спостереження times
 
-якщо усі спостереження є taken very late:
+якщо усі спостереження є taken дуже late:
 
 \[
 t\gg1/k,
@@ -1985,13 +1985,13 @@ t\gg1/k,
 e^{-kt}\approx0.
 \]
 
-дані mostly show рівновага.
+дані mostly показує рівновага.
 
-Information приблизно \(k\) від перехідний shape є weak.
+інформація приблизно \(k\) від перехідний shape є weak.
 
-якщо усі спостереження є too early, рівновага poorly constrained.
+якщо усі спостереження є too ранній, рівновага poorly constrained.
 
-тому символьний структура підказує collecting дані через множинний time scales.
+тому символьний структура підказує collecting дані через множинний час scales.
 
 ---
 
@@ -2008,30 +2008,30 @@ t_H=
 \right).
 \]
 
-це depends на \(k\) обидва:
+це залежить на \(k\) обидва:
 
-- directly through \(1/k\);
+- безпосередньо through \(1/k\);
 - indirectly through \(S^*=q/k\).
 
-тому поріг чутливість може бути більше complex than рівновага чутливість.
+тому поріг чутливість може бути більше complex ніж рівновага чутливість.
 
 чисельний параметр sweep може complement символьний differentiation.
 
 ---
 
-## Поглиблення: cumulative стан як цільова функція або обмеження
+## Поглиблення: накопичений стан як цільова функція або обмеження
 
 \[
 A(T)=\int_0^T S(t)\,dt.
 \]
 
-у future оптимізація problem, \((T)\) може become:
+у майбутній оптимізація задача, \((T)\) може become:
 
 - цільова функція;
 - обмеження;
-- exposure metric.
+- exposure метрика.
 
-отже символьний integration є не isolated exercise.
+отже символьний інтеграція є не isolated exercise.
 
 це може generate derived quantity використаний downstream.
 
@@ -2039,40 +2039,40 @@ A(T)=\int_0^T S(t)\,dt.
 
 ## Поглиблення: аналітичний розв’язок як benchmark
 
-коли замкнений форма exists, це provides excellent benchmark для чисельний розв’язувач.
+коли замкнений форма існує, це надає excellent benchmark для чисельний розв’язувач.
 
 Це rare privilege.
 
-Use це до перевірка:
+використовувати це до перевірка:
 
 - допуск;
 - крок choices;
 - interpolation;
 - реалізація.
 
-тоді later, для модель з немає замкнений форма, you already trust чисельний pipeline більше.
+тоді пізніше, для модель з немає замкнений форма, you already trust чисельний ланцюжок більше.
 
 ---
 
 ## Поглиблення: чисельний похибка бюджет
 
-Agreement критерій:
+збіг критерій:
 
 \[
 e_{max}<10^{-6}.
 \]
 
-але загальний computational discrepancy може мають components:
+але загальний обчислювальний discrepancy може мають components:
 
 - truncation похибка;
 - розв’язувач допуск;
 - interpolation;
 - floating точка;
-- time сітка.
+- час сітка.
 
  single допуск не explain усі похибка.
 
-для baseline smooth ODE, solve_ivp з strict tolerances makes ці tiny.
+для базовий сценарій smooth ODE, solve_ivp з strict допуски робить ці tiny.
 
 ---
 
@@ -2082,8 +2082,8 @@ e_{max}<10^{-6}.
 
 1. розв’язати з допуск набір;
 2. розв’язати з tighter набір B;
-3. порівняти trajectories;
-4. перевірка стійкість key результати.
+3. порівняти траєкторії;
+4. перевірка стійкість ключ результати.
 
 якщо результати stop changing materially, довірчий зростає.
 
@@ -2093,29 +2093,29 @@ e_{max}<10^{-6}.
 
 ## Поглиблення: time-grid independence
 
-solve_ivp internally chooses adaptive steps.
+solve_ivp internally chooses adaptive кроки.
 
 \`t_eval\` лише requests результат точки.
 
-якщо user зміни результат сітка від 121 до 61 точки, underlying integration може усе ще remain accurate.
+якщо user зміни результат сітка від 121 до 61 точки, underlying інтеграція може усе ще залишатися accurate.
 
 але max похибка evaluated на сітка може зміна slightly.
 
-отже перевірка metric itself depends на evaluation дизайн.
+отже перевірка метрика itself залежить на evaluation дизайн.
 
 ---
 
-## Поглиблення: символьний вираз complexity
+## Поглиблення: символьний вираз складність
 
-для larger systems, CAS може produce вираз тому великий це це є:
+для більший системи, CAS може створювати вираз тому великий це це є:
 
 - hard до read;
 - slow до evaluate;
 - numerically unstable.
 
- замкнений форма є не automatically найкращий computational representation.
+ замкнений форма є не автоматично найкращий обчислювальний представлення.
 
-Sometimes чисельний розв’язок є більше корисний і reliable.
+іноді чисельний розв’язок є більше корисний і reliable.
 
 ---
 
@@ -2123,7 +2123,7 @@ Sometimes чисельний розв’язок є більше корисни�
 
 два algebraically equivalent expressions може бутимають differently numerically.
 
-для very малий \(kt\), вираз:
+для дуже малий \(kt\), вираз:
 
 \[
 1-e^{-kt}
@@ -2131,31 +2131,31 @@ Sometimes чисельний розв’язок є більше корисни�
 
 може lose точність.
 
-Special чисельний функції like \`expm1\` може бути better.
+Special чисельний функції like \`expm1\` може бути краще.
 
 Це advanced reminder:
 
-> символьний equivalence не guarantee identical floating-point стійкість.
+> символьний equivalence не guarantee identical з рухомою комою стійкість.
 
 ---
 
 ## Поглиблення: символьний перевірка з припущення
 
-Simplification може depend на припущення such як:
+спрощення може залежати на припущення such як:
 
 \[
 k>0.
 \]
 
-без припущення, SymPy може keep умовний expressions або fail до reduce.
+без припущення, SymPy може keep умовний expressions або зазнати невдачі до reduce.
 
 тому символьний модель слід declare відомий область restrictions.
 
-це makes mathematics явний.
+це робить mathematics явний.
 
 ---
 
-## Поглиблення: точний порівняно з floating-point constants
+## Поглиблення: точний порівняно з з рухомою комою constants
 
 SymPy distinguishes:
 
@@ -2169,9 +2169,9 @@ SymPy distinguishes:
 0.1.
 \]
 
-точний rationals preserve algebraic exactness longer.
+точний rationals зберігати алгебраїчний exactness довше.
 
-для символьний derivation, use точний objects where possible.
+для символьний виведення, використовувати точний objects де можливий.
 
 для чисельний evaluation, convert intentionally.
 
@@ -2179,13 +2179,13 @@ SymPy distinguishes:
 
 ## Поглиблення: solving ODE з dsolve
 
-один може ask SymPy:
+один може запитати SymPy:
 
 ~~~python
 sp.dsolve(ode)
 ~~~
 
-але курс модель constructs відомий замкнений форма directly після finding рівновага.
+але курс модель constructs відомий замкнений форма безпосередньо після finding рівновага.
 
 чому?
 
@@ -2195,9 +2195,9 @@ sp.dsolve(ode)
 equilibrium + transient.
 \]
 
-Automatic dsolve може hide це reasoning.
+Automatic dsolve може приховувати це міркування.
 
-CAS слід support thinking, не replace це.
+CAS слід підтримка мислення, не замінити це.
 
 ---
 
@@ -2205,7 +2205,7 @@ CAS слід support thinking, не replace це.
 
 нев’язка перевірка generalizes.
 
-для algebraic рівняння:
+для алгебраїчний рівняння:
 
 \[
 f(x)=0,
@@ -2229,29 +2229,29 @@ R=\mathcal L(u)-f.
 g(x)\le0.
 \]
 
-нев’язка thinking є universal перевірка habit.
+нев’язка мислення є універсальний перевірка habit.
 
 ---
 
-## Поглиблення: comparing незалежний representations
+## Поглиблення: comparing незалежний представлення
 
-T2.L6 intentionally uses три representations:
+T2.L6 intentionally використовує три представлення:
 
 1. символьний вираз;
 2. hand-coded аналітичний NumPy;
-3. solve_ivp чисельний integration.
+3. solve_ivp чисельний інтеграція.
 
-якщо усі agree, common coding похибки менше likely.
+якщо усі узгоджуються, common coding похибки менше likely.
 
 Yet вони усе ще share той самий математичний припущення.
 
-Це **реалізація triangulation**, не empirical валідація.
+Це **реалізація triangulation**, не емпіричний валідація.
 
 ---
 
-## Поглиблення: модель валідація would require дані
+## Поглиблення: модель валідація би потребувати дані
 
-до validate ODE для реальний процес, ми would need спостереження:
+до перевіряти ODE для реальний процес, ми би потрібно спостереження:
 
 \[
 (t_i,S_i).
@@ -2260,11 +2260,11 @@ Yet вони усе ще share той самий математичний при
 тоді порівняти:
 
 - predicted траєкторія;
-- residuals;
+- нев’язки;
 - параметр оцінки;
 - out-of-sample ефективність.
 
-це moves beyond T2.L6 into калібрування і дослідження workflow.
+це moves beyond T2.L6 у калібрування і дослідження робочий процес.
 
 ---
 
@@ -2281,18 +2281,18 @@ Given дані, оцінка:
 тоді:
 
 1. calibrate;
-2. assess residuals;
+2. assess нев’язки;
 3. quantify невизначеність;
 4. перевірити чисельний розв’язок;
 5. прогнозувати thresholds/integrals.
 
-Це точно як символьний структура стає part науковий modeling.
+Це точно як символьний структура стає частина науковий моделювання.
 
 ---
 
 ## Поглиблення: чутливість beyond один параметр
 
-поточний експеримент varies \(k\) з фіксований \(q\).
+поточний експеримент змінюється \(k\) з фіксований \(q\).
 
 може build сітка:
 
@@ -2308,7 +2308,7 @@ k\in\{0.05,0.1,0.15\}.
 S(10;q,k).
 \]
 
-це exposes interactions у finite-time результат even though ODE лінійний у S.
+це exposes interactions у finite-time результат навіть though ODE лінійний у S.
 
 ---
 
@@ -2324,7 +2324,7 @@ shows combinations yielding той самий скінченний-стан на
 
 це може reveal параметр trade-offs.
 
-це also helps explain identifiability: один спостереження може correspond до багато параметр pairs.
+це також допомагає explain identifiability: один спостереження може correspond до багато параметр pairs.
 
 ---
 
@@ -2338,43 +2338,43 @@ q\sim distribution,
 k\sim distribution,
 \]
 
-тоді even точний формула produces uncertain:
+тоді навіть точний формула produces невизначений:
 
 \[
 S(t),S^*,t_H.
 \]
 
-символьний розв’язок makes repeated evaluation cheap.
+символьний розв’язок робить repeated evaluation cheap.
 
-отже символьний work може accelerate Monte Carlo невизначеність propagation.
+отже символьний робота може accelerate Monte Carlo невизначеність propagation.
 
 ---
 
-## Поглиблення: символьний чутливість і Monte Carlo complement кожний other
+## Поглиблення: символьний чутливість і Monte Carlo complement кожний інший
 
-похідна gives локальний вплив:
+похідна дає локальний вплив:
 
 \[
 \frac{\partial S^*}{\partial k}.
 \]
 
-Monte Carlo параметр невизначеність gives глобальний розподіл.
+Monte Carlo параметр невизначеність дає глобальний розподіл.
 
-Use похідна для локальний understanding.
+використовувати похідна для локальний understanding.
 
-Use моделювання для broader невизначеність.
+використовувати моделювання для broader невизначеність.
 
-Neither universally replaces other.
+Neither universally replaces інший.
 
 ---
 
 ## Поглиблення: break-the-model checklist
 
-Ask:
+запитати:
 
 1. є q сталий?
 2. є k сталий?
-3. є losses proportional до S?
+3. є losses пропорційний до S?
 4. є там затримка?
 5. є там thresholds?
 6. є система one-dimensional?
@@ -2390,7 +2390,7 @@ Ask:
 
 один може describe \(S(t)\) як синтетичний training-support indicator.
 
-не map q, k, S0 до actual операційний capacities без authorized дані і область justification.
+не map q, k, S0 до фактичний операційний capacities без дозволений дані і область justification.
 
  transferable заняття є:
 
@@ -2424,27 +2424,27 @@ Text reports:
 
 Це intentional.
 
-Regression тести need tight значення.
+Regression тести потрібно tight значення.
 
-Human інтерпретація не need ten decimal places.
+Human інтерпретація не потрібно ten decimal places.
 
-точність слід match purpose.
+точність слід відповідати призначення.
 
 ---
 
-## Поглиблення: compact свідчення table
+## Поглиблення: compact свідчення таблиця
 
 | твердження | свідчення |
 |---|---|
 | формула solves ODE | символьний нев’язка = 0 |
-| початковий умова коректний | substitution \(t=0\) |
+| початковий умова коректний | підстановка \(t=0\) |
 | рівновага 120 | \(q/k\) |
-| чисельний реалізація коректний | lambdify/direct agreement |
-| ODE integration коректний | solve_ivp похибка < \(10^{-6}\) |
-| k trend understood | похідна + сценарій table |
-| реальний система adequate | **не established за заняття** |
+| чисельний реалізація коректний | lambdify/прямий збіг |
+| ODE інтеграція коректний | solve_ivp похибка < \(10^{-6}\) |
+| k trend understood | похідна + сценарій таблиця |
+| реальний система адекватний | **не established за заняття** |
 
-це table prevents overclaiming.
+це таблиця prevents overclaiming.
 
 ---
 
@@ -2452,13 +2452,13 @@ Human інтерпретація не need ten decimal places.
 
 символьний аналіз може зміна не лише як ми розв’язати модель, але що експеримент ми дизайн.
 
-для baseline:
+для базовий сценарій:
 
 \[
 S^*=\frac{q}{k}.
 \]
 
-це tells us рівновага identifies ratio \(q/k\), не параметри separately.
+це tells us рівновага визначає ratio \(q/k\), не параметри separately.
 
 перехідний:
 
@@ -2466,12 +2466,12 @@ S^*=\frac{q}{k}.
 e^{-kt}
 \]
 
-tells us early-time дані contain information приблизно \(k\).
+tells us early-time дані містити інформація приблизно \(k\).
 
 отже символьний структура підказує:
 
 - collect equilibrium-like late дані;
-- collect перехідний early дані.
+- collect перехідний ранній дані.
 
 Це приклад mathematics guiding measurement strategy.
 
@@ -2485,11 +2485,11 @@ tells us early-time дані contain information приблизно \(k\).
 \left|\frac{\partial output}{\partial \theta}\right|
 \]
 
-є very малий через relevant range, precise estimation \(\theta\) може matter менше для це результат.
+є дуже малий через відповідний діапазон, precise estimation \(\theta\) може має значення менше для це результат.
 
 якщо похідна великий, параметр невизначеність strongly affects прогноз.
 
-чутливість може guide where до invest measurement effort.
+чутливість може guide де до invest measurement effort.
 
 ---
 
@@ -2497,14 +2497,14 @@ tells us early-time дані contain information приблизно \(k\).
 
 символьний похідна є локальний.
 
-для larger параметр зміни, нелінійний вплив може differ.
+для більший параметр зміни, нелінійний вплив може відрізнятися.
 
 тому pair:
 
 - символьний похідна;
 - параметр sweep.
 
-це combination appears repeatedly у good modeling practice.
+це combination appears repeatedly у добрий моделювання practice.
 
 ---
 
@@ -2520,7 +2520,7 @@ tells us early-time дані contain information приблизно \(k\).
 | 8 |.12 | 66.7 |... |
 | 12 |.12 | 100 |... |
 
-це table shows обидва структурний формула і finite-time вплив.
+це таблиця shows обидва структурний формула і finite-time вплив.
 
 ---
 
@@ -2568,7 +2568,7 @@ S=S_0+qt.
 
  символьний limit у замкненій формі вираз може recover це.
 
-Це powerful consistency перевірка і good CAS exercise.
+Це powerful consistency перевірка і добрий CAS exercise.
 
 ---
 
@@ -2582,7 +2582,7 @@ e^{-kt}
 1-kt+\frac{(kt)^2}{2}-\cdots.
 \]
 
-Substitute into розв’язок до get short-time approximation.
+Substitute у розв’язок до get short-time approximation.
 
 Leading поведінка:
 
@@ -2593,25 +2593,25 @@ S_0+(q-kS_0)t.
 
 це matches початковий похідна від ODE.
 
-Another символьний consistency перевірка.
+інший символьний consistency перевірка.
 
 ---
 
 ## Поглиблення: локальний linearization нелінійний моделі
 
-у future нелінійний ODE:
+у майбутній нелінійний ODE:
 
 \[
 \dot x=f(x),
 \]
 
-рівновага \(x^*\) може бути studied using похідна/Jacobian:
+рівновага \(x^*\) може бути studied використовуючи похідна/Jacobian:
 
 \[
 J=\frac{\partial f}{\partial x}\Big|_{x^*}.
 \]
 
-T2.L6 лінійний приклад prepares це idea.
+T2.L6 лінійний приклад prepares це ідея.
 
 ---
 
@@ -2635,7 +2635,7 @@ f(S)=q-kS.
 
 рівновага стійкий.
 
-Це simplest possible Jacobian стійкість аналіз.
+Це simplest можливий Jacobian стійкість аналіз.
 
 ---
 
@@ -2654,7 +2654,7 @@ CAS може help:
 - матриця exponential;
 - символьний Jacobian.
 
-чисельний методи тоді handle larger systems.
+чисельний методи тоді handle більший системи.
 
 T2.L6 скалярний приклад є foundation.
 
@@ -2662,51 +2662,51 @@ T2.L6 скалярний приклад є foundation.
 
 ## Поглиблення: stiffness preview
 
-Some ODE systems contain very інший time scales.
+Some ODE системи містити дуже інший час scales.
 
 тоді явний чисельний integrators може struggle.
 
-розв’язувач choice стає важливий.
+розв’язувач вибір стає важливий.
 
 поточний модель є не stiff.
 
-але hybrid символьний/чисельний reasoning helps detect time scales.
+але hybrid символьний/чисельний міркування допомагає detect час scales.
 
 ---
 
-## Поглиблення: event detection натомість у замкненій формі поріг
+## Поглиблення: подія detection натомість у замкненій формі поріг
 
-для complex ODE where поріг формула unavailable, solve_ivp може detect event:
+для complex ODE де поріг формула недоступний, solve_ivp може detect подія:
 
 \[
 S(t)-H=0.
 \]
 
-отже threshold_time concept generalizes від analytic algebra до чисельний event функції.
+отже threshold_time concept generalizes від analytic algebra до чисельний подія функції.
 
 ---
 
 ## Поглиблення: comparing поріг методи
 
-для baseline:
+для базовий сценарій:
 
 1. аналітичний поріг формула;
-2. чисельний event detection.
+2. чисельний подія detection.
 
-якщо вони agree, event реалізація verified.
+якщо вони узгоджуються, подія реалізація перевірений.
 
-це може бутиcome future розширення.
+це може бутинадходити майбутній розширення.
 
 ---
 
-## Поглиблення: cumulative integral numerically
+## Поглиблення: накопичений інтеграл numerically
 
 Similarly порівняти:
 
 - символьний cumulative_state();
 - чисельний quadrature траєкторія.
 
-це provides another незалежний перевірка channel.
+це надає інший незалежний перевірка channel.
 
 ---
 
@@ -2714,14 +2714,14 @@ Similarly порівняти:
 
  rich валідація матриця:
 
-| Quantity | символьний | Direct NumPy | SciPy |
+| Quantity | символьний | прямий NumPy | SciPy |
 |---|---|---|---|
 | S(t) | замкнений форма | analytical_solution | solve_ivp |
-| integral | integrate | cumulative_state | quadrature |
-| поріг | розв’язати algebra | threshold_time | event detection |
-| чутливість | diff | скінченний difference | сценарій sweep |
+| інтеграл | integrate | cumulative_state | quadrature |
+| поріг | розв’язати algebra | threshold_time | подія detection |
+| чутливість | diff | скінченний відмінність | сценарій sweep |
 
-Agreement через rows strengthens реалізація свідчення.
+збіг через rows strengthens реалізація свідчення.
 
 ---
 
@@ -2733,7 +2733,7 @@ Agreement через rows strengthens реалізація свідчення.
 dS^*/dk=-q/k^2.
 \]
 
-чисельний скінченний difference:
+чисельний скінченний відмінність:
 
 \[
 \frac{S^*(k+h)-S^*(k-h)}{2h}.
@@ -2753,7 +2753,7 @@ Too великий:
 
 Too малий:
 
-- floating-point cancellation.
+- з рухомою комою cancellation.
 
 Це classic чисельний аналіз trade-off.
 
@@ -2780,17 +2780,17 @@ store припущення:
 - початковий умова S0;
 - детермінований dynamics.
 
-це prevents later misuse.
+це prevents пізніше misuse.
 
 ---
 
-## Поглиблення: символьний notebooks і джерело files
+## Поглиблення: символьний notebooks і джерело файли
 
-ноутбук є ідеальний для displaying SymPy derivation.
+ноутбук є ідеальний для displaying SymPy виведення.
 
 але reusable функції слід live у src/model.py.
 
-той самий principle як T1.L3.
+той самий принцип як T1.L3.
 
 це enables тести і CI.
 
@@ -2798,9 +2798,9 @@ store припущення:
 
 ## Поглиблення: CAS versioning
 
-SymPy simplification/printing може зміна через версії.
+SymPy спрощення/printing може зміна через версії.
 
-математичний equivalence може remain.
+математичний equivalence може залишатися.
 
 тому тести слід prefer структурний equivalence:
 
@@ -2808,7 +2808,7 @@ SymPy simplification/printing може зміна через версії.
 simplify(expr_1-expr_2)=0
 \]
 
-rather than точний string formatting.
+rather ніж точний string formatting.
 
 ---
 
@@ -2816,13 +2816,13 @@ rather than точний string formatting.
 
 до placing формула у article:
 
-1. derive symbolically;
+1. вивести symbolically;
 2. simplify;
 3. нев’язка перевірка;
 4. render LaTeX;
 5. порівняти notation з manuscript.
 
-це reduces transcription похибки між код і paper.
+це зменшує transcription похибки між код і paper.
 
 ---
 
@@ -2832,8 +2832,8 @@ rather than точний string formatting.
 
 1. CAS exposes математичну структуру.
 2. нев’язка нуля verifies символьний розв’язок.
-3. Lambdify bridges символьний і чисельний representations.
-4. solve_ivp provides незалежний чисельний перевірка.
+3. Lambdify bridges символьний і чисельний представлення.
+4. solve_ivp надає незалежний чисельний перевірка.
 5. перевірка рівняння є не валідація реальний припущення.
 
 ### Три формули
@@ -2855,15 +2855,15 @@ S(t)=S^*+(S_0-S^*)e^{-kt}.
 ### Дві помилки
 
 - «SymPy solved це = дослідження complete»;
-- «чисельний match = реальний модель adequate».
+- «чисельний відповідати = реальний модель адекватний».
 
 ### Одне питання
 
-> Яку структурний information моя символьний модель може reveal до I launch чисельний експеримент?
+> Яку структурний інформація моя символьний модель може reveal до I launch чисельний експеримент?
 
 ### Наступний крок
 
-Reproduce baseline, перевірити нев’язка, порівняти solve_ivp і запуск k-sensitivity.
+відтворити базовий сценарій, перевірити нев’язка, порівняти solve_ivp і запуск k-sensitivity.
 
 ---
 
@@ -2871,22 +2871,22 @@ Reproduce baseline, перевірити нев’язка, порівняти s
 
 Computer algebra і чисельний методи є strongest together.
 
-символьний шар answers:
+символьний шар відповідає:
 
 > що робить модель imply structurally?
 
-чисельний шар answers:
+чисельний шар відповідає:
 
-> що happens для ці параметри і scenarios?
+> що happens для ці параметри і сценарії?
 
-перевірка шар asks:
+перевірка шар ставить питання:
 
-> робити незалежний representations agree?
+> робити незалежний представлення узгоджуються?
 
-дослідження шар asks:
+дослідження шар ставить питання:
 
 > є припущення meaningful для об’єкт?
 
- mature computational модель moves through усі four layers.
+ mature обчислювальний модель moves through усі four layers.
 
 це є реальний capability T2.L6 є designed до build.

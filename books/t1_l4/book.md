@@ -22,10 +22,10 @@
 - пояснювати, коли потрібна оптимізація;
 - розуміти Monte Carlo як метод невизначеність propagation;
 - розпізнавати мережа структура;
-- розуміти MCDA як formalized multi-criteria comparison;
+- розуміти MCDA як formalized multi-criteria порівняння;
 - вибирати інструмент Python після вибір методу;
 - формулювати перевірка для кожного класу методу;
-- проектувати method-selection chain для dissertation fragment.
+- проектувати method-selection ланцюг для фрагмент дисертації.
 
 ---
 
@@ -35,7 +35,7 @@
 
 > «Як це зробити через SciPy?»
 
-Але problem може вимагати точний символьний вираз, graph структура, ранжування альтернативи, невизначеність розподіл або constrained оптимум.
+Але задача може вимагати точний символьний вираз, граф структура, ранжування альтернативи, невизначеність розподіл або constrained оптимум.
 
 Тому ключова дисципліна:
 
@@ -63,20 +63,20 @@
 
 | Структура задачі | метод | інструмент Python | результат |
 |---|---|---|---|
-| корінь рівняння | чисельний пошук кореня | SciPy | number |
+| корінь рівняння | чисельний пошук кореня | SciPy | число |
 | точний вираз | символьна алгебра | SymPy | формула |
 | найкращий допустимий розподіл | лінійна оптимізація | SciPy linprog | оптимум |
 | ризик за випадковості | Monte Carlo | NumPy RNG | ймовірність/розподіл |
-| вузьке місце залежностей | graph/мережа | NetworkX | шлях/структура |
+| вузьке місце залежностей | граф/мережа | NetworkX | шлях/структура |
 | багатокритеріальний вибір | MCDA | pandas/NumPy | оцінка/ранжування |
 
 ---
 
 # приклад — чисельний пошук кореня
 
-## 3. Problem
+## 3. задача
 
-знайти додатний time \(t\) коли:
+знайти додатний час \(t\) коли:
 
 \[
 f(t)=120-6t-0.2t^2
@@ -106,13 +106,13 @@ f(0)=120>0,
 f(30)=-240<0,
 \]
 
- неперервний функція має корінь inside.
+ неперервний функція має корінь всередині.
 
 ---
 
 ## 4. чисельний результат
 
-SciPy root_scalar з Brent метод gives:
+SciPy root_scalar з Brent метод дає:
 
 \[
 t^*\approx13.7228132327.
@@ -124,11 +124,11 @@ t^*\approx13.7228132327.
 |f(t^*)|<10^{-8}.
 \]
 
-розв’язувач статус сам по собі є weaker than нев’язка перевірка.
+розв’язувач статус сам по собі є weaker ніж нев’язка перевірка.
 
 <figure>
  <img src="figures/fig_02_root_numeric_symbolic.svg" alt="чисельний і символьний корінь">
- <figcaption><strong>Рис. 2.</strong> чисельний корінь gives floating-point значення; символьний метод gives точний вираз. Agreement provides cross-method перевірка.</figcaption>
+ <figcaption><strong>Рис. 2.</strong> чисельний корінь дає з рухомою комою значення; символьний метод дає точний вираз. збіг забезпечує cross-method перевірка.</figcaption>
 </figure>
 
 ---
@@ -137,7 +137,7 @@ t^*\approx13.7228132327.
 
 ## 5. той самий рівняння, інший питання
 
-Now ask:
+тепер запитати:
 
 > що є точний аналітичний вираз для корені?
 
@@ -165,7 +165,7 @@ t=-15\pm5\sqrt{33}.
 корисний коли:
 
 - функція є складний;
-- точний форма unavailable;
+- точний форма недоступний;
 - лише numeric корінь є потрібний.
 
 ### символьний
@@ -173,12 +173,12 @@ t=-15\pm5\sqrt{33}.
 корисний коли:
 
 - точний dependence має значення;
-- формула supports подальший аналіз;
-- derivatives або межі є потрібний.
+- формула підтримує подальший аналіз;
+- похідні або межі є потрібний.
 
 Neither є universally superior.
 
-Cross-method agreement є strong перевірка.
+Cross-method збіг є сильний перевірка.
 
 ---
 
@@ -186,15 +186,15 @@ Cross-method agreement є strong перевірка.
 
  точний вираз може бути huge, важким для інтерпретації або чисельно незручним.
 
-якщо лише один скалярний результат є required, robust чисельний метод може бути better.
+якщо лише один скалярний результат є потрібний, robust чисельний метод може бути краще.
 
-метод якість є judged against дослідження need.
+метод якість є judged against дослідження потрібно.
 
 ---
 
 # приклад C — лінійна оптимізація
 
-## 8. Problem
+## 8. задача
 
 максимізувати:
 
@@ -216,11 +216,11 @@ x_1+x_2\le100,
 x_1,x_2\ge0.
 \]
 
-ми шукаємо найкращий допустимий decision, не корінь або формула.
+ми шукаємо найкращий допустимий рішення, не корінь або формула.
 
 ---
 
-## 9. Baseline оптимум
+## 9. базовий сценарій оптимум
 
 SciPy linprog returns:
 
@@ -246,12 +246,12 @@ F^*=8\cdot40+6\cdot60=680.
 
 <figure>
  <img src="figures/fig_03_lp_geometry.svg" alt="Геометрія лінійна оптимізація">
- <figcaption><strong>Рис. 3.</strong> пошук кореня шукає нуля, оптимізація шукає найкращий точка область допустимих розв’язків. У baseline оптимум лежить на intersection двох активні обмеження.</figcaption>
+ <figcaption><strong>Рис. 3.</strong> пошук кореня шукає нуля, оптимізація шукає найкращий точка область допустимих розв’язків. у базовому сценарії оптимум лежить на intersection двох активні обмеження.</figcaption>
 </figure>
 
 ---
 
-## 10. чому пошук кореня не може replace оптимізація
+## 10. чому пошук кореня не може замінити оптимізація
 
 Немає одного рівняння \(f(t)=0\). натомість ми мають:
 
@@ -259,7 +259,7 @@ F^*=8\cdot40+6\cdot60=680.
 - область допустимих розв’язків;
 - inequalities.
 
- клас методу має preserve цю семантику.
+ клас методу має зберігати цю семантику.
 
 перевірка перевірки:
 
@@ -276,7 +276,7 @@ F^*=8\cdot40+6\cdot60=680.
 
 але сітка resolution introduces approximation і scales poorly.
 
-лінійне програмування exploits математичну структуру directly.
+лінійне програмування exploits математичну структуру безпосередньо.
 
 Той факт, що повний перебір може розв’язати малий навчальний приклад не make це preferred клас методу.
 
@@ -284,7 +284,7 @@ F^*=8\cdot40+6\cdot60=680.
 
 # приклад D — MONTE CARLO ризик
 
-## 12. Problem
+## 12. задача
 
 Single-step витрата:
 
@@ -294,7 +294,7 @@ C_k\sim N(6,1.5^2)
 
 з від’ємні значення замінюються нулем.
 
-для 20 steps:
+для 20 кроки:
 
 \[
 C_{tot}=\sum_{k=1}^{20}C_k.
@@ -308,7 +308,7 @@ C_{tot}=\sum_{k=1}^{20}C_k.
 
 ---
 
-## 13. Baseline моделювання
+## 13. базовий сценарій моделювання
 
 для:
 
@@ -336,7 +336,7 @@ Nominal середнє загальний є:
 
 <figure>
  <img src="figures/fig_04_monte_carlo_risk.svg" alt="Monte Carlo ризик розподіл">
- <figcaption><strong>Рис. 4.</strong> Monte Carlo answers distribution-level питання. спроможність поріг splits змодельованих сум into event і non-event результати.</figcaption>
+ <figcaption><strong>Рис. 4.</strong> Monte Carlo відповідає distribution-level питання. спроможність поріг splits змодельованих сум у подія і non-event результати.</figcaption>
 </figure>
 
 ---
@@ -357,21 +357,21 @@ Incorrect:
 
 ## 15. чому оптимізація є помилковий here
 
- поточний питання має немає decision змінна і немає цільова функція до максимізувати.
+ поточний питання має немає рішення змінна і немає цільова функція до максимізувати.
 
-Adding оптимізація would answer another питання.
+Adding оптимізація би відповідь інший питання.
 
 для приклад:
 
 > що спроможність minimizes вартість subject до ризик нижче 5%?
 
-це would legitimately combine моделювання і оптимізація.
+це би legitimately combine моделювання і оптимізація.
 
 ---
 
 # приклад E — мережа метод
 
-## 16. Work graph
+## 16. робота граф
 
 Edges:
 
@@ -409,7 +409,7 @@ Via B:
 Start\rightarrow A\rightarrow C\rightarrow Finish
 \]
 
-має length:
+має довжина:
 
 \[
 12.
@@ -417,31 +417,31 @@ Start\rightarrow A\rightarrow C\rightarrow Finish
 
 <figure>
  <img src="figures/fig_05_network_path.svg" alt="критичний шлях mini-case">
- <figcaption><strong>Рис. 5.</strong> мережа метод uses залежність структура directly. Longest weighted DAG шлях є початок→→C→завершення, length 12.</figcaption>
+ <figcaption><strong>Рис. 5.</strong> мережа метод використовує залежність структура безпосередньо. Longest weighted DAG шлях є початок→→C→завершення, довжина 12.</figcaption>
 </figure>
 
 ---
 
-## 18. чому graph representation має значення
+## 18. чому граф представлення має значення
 
- тривалість table сам по собі може hide topology.
+ тривалість таблиця сам по собі може приховувати топологія.
 
-мережа representation preserves:
+мережа представлення preserves:
 
-- node identity;
+- вузол ідентичність;
 - edge напрям;
 - залежність;
 - шлях.
 
-коли topology є питання, graph метод є natural.
+коли топологія є питання, граф метод є природний.
 
 ---
 
-# приклад F — MULTI-CRITERIA DECISION аналіз
+# приклад F — MULTI-CRITERIA рішення аналіз
 
 ## 19. альтернативи
 
-| Alt | вартість | Time | надійність |
+| Alt | вартість | час | надійність |
 |---|---:|---:|---:|
 | | 80 | 7 |.90 |
 | B | 65 | 9 |.82 |
@@ -455,7 +455,7 @@ w_{time}=0.25,\quad
 w_{rel}=0.45.
 \]
 
-вартість/time є вартість критерії, надійність є виграш.
+вартість/час є вартість критерії, надійність є виграш.
 
 ---
 
@@ -468,7 +468,7 @@ r_{cost,i}=
 \frac{\min(cost)}{cost_i}.
 \]
 
-для time:
+для час:
 
 \[
 r_{time,i}=
@@ -493,7 +493,7 @@ S_i=
 
 ---
 
-## 21. Baseline ранжування
+## 21. базовий сценарій ранжування
 
 Approximate scores:
 
@@ -517,28 +517,28 @@ C>A>B.
 
 <figure>
  <img src="figures/fig_06_mcda_ranking.svg" alt="MCDA ранжування mini-case">
- <figcaption><strong>Рис. 6.</strong> MCDA produces умовний ранжування за явний ваги і критерій directions. ранжування є не цільова функція property незалежний метод.</figcaption>
+ <figcaption><strong>Рис. 6.</strong> MCDA produces умовний ранжування за явний ваги і критерій directions. ранжування є не цільова функція властивість незалежний метод.</figcaption>
 </figure>
 
 ---
 
 ## 22. MCDA versus оптимізація
 
-LP chooses неперервний decision змінні за hard обмеження.
+LP chooses неперервний рішення змінні за hard обмеження.
 
 MCDA compares дискретний альтернативи за множинний критерії.
 
-вони може coexist у larger decision workflow, але вони є не synonymous.
+вони може coexist у більший рішення робочий процес, але вони є не synonymous.
 
 ---
 
-# вибір методу як дослідження REASONING
+# вибір методу як дослідження міркування
 
-## 23. результат type є перший classifier
+## 23. результат type є перший класифікатор
 
-### Number
+### число
 
-корінь, integral, параметр оцінка.
+корінь, інтеграл, параметр оцінка.
 
 ### формула
 
@@ -550,37 +550,37 @@ MCDA compares дискретний альтернативи за множинн�
 
 ### розподіл/ймовірність
 
-Monte Carlo або statistical метод.
+Monte Carlo або статистичний метод.
 
 ### шлях/структура
 
-Graph/мережа метод.
+граф/мережа метод.
 
 ### ранжування
 
 MCDA.
 
- requested answer shape часто narrows метод choice immediately.
+ запитаний відповідь shape часто narrows метод вибір immediately.
 
 ---
 
-## 24. невизначеність є другий classifier
+## 24. невизначеність є другий класифікатор
 
-Ask:
+запитати:
 
-> є вхідні дані або спостереження випадковий або uncertain?
+> є вхідні дані або спостереження випадковий або невизначений?
 
-якщо yes, probabilistic шар може бути required.
+якщо yes, probabilistic шар може бути потрібний.
 
 але Monte Carlo слід не бути added лише оскільки невизначеність “sounds науковий”.
 
-Define випадковий змінні, distributions і припущення записані явноly.
+визначити випадковий змінні, distributions і припущення записані явноly.
 
 ---
 
-## 25. обмеження є third classifier
+## 25. обмеження є third класифікатор
 
-якщо problem має цільова функція:
+якщо задача має цільова функція:
 
 \[
 F(x)\rightarrow\max
@@ -592,30 +592,30 @@ subject до:
 g_i(x)\le0,
 \]
 
-оптимізація є natural class.
+оптимізація є природний class.
 
-без decision цільова функція, оптимізація може бути category похибка.
+без рішення цільова функція, оптимізація може бути category похибка.
 
 ---
 
-## 26. мережа структура є fourth classifier
+## 26. мережа структура є fourth класифікатор
 
-якщо relationships між entities determine результат, preserve them як graph структура.
+якщо relationships між entities determine результат, зберігатиm як граф структура.
 
-Examples:
+приклади:
 
 - проєкт залежності;
-- communication topology;
+- communication топологія;
 - потік мережа;
-- залежність graph.
+- залежність граф.
 
 ---
 
-## 27. множинний критерії є fifth classifier
+## 27. множинний критерії є fifth класифікатор
 
-коли альтернативи є judged за several non-equivalent критерії, один скалярний metric може require явний preference припущення.
+коли альтернативи є judged за several non-equivalent критерії, один скалярний метрика може потребувати явний preference припущення.
 
-MCDA makes them visible through:
+MCDA робитьm видимий through:
 
 - критерій directions;
 - нормалізація;
@@ -626,16 +626,16 @@ MCDA makes them visible through:
 
 ## 28. аналітичний benchmark є перевірка opportunity
 
-Even коли final метод чисельний, ask:
+навіть коли підсумковий метод чисельний, запитати:
 
 > є там simpler точний приклад?
 
-Examples:
+приклади:
 
-- чисельний корінь checked за символьний корінь;
-- чисельний ODE checked за замкнений форма;
-- Monte Carlo checked against rough expectation;
-- оптимізація checked за ручний corner точки.
+- чисельний корінь перевірений за символьний корінь;
+- чисельний ODE перевірений за замкнений форма;
+- Monte Carlo перевірений against rough expectation;
+- оптимізація перевірений за ручний corner точки.
 
 Це reusable дослідження discipline.
 
@@ -643,7 +643,7 @@ Examples:
 
 ## 29. метод, алгоритм, реалізація
 
-Distinguish три levels.
+Distinguish три рівні.
 
 ### клас методу
 
@@ -671,55 +671,55 @@ HiGHS.
 
 SciPy linprog.
 
-це distinction improves dissertation methodology language.
+це відмінність improves дисертація мова методології.
 
 ---
 
-## 30. перевірка має match метод
+## 30. перевірка має відповідати метод
 
 | метод | перевірка |
 |---|---|
 | корінь | нев’язка |
-| символьний | substitution/simplification |
+| символьний | підстановка/спрощення |
 | оптимізація | допустимість + цільова функція |
-| Monte Carlo | початкове значення генератора + збіжність/range |
-| мережа | ручний шлях validity/length |
+| Monte Carlo | початкове значення генератора + збіжність/діапазон |
+| мережа | ручний шлях валідність/довжина |
 | MCDA | directions + ваги + оцінка recomputation |
 
 <figure>
  <img src="figures/fig_07_verification_matrix.svg" alt="перевірка матриця за метод">
- <figcaption><strong>Рис. 7.</strong> вибір методу includes перевірка selection. результат без method-specific перевірка є incomplete.</figcaption>
+ <figcaption><strong>Рис. 7.</strong> вибір методу містить перевірка вибір. результат без method-specific перевірка є incomplete.</figcaption>
 </figure>
 
 ---
 
-## 31. Зламай вибір методу: hammer problem
+## 31. Зламай вибір методу: hammer задача
 
-якщо researcher knows один tool well, every problem може look like це tool.
+якщо дослідник knows один інструмент well, every задача може look like це інструмент.
 
- ймовірність питання forced into оптимізація є немає longer той самий дослідницьке питання.
+ ймовірність питання forced у оптимізація є немає довше той самий дослідницьке питання.
 
- graph problem flattened into table може lose topology.
+ граф задача flattened у таблиця може lose топологія.
 
- ранжування питання reduced до один arbitrary оцінка може hide preferences.
+ ранжування питання reduced до один arbitrary оцінка може приховувати preferences.
 
  відмова є conceptual, не syntactic.
 
 ---
 
-## 32. Зламай вибір методу: unnecessary complexity
+## 32. Зламай вибір методу: unnecessary складність
 
- simple точний формула exists.
+ простий точний формула існує.
 
-Researcher launches 100,000 Monte Carlo реалізації до оцінка той самий скалярний.
+дослідник launches 100,000 Monte Carlo реалізації до оцінка той самий скалярний.
 
- результат може бути close, але adds:
+ результат може бути close, але додає:
 
-- sampling noise;
-- computational вартість;
+- sampling шум;
+- обчислювальний вартість;
 - більше параметри.
 
-Complexity слід earn its place.
+складність слід earn its place.
 
 ---
 
@@ -727,9 +727,9 @@ Complexity слід earn its place.
 
  символьний вираз може бути точний але uselessly великий.
 
-якщо decision requires лише robust скалярний з допуск, чисельний метод може communicate better.
+якщо рішення потребує лише robust скалярний з допуск, чисельний метод може communicate краще.
 
-науковий rigor є не measured за вираз length.
+науковий rigor є не measured за вираз довжина.
 
 ---
 
@@ -749,7 +749,7 @@ Optimization
 Sensitivity.
 \]
 
-кожний stage answers інший питання.
+кожний stage відповідає інший питання.
 
 клас методуification є не приблизно choosing один метод forever.
 
@@ -761,9 +761,9 @@ Sensitivity.
 
  sensible strategy:
 
-1. simplest baseline;
+1. simplest базовий сценарій;
 2. перевірити;
-3. identify missing структура;
+3. визначити missing структура;
 4. add метод шар;
 5. перевірити again.
 
@@ -789,19 +789,19 @@ Robustness.
 
 ---
 
-## 36. Computational вартість
+## 36. обчислювальний вартість
 
-метод choice also depends на масштаб.
+метод вибір також залежить на масштаб.
 
-символьний solving може explode у complexity.
+символьний solving може explode у складність.
 
-пошук на сітці може бутиcome impossible у високий dimension.
+пошук на сітці може бутинадходити impossible у високий dimension.
 
-Monte Carlo може require багато реалізації.
+Monte Carlo може потребувати багато реалізації.
 
-Graph algorithms може масштаб well на sparse structures.
+граф algorithms може масштаб well на sparse structures.
 
-Computational допустимість belongs до метод justification.
+обчислювальний допустимість belongs до метод justification.
 
 ---
 
@@ -809,35 +809,35 @@ Computational допустимість belongs до метод justification.
 
 інший методи expose інший свідчення.
 
-символьний формула reveals dependence.
+символьний формула виявляє dependence.
 
-Monte Carlo reveals розподіл.
+Monte Carlo виявляє розподіл.
 
-оптимізація reveals активні обмеження.
+оптимізація виявляє активні обмеження.
 
-мережа метод reveals topology.
+мережа метод виявляє топологія.
 
-MCDA reveals trade-offs.
+MCDA виявляє trade-offs.
 
-Choose метод according до що needs до бути explained, не лише computed.
+обрати метод according до що потребує до бути explained, не лише computed.
 
 ---
 
-## 38. прогнозувати до tool
+## 38. прогнозувати до інструмент
 
-до running кожний приклад, record expectation.
+до running кожний приклад, запис expectation.
 
 - корінь між 0 і 30.
-- LP likely uses усі ресурс і бюджет.
+- LP likely використовує усі ресурс і бюджет.
 - Monte Carlo ризик біля 0.5 оскільки середнє загальний≈спроможність.
-- branch appears longer than B.
-- C може lead MCDA due до time/надійність.
+- branch appears довше ніж B.
+- C може lead MCDA due до час/надійність.
 
-прогноз turns метод use into експеримент.
+прогноз turns метод використовувати у експеримент.
 
 ---
 
-## 39. Python без fear: корінь
+## 39. Python без страх: корінь
 
 ~~~python
 root = numerical_root()
@@ -847,7 +847,7 @@ assert abs(value) < 1e-8
 
 ---
 
-## 40. Python без fear: LP
+## 40. Python без страх: LP
 
 ~~~python
 result = linear_optimization()
@@ -863,7 +863,7 @@ F^*=680.
 
 ---
 
-## 41. Python без fear: Monte Carlo
+## 41. Python без страх: Monte Carlo
 
 ~~~python
 risk = monte_carlo_risk(
@@ -880,7 +880,7 @@ risk\approx0.5021.
 
 ---
 
-## 42. Python без fear: мережа
+## 42. Python без страх: мережа
 
 ~~~python
 path, length = critical_path()
@@ -898,7 +898,7 @@ length=12.
 
 ---
 
-## 43. Python без fear: MCDA
+## 43. Python без страх: MCDA
 
 ~~~python
 ranking = weighted_sum_decision()
@@ -914,50 +914,50 @@ C>A>B.
 
 ## 44. відтворюваність через клас методуes
 
-кожний приклад слід record:
+кожний приклад слід запис:
 
 - вхідні дані;
 - метод;
 - параметри;
 - Python реалізація;
-- початкове значення генератора where relevant;
+- початкове значення генератора де відповідний;
 - перевірка;
 - результат.
 
- точний метадані differs, але походження principle remains.
+ точний метадані differs, але походження принцип залишається.
 
 ---
 
-## 45. вибір методу table для dissertation
+## 45. вибір методу таблиця для дисертація
 
 для кожний дослідження робота fill:
 
 | питання | структура | результат | метод | альтернатива | перевірка |
 |---|---|---|---|---|---|
 
-це prevents methodology chapter від becoming list libraries.
+це prevents методологія chapter від becoming list libraries.
 
 ---
 
 ## 46. альтернатива метод аналіз
 
-Good дослідження explains не лише що було selected, але правдоподібний альтернативи.
+добрий дослідження explains не лише що було selected, але правдоподібний альтернативи.
 
 приклад корінь:
 
 - Brent: robust bracketed скалярний корінь;
-- Newton: faster біля розв’язок але requires початок/похідна поведінка;
+- Newton: faster біля розв’язок але потребує початок/похідна поведінка;
 - SymPy: точний коли tractable.
 
-Selection є argument.
+вибір є argument.
 
 ---
 
 ## 47. коли методи disagree
 
-припустімо символьний і чисельний корінь differ significantly.
+припустімо символьний і чисельний корінь відрізнятися significantly.
 
-не average them.
+не average їх.
 
 Investigate:
 
@@ -971,19 +971,19 @@ Disagreement є diagnostic свідчення.
 
 ---
 
-## 48. коли методи agree
+## 48. коли методи узгоджуються
 
-Agreement strengthens довірчий у реалізація.
+збіг strengthens довірчий у реалізація.
 
 але якщо обидва encode той самий помилковий припущення, область модель може усе ще бути помилковий.
 
-це distinction repeats throughout курс.
+це відмінність repeats throughout курс.
 
 ---
 
 ## 49. синтетичний військовий context
 
- six приклади може represent abstract tasks such як поріг timing, training ресурс розподіл, uncertain синтетичний витрата, проєкт залежності і альтернатива selection.
+ six приклади може представляти abstract tasks such як поріг timing, training ресурс розподіл, невизначений синтетичний витрата, проєкт залежності і альтернатива вибір.
 
 немає реальний операційний дані є потрібний.
 
@@ -991,9 +991,9 @@ Agreement strengthens довірчий у реалізація.
 
 ---
 
-## 50. дослідження Transfer
+## 50. дослідження перенесення
 
-для один dissertation fragment fill:
+для один фрагмент дисертації fill:
 
 ~~~text
 Research question:
@@ -1029,7 +1029,7 @@ Allowed conclusion:
 
 ---
 
-## 51. приклад transfer
+## 51. приклад перенесення
 
 питання:
 
@@ -1043,29 +1043,29 @@ Allowed conclusion:
 
 > нелінійний метод найменших квадратів plus бутстреп.
 
-NetworkX would бути inappropriate unless graph структура actually exists.
+NetworkX би бути inappropriate unless граф структура actually існує.
 
-метод justification має reference problem.
+метод justification має reference задача.
 
 ---
 
-## 52. свідчення hierarchy
+## 52. свідчення ієрархія
 
- strong результат includes:
+ сильний результат містить:
 
-1. valid вхідні дані;
-2. justified метод;
-3. verified обчислення;
+1. коректний вхідні дані;
+2. обґрунтований метод;
+3. перевірений обчислення;
 4. чутливість/невизначеність коли потрібний;
 5. bounded інтерпретація.
 
-метод choice є лише один link у свідчення chain.
+метод вибір є лише один link у свідчення ланцюг.
 
 ---
 
 ## 53. “найкращий метод” є contextual
 
-Немає universal winner.
+Немає універсальний winner.
 
  метод є suitable relative до:
 
@@ -1073,10 +1073,10 @@ NetworkX would бути inappropriate unless graph структура actually e
 - припущення;
 - дані;
 - результат;
-- computational обмеження;
+- обчислювальний обмеження;
 - перевірка opportunities.
 
-Це чому класифікація є практичний methodology, не taxonomy trivia.
+Це чому класифікація є практичний методологія, не taxonomy trivia.
 
 ---
 
@@ -1085,10 +1085,10 @@ NetworkX would бути inappropriate unless graph структура actually e
 ### Five ideas
 
 1. Структура задачі selects метод.
-2. результат type є перший classifier.
-3. Python library є реалізація, не methodology.
-4. перевірка має match клас методу.
-5. Hybrid workflows є normal коли питання зміна.
+2. результат type є перший класифікатор.
+3. Python library є реалізація, не методологія.
+4. перевірка має відповідати клас методу.
+5. Hybrid workflows є нормальний коли питання зміна.
 
 ### три rules
 
@@ -1113,12 +1113,12 @@ Monte Carlo:
 
 ### два похибки
 
-- familiar tool → forced метод;
-- successful код → justified methodology.
+- familiar інструмент → forced метод;
+- successful код → обґрунтований методологія.
 
 ### один питання
 
-> що property my дослідження problem forces me до choose це метод?
+> що властивість my дослідження задача forces me до обрати це метод?
 
 ### Next крок
 
@@ -1129,8 +1129,8 @@ Question\rightarrow Method\rightarrow Tool\rightarrow Verification.
 \]
 
 <figure>
- <img src="figures/fig_08_research_transfer.svg" alt="дослідження transfer метод chain">
- <figcaption><strong>Рис. 8.</strong> вибір методу стає dissertation-ready коли chain від питання до перевірка є явний і reproducible.</figcaption>
+ <img src="figures/fig_08_research_transfer.svg" alt="дослідження перенесення метод ланцюг">
+ <figcaption><strong>Рис. 8.</strong> вибір методу стає dissertation-ready коли ланцюг від питання до перевірка є явний і відтворюваний.</figcaption>
 </figure>
 
 ---
@@ -1139,11 +1139,11 @@ Question\rightarrow Method\rightarrow Tool\rightarrow Verification.
 
 методи є не menu від який ми pick most sophisticated name.
 
-вони є математичний answers до структурний питання.
+вони є математичний відповідає до структурний питання.
 
  корінь метод finds нуля.
 
-оптимізація finds найкращий допустимий decision.
+оптимізація finds найкращий допустимий рішення.
 
 Monte Carlo propagates невизначеність.
 
@@ -1151,8 +1151,8 @@ Monte Carlo propagates невизначеність.
 
 MCDA formalizes multi-criteria preference.
 
-символьна алгебра reveals точний структура.
+символьна алгебра виявляє точний структура.
 
  core competence є being able до say:
 
-> **“My problem має це структура, тому це метод є appropriate, Це як I буде перевірити це, і ці є межі висновок.”**
+> **“My задача має це структура, тому це метод є appropriate, Це як I буде перевірити це, і ці є межі висновок.”**
