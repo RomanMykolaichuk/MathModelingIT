@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-BOOK_IDS = ("t1_l1", "t2_l1", "t2_l2", "t2_l3", "t2_l4", "t2_l5")
+BOOK_IDS = ("t1_l1", "t1_l2", "t1_l3", "t2_l1", "t2_l2", "t2_l3", "t2_l4", "t2_l5", "t2_l6")
 
 failures: list[str] = []
 
