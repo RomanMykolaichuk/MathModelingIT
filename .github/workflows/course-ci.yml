@@ -45,6 +45,21 @@ jobs:
           test -s books/t1_l1/metadata.yaml
           test -s web/books/t1_l1/index.html
           test -s web/books/t1_l1/figures/fig_03_baseline_scenario.svg
+          test -s books/t2_l1/book.md
+          test -s books/t2_l1/metadata.yaml
+          test -s web/books/t2_l1/index.html
+          test -s web/books/t2_l1/figures/fig_08_model_limits.svg
+          test -s books/t2_l2/book.md
+          test -s books/t2_l2/metadata.yaml
+          test -s web/books/t2_l2/index.html
+          test -s web/books/t2_l2/figures/fig_08_model_limits.svg
+          test -s books/t2_l3/book.md
+          test -s books/t2_l3/metadata.yaml
+          test -s web/books/t2_l3/index.html
+          test -s web/books/t2_l3/figures/fig_08_verification_layers.svg
+          grep -q 'books/t2_l1/index.html' web/course-catalog.js
+          grep -q 'books/t2_l2/index.html' web/course-catalog.js
+          grep -q 'books/t2_l3/index.html' web/course-catalog.js
           test -s books/t2_l4/book.md
           test -s books/t2_l4/metadata.yaml
           test -s web/books/t2_l4/index.html
