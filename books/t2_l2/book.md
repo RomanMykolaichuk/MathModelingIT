@@ -1259,6 +1259,594 @@ Current total_cost() робить саме це.
 
 ---
 
+## Поглиблення: transport problem як special case network flow
+
+Класична transportation problem має дуже впізнавану structure:
+
+- left-side nodes — sources;
+- right-side nodes — destinations;
+- arcs — allowed routes;
+- flow conservation — supply/demand balance;
+- arc cost — unit transportation cost.
+
+Тому її можна розглядати як special case min-cost flow.
+
+Це важливо методологічно.
+
+Якщо у вашому research object з’являються:
+
+- intermediate nodes;
+- transshipment;
+- route capacities;
+- multi-stage movement;
+
+то таблиця «source × destination» може стати замалою.
+
+Тоді природний extension:
+
+> general network flow model.
+
+Тобто T2.L2 — не ізольована формула, а gateway до ширшого класу flow models.
+
+---
+
+## Поглиблення: чому базисний план зазвичай sparse
+
+У baseline 3×4 маємо:
+
+\[
+m=3,\quad n=4.
+\]
+
+Для non-degenerate basic feasible transportation solution кількість positive basic variables часто не перевищує:
+
+\[
+m+n-1=6.
+\]
+
+У baseline positive flows саме шість.
+
+Це допомагає зрозуміти, чому optimal plan часто sparse:
+
+> не всі routes використовуються одночасно.
+
+Zero flow не означає route invalid.
+
+Він означає:
+
+> у поточному optimum route не входить у chosen basic structure.
+
+Це важлива різниця для interpretation.
+
+---
+
+## Поглиблення: route cost і opportunity cost
+
+Raw unit cost route:
+
+\[
+c_{ij}
+\]
+
+не показує повної системної цінності route.
+
+Наприклад, S2→D3 має cost 3.
+
+Але його closure підвищує total optimum на 55.
+
+Це **global opportunity impact**.
+
+Тому є два різні levels:
+
+### Local cost
+
+\[
+c_{23}=3.
+\]
+
+### System impact
+
+\[
+Z^*_{closed}-Z^*_{base}=55.
+\]
+
+У network planning саме другий indicator часто краще відповідає на question:
+
+> наскільки цей route важливий для current optimal structure?
+
+---
+
+## Поглиблення: reduced-cost intuition
+
+У linear programming unused route може мати zero flow тому, що введення невеликого flow через нього не покращує objective після необхідного rebalance.
+
+У simplex terminology це пов’язано з **reduced cost**.
+
+На introductory рівні достатньо intuition:
+
+> «дорогий» або «невикористаний» route оцінюється не ізольовано; важливо, що доведеться змінити в інших flows, щоб зберегти balances.
+
+Наприклад, якщо додати flow на S1→D3, потрібно одночасно:
+
+- зменшити інший flow до D3;
+- звільнити supply S1 або змінити інший route;
+- зберегти всі row/column totals.
+
+Тому marginal impact route — network-wide.
+
+---
+
+## Поглиблення: dual potentials як прихована структура
+
+Transportation problem має natural dual interpretation.
+
+Можна уявити potentials:
+
+\[
+u_i
+\]
+
+для sources і:
+
+\[
+v_j
+\]
+
+для destinations.
+
+Для active routes в optimum часто виконується relationship:
+
+\[
+u_i+v_j=c_{ij}
+\]
+
+у відповідній dual formulation.
+
+Для inactive route inequality показує, чи route може покращити solution.
+
+На цьому занятті не потрібно вручну будувати MODI method.
+
+Але важливо побачити idea:
+
+> **optimality можна пояснювати не лише primal flows, а й системою marginal values вузлів.**
+
+Це робить міст до duality T2.L1 і broader optimization theory.
+
+---
+
+## Поглиблення: чому однакове підвищення всіх D4 costs не змінює plan
+
+Scenario:
+
+\[
+c_{i4}'=c_{i4}+2
+\]
+
+для всіх sources.
+
+Будь-який feasible plan повинен доставити:
+
+\[
+35
+\]
+
+units у D4.
+
+Тому до total cost будь-якого feasible plan додається одна й та сама константа:
+
+\[
+2\cdot35=70.
+\]
+
+Отже, relative comparison feasible plans не змінюється.
+
+Саме тому optimum plan може залишитися тим самим.
+
+Це дуже сильний analytical result.
+
+Ми можемо передбачити його **до solver**.
+
+Такі algebraic observations потрібно використовувати.
+
+Optimization experiment не повинен складатися лише з black-box runs.
+
+---
+
+## Поглиблення: closure versus capacity reduction
+
+Forbidden route:
+
+\[
+x_{23}=0.
+\]
+
+Але real degradation може бути partial:
+
+\[
+x_{23}\le U.
+\]
+
+Наприклад:
+
+\[
+U=10.
+\]
+
+Тоді route не закритий, але capacity reduced.
+
+Це дає більш плавний sensitivity experiment:
+
+\[
+U\in\{30,20,10,0\}.
+\]
+
+Можна побудувати:
+
+\[
+Z^*(U)
+\]
+
+і побачити, коли route capacity стає limiting.
+
+Це сильніший research design, ніж лише binary open/closed scenario.
+
+---
+
+## Поглиблення: capacity sensitivity
+
+Якщо route capacity \(U\) велика і baseline flow:
+
+\[
+x_{23}=30,
+\]
+
+то:
+
+\[
+U\ge30
+\]
+
+не впливає на baseline optimum.
+
+Коли:
+
+\[
+U<30,
+\]
+
+constraint becomes active.
+
+Тоді model починає reroute.
+
+Це точний analogue plateau/breakpoint logic із T2.L1:
+
+> parameter впливає лише після того, як стає active restriction.
+
+Такі structural parallels між lessons важливі.
+
+---
+
+## Поглиблення: imbalance як model design choice
+
+Якщо:
+
+\[
+\sum a_i\ne\sum b_j,
+\]
+
+можна додати dummy node.
+
+Але dummy node повинен мати semantics.
+
+### Dummy destination
+
+Якщо supply > demand, dummy destination може означати:
+
+- unused stock;
+- storage;
+- reserve.
+
+Потрібно визначити cost.
+
+### Dummy source
+
+Якщо demand > supply, dummy source може означати:
+
+- unmet demand;
+- emergency acquisition;
+- shortage penalty.
+
+Знову потрібен cost/penalty.
+
+Якщо поставити dummy cost = 0 без explanation, model може трактувати shortage як безкоштовне.
+
+Отже:
+
+> balancing technique є modeling decision, а не лише textbook trick.
+
+---
+
+## Поглиблення: penalty for unmet demand
+
+Замість strict equality можна ввести shortage variable:
+
+\[
+s_j\ge0.
+\]
+
+Demand equation:
+
+\[
+\sum_i x_{ij}+s_j=b_j.
+\]
+
+Objective:
+
+\[
+Z=
+\sum_{ij}c_{ij}x_{ij}
++
+\sum_j p_js_j.
+\]
+
+Де:
+
+\[
+p_j
+\]
+
+— penalty unmet demand.
+
+Тоді model вирішує:
+
+- коли краще expensive transport;
+- коли допустимий shortage.
+
+Але penalty має мати предметне обґрунтування.
+
+---
+
+## Поглиблення: fixed route activation cost
+
+Classical model:
+
+\[
+Cost_{ij}=c_{ij}x_{ij}.
+\]
+
+А якщо запуск route потребує fixed cost:
+
+\[
+f_{ij}
+\]
+
+незалежно від quantity?
+
+Тоді потрібна binary variable:
+
+\[
+y_{ij}\in\{0,1\},
+\]
+
+і constraint:
+
+\[
+x_{ij}\le U_{ij}y_{ij}.
+\]
+
+Objective:
+
+\[
+Z=
+\sum c_{ij}x_{ij}
++
+\sum f_{ij}y_{ij}.
+\]
+
+Це вже mixed-integer programming.
+
+Тут добре видно межу classical LP.
+
+---
+
+## Поглиблення: multi-period extension
+
+Для кількох періодів:
+
+\[
+x_{ijt}
+\]
+
+— flow route \(i\rightarrow j\) у time \(t\).
+
+Можна додати inventory:
+
+\[
+I_{it}.
+\]
+
+Balance:
+
+\[
+I_{i,t-1}+Supply_{it}
+=
+\sum_j x_{ijt}
++
+I_{it}.
+\]
+
+Тоді рішення вже враховує:
+
+- коли переміщувати;
+- скільки зберігати;
+- чи переносити stock у наступний period.
+
+Це значно ближче до dynamic planning.
+
+---
+
+## Поглиблення: uncertainty supply і demand
+
+Baseline:
+
+\[
+a_i,\ b_j
+\]
+
+fixed.
+
+Але в research problem вони можуть бути forecasts.
+
+Тоді можна:
+
+### Scenario set
+
+- low demand;
+- nominal;
+- high demand.
+
+### Monte Carlo
+
+Sample demand values.
+
+### Robust optimization
+
+Require feasibility across interval.
+
+### Chance constraints
+
+Allow small probability shortage.
+
+Вибір extension залежить від research question.
+
+Не потрібно автоматично робити stochastic model.
+
+---
+
+## Поглиблення: independent verification as model culture
+
+<figure>
+  <img src="figures/fig_07_verification_layers.svg" alt="Три рівні перевірки транспортної моделі">
+  <figcaption><strong>Рис. 7.</strong> PuLP/HiGHS agreement підтверджує computation, balance checks підтверджують feasibility, але лише domain validation може підтвердити, що модель відповідає реальному процесу.</figcaption>
+</figure>
+
+Корисна послідовність:
+
+1. **Solver status** — algorithm completed.
+2. **Balance verification** — plan mathematically feasible.
+3. **Independent recomputation** — objective correct.
+4. **Second backend** — implementation consistency.
+5. **Scenario analysis** — structural response plausible.
+6. **Domain review** — assumptions meaningful.
+
+Кожен layer відповідає на інше question.
+
+---
+
+## Поглиблення: model audit T2.L2
+
+### Structure audit
+
+- sources complete?
+- destinations complete?
+- routes correctly represented?
+- forbidden routes valid?
+
+### Data audit
+
+- unit costs comparable?
+- same period/currency/unit?
+- supply/demand provenance known?
+
+### Numerical audit
+
+- finite inputs?
+- balance correct?
+- solver optimal?
+- residuals small?
+
+### Scenario audit
+
+- closure scenarios meaningful?
+- cost shocks plausible?
+- supply shifts justified?
+
+### Interpretation audit
+
+- local route cost not confused with system importance?
+- solver agreement not called validation?
+- limitations stated?
+
+---
+
+## Поглиблення: reproducibility package
+
+Збережіть:
+
+- costs.csv;
+- supply.csv;
+- demand.csv;
+- forbidden routes;
+- solver versions;
+- baseline plan;
+- objective;
+- residuals;
+- alternative backend result;
+- scenario definitions;
+- scenario results;
+- figures;
+- commit hash;
+- interpretation.
+
+Тоді інший researcher може відтворити не лише number 515, а весь experiment.
+
+---
+
+## Поглиблення: де classical transportation model закінчується
+
+<figure>
+  <img src="figures/fig_08_model_limits.svg" alt="Межі classical transportation LP">
+  <figcaption><strong>Рис. 8.</strong> Якщо routes мають capacities, demand uncertain, рішення multi-period або costs nonlinear/fixed, classical balanced transportation LP стає лише baseline, а не фінальною моделлю.</figcaption>
+</figure>
+
+Головний principle:
+
+> **розширюйте model лише тоді, коли конкретне припущення baseline суперечить research object.**
+
+Складність має бути мотивована.
+
+---
+
+## Поглиблення: напівхудожнє повернення до сцени
+
+Після baseline керівник бачить:
+
+\[
+Z=515
+\]
+
+і питає:
+
+> «Чому не просто використовувати найдешевші routes?»
+
+Аналітик показує plan і каже:
+
+> «Бо кожен cheap route конкурує за limited supply і destination demand. Якщо закрити S2→D3, total cost піднімається до 570, і network перебудовує одразу кілька flows. Якщо ж однаково збільшити всі D4 costs на 2, plan не зміниться, а objective зросте рівно на 70».
+
+Тепер table перетворилася на explanation.
+
+Не:
+
+> «solver намалював matrix».
+
+А:
+
+> **«ось які balances формують network, ось який route є системно важливим, ось яка зміна впливає на plan, а яка — лише на total cost».**
+
+Саме це робить transportation model дослідницьким інструментом.
+
+---
+
 ## 45. Data provenance
 
 Для costs потрібно знати:
