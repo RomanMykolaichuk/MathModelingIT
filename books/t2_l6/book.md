@@ -1741,6 +1741,713 @@ Practical sequence:
 
 ---
 
+## Поглиблення: dimensional analysis before symbolic manipulation
+
+Перед тим як натискати \`solve\`, корисно перевірити units.
+
+ODE:
+
+\[
+\frac{dS}{dt}=q-kS.
+\]
+
+If \(S\) measured in state units and \(t\) in time, then:
+
+\[
+[q]=\frac{S}{t},
+\]
+
+and because:
+
+\[
+[kS]=\frac{S}{t},
+\]
+
+we need:
+
+\[
+[k]=\frac{1}{t}.
+\]
+
+Therefore:
+
+\[
+\frac{q}{k}
+\]
+
+has units \(S\), as required for equilibrium.
+
+This simple check catches many formulation errors before any CAS work.
+
+---
+
+## Поглиблення: nondimensionalization
+
+Define:
+
+\[
+s=\frac{S}{S^*},
+\qquad
+\tau=kt.
+\]
+
+Because:
+
+\[
+S^*=\frac{q}{k},
+\]
+
+the ODE becomes:
+
+\[
+\frac{ds}{d\tau}=1-s.
+\]
+
+Now parameter \(q\) and \(k\) disappear from the dimensionless dynamics.
+
+Solution:
+
+\[
+s(\tau)=1+(s_0-1)e^{-\tau}.
+\]
+
+This reveals a universal structure.
+
+Different \(q,k\) cases are scaled versions of the same normalized process.
+
+Symbolic tools help expose such simplifications.
+
+---
+
+## Поглиблення: why nondimensionalization matters
+
+It can show:
+
+- which parameter combinations truly matter;
+- natural time scale;
+- natural state scale;
+- how many independent dimensionless groups remain.
+
+In baseline:
+
+\[
+\tau=kt
+\]
+
+shows \(1/k\) is time scale.
+
+\[
+S^*=q/k
+\]
+
+is state scale.
+
+This is deeper than just computing numbers.
+
+---
+
+## Поглиблення: stability of equilibrium
+
+Let:
+
+\[
+u(t)=S(t)-S^*.
+\]
+
+Then:
+
+\[
+\frac{du}{dt}=-ku.
+\]
+
+Solution:
+
+\[
+u(t)=u(0)e^{-kt}.
+\]
+
+Since \(k>0\):
+
+\[
+u(t)\rightarrow0.
+\]
+
+Therefore equilibrium is asymptotically stable.
+
+This conclusion follows directly from transformed equation.
+
+CAS can support algebra, but stability interpretation remains researcher’s task.
+
+---
+
+## Поглиблення: if k < 0
+
+Current model rejects \(k\le0\).
+
+Why?
+
+If \(k<0\), equation becomes:
+
+\[
+\frac{dS}{dt}=q+|k|S.
+\]
+
+State grows exponentially.
+
+The supposed “loss coefficient” becomes gain.
+
+So input validation encodes domain meaning.
+
+This is a good example of semantic validation, not only numeric hygiene.
+
+---
+
+## Поглиблення: identifiability from equilibrium only
+
+If only long-run equilibrium observed:
+
+\[
+S^*=120,
+\]
+
+then any pair satisfying:
+
+\[
+q=120k
+\]
+
+fits equilibrium.
+
+Examples:
+
+\[
+(12,0.1),
+\]
+
+\[
+(24,0.2),
+\]
+
+\[
+(6,0.05).
+\]
+
+Therefore equilibrium data alone cannot identify both parameters.
+
+This is **structural identifiability intuition**.
+
+---
+
+## Поглиблення: transient data identify k
+
+Normalized deviation:
+
+\[
+\frac{S(t)-S^*}{S_0-S^*}
+=
+e^{-kt}.
+\]
+
+Take log:
+
+\[
+\ln
+\left|
+\frac{S(t)-S^*}{S_0-S^*}
+\right|
+=
+-kt.
+\]
+
+Thus transient slope can reveal \(k\) when equilibrium known.
+
+Then:
+
+\[
+q=kS^*.
+\]
+
+This connects symbolic derivation to experimental design.
+
+---
+
+## Поглиблення: choosing observation times
+
+If all observations are taken very late:
+
+\[
+t\gg1/k,
+\]
+
+then:
+
+\[
+e^{-kt}\approx0.
+\]
+
+Data mostly show equilibrium.
+
+Information about \(k\) from transient shape is weak.
+
+If all observations are too early, equilibrium poorly constrained.
+
+Therefore symbolic structure suggests collecting data across multiple time scales.
+
+---
+
+## Поглиблення: threshold time sensitivity
+
+Threshold formula:
+
+\[
+t_H=
+-\frac1k
+\ln
+\left(
+\frac{H-S^*}{S_0-S^*}
+\right).
+\]
+
+This depends on \(k\) both:
+
+- directly through \(1/k\);
+- indirectly through \(S^*=q/k\).
+
+So threshold sensitivity can be more complex than equilibrium sensitivity.
+
+Numerical parameter sweep can complement symbolic differentiation.
+
+---
+
+## Поглиблення: cumulative state as objective or constraint
+
+\[
+A(T)=\int_0^T S(t)\,dt.
+\]
+
+In a future optimization problem, \(A(T)\) could become:
+
+- objective;
+- constraint;
+- exposure metric.
+
+Thus symbolic integration is not isolated exercise.
+
+It can generate a derived quantity used downstream.
+
+---
+
+## Поглиблення: analytical solution as benchmark
+
+When closed form exists, it provides excellent benchmark for numerical solver.
+
+This is rare privilege.
+
+Use it to test:
+
+- tolerance;
+- step choices;
+- interpolation;
+- implementation.
+
+Then later, for a model with no closed form, you already trust the numerical pipeline more.
+
+---
+
+## Поглиблення: numerical error budget
+
+Agreement criterion:
+
+\[
+e_{max}<10^{-6}.
+\]
+
+But total computational discrepancy can have components:
+
+- truncation error;
+- solver tolerance;
+- interpolation;
+- floating point;
+- time grid.
+
+A single tolerance does not explain all error.
+
+For baseline smooth ODE, solve_ivp with strict tolerances makes these tiny.
+
+---
+
+## Поглиблення: convergence study
+
+A stronger numerical check:
+
+1. solve with tolerance set A;
+2. solve with tighter set B;
+3. compare trajectories;
+4. check stability of key outputs.
+
+If results stop changing materially, confidence increases.
+
+This is numerical convergence evidence.
+
+---
+
+## Поглиблення: time-grid independence
+
+solve_ivp internally chooses adaptive steps.
+
+\`t_eval\` only requests output points.
+
+If user changes output grid from 121 to 61 points, underlying integration may still remain accurate.
+
+But max error evaluated on grid may change slightly.
+
+Thus verification metric itself depends on evaluation design.
+
+---
+
+## Поглиблення: symbolic expression complexity
+
+For larger systems, CAS can produce an expression so large that it is:
+
+- hard to read;
+- slow to evaluate;
+- numerically unstable.
+
+A closed form is not automatically the best computational representation.
+
+Sometimes numerical solution is more useful and reliable.
+
+---
+
+## Поглиблення: catastrophic cancellation
+
+Two algebraically equivalent expressions can behave differently numerically.
+
+For very small \(kt\), expression:
+
+\[
+1-e^{-kt}
+\]
+
+can lose precision.
+
+Special numerical functions like \`expm1\` may be better.
+
+This is an advanced reminder:
+
+> symbolic equivalence does not guarantee identical floating-point stability.
+
+---
+
+## Поглиблення: symbolic verification with assumptions
+
+Simplification may depend on assumptions such as:
+
+\[
+k>0.
+\]
+
+Without assumptions, SymPy may keep conditional expressions or fail to reduce.
+
+Therefore symbolic model should declare known domain restrictions.
+
+This makes mathematics explicit.
+
+---
+
+## Поглиблення: exact vs floating-point constants
+
+SymPy distinguishes:
+
+\[
+\frac{1}{10}
+\]
+
+from floating:
+
+\[
+0.1.
+\]
+
+Exact rationals preserve algebraic exactness longer.
+
+For symbolic derivation, use exact objects where possible.
+
+For numerical evaluation, convert intentionally.
+
+---
+
+## Поглиблення: solving ODE with dsolve
+
+One can ask SymPy:
+
+~~~python
+sp.dsolve(ode)
+~~~
+
+But course model constructs known closed form directly after finding equilibrium.
+
+Why?
+
+Because pedagogical goal is to understand structure:
+
+\[
+equilibrium + transient.
+\]
+
+Automatic dsolve can hide this reasoning.
+
+CAS should support thinking, not replace it.
+
+---
+
+## Поглиблення: residual as reusable pattern
+
+Residual verification generalizes.
+
+For algebraic equation:
+
+\[
+f(x)=0,
+\]
+
+check:
+
+\[
+f(x^*)\approx0.
+\]
+
+For PDE/ODE candidate:
+
+\[
+R=\mathcal L(u)-f.
+\]
+
+For optimization constraints:
+
+\[
+g(x)\le0.
+\]
+
+Residual thinking is a universal verification habit.
+
+---
+
+## Поглиблення: comparing independent representations
+
+T2.L6 intentionally uses three representations:
+
+1. symbolic expression;
+2. hand-coded analytical NumPy;
+3. solve_ivp numerical integration.
+
+If all agree, common coding errors less likely.
+
+Yet they still share the same mathematical assumptions.
+
+This is **implementation triangulation**, not empirical validation.
+
+---
+
+## Поглиблення: model validation would require data
+
+To validate the ODE for a real process, we would need observations:
+
+\[
+(t_i,S_i).
+\]
+
+Then compare:
+
+- predicted trajectory;
+- residuals;
+- parameter estimates;
+- out-of-sample performance.
+
+That moves beyond T2.L6 into calibration and research workflow.
+
+---
+
+## Поглиблення: model calibration link to T2.L7
+
+Suppose \(q,k\) unknown.
+
+Given data, estimate:
+
+\[
+\hat q,\hat k.
+\]
+
+Then:
+
+1. calibrate;
+2. assess residuals;
+3. quantify uncertainty;
+4. verify numerical solution;
+5. predict thresholds/integrals.
+
+This is exactly how symbolic structure becomes part of scientific modeling.
+
+---
+
+## Поглиблення: sensitivity beyond one parameter
+
+Current experiment varies \(k\) with fixed \(q\).
+
+Could build grid:
+
+\[
+q\in\{8,12,16\},
+\quad
+k\in\{0.05,0.1,0.15\}.
+\]
+
+Then study response surface:
+
+\[
+S(10;q,k).
+\]
+
+This exposes interactions in finite-time output even though ODE linear in S.
+
+---
+
+## Поглиблення: contour map
+
+A contour of:
+
+\[
+S(10;q,k)
+\]
+
+shows combinations yielding same finite-horizon state.
+
+This can reveal parameter trade-offs.
+
+It also helps explain identifiability: one observation may correspond to many parameter pairs.
+
+---
+
+## Поглиблення: uncertainty propagation
+
+If:
+
+\[
+q\sim distribution,
+\quad
+k\sim distribution,
+\]
+
+then even exact formula produces uncertain:
+
+\[
+S(t),S^*,t_H.
+\]
+
+Symbolic solution makes repeated evaluation cheap.
+
+Thus symbolic work can accelerate Monte Carlo uncertainty propagation.
+
+---
+
+## Поглиблення: symbolic sensitivity and Monte Carlo complement each other
+
+Derivative gives local effect:
+
+\[
+\frac{\partial S^*}{\partial k}.
+\]
+
+Monte Carlo parameter uncertainty gives global distribution.
+
+Use derivative for local understanding.
+
+Use simulation for broader uncertainty.
+
+Neither universally replaces the other.
+
+---
+
+## Поглиблення: break-the-model checklist
+
+Ask:
+
+1. Is q constant?
+2. Is k constant?
+3. Are losses proportional to S?
+4. Is there delay?
+5. Are there thresholds?
+6. Is system one-dimensional?
+7. Are observations noisy?
+8. Are parameters known?
+9. Is state continuous?
+
+Each “no” suggests a model extension.
+
+---
+
+## Поглиблення: research-safe military example
+
+One may describe \(S(t)\) as a synthetic training-support indicator.
+
+Do not map q, k, S0 to actual operational capacities without authorized data and domain justification.
+
+The transferable lesson is:
+
+\[
+balance\ law
+\rightarrow
+equilibrium
+\rightarrow
+transient
+\rightarrow
+verification
+\rightarrow
+sensitivity.
+\]
+
+---
+
+## Поглиблення: reporting precision
+
+Tests store:
+
+\[
+83.2120558829.
+\]
+
+Text reports:
+
+\[
+83.2121.
+\]
+
+This is intentional.
+
+Regression tests need tight values.
+
+Human interpretation does not need ten decimal places.
+
+Precision should match purpose.
+
+---
+
+## Поглиблення: a compact evidence table
+
+| Claim | Evidence |
+|---|---|
+| formula solves ODE | symbolic residual = 0 |
+| initial condition correct | substitution \(t=0\) |
+| equilibrium 120 | \(q/k\) |
+| numerical implementation correct | lambdify/direct agreement |
+| ODE integration correct | solve_ivp error < \(10^{-6}\) |
+| k trend understood | derivative + scenario table |
+| real system adequate | **not established by lesson** |
+
+This table prevents overclaiming.
+
+---
+
 ## 74. One-page summary
 
 ### П’ять головних ідей
