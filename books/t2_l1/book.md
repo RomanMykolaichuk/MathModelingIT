@@ -1,35 +1,35 @@
-# MathModelingIT MiniBook T2.L1
+# MathModelingIT · Мінікнига T2.L1
 
-## Задачі оптимізації в середовищі VS Code
+## Задачі оптимізації в середовищі порівняно з код
 
 ### Як перетворити обмежений ресурс на перевірювану оптимізаційну модель
 
-> **Головна ідея книги:** оптимізація — це не «попросити solver знайти максимум». Це спосіб формально описати, що саме ми вирішуємо, чого прагнемо, які обмеження не можна порушувати, які припущення роблять модель лінійною і як перевірити, що знайдений optimum є допустимим та змістовно інтерпретованим.
+> **Головна ідея книги:** оптимізація — це не «попросити розв’язувач знайти максимум». Це спосіб формально описати, що саме ми вирішуємо, чого прагнемо, які обмеження не можна порушувати, які припущення роблять модель лінійною і як перевірити, що знайдений оптимум є допустимим та змістовно інтерпретованим.
 
 ---
 
 ## 0. Паспорт книги
 
-**Код заняття:** T2.L1  
-**Тема:** задачі оптимізації в середовищі VS Code  
-**Рівень:** середній  
-**Орієнтовний час читання:** 65–80 хвилин  
+**Код заняття:** T2.L1 
+**Тема:** задачі оптимізації в середовищі порівняно з код 
+**Рівень:** середній 
+**Орієнтовний час читання:** 65–80 хвилин 
 **Попередні знання:** базова алгебра, поняття функції та нерівності; програмування не є обов’язковим на початку читання.
 
 Після цієї книги ви повинні вміти:
 
 - бачити у прикладній задачі змінні рішення;
 - відрізняти змінні рішення від параметрів;
-- формулювати objective;
-- записувати resource, budget і bound constraints;
-- пояснювати feasible region;
-- розрізняти feasible і optimal solution;
+- формулювати цільова функція;
+- записувати ресурс, бюджет і bound обмеження;
+- пояснювати область допустимих розв’язків;
+- розрізняти допустимий і оптимальний розв’язок;
 - розуміти, чому SciPy linprog мінімізує навіть коли наша задача сформульована як maximization;
-- перевіряти optimum незалежно від status solver;
-- проводити scenario і sensitivity analysis;
-- пояснювати active constraints;
-- розуміти, коли додатковий ресурс або бюджет перестає покращувати objective;
-- переносити optimization logic на власне research question.
+- перевіряти оптимум незалежно від статус розв’язувач;
+- проводити сценарій і аналіз чутливості;
+- пояснювати активні обмеження;
+- розуміти, коли додатковий ресурс або бюджет перестає покращувати цільова функція;
+- переносити оптимізація logic на власне дослідницьке питання.
 
 ---
 
@@ -39,25 +39,25 @@
 
 Є чотири умовні напрями:
 
-- A;
+-;
 - B;
 - C;
 - D.
 
-Маємо 100 одиниць обмеженого ресурсу і budget 250 умовних одиниць.
+Маємо 100 одиниць обмеженого ресурсу і бюджет 250 умовних одиниць.
 
 Для кожного напряму відомі:
 
-- effectiveness per unit;
-- unit cost;
-- minimum allocation;
-- maximum allocation.
+- effectiveness per одиниця;
+- одиниця вартість;
+- minimum розподіл;
+- максимум розподіл.
 
 Таблиця:
 
-| Direction | Effectiveness | Unit cost | Minimum | Maximum |
+| напрям | Effectiveness | одиниця вартість | Minimum | максимум |
 |---|---:|---:|---:|---:|
-| A | 8 | 3 | 10 | 40 |
+| | 8 | 3 | 10 | 40 |
 | B | 6 | 2 | 15 | 35 |
 | C | 9 | 4 | 10 | 30 |
 | D | 5 | 1 | 5 | 25 |
@@ -66,25 +66,25 @@
 
 > «C має effectiveness 9 — найбільшу. Давайте весь ресурс віддамо C».
 
-Але C має maximum 30.
+Але C має максимум 30.
 
-Крім того, його unit cost = 4.
+Крім того, його одиниця вартість = 4.
 
 Існують minimum requirements інших напрямів.
 
-Budget обмежений.
+бюджет обмежений.
 
 Отже, «найвищий коефіцієнт» ще не означає «все туди».
 
 Правильне питання:
 
-> **Який розподіл ресурсу максимізує сумарну effectiveness, не порушуючи resource, budget і bounds constraints?**
+> **Який розподіл ресурсу максимізує сумарну effectiveness, не порушуючи ресурс, бюджет і bounds обмеження?**
 
 Це вже оптимізаційна модель.
 
 <figure>
-  <img src="figures/fig_01_problem_structure.svg" alt="Структура оптимізаційної задачі">
-  <figcaption><strong>Рис. 1.</strong> Оптимізація поєднує decision variables, objective та constraints. Якщо хоча б один із цих елементів не визначений, «пошук найкращого рішення» математично неповний.</figcaption>
+ <img src="figures/fig_01_problem_structure.svg" alt="Структура оптимізаційної задачі">
+ <figcaption><strong>Рис. 1.</strong> Оптимізація поєднує decision змінні, цільова функція та обмеження. Якщо хоча б один із цих елементів не визначений, «пошук найкращого рішення» математично неповний.</figcaption>
 </figure>
 
 ---
@@ -97,7 +97,7 @@ Budget обмежений.
 x_A,x_B,x_C,x_D.
 \]
 
-Це кількість ресурсу, яку model allocates кожному напряму.
+Це кількість ресурсу, яку модель allocates кожному напряму.
 
 Вектор:
 
@@ -106,20 +106,20 @@ x=
 (x_A,x_B,x_C,x_D).
 \]
 
-Це **decision variables**.
+Це **decision змінні**.
 
 Важлива відмінність:
 
-- effectiveness coefficient 8 для A — parameter;
-- \(x_A\) — decision variable.
+- effectiveness коефіцієнт 8 для — параметр;
+- \(x_A\) — decision змінна.
 
-Ми не «обираємо» effectiveness coefficient у baseline.
+Ми не «обираємо» effectiveness коефіцієнт у baseline.
 
-Ми обираємо allocation.
+Ми обираємо розподіл.
 
 ---
 
-## 3. Parameters: умови задачі
+## 3. параметри: умови задачі
 
 Параметри baseline:
 
@@ -153,19 +153,19 @@ l=(10,15,10,5)
 u=(40,35,30,25)
 \]
 
-— upper bounds.
+— верхній bounds.
 
-У scenario analysis parameters змінюються.
+У сценарний аналіз параметри змінюються.
 
-Decision variables solver визначає заново.
+Decision змінні розв’язувач визначає заново.
 
 Це ще одна фундаментальна відмінність:
 
-> **parameter задає сценарій; decision variable є відповіддю model у цьому сценарії.**
+> **параметр задає сценарій; decision змінна є відповіддю модель у цьому сценарії.**
 
 ---
 
-## 4. Objective: що означає «краще»
+## 4. цільова функція: що означає «краще»
 
 Сумарна effectiveness:
 
@@ -183,29 +183,29 @@ F(x)=
 F(x)\rightarrow\max.
 \]
 
-Це statement of preference.
+Це statement preference.
 
 Воно каже:
 
 > серед допустимих allocations кращий той, де більша weighted sum effectiveness.
 
-Математика не визначає сама, що саме повинно бути objective.
+Математика не визначає сама, що саме повинно бути цільова функція.
 
-Це визначає research/decision question.
+Це визначає дослідження/decision питання.
 
-Можна було б мінімізувати cost.
+Можна було б мінімізувати вартість.
 
-Можна було б мінімізувати risk.
+Можна було б мінімізувати ризик.
 
 Можна було б мати multi-objective problem.
 
-Baseline обирає одну objective:
+Baseline обирає одну цільова функція:
 
-> maximize total effectiveness.
+> максимізувати загальний effectiveness.
 
 ---
 
-## 5. Resource constraint
+## 5. ресурс обмеження
 
 Усього є 100 units:
 
@@ -223,23 +223,23 @@ x_A+x_B+x_C+x_D\le100.
 
 а не equality?
 
-Тому що mathematically model дозволяє не використовати весь ресурс, якщо це оптимально або якщо інші constraints не дозволяють використати його.
+Тому що mathematically модель дозволяє не використовати весь ресурс, якщо це оптимально або якщо інші обмеження не дозволяють використати його.
 
-У baseline optimum resource використовується повністю.
+У baseline оптимум ресурс використовується повністю.
 
 Але це **результат**, а не заздалегідь нав’язана equality.
 
 ---
 
-## 6. Budget constraint
+## 6. бюджет обмеження
 
-Вартість allocation:
+Вартість розподіл:
 
 \[
 3x_A+2x_B+4x_C+x_D.
 \]
 
-Budget:
+бюджет:
 
 \[
 3x_A+2x_B+4x_C+x_D\le250.
@@ -247,21 +247,21 @@ Budget:
 
 Тепер видно trade-off.
 
-C має effectiveness 9, але cost 4.
+C має effectiveness 9, але вартість 4.
 
-D має effectiveness лише 5, але cost 1.
+D має effectiveness лише 5, але вартість 1.
 
-Тому budget constraint змушує solver балансувати:
+Тому бюджет обмеження змушує розв’язувач балансувати:
 
 - effectiveness;
-- cost;
+- вартість;
 - bounds.
 
 ---
 
 ## 7. Bounds як частина предметної постановки
 
-Для A:
+Для:
 
 \[
 10\le x_A\le40.
@@ -289,11 +289,11 @@ Lower bound може означати:
 
 > мінімально необхідний рівень забезпечення.
 
-Upper bound:
+верхній bound:
 
 > фізичну, організаційну або технологічну межу використання ресурсу.
 
-Bounds не повинні з’являтися «щоб solver дав красиве рішення».
+Bounds не повинні з’являтися «щоб розв’язувач дав красиве рішення».
 
 Вони повинні мати предметний зміст.
 
@@ -335,23 +335,23 @@ x_A+x_B+x_C+x_D\le100,
 5\le x_D\le25.
 \]
 
-Це linear programming problem.
+Це лінійне програмування problem.
 
-Чому linear?
+Чому лінійний?
 
 Бо:
 
-- objective linear;
-- constraints linear;
-- coefficients constant.
+- цільова функція лінійний;
+- обмеження лінійний;
+- коефіцієнти сталий.
 
 ---
 
-## 9. Feasible region
+## 9. область допустимих розв’язків
 
-Feasible solution — будь-який \(x\), який виконує всі constraints.
+допустимий розв’язок — будь-який \(x\), який виконує всі обмеження.
 
-Optimal solution — feasible solution із найкращим objective.
+оптимальний розв’язок — допустимий розв’язок із найкращим цільова функція.
 
 Це різні поняття.
 
@@ -361,15 +361,15 @@ Optimal solution — feasible solution із найкращим objective.
 x=(25,25,25,25)
 \]
 
-feasible.
+допустимий.
 
-Resource:
+ресурс:
 
 \[
 25+25+25+25=100.
 \]
 
-Budget:
+бюджет:
 
 \[
 3\cdot25+
@@ -379,7 +379,7 @@ Budget:
 =250.
 \]
 
-Objective:
+цільова функція:
 
 \[
 F=8\cdot25+
@@ -389,45 +389,45 @@ F=8\cdot25+
 =700.
 \]
 
-Отже, 700 — хороший feasible candidate.
+Отже, 700 — хороший допустимий кандидатний.
 
-Але не optimum.
+Але не оптимум.
 
 <figure>
-  <img src="figures/fig_02_feasible_vs_optimal.svg" alt="Допустиме і оптимальне рішення">
-  <figcaption><strong>Рис. 2.</strong> Feasible region містить багато допустимих рішень. Optimizer шукає серед них те, яке найкраще відповідає objective.</figcaption>
+ <img src="figures/fig_02_feasible_vs_optimal.svg" alt="Допустиме і оптимальне рішення">
+ <figcaption><strong>Рис. 2.</strong> область допустимих розв’язків містить багато допустимих рішень. оптимізатор шукає серед них те, яке найкраще відповідає цільова функція.</figcaption>
 </figure>
 
 ---
 
-## 10. Baseline optimum
+## 10. Baseline оптимум
 
-Source-of-truth tests фіксують:
+Source-of-truth тести фіксують:
 
 \[
 x^*=
 (40,\ 17.5,\ 17.5,\ 25).
 \]
 
-Objective:
+цільова функція:
 
 \[
 F(x^*)=707.5.
 \]
 
-Resource used:
+ресурс використаний:
 
 \[
 100.
 \]
 
-Budget used:
+бюджет використаний:
 
 \[
 250.
 \]
 
-Отже, обидва global constraints активні:
+Отже, обидва глобальний обмеження активні:
 
 \[
 resource\ slack=0,
@@ -443,33 +443,33 @@ budget\ slack=0.
 
 ---
 
-## 11. Чому A = 40
+## 11. Чому = 40
 
-A має:
+ має:
 
 - effectiveness 8;
-- cost 3;
+- вартість 3;
 - max 40.
 
-У optimum:
+У оптимум:
 
 \[
 x_A=40.
 \]
 
-Тобто upper bound активний.
+Тобто верхній bound активний.
 
 Це означає:
 
-> за baseline objective і constraints model хотіла б принаймні не зменшувати allocation A; її зупиняє upper bound.
+> за baseline цільова функція і обмеження модель хотіла б принаймні не зменшувати розподіл; її зупиняє верхній bound.
 
 Але це не треба інтерпретувати як:
 
-> «A завжди треба забезпечувати максимально».
+> « завжди треба забезпечувати максимально».
 
 Лише:
 
-> у цьому model scenario optimum лежить на upper bound A.
+> у цьому модель сценарій оптимум лежить на верхній bound.
 
 ---
 
@@ -481,13 +481,13 @@ D має найменшу effectiveness:
 5.
 \]
 
-Але також найменшу unit cost:
+Але також найменшу одиниця вартість:
 
 \[
 1.
 \]
 
-У optimum:
+У оптимум:
 
 \[
 x_D=25,
@@ -497,15 +497,15 @@ x_D=25,
 
 Це хороший урок.
 
-Найнижчий effectiveness coefficient не означає, що direction не вигідний.
+Найнижчий effectiveness коефіцієнт не означає, що напрям не вигідний.
 
-При tight budget дешевший ресурс може звільняти можливість для інших allocations.
+При tight бюджет дешевший ресурс може звільняти можливість для інших allocations.
 
-Optimization аналізує систему constraints одночасно.
+оптимізація аналізує систему обмеження одночасно.
 
 ---
 
-## 13. Чому C не отримує maximum 30
+## 13. Чому C не отримує максимум 30
 
 C має highest effectiveness:
 
@@ -513,7 +513,7 @@ C має highest effectiveness:
 9.
 \]
 
-Але unit cost:
+Але одиниця вартість:
 
 \[
 4.
@@ -527,17 +527,17 @@ x_C=17.5<30.
 
 Причина — не в тому, що C «погана».
 
-Причина — budget trade-off.
+Причина — бюджет trade-off.
 
-Щоб додати C, потрібно витрачати більше budget per unit.
+Щоб додати C, потрібно витрачати більше бюджет per одиниця.
 
-Зміна allocation повинна компенсуватися зменшенням інших directions.
+Зміна розподіл повинна компенсуватися зменшенням інших directions.
 
 ---
 
-## 14. Active constraints
+## 14. активні обмеження
 
-Constraint active, якщо в optimum виконується як equality.
+обмеження активний, якщо в оптимум виконується як equality.
 
 Baseline:
 
@@ -545,13 +545,13 @@ Baseline:
 x_A+x_B+x_C+x_D=100.
 \]
 
-Budget:
+бюджет:
 
 \[
 3x_A+2x_B+4x_C+x_D=250.
 \]
 
-Також active bounds:
+Також активний bounds:
 
 \[
 x_A=40,
@@ -561,18 +561,18 @@ x_A=40,
 x_D=25.
 \]
 
-Ці active constraints визначають geometry optimum.
+Ці активні обмеження визначають geometry оптимум.
 
 <figure>
-  <img src="figures/fig_03_active_constraints.svg" alt="Активні обмеження baseline optimum">
-  <figcaption><strong>Рис. 3.</strong> Baseline optimum лежить на одночасно активних resource і budget constraints, а також на верхніх bounds A і D.</figcaption>
+ <img src="figures/fig_03_active_constraints.svg" alt="Активні обмеження baseline оптимум">
+ <figcaption><strong>Рис. 3.</strong> Baseline оптимум лежить на одночасно активних ресурс і бюджет обмеження, а також на верхніх bounds і D.</figcaption>
 </figure>
 
 ---
 
-## 15. Чому optimum часто лежить на межі
+## 15. Чому оптимум часто лежить на межі
 
-У linear programming objective:
+У лінійне програмування цільова функція:
 
 \[
 c^Tx
@@ -580,15 +580,15 @@ c^Tx
 
 змінюється лінійно.
 
-Feasible region — convex polytope.
+область допустимих розв’язків — convex polytope.
 
-Для LP optimum, якщо він існує, можна знайти на extreme point feasible region.
+Для LP оптимум, якщо він існує, можна знайти на extreme точка область допустимих розв’язків.
 
 Інтуїтивно:
 
-> linear objective «штовхає» solution до межі допустимої області.
+> лінійний цільова функція «штовхає» розв’язок до межі допустимої області.
 
-Тому active constraints — не випадковість.
+Тому активні обмеження — не випадковість.
 
 Вони часто є ключем до інтерпретації.
 
@@ -641,9 +641,9 @@ result = linprog(
 
 ---
 
-## 17. Solver success — ще не кінець
+## 17. розв’язувач успіх — ще не кінець
 
-Припустимо solver повернув:
+Припустимо розв’язувач повернув:
 
 ~~~text
 success = True
@@ -653,23 +653,23 @@ success = True
 
 Приблизно:
 
-> numerical optimizer завершив algorithm і вважає, що знайшов solution відповідно до model.
+> чисельний оптимізатор завершив алгоритм і вважає, що знайшов розв’язок відповідно до модель.
 
 Це не означає автоматично:
 
-- inputs correct;
-- constraints reflect reality;
-- units correct;
-- model adequate;
-- interpretation valid.
+- вхідні дані коректний;
+- обмеження reflect reality;
+- units коректний;
+- модель adequate;
+- інтерпретація valid.
 
-Тому потрібна independent feasibility check.
+Тому потрібна незалежний допустимість перевірка.
 
 ---
 
-## 18. Verification constraints
+## 18. перевірка обмеження
 
-Для candidate \(x\) перевіряємо:
+Для кандидатний \(x\) перевіряємо:
 
 ### Bounds
 
@@ -677,43 +677,43 @@ success = True
 l_i\le x_i\le u_i.
 \]
 
-### Resource
+### ресурс
 
 \[
 \sum_i x_i\le100.
 \]
 
-### Budget
+### бюджет
 
 \[
 \sum_i c_ix_i\le250.
 \]
 
-### Finite numbers
+### скінченний числа
 
-Values не повинні бути NaN/∞.
+значення не повинні бути NaN/∞.
 
-Verification — окремий крок від optimization.
+перевірка — окремий крок від оптимізація.
 
 ---
 
-## 19. Manual candidate як sanity check
+## 19. ручний кандидатний як перевірка здорового глузду
 
-Manual candidate:
+ручний кандидатний:
 
 \[
 (25,25,25,25).
 \]
 
-Feasible.
+допустимий.
 
-Objective:
+цільова функція:
 
 \[
 700.
 \]
 
-Optimizer:
+оптимізатор:
 
 \[
 707.5.
@@ -725,54 +725,54 @@ Optimizer:
 707.5>700.
 \]
 
-Це не математичний доказ global optimality.
+Це не математичний доказ глобальний optimality.
 
 Але це корисна перевірка:
 
-> solver принаймні не повернув очевидно гірший result за простий feasible baseline.
+> розв’язувач принаймні не повернув очевидно гірший результат за простий допустимий baseline.
 
 ---
 
 ## 20. Чому рівномірно не означає оптимально
 
-Allocation 25/25/25/25 виглядає «справедливо».
+розподіл 25/25/25/25 виглядає «справедливо».
 
-Але objective не містить fairness.
+Але цільова функція не містить fairness.
 
 Він містить effectiveness.
 
-Optimization не знає слова «рівномірно», якщо ми не закодували його математично.
+оптимізація не знає слова «рівномірно», якщо ми не закодували його математично.
 
 Це ключовий principle:
 
-> **model optimizes what you wrote, not what you intended.**
+> **модель optimizes що you wrote, не що you intended.**
 
 Якщо fairness важлива, потрібно:
 
-- додати constraint;
-- або іншу objective;
+- додати обмеження;
+- або іншу цільова функція;
 - або multi-objective formulation.
 
 ---
 
-## 21. Scenario analysis
+## 21. сценарний аналіз
 
-Optimization result має сенс лише разом із питанням:
+оптимізація результат має сенс лише разом із питанням:
 
-> що буде, якщо inputs зміняться?
+> що буде, якщо вхідні дані зміняться?
 
-У lesson experiment є scenarios:
+У заняття експеримент є scenarios:
 
 1. baseline;
-2. resource = 90;
-3. resource = 110;
-4. budget = 230;
-5. budget = 270;
+2. ресурс = 90;
+3. ресурс = 110;
+4. бюджет = 230;
+5. бюджет = 270;
 6. effectiveness C: 9 → 11.
 
-Для кожного solver потрібно запускати заново.
+Для кожного розв’язувач потрібно запускати заново.
 
-Бо optimum — function of parameters:
+Бо оптимум — функція параметри:
 
 \[
 x^*=x^*(R,B,e,c,l,u).
@@ -780,7 +780,7 @@ x^*=x^*(R,B,e,c,l,u).
 
 ---
 
-## 22. Scenario: budget 230
+## 22. сценарій: бюджет 230
 
 При:
 
@@ -788,43 +788,43 @@ x^*=x^*(R,B,e,c,l,u).
 B=230
 \]
 
-optimal allocation для baseline coefficients:
+оптимальний розподіл для baseline коефіцієнти:
 
 \[
 x^*\approx(35,30,10,25).
 \]
 
-Objective:
+цільова функція:
 
 \[
 F^*=675.
 \]
 
-Resource:
+ресурс:
 
 \[
 100.
 \]
 
-Budget:
+бюджет:
 
 \[
 230.
 \]
 
-Budget tight.
+бюджет tight.
 
-Resource також fully used.
+ресурс також fully використаний.
 
-Структура allocation змінилася помітно.
+Структура розподіл змінилася помітно.
 
 C опускається до lower bound 10.
 
-Це показує, як expensive direction втрачає priority при tighter budget.
+Це показує, як expensive напрям втрачає priority при tighter бюджет.
 
 ---
 
-## 23. Scenario: budget 270
+## 23. сценарій: бюджет 270
 
 При:
 
@@ -832,37 +832,37 @@ C опускається до lower bound 10.
 B=270
 \]
 
-один optimum:
+один оптимум:
 
 \[
 x^*=(40,15,25,20).
 \]
 
-Objective:
+цільова функція:
 
 \[
 735.
 \]
 
-Resource:
+ресурс:
 
 \[
 100.
 \]
 
-Budget:
+бюджет:
 
 \[
 270.
 \]
 
-З більшим budget можна shift allocation toward high-effectiveness C.
+З більшим бюджет можна shift розподіл toward high-effectiveness C.
 
 Але це не триває нескінченно.
 
 ---
 
-## 24. Sensitivity curve: budget 210–290
+## 24. чутливість curve: бюджет 210–290
 
 Розглянемо:
 
@@ -870,9 +870,9 @@ Budget:
 B\in[210,290].
 \]
 
-Контрольні points:
+Контрольні точки:
 
-| Budget | Objective |
+| бюджет | цільова функція |
 |---:|---:|
 | 210 | 625.0 |
 | 220 | 651.67 |
@@ -884,46 +884,46 @@ B\in[210,290].
 | 280 | 748.33 |
 | 290 | 760.0 |
 
-Objective grows.
+цільова функція grows.
 
-Але marginal gain не однаковий.
+Але граничний gain не однаковий.
 
 <figure>
-  <img src="figures/fig_04_budget_sensitivity.svg" alt="Sensitivity objective до budget">
-  <figcaption><strong>Рис. 4.</strong> Зі збільшенням budget objective зростає, але структура optimum змінюється кусочно-лінійно, бо активними стають різні constraints і bounds.</figcaption>
+ <img src="figures/fig_04_budget_sensitivity.svg" alt="чутливість цільова функція до бюджет">
+ <figcaption><strong>Рис. 4.</strong> Зі збільшенням бюджет цільова функція зростає, але структура оптимум змінюється кусочно-лінійно, бо активними стають різні обмеження і bounds.</figcaption>
 </figure>
 
 ---
 
-## 25. Коли додатковий budget перестає допомагати
+## 25. Коли додатковий бюджет перестає допомагати
 
-Продовжимо sensitivity.
+Продовжимо чутливість.
 
-При budget приблизно:
+При бюджет приблизно:
 
 \[
 295
 \]
 
-model уже може досягти allocation:
+модель уже може досягти розподіл:
 
 \[
 (40,25,30,5).
 \]
 
-Objective:
+цільова функція:
 
 \[
 765.
 \]
 
-Budget used:
+бюджет використаний:
 
 \[
 295.
 \]
 
-Resource used:
+ресурс використаний:
 
 \[
 100.
@@ -941,7 +941,7 @@ B=310
 B=350,
 \]
 
-objective залишається:
+цільова функція залишається:
 
 \[
 765.
@@ -949,90 +949,90 @@ objective залишається:
 
 Чому?
 
-Budget більше не limiting.
+бюджет більше не limiting.
 
 Тепер обмежують:
 
-- total resource;
-- upper bounds A і C;
+- загальний ресурс;
+- верхній bounds і C;
 - lower bound D;
-- structure objective.
+- структура цільова функція.
 
 <figure>
-  <img src="figures/fig_05_budget_plateau.svg" alt="Плато після зняття бюджетного обмеження">
-  <figcaption><strong>Рис. 5.</strong> Після приблизно 295 додатковий budget не покращує objective. Це приклад зміни active constraint: budget перестає бути bottleneck.</figcaption>
+ <img src="figures/fig_05_budget_plateau.svg" alt="Плато після зняття бюджетного обмеження">
+ <figcaption><strong>Рис. 5.</strong> Після приблизно 295 додатковий бюджет не покращує цільова функція. Це приклад зміни активний обмеження: бюджет перестає бути bottleneck.</figcaption>
 </figure>
 
 ---
 
-## 26. Marginal value інтуїтивно
+## 26. граничний значення інтуїтивно
 
-Поки budget active, додаткова одиниця budget має positive marginal value.
+Поки бюджет активний, додаткова одиниця бюджет має додатний граничний значення.
 
-Коли budget slack:
+Коли бюджет резерв часу:
 
 \[
 B-B_{used}>0,
 \]
 
-додатковий budget не змінює optimum.
+додатковий бюджет не змінює оптимум.
 
 Можна сказати:
 
-> marginal value budget стає нульовим у поточному regime.
+> граничний значення бюджет стає нульовим у поточному regime.
 
-У linear programming це пов’язано з dual values / shadow prices.
+У лінійне програмування це пов’язано з dual значення / shadow prices.
 
-У першій MiniBook достатньо інтуїції:
+У першій мінікнига достатньо інтуїції:
 
-> **цінність додаткового ресурсу залежить від того, чи він реально є limiting constraint.**
+> **цінність додаткового ресурсу залежить від того, чи він реально є limiting обмеження.**
 
 ---
 
 ## 27. «Більше ресурсу» не завжди означає «кращий результат»
 
-Припустимо збільшили total resource:
+Припустимо збільшили загальний ресурс:
 
 \[
 100\rightarrow110.
 \]
 
-Якщо budget залишився 250, додатковий physical resource може не бути повністю використаний.
+Якщо бюджет залишився 250, додатковий physical ресурс може не бути повністю використаний.
 
 Чому?
 
-Budget не дозволяє профінансувати всі додаткові units.
+бюджет не дозволяє профінансувати всі додаткові units.
 
 Отже:
 
-> resource availability і budget capacity — різні constraints.
+> ресурс availability і бюджет спроможність — різні обмеження.
 
 Збільшення одного не гарантує покращення, якщо інший уже bottleneck.
 
 ---
 
-## 28. Constraint interaction
+## 28. обмеження взаємодія
 
-Optimization model — система.
+оптимізація модель — система.
 
-Не можна інтерпретувати constraint окремо.
+Не можна інтерпретувати обмеження окремо.
 
 Наприклад:
 
-- budget increase змінює optimum;
-- потім upper bound C стає active;
-- далі benefit budget зменшується;
-- зрештою resource constraint dominates.
+- бюджет increase змінює оптимум;
+- потім верхній bound C стає активний;
+- далі виграш бюджет зменшується;
+- зрештою ресурс обмеження dominates.
 
-Це **regime change**.
+Це **regime зміна**.
 
-Sensitivity analysis потрібен саме для виявлення таких переходів.
+аналіз чутливості потрібен саме для виявлення таких переходів.
 
 ---
 
-## 29. Геометрична інтуїція на двох variables
+## 29. Геометрична інтуїція на двох змінні
 
-У 4D feasible region важко намалювати.
+У 4D область допустимих розв’язків важко намалювати.
 
 Але у 2D:
 
@@ -1040,32 +1040,32 @@ Sensitivity analysis потрібен саме для виявлення так�
 x,y.
 \]
 
-Constraints утворюють polygon.
+обмеження утворюють polygon.
 
-Objective:
+цільова функція:
 
 \[
 F=ax+by.
 \]
 
-Лінії однакового objective:
+Лінії однакового цільова функція:
 
 \[
 ax+by=k.
 \]
 
-Ми «зсуваємо» таку лінію в напрямі зростання \(k\), доки вона ще торкається feasible region.
+Ми «зсуваємо» таку лінію в напрямі зростання \(k\), доки вона ще торкається область допустимих розв’язків.
 
-Точка останнього дотику — optimum.
+Точка останнього дотику — оптимум.
 
 <figure>
-  <img src="figures/fig_06_geometry.svg" alt="Геометрична інтуїція LP">
-  <figcaption><strong>Рис. 6.</strong> У двовимірній LP objective line рухається до межі feasible region. Optimum виникає в точці, де подальший рух уже порушив би constraints.</figcaption>
+ <img src="figures/fig_06_geometry.svg" alt="Геометрична інтуїція LP">
+ <figcaption><strong>Рис. 6.</strong> У двовимірній LP цільова функція line рухається до межі область допустимих розв’язків. оптимум виникає в точці, де подальший рух уже порушив би обмеження.</figcaption>
 </figure>
 
 ---
 
-## 30. Diminishing returns — межа linear model
+## 30. спадна віддача — межа лінійний модель
 
 Baseline припускає:
 
@@ -1074,7 +1074,7 @@ F=
 8x_A+6x_B+9x_C+5x_D.
 \]
 
-Тобто кожна додаткова unit C завжди дає +9.
+Тобто кожна додаткова одиниця C завжди дає +9.
 
 Чи завжди це реалістично?
 
@@ -1082,13 +1082,13 @@ F=
 
 Наступні — менше.
 
-Тоді потрібна nonlinear function:
+Тоді потрібна нелінійний функція:
 
 \[
 F_C(x_C)
 \]
 
-із diminishing returns.
+із спадна віддача.
 
 Це міст до T2.L3.
 
@@ -1096,16 +1096,16 @@ F_C(x_C)
 
 ## 31. Synergy і conflict — ще одна межа
 
-Linear objective additive:
+лінійний цільова функція additive:
 
 \[
 F=
 F_A+F_B+F_C+F_D.
 \]
 
-Вона не містить interaction term.
+Вона не містить взаємодія term.
 
-А якщо A і C разом дають synergy?
+А якщо і C разом дають synergy?
 
 Тоді може з’явитися:
 
@@ -1119,13 +1119,13 @@ F_A+F_B+F_C+F_D.
 -\delta x_Bx_D.
 \]
 
-Це вже nonlinear model.
+Це вже нелінійний модель.
 
 ---
 
-## 32. Discrete decisions
+## 32. дискретний decisions
 
-Baseline variables continuous.
+Baseline змінні неперервний.
 
 Можливо:
 
@@ -1133,7 +1133,7 @@ Baseline variables continuous.
 x_A=17.5.
 \]
 
-Але якщо resource — неподільні units?
+Але якщо ресурс — неподільні units?
 
 Тоді:
 
@@ -1151,13 +1151,13 @@ x_i\in\mathbb Z.
 y_i\in\{0,1\}.
 \]
 
-Тоді це integer або mixed-integer programming.
+Тоді це integer або mixed-integer програмування.
 
 LP baseline тут недостатній.
 
 ---
 
-## 33. Невизначені coefficients
+## 33. Невизначені коефіцієнти
 
 Effectiveness:
 
@@ -1165,32 +1165,32 @@ Effectiveness:
 e_C=9.
 \]
 
-Але якщо це estimate:
+Але якщо це оцінка:
 
 \[
 e_C\in[7,11]?
 \]
 
-Тоді one deterministic coefficient може створювати false certainty.
+Тоді один детермінований коефіцієнт може створювати false certainty.
 
 Можливі extensions:
 
-- scenario analysis;
-- robust optimization;
-- stochastic programming;
-- Monte Carlo around parameters.
+- сценарний аналіз;
+- robust оптимізація;
+- стохастичний програмування;
+- Monte Carlo навколо параметри.
 
-Перший крок — не складний algorithm.
+Перший крок — не складний алгоритм.
 
 Перший крок:
 
-> визнати uncertainty.
+> визнати невизначеність.
 
 ---
 
-## 34. Python без страху: problem object
+## 34. Python без страху: problem об’єкт
 
-У code parameters зібрані в AllocationProblem.
+У код параметри зібрані в AllocationProblem.
 
 Концептуально:
 
@@ -1206,13 +1206,13 @@ problem = AllocationProblem(
 )
 ~~~
 
-Це корисно, бо model input стає явним object.
+Це корисно, бо модель вхідні дані стає явним об’єкт.
 
-Не розкиданим набором magic numbers.
+Не розкиданим набором magic числа.
 
 ---
 
-## 35. Python без страху: solve
+## 35. Python без страху: розв’язати
 
 ~~~python
 result = solve_allocation(problem)
@@ -1220,11 +1220,11 @@ result = solve_allocation(problem)
 
 Результат містить:
 
-- allocation;
-- objective;
+- розподіл;
+- цільова функція;
 - resource_used;
 - budget_used;
-- success;
+- успіх;
 - message.
 
 Не використовуйте тільки:
@@ -1233,11 +1233,11 @@ result = solve_allocation(problem)
 print(result.objective)
 ~~~
 
-Потрібно аналізувати структуру solution.
+Потрібно аналізувати структуру розв’язок.
 
 ---
 
-## 36. Python без страху: feasibility
+## 36. Python без страху: допустимість
 
 ~~~python
 checks = check_feasibility(
@@ -1250,32 +1250,32 @@ assert checks["all"]
 
 Це хороший pattern:
 
-> solver → independent check.
+> розв’язувач → незалежний перевірка.
 
-У складніших models це стає ще важливішим.
+У складніших моделі це стає ще важливішим.
 
 ---
 
-## 37. Validation inputs
+## 37. валідація вхідні дані
 
 Модель відхиляє:
 
-- empty direction set;
-- parameter vectors wrong length;
-- negative minimum;
-- maximum < minimum;
-- negative resource;
-- negative budget.
+- empty напрям набір;
+- параметр vectors помилковий length;
+- від’ємний minimum;
+- максимум < minimum;
+- від’ємний ресурс;
+- від’ємний бюджет.
 
-Ці checks не «заважають користувачу».
+Ці перевірки не «заважають користувачу».
 
-Вони захищають semantic contract model.
+Вони захищають semantic contract модель.
 
 ---
 
 ## 38. Infeasible problem
 
-Що буде, якщо budget = 60?
+Що буде, якщо бюджет = 60?
 
 Мінімальні allocations:
 
@@ -1299,83 +1299,83 @@ assert checks["all"]
 60<105.
 \]
 
-Feasible solution не існує.
+допустимий розв’язок не існує.
 
-Solver може повідомити failure.
+розв’язувач може повідомити відмова.
 
-Це не «помилка optimizer».
+Це не «помилка оптимізатор».
 
 Це характеристика постановки:
 
-> constraints mutually incompatible.
+> обмеження mutually incompatible.
 
 ---
 
-## 39. Feasibility before optimization
+## 39. допустимість до оптимізація
 
 Корисний принцип:
 
 > спочатку переконайтеся, що хоча б одне допустиме рішення може існувати.
 
-Наприклад, lower-bound resource:
+Наприклад, lower-bound ресурс:
 
 \[
 10+15+10+5=40\le100.
 \]
 
-Lower-bound budget:
+Lower-bound бюджет:
 
 \[
 105\le250.
 \]
 
-Це simple necessary check.
+Це simple necessary перевірка.
 
-Для складніших задач solver сам перевіряє feasibility, але domain sanity checks дуже корисні.
+Для складніших задач розв’язувач сам перевіряє допустимість, але область перевірка здорового глуздуs дуже корисні.
 
 ---
 
-## 40. Зламай модель: wrong objective
+## 40. Зламай модель: помилковий цільова функція
 
-Припустимо ми хотіли мінімізувати cost, але написали maximize effectiveness.
+Припустимо ми хотіли мінімізувати вартість, але написали максимізувати effectiveness.
 
-Solver чесно оптимізує effectiveness.
+розв’язувач чесно оптимізує effectiveness.
 
 Потім хтось каже:
 
 > рішення занадто дороге.
 
-Проблема не в solver.
+Проблема не в розв’язувач.
 
-Проблема в objective.
+Проблема в цільова функція.
 
-Optimization algorithm не знає незаписані preferences.
+оптимізація алгоритм не знає незаписані preferences.
 
 ---
 
-## 41. Зламай модель: missing constraint
+## 41. Зламай модель: missing обмеження
 
 Припустимо напрям C фізично не може отримати більше 20.
 
-А model має:
+А модель має:
 
 \[
 x_C\le30.
 \]
 
-Тоді optimum може бути mathematically feasible, але real-world infeasible.
+Тоді оптимум може бути mathematically допустимий, але реальний infeasible.
 
-Це classic example:
+Це classic приклад:
 
-> model feasibility ≠ real-world feasibility.
+> модель допустимість ≠ реальний допустимість.
 
 ---
 
-## 42. Зламай модель: arbitrary coefficient
+## 42. Зламай модель: arbitrary коефіцієнт
 
-Якщо effectiveness 9 для C взято без data або обґрунтування, optimum може бути дуже точним numeric answer на слабке input assumption.
+Якщо effectiveness 9 для C взято без дані або обґрунтування, оптимум може бути дуже точним numeric answer на слабке вхідні дані припущення.
 
-Sensitivity:
+чутливість:
 
 \[
 9\rightarrow11
@@ -1383,45 +1383,45 @@ Sensitivity:
 
 показує:
 
-> coefficient matters.
+> коефіцієнт має значення.
 
-Отже, research transfer повинен включати питання:
+Отже, дослідження transfer повинен включати питання:
 
-> звідки беруться coefficients?
+> звідки беруться коефіцієнти?
 
 ---
 
-## 43. Зламай модель: unit inconsistency
+## 43. Зламай модель: одиниця inconsistency
 
-Effectiveness coefficients можуть мати різні meanings.
+Effectiveness коефіцієнти можуть мати різні meanings.
 
-Якщо A effectiveness виміряна одним методом, C — іншим, linear combination може бути беззмістовною.
+Якщо effectiveness виміряна одним методом, C — іншим, лінійний combination може бути беззмістовною.
 
-Перед optimization:
+Перед оптимізація:
 
 - definitions;
 - units;
 - scales;
-- data provenance
+- дані походження
 
 повинні бути узгоджені.
 
 ---
 
-## 44. Verification, validation, calibration
+## 44. перевірка, валідація, калібрування
 
-### Verification
+### перевірка
 
-Чи правильно solver problem coded?
+Чи правильно розв’язувач problem coded?
 
 - signs;
-- coefficients;
-- constraints;
+- коефіцієнти;
+- обмеження;
 - bounds.
 
-### Calibration
+### калібрування
 
-Чи правильно оцінені coefficients?
+Чи правильно оцінені коефіцієнти?
 
 Наприклад:
 
@@ -1429,105 +1429,105 @@ Effectiveness coefficients можуть мати різні meanings.
 e_C=9.
 \]
 
-### Validation / adequacy
+### валідація / адекватність
 
-Чи linear model достатня для real system?
+Чи лінійний модель достатня для реальний система?
 
 Це різні рівні.
 
-Успішний solver підтверджує лише дуже малу частину evidence chain.
+Успішний розв’язувач підтверджує лише дуже малу частину свідчення chain.
 
 ---
 
-## Поглиблення: optimization як карта компромісів, а не «машина рішень»
+## Поглиблення: оптимізація як карта компромісів, а не «машина рішень»
 
 У прикладній роботі дуже легко звести оптимізацію до одного рядка:
 
-> solver повернув \(x^*\).
+> розв’язувач повернув \(x^*\).
 
 Але науково сильніша інтерпретація починається з іншого питання:
 
-> **які саме компроміси змусили optimum опинитися в цій точці?**
+> **які саме компроміси змусили оптимум опинитися в цій точці?**
 
-Baseline allocation:
+Baseline розподіл:
 
 \[
 x^*=(40,\ 17.5,\ 17.5,\ 25)
 \]
 
-не виникає з одного coefficient.
+не виникає з одного коефіцієнт.
 
 Вона є результатом одночасної взаємодії:
 
 - effectiveness;
-- unit cost;
-- total resource;
-- total budget;
+- одиниця вартість;
+- загальний ресурс;
+- загальний бюджет;
 - lower bounds;
-- upper bounds.
+- верхній bounds.
 
-Тому optimum корисно читати не як «рекомендацію числа», а як **структурний fingerprint** поточного scenario.
+Тому оптимум корисно читати не як «рекомендацію числа», а як **структурний fingerprint** поточного сценарій.
 
 У baseline:
 
-- A впирається у maximum;
-- D впирається у maximum;
-- resource повністю використаний;
-- budget повністю використаний;
-- B і C ділять залишок так, щоб одночасно зберегти balances constraints та maximize objective.
+- впирається у максимум;
+- D впирається у максимум;
+- ресурс повністю використаний;
+- бюджет повністю використаний;
+- B і C ділять залишок так, щоб одночасно зберегти баланси обмеження та максимізувати цільова функція.
 
-Змінимо scenario — fingerprint зміниться.
+Змінимо сценарій — fingerprint зміниться.
 
 ---
 
 ## Поглиблення: повна таблиця сценаріїв
 
-Порівняємо кілька model states.
+Порівняємо кілька модель states.
 
-| Scenario | R | B | Approx allocation | Objective | Main interpretation |
+| сценарій | R | B | Approx розподіл | цільова функція | Main інтерпретація |
 |---|---:|---:|---|---:|---|
-| Baseline | 100 | 250 | (40,17.5,17.5,25) | 707.5 | resource і budget active |
-| Budget low | 100 | 230 | (35,30,10,25) | 675.0 | C pushed to lower bound |
-| Budget high | 100 | 270 | (40,15,25,20) | 735.0 | more allocation to C |
-| Near plateau | 100 | 295 | (40,25,30,5) | 765.0 | budget just sufficient |
-| Above plateau | 100 | 320 | same optimum | 765.0 | budget no longer limiting |
+| Baseline | 100 | 250 | (40,17.5,17.5,25) | 707.5 | ресурс і бюджет активний |
+| бюджет низький | 100 | 230 | (35,30,10,25) | 675.0 | C pushed до lower bound |
+| бюджет високий | 100 | 270 | (40,15,25,20) | 735.0 | більше розподіл до C |
+| біля plateau | 100 | 295 | (40,25,30,5) | 765.0 | бюджет just sufficient |
+| вище plateau | 100 | 320 | той самий оптимум | 765.0 | бюджет немає longer limiting |
 
 <figure>
-  <img src="figures/fig_07_scenarios.svg" alt="Порівняння сценаріїв оптимізації">
-  <figcaption><strong>Рис. 7.</strong> Optimization result потрібно читати як family of scenario-dependent solutions. Зміна parameter змінює не лише objective, а й structure allocation та набір active constraints.</figcaption>
+ <img src="figures/fig_07_scenarios.svg" alt="Порівняння сценаріїв оптимізації">
+ <figcaption><strong>Рис. 7.</strong> оптимізація результат потрібно читати як family scenario-dependent розв’язки. Зміна параметр змінює не лише цільова функція, а й структура розподіл та набір активні обмеження.</figcaption>
 </figure>
 
-Така таблиця дає значно сильніший research output, ніж один baseline row.
+Така таблиця дає значно сильніший дослідження результат, ніж один baseline row.
 
 Вона дозволяє побачити:
 
-- де solution stable;
-- де allocation rapidly changes;
-- де constraint перестає бути bottleneck;
+- де розв’язок стійкий;
+- де розподіл rapidly зміни;
+- де обмеження перестає бути bottleneck;
 - де система входить у plateau.
 
 ---
 
-## Поглиблення: чому sensitivity curve кусочно-лінійна
+## Поглиблення: чому чутливість curve кусочно-лінійна
 
-У linear programming objective і constraints linear.
+У лінійне програмування цільова функція і обмеження лінійний.
 
-Але function:
+Але функція:
 
 \[
 V(B)=\max_x F(x;B)
 \]
 
-не обов’язково одна straight line на всьому діапазоні budget.
+не обов’язково одна straight line на всьому діапазоні бюджет.
 
-Причина — зміна **active set**.
+Причина — зміна **активний набір**.
 
-У певному interval optimum може визначатися набором:
+У певному інтервал оптимум може визначатися набором:
 
-- resource active;
-- budget active;
-- A upper active;
-- D upper active.
+- ресурс активний;
+- бюджет активний;
+- верхній активний;
+- D верхній активний.
 
 Після зміни B одна змінна може відійти від bound, інша — дійти до bound.
 
@@ -1539,21 +1539,21 @@ V(B)=\max_x F(x;B)
 
 змінюється.
 
-Отже, breakpoints на sensitivity graph мають математичний зміст.
+Отже, breakpoints на чутливість graph мають математичний зміст.
 
 Вони показують:
 
-> **де система переходить у новий optimization regime.**
+> **де система переходить у новий оптимізація regime.**
 
-У research analysis саме ці breakpoints часто цікавіші за baseline optimum.
+У дослідження аналіз саме ці breakpoints часто цікавіші за baseline оптимум.
 
 ---
 
-## Поглиблення: локальна marginal value і shadow price
+## Поглиблення: локальна граничний значення і shadow price
 
-Якщо budget constraint active, невелике збільшення budget може збільшувати objective.
+Якщо бюджет обмеження активний, невелике збільшення бюджет може збільшувати цільова функція.
 
-У вузькому interval можна оцінити:
+У вузькому інтервал можна оцінити:
 
 \[
 \lambda_B\approx\frac{\Delta F^*}{\Delta B}.
@@ -1580,7 +1580,7 @@ F^*(250)=707.5.
 
 Інтуїтивно:
 
-> у цьому локальному regime одна додаткова unit budget дає приблизно 1.5 objective units.
+> у цьому локальному regime одна додаткова одиниця бюджет дає приблизно 1.5 цільова функція units.
 
 Але не можна автоматично переносити це число на:
 
@@ -1598,9 +1598,9 @@ Shadow price — **локальна**, а не універсальна хара
 
 ---
 
-## Поглиблення: sensitivity до effectiveness coefficient
+## Поглиблення: чутливість до effectiveness коефіцієнт
 
-Тепер змінюємо не resource, а model coefficient.
+Тепер змінюємо не ресурс, а модель коефіцієнт.
 
 Baseline:
 
@@ -1608,7 +1608,7 @@ Baseline:
 e_C=9.
 \]
 
-Scenario:
+сценарій:
 
 \[
 e_C=11.
@@ -1616,15 +1616,15 @@ e_C=11.
 
 Це інше питання.
 
-Budget sensitivity відповідає:
+бюджет чутливість відповідає:
 
 > що буде, якщо зміниться доступне обмеження?
 
-Coefficient sensitivity:
+коефіцієнт чутливість:
 
-> що буде, якщо ми інакше оцінюємо віддачу direction C?
+> що буде, якщо ми інакше оцінюємо віддачу напрям C?
 
-Це особливо важливо, якщо effectiveness coefficients оцінені експертно або за data.
+Це особливо важливо, якщо effectiveness коефіцієнти оцінені експертно або за дані.
 
 Якщо невелика зміна:
 
@@ -1632,15 +1632,15 @@ Coefficient sensitivity:
 9\rightarrow9.5
 \]
 
-різко перебудовує optimum, conclusion fragile.
+різко перебудовує оптимум, висновок fragile.
 
-Якщо allocation майже не змінюється, model більш stable до цього assumption.
+Якщо розподіл майже не змінюється, модель більш стійкий до цього припущення.
 
-Тому sensitivity analysis потрібно будувати не лише навколо constraints, а й навколо **найменш надійних parameters**.
+Тому аналіз чутливості потрібно будувати не лише навколо обмеження, а й навколо **найменш надійних параметри**.
 
 ---
 
-## Поглиблення: що робити, якщо coefficient невідомий точно
+## Поглиблення: що робити, якщо коефіцієнт невідомий точно
 
 Припустимо:
 
@@ -1650,7 +1650,7 @@ e_C\in[8,11].
 
 Є кілька підходів.
 
-### Scenario analysis
+### сценарний аналіз
 
 Запустити:
 
@@ -1658,37 +1658,37 @@ e_C\in[8,11].
 e_C=8,\ 9,\ 10,\ 11.
 \]
 
-Порівняти optimum.
+Порівняти оптимум.
 
-### Monte Carlo around coefficients
+### Monte Carlo навколо коефіцієнти
 
-Якщо є distribution, sample coefficients і solve repeatedly.
+Якщо є розподіл, вибірка коефіцієнти і розв’язати repeatedly.
 
-### Robust optimization
+### Robust оптимізація
 
-Шукати decision, який працює прийнятно для worst/plausible parameter combinations.
+Шукати decision, який працює прийнятно для worst/правдоподібний параметр combinations.
 
-Ці підходи відповідають на різні questions.
+Ці підходи відповідають на різні питання.
 
 Не потрібно одразу переходити до найскладнішого.
 
 Початкова дисципліна:
 
-> **позначити uncertainty там, де вона реально є.**
+> **позначити невизначеність там, де вона реально є.**
 
 ---
 
-## Поглиблення: nominal optimum і robust decision — не одне й те саме
+## Поглиблення: nominal оптимум і robust decision — не одне й те саме
 
-Nominal optimization питає:
+Nominal оптимізація питає:
 
-> яке decision найкраще для одного заданого набору parameters?
+> яке decision найкраще для одного заданого набору параметри?
 
 Robust perspective:
 
-> яке decision залишається прийнятним, якщо parameters трохи помилкові?
+> яке decision залишається прийнятним, якщо параметри трохи помилкові?
 
-Можливо, nominal optimum:
+Можливо, nominal оптимум:
 
 \[
 x^*=(40,17.5,17.5,25)
@@ -1696,71 +1696,71 @@ x^*=(40,17.5,17.5,25)
 
 дуже чутливий.
 
-Інший allocation має трохи нижчий baseline objective, але краще поводиться у wider scenario range.
+Інший розподіл має трохи нижчий baseline цільова функція, але краще поводиться у wider сценарій range.
 
-Тоді decision-maker може свідомо обрати не nominal maximum.
+Тоді decision-maker може свідомо обрати не nominal максимум.
 
 Це не «відмова від математики».
 
-Це зміна decision criterion.
+Це зміна decision критерій.
 
 ---
 
-## Поглиблення: multiple optima і чому один vector може бути не єдиним
+## Поглиблення: множинний optima і чому один vector може бути не єдиним
 
-У LP інколи objective line паралельна face feasible region.
+У LP інколи цільова функція line паралельна face область допустимих розв’язків.
 
-Тоді існує багато solutions із тим самим objective.
+Тоді існує багато розв’язки із тим самим цільова функція.
 
-Solver повертає одну.
+розв’язувач повертає одну.
 
 Це не означає:
 
-> тільки вона optimal.
+> тільки вона оптимальний.
 
-Якщо multiple optima існують, можна застосувати secondary criterion.
+Якщо множинний optima існують, можна застосувати secondary критерій.
 
 Наприклад:
 
-1. maximize primary effectiveness;
-2. серед усіх primary-optimal solutions minimize imbalance;
-3. або maximize reserve;
-4. або minimize switching cost.
+1. максимізувати primary effectiveness;
+2. серед усіх primary-optimal розв’язки minimize imbalance;
+3. або максимізувати reserve;
+4. або minimize switching вартість.
 
-Це називають lexicographic / hierarchical optimization.
+Це називають lexicographic / hierarchical оптимізація.
 
-Навіть якщо baseline T2.L1 має контрольний optimum, загальна методологія повинна пам’ятати про non-uniqueness.
+Навіть якщо baseline T2.L1 має контрольний оптимум, загальна методологія повинна пам’ятати про non-uniqueness.
 
 ---
 
-## Поглиблення: constraints як наукові гіпотези
+## Поглиблення: обмеження як наукові гіпотези
 
-Constraint часто сприймається як «відомий факт»:
+обмеження часто сприймається як «відомий факт»:
 
 \[
 x_C\le30.
 \]
 
-Але іноді upper bound — це теж assumption.
+Але іноді верхній bound — це теж припущення.
 
 Наприклад:
 
-- estimate capacity;
-- normative threshold;
+- оцінка спроможність;
+- normative поріг;
 - expert restriction;
-- historical maximum.
+- historical максимум.
 
-Тоді constraint має provenance.
+Тоді обмеження має походження.
 
 Корисно мати таблицю:
 
-| Constraint | Meaning | Source | Confidence |
+| обмеження | зміст | джерело | довірчий |
 |---|---|---|---|
-| \(\sum x_i\le100\) | total resource | measured | high |
-| budget≤250 | financial limit | policy | high |
-| \(x_C\le30\) | capacity | expert estimate | medium |
+| \(\sum x_i\le100\) | загальний ресурс | measured | високий |
+| бюджет≤250 | financial limit | policy | високий |
+| \(x_C\le30\) | спроможність | expert оцінка | medium |
 
-Це перетворює model із набору inequalities на **audit-ready research artifact**.
+Це перетворює модель із набору inequalities на **audit-ready дослідження артефакт**.
 
 ---
 
@@ -1772,123 +1772,123 @@ x_C\le30.
 \sum l_i > R.
 \]
 
-Тоді жоден allocation не може satisfy constraints.
+Тоді жоден розподіл не може satisfy обмеження.
 
-Або minimum budget requirement перевищує B.
+Або minimum бюджет requirement перевищує B.
 
-Solver повідомить infeasible.
+розв’язувач повідомить infeasible.
 
 Не потрібно трактувати це як:
 
 > «програма не спрацювала».
 
-Іноді найцінніший model result:
+Іноді найцінніший модель результат:
 
 > **задані вимоги взаємно несумісні.**
 
-Тоді research question змінюється:
+Тоді дослідницьке питання змінюється:
 
 - яке requirement послабити;
 - наскільки;
 - якою ціною;
-- який constraint створює conflict.
+- який обмеження створює conflict.
 
 ---
 
-## Поглиблення: optimization model audit
+## Поглиблення: оптимізація модель аудит
 
 Перед фінальним висновком корисно пройти чотири рівні.
 
-### Semantic audit
+### Semantic аудит
 
-- кожна decision variable має реальний зміст?
-- objective відповідає research goal?
-- кожен constraint має пояснення?
+- кожна decision змінна має реальний зміст?
+- цільова функція відповідає дослідження goal?
+- кожен обмеження має пояснення?
 
-### Numerical audit
+### чисельний аудит
 
 - units узгоджені?
-- inputs finite?
+- вхідні дані скінченний?
 - bounds valid?
-- solver status success?
+- розв’язувач статус успіх?
 
-### Solution audit
+### розв’язок аудит
 
-- feasibility independently checked?
-- objective independently recomputed?
-- active constraints identified?
+- допустимість independently checked?
+- цільова функція independently recomputed?
+- активні обмеження identified?
 
-### Stability audit
+### стійкість аудит
 
-- sensitivity performed?
-- uncertain parameters varied?
+- чутливість performed?
+- uncertain параметри varied?
 - plateau / breakpoints identified?
 
-Якщо хоча б один рівень пропущено, statement «optimal» може бути technically correct, але scientifically weak.
+Якщо хоча б один рівень пропущено, statement «оптимальний» може бути technically коректний, але scientifically weak.
 
 ---
 
-## Поглиблення: reproducibility package T2.L1
+## Поглиблення: відтворюваність пакет T2.L1
 
-Для відтворюваного optimization experiment збережіть:
+Для відтворюваного оптимізація експеримент збережіть:
 
-- input table;
-- coefficient definitions;
+- вхідні дані table;
+- коефіцієнт definitions;
 - units;
 - bounds;
-- total resource;
-- budget;
-- solver method;
-- software versions;
-- baseline result;
-- feasibility checks;
-- scenario table;
-- sensitivity graph;
-- commit hash;
-- interpretation;
+- загальний ресурс;
+- бюджет;
+- розв’язувач метод;
+- програмний версії;
+- baseline результат;
+- допустимість перевірки;
+- сценарій table;
+- чутливість graph;
+- коміт хеш;
+- інтерпретація;
 - limitations.
 
-Screenshot із objective value не є reproducibility package.
+Screenshot із цільова функція значення не є відтворюваність пакет.
 
 ---
 
-## Поглиблення: межі linear baseline
+## Поглиблення: межі лінійний baseline
 
 <figure>
-  <img src="figures/fig_08_model_limits.svg" alt="Межі лінійної оптимізаційної моделі">
-  <figcaption><strong>Рис. 8.</strong> Linear baseline потрібно розширювати лише тоді, коли предметна логіка вимагає diminishing returns, interactions, discrete decisions або uncertainty. Складність не є самоціллю.</figcaption>
+ <img src="figures/fig_08_model_limits.svg" alt="Межі лінійної оптимізаційної моделі">
+ <figcaption><strong>Рис. 8.</strong> лінійний baseline потрібно розширювати лише тоді, коли предметна логіка вимагає спадна віддача, interactions, дискретний decisions або невизначеність. Складність не є самоціллю.</figcaption>
 </figure>
 
-Linear model сильна саме своєю прозорістю.
+лінійний модель сильна саме своєю прозорістю.
 
-Але вона має assumptions:
+Але вона має припущення:
 
-- constant marginal effectiveness;
+- сталий граничний effectiveness;
 - additive contributions;
-- continuous decision variables;
-- fixed coefficients;
-- fixed bounds;
+- неперервний decision змінні;
+- фіксований коефіцієнти;
+- фіксований bounds;
 - one-stage decision.
 
-Якщо хоча б одна з цих assumptions критично порушується, потрібно змінювати model class.
+Якщо хоча б одна з цих припущення критично порушується, потрібно змінювати модель class.
 
 Важливо не казати:
 
-> linear programming «погана».
+> лінійне програмування «погана».
 
 Правильніше:
 
-> вона відповідає одній структурі assumptions.
+> вона відповідає одній структурі припущення.
 
 Наступне питання завжди:
 
-> чи відповідають ці assumptions нашому research object?
+> чи відповідають ці припущення нашому дослідження об’єкт?
 
 ---
 
 ## Поглиблення: напівхудожнє повернення до сцени
 
-Після першого solve керівник бачить:
+Після першого розв’язати керівник бачить:
 
 \[
 707.5
@@ -1900,65 +1900,65 @@ Linear model сильна саме своєю прозорістю.
 
 Аналітик відповідає:
 
-> «Для baseline linear model — так. Але budget і resource повністю active. Якщо budget збільшити, objective росте до приблизно 765. Після близько 295 budget перестає бути bottleneck. Далі потрібен не додатковий budget, а зміна resource/bounds або самої structure model».
+> «Для baseline лінійний модель — так. Але бюджет і ресурс повністю активний. Якщо бюджет збільшити, цільова функція росте до приблизно 765. Після близько 295 бюджет перестає бути bottleneck. Далі потрібен не додатковий бюджет, а зміна ресурс/bounds або самої структура модель».
 
-Тепер optimization result став управлінсько зрозумілим.
+Тепер оптимізація результат став управлінсько зрозумілим.
 
 Не просто:
 
-> «solver сказав 707.5».
+> «розв’язувач сказав 707.5».
 
 А:
 
-> **«ось чому 707.5, ось що обмежує систему, ось де додатковий budget має цінність, а ось де перестає».**
+> **«ось чому 707.5, ось що обмежує систему, ось де додатковий бюджет має цінність, а ось де перестає».**
 
 Це і є повноцінна інтерпретація.
 
 ---
 
-## 45. Scenario design
+## 45. сценарій дизайн
 
-Сильний experiment:
+Сильний експеримент:
 
-| Run | Parameter | Expected question |
+| запуск | параметр | очікуваний питання |
 |---|---|---|
-| Baseline | R=100, B=250 | control |
-| Resource low | R=90 | effect of resource limit |
-| Resource high | R=110 | is resource still bottleneck? |
-| Budget low | B=230 | expensive directions constrained |
-| Budget high | B=270 | shift toward high effectiveness |
-| Coefficient C | 9→11 | sensitivity to effectiveness |
+| Baseline | R=100, B=250 | контрольний |
+| ресурс низький | R=90 | вплив ресурс limit |
+| ресурс високий | R=110 | є ресурс усе ще bottleneck? |
+| бюджет низький | B=230 | expensive directions constrained |
+| бюджет високий | B=270 | shift toward високий effectiveness |
+| коефіцієнт C | 9→11 | чутливість до effectiveness |
 
-Перед запуском записуйте prediction.
+Перед запуском записуйте прогноз.
 
 ---
 
-## 46. Budget sensitivity як кусочно-лінійна картина
+## 46. бюджет чутливість як кусочно-лінійна картина
 
-LP sensitivity curve часто складається з segments.
+LP чутливість curve часто складається з segments.
 
 Чому?
 
-У певному interval однакова set of active constraints визначає optimum.
+У певному інтервал однакова набір активні обмеження визначає оптимум.
 
-Коли constraint або bound змінює status:
+Коли обмеження або bound змінює статус:
 
 - segment slope змінюється;
-- allocation regime змінюється.
+- розподіл regime змінюється.
 
-Тому «злам» лінії на graph — не numerical noise.
+Тому «злам» лінії на graph — не чисельний noise.
 
-Це може бути зміна structure optimum.
+Це може бути зміна структура оптимум.
 
 ---
 
 ## 47. Shadow price інтуїтивно
 
-Якщо budget active, shadow price відповідає на локальне питання:
+Якщо бюджет активний, shadow price відповідає на локальне питання:
 
-> наскільки зміниться optimal objective при невеликому збільшенні budget?
+> наскільки зміниться оптимальний цільова функція при невеликому збільшенні бюджет?
 
-У різних ranges slope sensitivity curve різний.
+У різних ranges slope чутливість curve різний.
 
 Наприклад, між B=240 і 250:
 
@@ -1978,7 +1978,7 @@ average gain:
 1.5
 \]
 
-objective units per budget unit.
+цільова функція units per бюджет одиниця.
 
 А після plateau:
 
@@ -1986,23 +1986,23 @@ objective units per budget unit.
 \Delta F=0.
 \]
 
-Shadow price conceptually zero.
+Shadow price conceptually нуля.
 
-Для точного dual interpretation потрібна solver dual information, але intuition уже видно.
+Для точного dual інтерпретація потрібна розв’язувач dual information, але інтуїція уже видно.
 
 ---
 
 ## 48. Чому 707.5 — не «ефективність системи в реальності»
 
-Objective value:
+цільова функція значення:
 
 \[
 707.5
 \]
 
-має meaning лише через coefficients.
+має зміст лише через коефіцієнти.
 
-Якщо effectiveness units synthetic, 707.5 — synthetic aggregate score.
+Якщо effectiveness units синтетичний, 707.5 — синтетичний aggregate оцінка.
 
 Не треба писати:
 
@@ -2010,33 +2010,33 @@ Objective value:
 
 Краще:
 
-> у baseline optimization model optimal weighted objective equals 707.5.
+> у baseline оптимізація модель оптимальний weighted цільова функція equals 707.5.
 
 Words matter.
 
 ---
 
-## 49. Allowed conclusion
+## 49. Allowed висновок
 
 Слабкий:
 
-> оптимальний розподіл A=40, B=17.5, C=17.5, D=25.
+> оптимальний розподіл =40, B=17.5, C=17.5, D=25.
 
 Кращий:
 
-> За baseline coefficients, bounds, resource 100 і budget 250 linear model має optimum \(x^*=(40,17.5,17.5,25)\) із objective 707.5; resource і budget constraints активні.
+> За baseline коефіцієнти, bounds, ресурс 100 і бюджет 250 лінійний модель має оптимум \(x^*=(40,17.5,17.5,25)\) із цільова функція 707.5; ресурс і бюджет обмеження активні.
 
 Ще сильніший:
 
-> Budget sensitivity показує, що додатковий budget підвищує objective лише до переходу в інший limiting regime; приблизно після budget 295 baseline model досягає plateau 765, де budget уже не є active constraint.
+> бюджет чутливість показує, що додатковий бюджет підвищує цільова функція лише до переходу в інший limiting regime; приблизно після бюджет 295 baseline модель досягає plateau 765, де бюджет уже не є активний обмеження.
 
-Це вже structural interpretation.
+Це вже структурний інтерпретація.
 
 ---
 
-## 50. Research Transfer
+## 50. дослідження Transfer
 
-Спробуйте описати власну research problem.
+Спробуйте описати власну дослідження problem.
 
 Шаблон:
 
@@ -2074,16 +2074,16 @@ Allowed conclusion:
 
 ### Приклад перенесення
 
-У дисертації decision variables можуть бути:
+У дисертації decision змінні можуть бути:
 
-- allocation of processing capacity;
-- time distribution;
+- розподіл processing спроможність;
+- time розподіл;
 - experimental resources;
-- model configuration budget.
+- модель конфігурація бюджет.
 
-Головне — не копіювати numbers A–D.
+Головне — не копіювати числа –D.
 
-Головне — перенести structure.
+Головне — перенести структура.
 
 ---
 
@@ -2091,9 +2091,9 @@ Allowed conclusion:
 
 Після всіх розрахунків корисно чітко розділити чотири твердження.
 
-### Твердження 1. Feasibility
+### Твердження 1. допустимість
 
-Ми довели, що знайдений vector виконує constraints:
+Ми довели, що знайдений vector виконує обмеження:
 
 \[
 l_i\le x_i\le u_i,
@@ -2109,69 +2109,69 @@ l_i\le x_i\le u_i,
 
 Це твердження про **допустимість**.
 
-### Твердження 2. Optimality у mathematical model
+### Твердження 2. Optimality у математичний модель
 
-Для linear problem і коректно завершеного HiGHS solver можемо говорити про optimum у сформульованій LP model.
+Для лінійний problem і коректно завершеного HiGHS розв’язувач можемо говорити про оптимум у сформульованій LP модель.
 
-Тобто серед усіх feasible vectors саме model objective не має кращого значення.
+Тобто серед усіх допустимий vectors саме модель цільова функція не має кращого значення.
 
 Це твердження про **математичну модель**.
 
-### Твердження 3. Stability
+### Твердження 3. стійкість
 
-Sensitivity показує, чи conclusion зберігається при зміні:
+чутливість показує, чи висновок зберігається при зміні:
 
-- budget;
-- resource;
-- effectiveness coefficients;
+- бюджет;
+- ресурс;
+- effectiveness коефіцієнти;
 - bounds.
 
 Це твердження про **стійкість результату**.
 
-### Твердження 4. Real-world usefulness
+### Твердження 4. реальний usefulness
 
 Лише після перевірки:
 
-- meaning coefficients;
-- data provenance;
-- constraint adequacy;
+- зміст коефіцієнти;
+- дані походження;
+- обмеження адекватність;
 - units;
-- uncertainty
+- невизначеність
 
 можна обговорювати usefulness для реального decision support.
 
-Це вже не purely mathematical theorem.
+Це вже не purely математичний theorem.
 
 Саме тут проходить межа між:
 
-> «optimal in model»
+> «оптимальний у модель»
 
 і:
 
-> «useful decision in organization».
+> «корисний decision у organization».
 
 ---
 
-## Поглиблення: синтетичний військовий приклад без operational claims
+## Поглиблення: синтетичний військовий приклад без операційний claims
 
-Щоб не створювати ілюзію роботи з реальними planning data, уявімо чотири умовні напрями підтримки навчального заходу.
+Щоб не створювати ілюзію роботи з реальними planning дані, уявімо чотири умовні напрями підтримки навчального заходу.
 
-- A — підготовка інформаційних матеріалів;
+- — підготовка інформаційних матеріалів;
 - B — технічна підтримка;
 - C — аналітична підтримка;
 - D — резервна організаційна спроможність.
 
-Effectiveness coefficients не є бойовими показниками.
+Effectiveness коефіцієнти не є бойовими показниками.
 
-Це synthetic teaching scores.
+Це синтетичний навчальний scores.
 
-Тоді model question звучить:
+Тоді модель питання звучить:
 
-> як розподілити умовний ресурс між чотирма видами підтримки, якщо кожен має minimum/maximum level, різну умовну effectiveness і різну unit cost?
+> як розподілити умовний ресурс між чотирма видами підтримки, якщо кожен має minimum/максимум рівень, різну умовну effectiveness і різну одиниця вартість?
 
-Цей приклад корисний не numbers.
+Цей приклад корисний не числа.
 
-Корисна structure:
+Корисна структура:
 
 \[
 decision\ variables
@@ -2185,111 +2185,111 @@ optimum
 sensitivity.
 \]
 
-Саме structure потрібно переносити у власне дослідження.
+Саме структура потрібно переносити у власне дослідження.
 
 ---
 
 ## Поглиблення: checklist перед словами «оптимальний розподіл»
 
-Перед тим як написати conclusion, поставте сім запитань.
+Перед тим як написати висновок, поставте сім запитань.
 
-1. **Що саме є decision variable?**
-2. **Чому objective має саме таку форму?**
-3. **Звідки взяті coefficients?**
-4. **Які constraints hard, а які estimated?**
-5. **Чи independently verified feasibility?**
-6. **Які parameters змінюють optimum найбільше?**
-7. **Яке найсильніше твердження підтримує model без виходу за її assumptions?**
+1. **Що саме є decision змінна?**
+2. **Чому цільова функція має саме таку форму?**
+3. **Звідки взяті коефіцієнти?**
+4. **Які обмеження hard, а які estimated?**
+5. **Чи independently verified допустимість?**
+6. **Які параметри змінюють оптимум найбільше?**
+7. **Яке найсильніше твердження підтримує модель без виходу за її припущення?**
 
-Якщо відповіді відсутні, слово «optimal» звучить сильніше, ніж evidence.
+Якщо відповіді відсутні, слово «оптимальний» звучить сильніше, ніж свідчення.
 
-Якщо відповіді задокументовані, optimization experiment стає частиною відтворюваного дослідження.
+Якщо відповіді задокументовані, оптимізація експеримент стає частиною відтворюваного дослідження.
 
 ---
 
 ## 51. Мінісловник T2.L1
 
-### Decision variable
+### Decision змінна
 
-Величина, яку обирає optimization model.
+Величина, яку обирає оптимізація модель.
 
-### Parameter
+### параметр
 
-Вхідна характеристика scenario.
+Вхідна характеристика сценарій.
 
-### Objective
+### цільова функція
 
 Функція, яку мінімізують або максимізують.
 
-### Constraint
+### обмеження
 
 Умова допустимості.
 
 ### Bound
 
-Lower/upper limit decision variable.
+Lower/верхній limit decision змінна.
 
-### Feasible solution
+### допустимий розв’язок
 
-Рішення, що виконує constraints.
+Рішення, що виконує обмеження.
 
-### Optimal solution
+### оптимальний розв’язок
 
-Feasible solution з найкращим objective.
+допустимий розв’язок з найкращим цільова функція.
 
-### Active constraint
+### активний обмеження
 
-Constraint, виконаний як equality в optimum.
+обмеження, виконаний як equality в оптимум.
 
-### Slack
+### резерв часу
 
-Запас до constraint boundary.
+Запас до обмеження межа.
 
-### Sensitivity
+### чутливість
 
-Зміна optimum при зміні parameter.
+Зміна оптимум при зміні параметр.
 
 ### Shadow price
 
-Локальна marginal value relaxation constraint.
+Локальна граничний значення relaxation обмеження.
 
 ### Infeasible problem
 
-Problem без жодного feasible solution.
+Problem без жодного допустимий розв’язок.
 
 ---
 
 ## 52. Мініексперимент
 
-### Question 1
+### питання 1
 
 Чому C з effectiveness 9 не отримує 30 baseline?
 
-Через budget trade-off.
+Через бюджет trade-off.
 
-### Question 2
+### питання 2
 
 Чому D з effectiveness 5 отримує max 25?
 
-Через low cost і system-wide constraint interaction.
+Через низький вартість і system-wide обмеження взаємодія.
 
-### Question 3
+### питання 3
 
-Чому budget >295 не дає benefit?
+Чому бюджет >295 не дає виграш?
 
-Budget перестає бути bottleneck.
+бюджет перестає бути bottleneck.
 
-### Question 4
+### питання 4
 
-Чи означає solver success, що модель адекватна?
+Чи означає розв’язувач успіх, що модель адекватна?
 
 Ні.
 
 ---
 
-## Поглиблення: від optimum до рішення
+## Поглиблення: від оптимум до рішення
 
-Останній conceptual step — відокремити математичний optimum від реального organizational decision.
+Останній conceptual крок — відокремити математичний оптимум від реального organizational decision.
 
 Модель каже:
 
@@ -2297,33 +2297,33 @@ Budget перестає бути bottleneck.
 x^*=(40,17.5,17.5,25).
 \]
 
-Але людина, яка приймає рішення, може додатково враховувати фактори, яких у model немає:
+Але людина, яка приймає рішення, може додатково враховувати фактори, яких у модель немає:
 
-- implementation time;
-- switching cost;
+- реалізація time;
+- switching вартість;
 - organizational readiness;
 - legal restrictions;
-- qualitative risk;
-- data uncertainty;
-- requirement for reserve.
+- qualitative ризик;
+- дані невизначеність;
+- requirement для reserve.
 
-Тому optimization output краще трактувати як:
+Тому оптимізація результат краще трактувати як:
 
 > **структурований аргумент для decision support**, а не автоматичний наказ.
 
-Якщо final decision відрізняється від \(x^*\), це не обов’язково означає, що model «марна».
+Якщо final decision відрізняється від \(x^*\), це не обов’язково означає, що модель «марна».
 
 Потрібно задокументувати:
 
-1. що рекомендувала model;
-2. які factors були поза model;
-3. чому decision-maker відхилився від optimum;
-4. який очікуваний cost цього відхилення;
-5. чи треба додати missed factor у наступну version model.
+1. що рекомендувала модель;
+2. які factors були поза модель;
+3. чому decision-maker відхилився від оптимум;
+4. який очікуваний вартість цього відхилення;
+5. чи треба додати missed factor у наступну версія модель.
 
 Це створює learning loop між modeling і practice.
 
-У research context така прозорість особливо важлива: модель не приховує людське рішення, а робить його аргументацію чіткішою.
+У дослідження context така прозорість особливо важлива: модель не приховує людське рішення, а робить його аргументацію чіткішою.
 
 ---
 
@@ -2331,27 +2331,27 @@ x^*=(40,17.5,17.5,25).
 
 ### П’ять ідей
 
-1. Optimization починається з decision variables, objective і constraints.
-2. Feasible не означає optimal.
-3. Active constraints пояснюють structure optimum.
-4. Sensitivity показує, коли limiting factor змінюється.
-5. Solver success не замінює verification і model adequacy.
+1. оптимізація починається з decision змінні, цільова функція і обмеження.
+2. допустимий не означає оптимальний.
+3. активні обмеження пояснюють структура оптимум.
+4. чутливість показує, коли limiting factor змінюється.
+5. розв’язувач успіх не замінює перевірка і модель адекватність.
 
 ### Три формули
 
-Objective:
+цільова функція:
 
 \[
 F(x)=8x_A+6x_B+9x_C+5x_D.
 \]
 
-Resource:
+ресурс:
 
 \[
 \sum_i x_i\le100.
 \]
 
-Budget:
+бюджет:
 
 \[
 3x_A+2x_B+4x_C+x_D\le250.
@@ -2359,22 +2359,22 @@ Budget:
 
 ### Дві помилки
 
-- «найвищий coefficient → весь resource туди»;
-- «solver success → правильна real-world decision».
+- «найвищий коефіцієнт → весь ресурс туди»;
+- «розв’язувач успіх → правильна реальний decision».
 
 ### Одне питання
 
-> Яке constraint є bottleneck у моїй власній optimization problem і як я це перевірю sensitivity analysis?
+> Яке обмеження є bottleneck у моїй власній оптимізація problem і як я це перевірю аналіз чутливості?
 
 ### Наступний крок
 
-Побудуйте власні scenarios, знайдіть active constraints і поясніть plateau, якщо він з’явиться.
+Побудуйте власні scenarios, знайдіть активні обмеження і поясніть plateau, якщо він з’явиться.
 
 ---
 
 ## 54. Фінальна думка
 
-Optimization не прибирає складність рішення.
+оптимізація не прибирає складність рішення.
 
 Вона робить її явною.
 
@@ -2383,9 +2383,9 @@ Optimization не прибирає складність рішення.
 - що ми можемо змінити;
 - що ми хочемо покращити;
 - що не можна порушувати;
-- які numbers вважаємо відомими;
-- які assumptions роблять model linear.
+- які числа вважаємо відомими;
+- які припущення роблять модель лінійний.
 
-Саме тому найцінніший output optimization — не одне число 707.5.
+Саме тому найцінніший результат оптимізація — не одне число 707.5.
 
-Найцінніше — **структура аргументу**, яка пояснює, чому саме цей solution є optimum у межах саме цієї model.
+Найцінніше — **структура аргументу**, яка пояснює, чому саме цей розв’язок є оптимум у межах саме цієї модель.

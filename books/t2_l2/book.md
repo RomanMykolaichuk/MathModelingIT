@@ -1,4 +1,4 @@
-# MathModelingIT MiniBook T2.L2
+# MathModelingIT · Мінікнига T2.L2
 
 ## Математична модель транспортної задачі
 
@@ -10,27 +10,27 @@
 
 ## 0. Паспорт книги
 
-**Код заняття:** T2.L2  
-**Тема:** математична модель транспортної задачі  
-**Рівень:** середній  
-**Орієнтовний час читання:** 65–80 хвилин  
+**Код заняття:** T2.L2 
+**Тема:** математична модель транспортної задачі 
+**Рівень:** середній 
+**Орієнтовний час читання:** 65–80 хвилин 
 **Попередні знання:** базова алгебра, таблиці, лінійна оптимізація на рівні T2.L1.
 
 Після цієї книги ви повинні вміти:
 
-- бачити структуру «sources → flows → demands»;
+- бачити структуру «джерела → потоки → потреби»;
 - формалізувати \(x_{ij}\);
-- записувати objective total transportation cost;
-- записувати supply і demand balance equations;
+- записувати цільова функція загальний перевезення вартість;
+- записувати постачання і потреба баланс рівняння;
 - розрізняти balanced та unbalanced problems;
-- пояснювати, чому feasibility важлива не менше за optimality;
-- читати optimal plan як network flow;
-- перевіряти solution balances незалежно від solver;
-- порівнювати PuLP і SciPy як independent computational backends;
-- моделювати forbidden routes;
-- інтерпретувати route criticality через scenario cost;
-- розуміти межі linear transportation model;
-- переносити структуру на власну research problem.
+- пояснювати, чому допустимість важлива не менше за optimality;
+- читати оптимальний план як мережевий потік;
+- перевіряти розв’язок баланси незалежно від розв’язувач;
+- порівнювати PuLP і SciPy як незалежний computational backends;
+- моделювати заборонений маршрути;
+- інтерпретувати маршрут criticality через сценарій вартість;
+- розуміти межі лінійний перевезення модель;
+- переносити структуру на власну дослідження problem.
 
 ---
 
@@ -63,9 +63,9 @@ a=(35,50,40).
 b=(30,25,35,35).
 \]
 
-Матриця unit costs:
+Матриця одиниця costs:
 
-|  | D1 | D2 | D3 | D4 |
+| | D1 | D2 | D3 | D4 |
 |---|---:|---:|---:|---:|
 | S1 | 4 | 6 | 8 | 7 |
 | S2 | 5 | 4 | 3 | 6 |
@@ -73,29 +73,29 @@ b=(30,25,35,35).
 
 Хтось дивиться на таблицю і каже:
 
-> «S2→D3 має cost 3 — найнижчий. Давайте використовувати його максимально».
+> «S2→D3 має вартість 3 — найнижчий. Давайте використовувати його максимально».
 
 Це частково правильно.
 
 Але D3 потребує лише 35.
 
-S2 має supply 50.
+S2 має постачання 50.
 
 S2 також може вигідно обслуговувати D2.
 
 D4 має потребу 35.
 
-S3 має власні supply constraints.
+S3 має власні постачання обмеження.
 
-Тому local cheapest route не визначає global optimum.
+Тому локальний cheapest маршрут не визначає глобальний оптимум.
 
 Правильне питання:
 
-> **Як розподілити всі потоки між джерелами й пунктами потреби так, щоб повністю виконати всі supply/demand balances і мінімізувати total cost?**
+> **Як розподілити всі потоки між джерелами й пунктами потреби так, щоб повністю виконати всі постачання/потреба баланси і мінімізувати загальний вартість?**
 
 <figure>
-  <img src="figures/fig_01_transport_structure.svg" alt="Структура транспортної задачі">
-  <figcaption><strong>Рис. 1.</strong> Транспортна модель пов’язує джерела, пункти потреби та маршрути. Локально дешевий маршрут корисний лише в межах глобальних balance constraints.</figcaption>
+ <img src="figures/fig_01_transport_structure.svg" alt="Структура транспортної задачі">
+ <figcaption><strong>Рис. 1.</strong> Транспортна модель пов’язує джерела, пункти потреби та маршрути. Локально дешевий маршрут корисний лише в межах глобальних баланс обмеження.</figcaption>
 </figure>
 
 ---
@@ -104,28 +104,28 @@ S3 має власні supply constraints.
 
 Нехай:
 
-- \(i\) — index source;
+- \(i\) — index джерело;
 - \(j\) — index destination;
-- \(a_i\) — supply source \(i\);
-- \(b_j\) — demand destination \(j\);
-- \(c_{ij}\) — unit cost route \(i\rightarrow j\);
-- \(x_{ij}\) — quantity sent on route \(i\rightarrow j\).
+- \(a_i\) — постачання джерело \(i\);
+- \(b_j\) — потреба destination \(j\);
+- \(c_{ij}\) — одиниця вартість маршрут \(i\rightarrow j\);
+- \(x_{ij}\) — quantity sent на маршрут \(i\rightarrow j\).
 
-Decision variables:
+Decision змінні:
 
 \[
 x_{ij}.
 \]
 
-Для 3×4 matrix маємо 12 variables.
+Для 3×4 матриця маємо 12 змінні.
 
-Кожна відповідає окремому route.
+Кожна відповідає окремому маршрут.
 
 ---
 
-## 3. Objective function
+## 3. цільова функція функція
 
-Total cost:
+загальний вартість:
 
 \[
 Z=
@@ -138,7 +138,7 @@ Z=
 Z\rightarrow\min.
 \]
 
-Для конкретної 3×4 matrix це:
+Для конкретної 3×4 матриця це:
 
 \[
 \begin{aligned}
@@ -149,15 +149,15 @@ Z={}&
 \end{aligned}
 \]
 
-Це linear objective.
+Це лінійний цільова функція.
 
-Кожна додаткова unit на route додає constant unit cost.
+Кожна додаткова одиниця на маршрут додає сталий одиниця вартість.
 
 ---
 
-## 4. Supply constraints
+## 4. постачання обмеження
 
-Source S1 має 35:
+джерело S1 має 35:
 
 \[
 x_{11}+x_{12}+x_{13}+x_{14}=35.
@@ -177,11 +177,11 @@ x_{31}+x_{32}+x_{33}+x_{34}=40.
 
 У balanced baseline використовується equality.
 
-Увесь supply повинен бути розподілений.
+Увесь постачання повинен бути розподілений.
 
 ---
 
-## 5. Demand constraints
+## 5. потреба обмеження
 
 D1 потребує 30:
 
@@ -207,7 +207,7 @@ D4:
 x_{14}+x_{24}+x_{34}=35.
 \]
 
-Кожна demand повинна бути задоволена точно.
+Кожна потреба повинна бути задоволена точно.
 
 ---
 
@@ -221,19 +221,19 @@ x_{ij}\ge0.
 
 У baseline немає сенсу «відправити мінус 5 units».
 
-Це simple constraint, але воно є частиною mathematical meaning.
+Це simple обмеження, але воно є частиною математичний зміст.
 
 ---
 
 ## 7. Balanced problem
 
-Total supply:
+загальний постачання:
 
 \[
 35+50+40=125.
 \]
 
-Total demand:
+загальний потреба:
 
 \[
 30+25+35+35=125.
@@ -248,19 +248,19 @@ Total demand:
 Problem balanced.
 
 <figure>
-  <img src="figures/fig_02_balance.svg" alt="Баланс supply і demand">
-  <figcaption><strong>Рис. 2.</strong> У baseline total supply = total demand = 125. Саме це дозволяє використовувати equality constraints для всіх sources і destinations без dummy nodes.</figcaption>
+ <img src="figures/fig_02_balance.svg" alt="Баланс постачання і потреба">
+ <figcaption><strong>Рис. 2.</strong> У baseline загальний постачання = загальний потреба = 125. Саме це дозволяє використовувати equality обмеження для всіх джерела і destinations без dummy nodes.</figcaption>
 </figure>
 
 ---
 
 ## 8. Чому unbalanced problem не приховують автоматично
 
-У багатьох textbooks unbalanced transportation problem доповнюють dummy source або dummy destination.
+У багатьох textbooks unbalanced перевезення problem доповнюють dummy джерело або dummy destination.
 
 Це математично зручно.
 
-Але в нашому course baseline validate_problem() спочатку відхиляє imbalance.
+Але в нашому курс baseline validate_problem() спочатку відхиляє imbalance.
 
 Чому?
 
@@ -272,52 +272,52 @@ Problem balanced.
 
 має предметний зміст.
 
-### Якщо supply > demand
+### Якщо постачання > потреба
 
 Що означає надлишок?
 
 - storage?
-- unused resource?
+- unused ресурс?
 - reserve?
 - disposal?
 
-### Якщо demand > supply
+### Якщо потреба > постачання
 
 Що означає deficit?
 
-- unmet demand?
+- unmet потреба?
 - priority?
 - penalty?
-- emergency source?
+- emergency джерело?
 
-Dummy node не повинен приховувати це decision question.
+Dummy node не повинен приховувати це decision питання.
 
 ---
 
-## 9. Baseline optimal plan
+## 9. Baseline оптимальний план
 
-Source-of-truth tests фіксують:
+Source-of-truth тести фіксують:
 
-|  | D1 | D2 | D3 | D4 |
+| | D1 | D2 | D3 | D4 |
 |---|---:|---:|---:|---:|
 | S1 | 30 | 5 | 0 | 0 |
 | S2 | 0 | 20 | 30 | 0 |
 | S3 | 0 | 0 | 5 | 35 |
 
-Total cost:
+загальний вартість:
 
 \[
 Z^*=515.
 \]
 
 <figure>
-  <img src="figures/fig_03_baseline_plan.svg" alt="Baseline optimal transportation plan">
-  <figcaption><strong>Рис. 3.</strong> Baseline optimum використовує шість routes із дванадцяти. Нульовий flow не означає «маршрут поганий»; він означає, що в global optimum інші маршрути задовольняють balances дешевше.</figcaption>
+ <img src="figures/fig_03_baseline_plan.svg" alt="Baseline оптимальний перевезення план">
+ <figcaption><strong>Рис. 3.</strong> Baseline оптимум використовує шість маршрути із дванадцяти. Нульовий потік не означає «маршрут поганий»; він означає, що в глобальний оптимум інші маршрути задовольняють баланси дешевше.</figcaption>
 </figure>
 
 ---
 
-## 10. Manual cost verification
+## 10. ручний вартість перевірка
 
 Перевіримо:
 
@@ -351,13 +351,13 @@ Z^*=515.
 120+30+80+90+20+175=515.
 \]
 
-Це manual sanity check.
+Це ручний перевірка здорового глузду.
 
-Solver value не повинен бути black box.
+розв’язувач значення не повинен бути black box.
 
 ---
 
-## 11. Supply balance verification
+## 11. постачання баланс перевірка
 
 ### S1
 
@@ -377,11 +377,11 @@ Solver value не повинен бути black box.
 5+35=40.
 \]
 
-Усі supply balances виконані.
+Усі постачання баланси виконані.
 
 ---
 
-## 12. Demand balance verification
+## 12. потреба баланс перевірка
 
 ### D1
 
@@ -407,24 +407,24 @@ Solver value не повинен бути black box.
 35=35.
 \]
 
-Усі demand balances виконані.
+Усі потреба баланси виконані.
 
 Це просте, але дуже важливе розділення:
 
-- objective correct;
-- feasibility correct.
+- цільова функція коректний;
+- допустимість коректний.
 
 ---
 
-## 13. Чому cheapest route S2→D3 не отримує 35
+## 13. Чому cheapest маршрут S2→D3 не отримує 35
 
-S2→D3 cost:
+S2→D3 вартість:
 
 \[
 3.
 \]
 
-D3 demand:
+D3 потреба:
 
 \[
 35.
@@ -444,9 +444,9 @@ Baseline sends:
 20
 \]
 
-to D2.
+до D2.
 
-Total supply S2:
+загальний постачання S2:
 
 \[
 50.
@@ -454,48 +454,48 @@ Total supply S2:
 
 Якщо віддати D3 усі 35 із S2, залишиться 15 для D2.
 
-Тоді ще 10 D2 треба покрити іншим source.
+Тоді ще 10 D2 треба покрити іншим джерело.
 
-Global cost може зрости.
+глобальний вартість може зрости.
 
 Отже:
 
-> optimization оцінює opportunity cost allocation supply між destinations.
+> оптимізація оцінює opportunity вартість розподіл постачання між destinations.
 
 ---
 
-## 14. Transportation plan як network flow
+## 14. перевезення план як мережевий потік
 
-Matrix можна читати як graph.
+матриця можна читати як graph.
 
-Sources ліворуч.
+джерела ліворуч.
 
 Destinations праворуч.
 
-Positive flow — active edge.
+додатний потік — активний edge.
 
 <figure>
-  <img src="figures/fig_04_network_flow.svg" alt="Мережеве представлення baseline flow">
-  <figcaption><strong>Рис. 4.</strong> Matrix plan і network flow — два представлення тієї самої solution. Товщина route може кодувати quantity, а підпис — unit cost.</figcaption>
+ <img src="figures/fig_04_network_flow.svg" alt="Мережеве представлення baseline потік">
+ <figcaption><strong>Рис. 4.</strong> матриця план і мережевий потік — два представлення тієї самої розв’язок. Товщина маршрут може кодувати quantity, а підпис — одиниця вартість.</figcaption>
 </figure>
 
-Visualization корисна, коли допомагає побачити structure.
+Visualization корисна, коли допомагає побачити структура.
 
 Не просто «красива схема».
 
 ---
 
-## 15. Matrix vs tidy format
+## 15. матриця порівняно з tidy format
 
-Matrix:
+матриця:
 
-|  | D1 | D2 | D3 | D4 |
+| | D1 | D2 | D3 | D4 |
 |---|---:|---:|---:|---:|
 | S1 | 30 | 5 | 0 | 0 |
 | S2 | 0 | 20 | 30 | 0 |
 | S3 | 0 | 0 | 5 | 35 |
 
-Tidy routes:
+Tidy маршрути:
 
 | supplier | consumer | quantity |
 |---|---|---:|
@@ -506,15 +506,15 @@ Tidy routes:
 | S3 | D3 | 5 |
 | S3 | D4 | 35 |
 
-Matrix краще для balances.
+матриця краще для баланси.
 
-Tidy table — для plotting, filtering, route-level analysis.
+Tidy table — для plotting, filtering, route-level аналіз.
 
 ---
 
 ## 16. PuLP і SciPy: навіщо два solvers
 
-Course використовує:
+курс використовує:
 
 1. PuLP/CBC;
 2. SciPy linprog / HiGHS.
@@ -523,9 +523,9 @@ Course використовує:
 
 Не тому, що один «правильний», а інший «неправильний».
 
-Independent implementation дозволяє перевірити:
+незалежний реалізація дозволяє перевірити:
 
-> чи два різні computational pathways дають однаковий optimum.
+> чи два різні computational pathways дають однаковий оптимум.
 
 Baseline:
 
@@ -537,40 +537,40 @@ Z^*_{PuLP}=515.
 Z^*_{SciPy}=515.
 \]
 
-Це підсилює довіру до computation.
+Це підсилює довіру до обчислення.
 
-Але не доводить model adequacy.
+Але не доводить модель адекватність.
 
 ---
 
 ## 17. Три різні твердження
 
-### Solver success
+### розв’язувач успіх
 
-Algorithm завершився.
+алгоритм завершився.
 
-### Mathematical feasibility
+### математичний допустимість
 
-Flows виконують:
+потоки виконують:
 
 - non-negativity;
-- supply balances;
-- demand balances;
-- forbidden route constraints.
+- постачання баланси;
+- потреба баланси;
+- заборонений маршрут обмеження.
 
-### Real-world adequacy
+### реальний адекватність
 
-Model assumptions sufficient for actual system.
+модель припущення sufficient для actual система.
 
 Це різні рівні.
 
-Можна мати два solvers із perfect agreement і все одно inadequate model.
+Можна мати два solvers із perfect agreement і все одно inadequate модель.
 
 ---
 
-## 18. Forbidden route
+## 18. заборонений маршрут
 
-Припустимо route:
+Припустимо маршрут:
 
 \[
 S2\rightarrow D3
@@ -584,28 +584,28 @@ S2\rightarrow D3
 x_{23}=0.
 \]
 
-Це новий constraint.
+Це новий обмеження.
 
-Baseline route був дуже корисний:
+Baseline маршрут був дуже корисний:
 
-- unit cost = 3;
-- flow = 30.
+- одиниця вартість = 3;
+- потік = 30.
 
-Очікуємо, що closure збільшить total cost.
+Очікуємо, що замикання збільшить загальний вартість.
 
 ---
 
-## 19. Scenario: S2→D3 closed
+## 19. сценарій: S2→D3 замкнений
 
-Новий optimum:
+Новий оптимум:
 
-|  | D1 | D2 | D3 | D4 |
+| | D1 | D2 | D3 | D4 |
 |---|---:|---:|---:|---:|
 | S1 | 30 | 0 | 0 | 5 |
 | S2 | 0 | 25 | 0 | 25 |
 | S3 | 0 | 0 | 35 | 5 |
 
-Total cost:
+загальний вартість:
 
 \[
 Z=570.
@@ -624,13 +624,13 @@ Relative increase:
 \]
 
 <figure>
-  <img src="figures/fig_05_route_closure.svg" alt="Вплив закриття S2-D3">
-  <figcaption><strong>Рис. 5.</strong> Закриття дешевого й активно використаного S2→D3 змушує model перебудувати кілька flows, а не просто замінити один route.</figcaption>
+ <img src="figures/fig_05_route_closure.svg" alt="Вплив закриття S2-D3">
+ <figcaption><strong>Рис. 5.</strong> Закриття дешевого й активно використаного S2→D3 змушує модель перебудувати кілька потоки, а не просто замінити один маршрут.</figcaption>
 </figure>
 
 ---
 
-## 20. Чому closure змінює багато routes
+## 20. Чому замикання змінює багато маршрути
 
 Було:
 
@@ -638,7 +638,7 @@ Relative increase:
 S2\rightarrow D3=30.
 \]
 
-Після closure ці 30 units D3 треба отримати інакше.
+Після замикання ці 30 units D3 треба отримати інакше.
 
 S3 може більше віддати D3.
 
@@ -646,17 +646,17 @@ S3 може більше віддати D3.
 
 D4 потребує compensation від S2 або S1.
 
-У результаті запускається chain of reallocation.
+У результаті запускається chain reallocation.
 
 Це системний ефект.
 
-> **Route importance визначається не лише cost route, а його місцем у глобальній balance structure.**
+> **маршрут importance визначається не лише вартість маршрут, а його місцем у глобальній баланс структура.**
 
 ---
 
-## 21. Route criticality через cost impact
+## 21. маршрут criticality через вартість impact
 
-Можна визначити простий scenario indicator:
+Можна визначити простий сценарій indicator:
 
 \[
 Impact_{ij}=
@@ -671,15 +671,15 @@ Impact=55.
 
 Це не універсальна «критичність маршруту».
 
-Але в конкретній model:
+Але в конкретній модель:
 
-> closure цього route має cost penalty 55.
+> замикання цього маршрут має вартість penalty 55.
 
 Таке scenario-based definition значно чіткіше за слово «важливий».
 
 ---
 
-## 22. Scenario: increase cost S2→D3 by 4
+## 22. сценарій: increase вартість S2→D3 за 4
 
 Baseline:
 
@@ -687,55 +687,55 @@ Baseline:
 c_{23}=3.
 \]
 
-Scenario:
+сценарій:
 
 \[
 c_{23}=7.
 \]
 
-Model знаходить rerouting із total cost:
+модель знаходить rerouting із загальний вартість:
 
 \[
 570.
 \]
 
-У цьому dataset підвищення cost на 4 робить route настільки невигідним, що optimum фактично переходить до того ж structure, що й closure.
+У цьому dataset підвищення вартість на 4 робить маршрут настільки невигідним, що оптимум фактично переходить до того ж структура, що й замикання.
 
-Це цікавий threshold effect у linear optimization.
+Це цікавий поріг вплив у лінійна оптимізація.
 
-Route формально доступний.
+маршрут формально доступний.
 
-Але economic optimum перестає його використовувати.
+Але economic оптимум перестає його використовувати.
 
 ---
 
-## 23. Forbidden ≠ expensive
+## 23. заборонений ≠ expensive
 
-Forbidden route:
+заборонений маршрут:
 
 \[
 x_{ij}=0.
 \]
 
-Expensive route:
+Expensive маршрут:
 
 \[
 c_{ij}\uparrow.
 \]
 
-Це різні model mechanisms.
+Це різні модель mechanisms.
 
-Forbidden — hard constraint.
+заборонений — hard обмеження.
 
-Expensive — soft economic disincentive через objective.
+Expensive — soft economic disincentive через цільова функція.
 
-У певному scenario result може бути однаковим.
+У певному сценарій результат може бути однаковим.
 
-Але interpretation різна.
+Але інтерпретація різна.
 
 ---
 
-## 24. Scenario: all D4 costs +2
+## 24. сценарій: усі D4 costs +2
 
 Якщо:
 
@@ -743,21 +743,21 @@ Expensive — soft economic disincentive через objective.
 c_{i4}\rightarrow c_{i4}+2
 \]
 
-для всіх sources, baseline plan може залишитися тим самим.
+для всіх джерела, baseline план може залишитися тим самим.
 
 Чому?
 
-Relative ranking routes to D4 не змінилася.
+Relative ранжування маршрути до D4 не змінилася.
 
-Кожна unit demand D4 у будь-якому разі стала на 2 дорожча.
+Кожна одиниця потреба D4 у будь-якому разі стала на 2 дорожча.
 
-D4 demand:
+D4 потреба:
 
 \[
 35.
 \]
 
-Total cost increase:
+загальний вартість increase:
 
 \[
 2\cdot35=70.
@@ -769,39 +769,39 @@ Total cost increase:
 515+70=585.
 \]
 
-Plan той самий.
+план той самий.
 
-Objective змінився.
+цільова функція змінився.
 
 Це важлива distinction:
 
-> parameter change може змінити objective value, але не decision variables.
+> параметр зміна може змінити цільова функція значення, але не decision змінні.
 
 ---
 
-## 25. Scenario: shift 10 supply S1→S3
+## 25. сценарій: shift 10 постачання S1→S3
 
-Новий supply:
+Новий постачання:
 
 \[
 (25,50,50).
 \]
 
-Total still:
+загальний усе ще:
 
 \[
 125.
 \]
 
-New optimum cost:
+New оптимум вартість:
 
 \[
 520.
 \]
 
-Plan:
+план:
 
-|  | D1 | D2 | D3 | D4 |
+| | D1 | D2 | D3 | D4 |
 |---|---:|---:|---:|---:|
 | S1 | 25 | 0 | 0 | 0 |
 | S2 | 5 | 25 | 20 | 0 |
@@ -809,38 +809,38 @@ Plan:
 
 Це показує:
 
-> навіть при тому самому total supply distribution across sources matters.
+> навіть при тому самому загальний постачання розподіл через джерела має значення.
 
-Location/source structure впливає на optimum.
+Location/джерело структура впливає на оптимум.
 
 ---
 
-## 26. Scenario analysis як лабораторія структури
+## 26. сценарний аналіз як лабораторія структури
 
 Корисний набір:
 
-| Scenario | Change | Cost |
+| сценарій | зміна | вартість |
 |---|---|---:|
 | Baseline | none | 515 |
-| Close S2→D3 | hard closure | 570 |
-| Cost S2→D3 +4 | price shock | 570 |
-| D4 all +2 | destination-wide cost | 585 |
-| Supply shift | S1−10, S3+10 | 520 |
+| Close S2→D3 | hard замикання | 570 |
+| вартість S2→D3 +4 | price shock | 570 |
+| D4 усі +2 | destination-wide вартість | 585 |
+| постачання shift | S1−10, S3+10 | 520 |
 
 <figure>
-  <img src="figures/fig_06_scenario_costs.svg" alt="Порівняння вартостей сценаріїв">
-  <figcaption><strong>Рис. 6.</strong> Scenario comparison допомагає відокремити зміни plan structure від змін objective value.</figcaption>
+ <img src="figures/fig_06_scenario_costs.svg" alt="Порівняння вартостей сценаріїв">
+ <figcaption><strong>Рис. 6.</strong> сценарій comparison допомагає відокремити зміни план структура від змін цільова функція значення.</figcaption>
 </figure>
 
 ---
 
 ## 27. Heatmap: що вона повинна показувати
 
-Heatmap flows корисна, якщо читається як:
+Heatmap потоки корисна, якщо читається як:
 
-- де concentrated flow;
-- які routes zero;
-- як plan reroutes after scenario.
+- де concentrated потік;
+- які маршрути нуля;
+- як план reroutes після сценарій.
 
 Погана інтерпретація:
 
@@ -848,11 +848,11 @@ Heatmap flows корисна, якщо читається як:
 
 Краща:
 
-> baseline концентрує D3 на S2→D3 через low unit cost; після closure D3 переходить до S3, що каскадно змінює D4 flows.
+> baseline концентрує D3 на S2→D3 через низький одиниця вартість; після замикання D3 переходить до S3, що каскадно змінює D4 потоки.
 
 ---
 
-## 28. Assumption: linear route cost
+## 28. припущення: лінійний маршрут вартість
 
 Baseline:
 
@@ -860,15 +860,15 @@ Baseline:
 Cost_{ij}=c_{ij}x_{ij}.
 \]
 
-Тобто unit cost constant.
+Тобто одиниця вартість сталий.
 
-Але real system може мати:
+Але реальний система може мати:
 
 - volume discounts;
 - congestion;
-- fixed activation cost;
-- threshold;
-- capacity-dependent cost.
+- фіксований activation вартість;
+- поріг;
+- capacity-dependent вартість.
 
 Тоді:
 
@@ -876,15 +876,15 @@ Cost_{ij}=c_{ij}x_{ij}.
 Cost_{ij}=f_{ij}(x_{ij})
 \]
 
-може бути nonlinear.
+може бути нелінійний.
 
-Класична transportation LP стає недостатньою.
+Класична перевезення LP стає недостатньою.
 
 ---
 
-## 29. Assumption: unlimited route capacity
+## 29. припущення: unlimited маршрут спроможність
 
-Baseline route не має upper capacity.
+Baseline маршрут не має верхній спроможність.
 
 Формально:
 
@@ -892,9 +892,9 @@ Baseline route не має upper capacity.
 x_{ij}\ge0
 \]
 
-і тільки supply/demand обмежують flow.
+і тільки постачання/потреба обмежують потік.
 
-Але route може мати maximum:
+Але маршрут може мати максимум:
 
 \[
 x_{ij}\le u_{ij}.
@@ -902,15 +902,15 @@ x_{ij}\le u_{ij}.
 
 Це легко додати в LP.
 
-Але якщо capacity змінюється в часі, model structure ускладнюється.
+Але якщо спроможність змінюється в часі, модель структура ускладнюється.
 
 ---
 
-## 30. Assumption: one planning period
+## 30. припущення: один planning period
 
 Baseline не має time dimension.
 
-Усі supply і demand належать одному period.
+Усі постачання і потреба належать одному period.
 
 Якщо потрібно:
 
@@ -918,7 +918,7 @@ Baseline не має time dimension.
 - day 2;
 - day 3;
 
-потрібні variables:
+потрібні змінні:
 
 \[
 x_{ijt}.
@@ -929,29 +929,29 @@ x_{ijt}.
 - inventory;
 - carry-over;
 - time-dependent costs;
-- dynamic demand.
+- динамічний потреба.
 
-Це multi-period transport model.
+Це multi-period transport модель.
 
 ---
 
-## 31. Assumption: known supply and demand
+## 31. припущення: відомий постачання і потреба
 
-Supply:
+постачання:
 
 \[
 35,50,40.
 \]
 
-Demand:
+потреба:
 
 \[
 30,25,35,35.
 \]
 
-Baseline вважає їх exact.
+Baseline вважає їх точний.
 
-Якщо demand uncertain:
+Якщо потреба uncertain:
 
 \[
 b_j\sim distribution
@@ -965,21 +965,21 @@ b_j\in interval,
 
 можна перейти до:
 
-- scenario optimization;
-- stochastic programming;
-- robust optimization.
+- сценарій оптимізація;
+- стохастичний програмування;
+- robust оптимізація.
 
 ---
 
-## 32. Assumption: continuous flow
+## 32. припущення: неперервний потік
 
-Model дозволяє:
+модель дозволяє:
 
 \[
 x_{ij}=5.5.
 \]
 
-Якщо flow — неподільні units, потрібно:
+Якщо потік — неподільні units, потрібно:
 
 \[
 x_{ij}\in\mathbb Z.
@@ -989,7 +989,7 @@ x_{ij}\in\mathbb Z.
 
 Важливо:
 
-> mathematical convenience continuous variable повинна відповідати nature resource.
+> математичний convenience неперервний змінна повинна відповідати nature ресурс.
 
 ---
 
@@ -1001,54 +1001,54 @@ x_{ij}\in\mathbb Z.
 35\rightarrow36.
 \]
 
-Total demand:
+загальний потреба:
 
 \[
 126.
 \]
 
-Supply:
+постачання:
 
 \[
 125.
 \]
 
-Current validate_problem() відхиляє problem.
+поточний validate_problem() відхиляє problem.
 
 Це навмисно.
 
 Потрібно спочатку пояснити:
 
-> що означає 1 unit deficit?
+> що означає 1 одиниця deficit?
 
 Можливі extensions:
 
-- unmet demand variable;
+- unmet потреба змінна;
 - penalty;
 - priority;
-- emergency source.
+- emergency джерело.
 
 ---
 
-## 34. Зламай модель: unknown forbidden route
+## 34. Зламай модель: unknown заборонений маршрут
 
-Якщо input:
+Якщо вхідні дані:
 
 ~~~text
 ("S2","D99")
 ~~~
 
-а D99 не існує, current model відхиляє scenario.
+а D99 не існує, поточний модель відхиляє сценарій.
 
-Це важлива defensive behavior.
+Це важлива defensive поведінка.
 
 Інакше один backend міг би silently ignore typo, а інший — поводитися інакше.
 
-Model contract має бути consistent.
+модель contract має бути consistent.
 
 ---
 
-## 35. Зламай модель: negative cost
+## 35. Зламай модель: від’ємний вартість
 
 Baseline requires:
 
@@ -1056,33 +1056,33 @@ Baseline requires:
 c_{ij}\ge0.
 \]
 
-Negative cost міг би означати subsidy або reward, але в цій навчальній постановці такого semantics немає.
+від’ємний вартість міг би означати subsidy або reward, але в цій навчальній постановці такого semantics немає.
 
-Тому negative values rejected.
+Тому від’ємний значення rejected.
 
-Якщо предметна область реально допускає negative effective cost, model assumptions потрібно змінити явно.
+Якщо предметна область реально допускає від’ємний effective вартість, модель припущення потрібно змінити явно.
 
 ---
 
-## 36. Зламай модель: route dependency
+## 36. Зламай модель: маршрут залежність
 
-Baseline routes незалежні, крім supply/demand.
+Baseline маршрути незалежні, крім постачання/потреба.
 
-А якщо використання S1→D1 впливає на capacity S1→D2?
+А якщо використання S1→D1 впливає на спроможність S1→D2?
 
-Тоді потрібне shared capacity constraint:
+Тоді потрібне shared спроможність обмеження:
 
 \[
 x_{11}+x_{12}\le U.
 \]
 
-Або складніша network flow model.
+Або складніша мережевий потік модель.
 
 ---
 
-## 37. Зламай модель: risk instead of monetary cost
+## 37. Зламай модель: ризик натомість monetary вартість
 
-Objective можна змінити.
+цільова функція можна змінити.
 
 Наприклад:
 
@@ -1090,27 +1090,27 @@ Objective можна змінити.
 c_{ij}=risk_{ij}.
 \]
 
-Тоді model мінімізує aggregate risk proxy.
+Тоді модель мінімізує aggregate ризик proxy.
 
 Але дуже важливо:
 
-> число risk має бути meaningfully additive.
+> число ризик має бути meaningfully additive.
 
-Не кожен qualitative risk можна коректно просто підсумувати.
+Не кожен qualitative ризик можна коректно просто підсумувати.
 
 ---
 
-## 38. Multi-objective extension
+## 38. Multi-objective розширення
 
 Можливо хочемо мінімізувати:
 
-- cost;
+- вартість;
 - time;
-- risk.
+- ризик.
 
 Одночасно.
 
-Тоді один scalar objective може бути:
+Тоді один скалярний цільова функція може бути:
 
 \[
 Z=
@@ -1119,15 +1119,15 @@ w_tTime+
 w_rRisk.
 \]
 
-Але це вже повертає нас до проблеми weights.
+Але це вже повертає нас до проблеми ваги.
 
-Інший шлях — Pareto analysis.
+Інший шлях — Pareto аналіз.
 
-Transportation problem стає multi-objective.
+перевезення problem стає multi-objective.
 
 ---
 
-## 39. Python без страху: validation
+## 39. Python без страху: валідація
 
 ~~~python
 validate_problem(
@@ -1139,14 +1139,14 @@ validate_problem(
 
 Перевіряється:
 
-- non-empty matrix;
-- row labels match supply;
-- columns match demand;
+- non-empty матриця;
+- row labels match постачання;
+- columns match потреба;
 - non-negative costs;
-- non-negative supply/demand;
-- total balance.
+- non-negative постачання/потреба;
+- загальний баланс.
 
-Це input contract.
+Це вхідні дані contract.
 
 ---
 
@@ -1162,19 +1162,19 @@ result = solve_transport_pulp(
 )
 ~~~
 
-Output:
+результат:
 
-- status;
+- статус;
 - total_cost;
-- plan matrix.
+- план матриця.
 
 Не зупиняйтеся на total_cost.
 
-Потрібно читати plan.
+Потрібно читати план.
 
 ---
 
-## 41. Python без страху: SciPy verification
+## 41. Python без страху: SciPy перевірка
 
 ~~~python
 check = solve_transport_scipy(
@@ -1186,9 +1186,9 @@ check = solve_transport_scipy(
 assert abs(check.total_cost - result.total_cost) < tolerance
 ~~~
 
-Independent backend зменшує ризик implementation-specific error.
+незалежний backend зменшує ризик implementation-specific похибка.
 
-Але обидва використовують ту саму mathematical model.
+Але обидва використовують ту саму математичний модель.
 
 ---
 
@@ -1209,13 +1209,13 @@ assert checks["feasible"]
 - max_supply_residual;
 - max_demand_residual.
 
-Numerical solvers працюють із tolerances.
+чисельний solvers працюють із tolerances.
 
-Тому residual — корисний diagnostic.
+Тому нев’язка — корисний diagnostic.
 
 ---
 
-## 43. Total cost як independent recomputation
+## 43. загальний вартість як незалежний recomputation
 
 Не потрібно довіряти лише:
 
@@ -1231,62 +1231,62 @@ result.fun
 
 окремо.
 
-Current total_cost() робить саме це.
+поточний total_cost() робить саме це.
 
 Це pattern:
 
-> recompute important outputs independently when inexpensive.
+> recompute важливий результати independently коли inexpensive.
 
 ---
 
-## 44. Verification ≠ proof of real adequacy
+## 44. перевірка ≠ proof реальний адекватність
 
 Якщо:
 
 - PuLP = 515;
 - SciPy = 515;
-- balances exact;
+- баланси точний;
 
 ми можемо сказати:
 
-> computation is internally consistent.
+> обчислення є internally consistent.
 
 Не можемо автоматично сказати:
 
-> real logistics system cost is minimized by this plan.
+> реальний logistics система вартість є minimized за це план.
 
-Для цього потрібно validate assumptions and data.
+Для цього потрібно validate припущення і дані.
 
 ---
 
-## Поглиблення: transport problem як special case network flow
+## Поглиблення: transport problem як special приклад мережевий потік
 
-Класична transportation problem має дуже впізнавану structure:
+Класична перевезення problem має дуже впізнавану структура:
 
-- left-side nodes — sources;
+- left-side nodes — джерела;
 - right-side nodes — destinations;
-- arcs — allowed routes;
-- flow conservation — supply/demand balance;
-- arc cost — unit transportation cost.
+- arcs — allowed маршрути;
+- потік conservation — постачання/потреба баланс;
+- arc вартість — одиниця перевезення вартість.
 
-Тому її можна розглядати як special case min-cost flow.
+Тому її можна розглядати як special приклад min-cost потік.
 
 Це важливо методологічно.
 
-Якщо у вашому research object з’являються:
+Якщо у вашому дослідження об’єкт з’являються:
 
 - intermediate nodes;
 - transshipment;
-- route capacities;
+- маршрут capacities;
 - multi-stage movement;
 
-то таблиця «source × destination» може стати замалою.
+то таблиця «джерело × destination» може стати замалою.
 
-Тоді природний extension:
+Тоді природний розширення:
 
-> general network flow model.
+> general мережевий потік модель.
 
-Тобто T2.L2 — не ізольована формула, а gateway до ширшого класу flow models.
+Тобто T2.L2 — не ізольована формула, а gateway до ширшого класу потік моделі.
 
 ---
 
@@ -1298,87 +1298,87 @@ Current total_cost() робить саме це.
 m=3,\quad n=4.
 \]
 
-Для non-degenerate basic feasible transportation solution кількість positive basic variables часто не перевищує:
+Для non-degenerate basic допустимий перевезення розв’язок кількість додатний basic змінні часто не перевищує:
 
 \[
 m+n-1=6.
 \]
 
-У baseline positive flows саме шість.
+У baseline додатний потоки саме шість.
 
-Це допомагає зрозуміти, чому optimal plan часто sparse:
+Це допомагає зрозуміти, чому оптимальний план часто sparse:
 
-> не всі routes використовуються одночасно.
+> не всі маршрути використовуються одночасно.
 
-Zero flow не означає route invalid.
+нуля потік не означає маршрут invalid.
 
 Він означає:
 
-> у поточному optimum route не входить у chosen basic structure.
+> у поточному оптимум маршрут не входить у chosen basic структура.
 
-Це важлива різниця для interpretation.
+Це важлива різниця для інтерпретація.
 
 ---
 
-## Поглиблення: route cost і opportunity cost
+## Поглиблення: маршрут вартість і opportunity вартість
 
-Raw unit cost route:
+необроблений одиниця вартість маршрут:
 
 \[
 c_{ij}
 \]
 
-не показує повної системної цінності route.
+не показує повної системної цінності маршрут.
 
-Наприклад, S2→D3 має cost 3.
+Наприклад, S2→D3 має вартість 3.
 
-Але його closure підвищує total optimum на 55.
+Але його замикання підвищує загальний оптимум на 55.
 
-Це **global opportunity impact**.
+Це **глобальний opportunity impact**.
 
 Тому є два різні levels:
 
-### Local cost
+### локальний вартість
 
 \[
 c_{23}=3.
 \]
 
-### System impact
+### система impact
 
 \[
 Z^*_{closed}-Z^*_{base}=55.
 \]
 
-У network planning саме другий indicator часто краще відповідає на question:
+У мережа planning саме другий indicator часто краще відповідає на питання:
 
-> наскільки цей route важливий для current optimal structure?
+> наскільки цей маршрут важливий для поточний оптимальний структура?
 
 ---
 
-## Поглиблення: reduced-cost intuition
+## Поглиблення: reduced-cost інтуїція
 
-У linear programming unused route може мати zero flow тому, що введення невеликого flow через нього не покращує objective після необхідного rebalance.
+У лінійне програмування unused маршрут може мати нуля потік тому, що введення невеликого потік через нього не покращує цільова функція після необхідного rebalance.
 
-У simplex terminology це пов’язано з **reduced cost**.
+У simplex terminology це пов’язано з **reduced вартість**.
 
-На introductory рівні достатньо intuition:
+На introductory рівні достатньо інтуїція:
 
-> «дорогий» або «невикористаний» route оцінюється не ізольовано; важливо, що доведеться змінити в інших flows, щоб зберегти balances.
+> «дорогий» або «невикористаний» маршрут оцінюється не ізольовано; важливо, що доведеться змінити в інших потоки, щоб зберегти баланси.
 
-Наприклад, якщо додати flow на S1→D3, потрібно одночасно:
+Наприклад, якщо додати потік на S1→D3, потрібно одночасно:
 
-- зменшити інший flow до D3;
-- звільнити supply S1 або змінити інший route;
+- зменшити інший потік до D3;
+- звільнити постачання S1 або змінити інший маршрут;
 - зберегти всі row/column totals.
 
-Тому marginal impact route — network-wide.
+Тому граничний impact маршрут — network-wide.
 
 ---
 
 ## Поглиблення: dual potentials як прихована структура
 
-Transportation problem має natural dual interpretation.
+перевезення problem має natural dual інтерпретація.
 
 Можна уявити potentials:
 
@@ -1386,7 +1386,7 @@ Transportation problem має natural dual interpretation.
 u_i
 \]
 
-для sources і:
+для джерела і:
 
 \[
 v_j
@@ -1394,7 +1394,7 @@ v_j
 
 для destinations.
 
-Для active routes в optimum часто виконується relationship:
+Для активний маршрути в оптимум часто виконується relationship:
 
 \[
 u_i+v_j=c_{ij}
@@ -1402,29 +1402,29 @@ u_i+v_j=c_{ij}
 
 у відповідній dual formulation.
 
-Для inactive route inequality показує, чи route може покращити solution.
+Для inactive маршрут inequality показує, чи маршрут може покращити розв’язок.
 
-На цьому занятті не потрібно вручну будувати MODI method.
+На цьому занятті не потрібно вручну будувати MODI метод.
 
 Але важливо побачити idea:
 
-> **optimality можна пояснювати не лише primal flows, а й системою marginal values вузлів.**
+> **optimality можна пояснювати не лише primal потоки, а й системою граничний значення вузлів.**
 
-Це робить міст до duality T2.L1 і broader optimization theory.
+Це робить міст до duality T2.L1 і broader оптимізація theory.
 
 ---
 
-## Поглиблення: чому однакове підвищення всіх D4 costs не змінює plan
+## Поглиблення: чому однакове підвищення всіх D4 costs не змінює план
 
-Scenario:
+сценарій:
 
 \[
 c_{i4}'=c_{i4}+2
 \]
 
-для всіх sources.
+для всіх джерела.
 
-Будь-який feasible plan повинен доставити:
+Будь-який допустимий план повинен доставити:
 
 \[
 35
@@ -1432,35 +1432,35 @@ c_{i4}'=c_{i4}+2
 
 units у D4.
 
-Тому до total cost будь-якого feasible plan додається одна й та сама константа:
+Тому до загальний вартість будь-якого допустимий план додається одна й та сама константа:
 
 \[
 2\cdot35=70.
 \]
 
-Отже, relative comparison feasible plans не змінюється.
+Отже, relative comparison допустимий plans не змінюється.
 
-Саме тому optimum plan може залишитися тим самим.
+Саме тому оптимум план може залишитися тим самим.
 
-Це дуже сильний analytical result.
+Це дуже сильний аналітичний результат.
 
-Ми можемо передбачити його **до solver**.
+Ми можемо передбачити його **до розв’язувач**.
 
-Такі algebraic observations потрібно використовувати.
+Такі algebraic спостереження потрібно використовувати.
 
-Optimization experiment не повинен складатися лише з black-box runs.
+оптимізація експеримент не повинен складатися лише з black-box реалізації.
 
 ---
 
-## Поглиблення: closure versus capacity reduction
+## Поглиблення: замикання versus спроможність reduction
 
-Forbidden route:
+заборонений маршрут:
 
 \[
 x_{23}=0.
 \]
 
-Але real degradation може бути partial:
+Але реальний degradation може бути partial:
 
 \[
 x_{23}\le U.
@@ -1472,9 +1472,9 @@ x_{23}\le U.
 U=10.
 \]
 
-Тоді route не закритий, але capacity reduced.
+Тоді маршрут не закритий, але спроможність reduced.
 
-Це дає більш плавний sensitivity experiment:
+Це дає більш плавний чутливість експеримент:
 
 \[
 U\in\{30,20,10,0\}.
@@ -1486,15 +1486,15 @@ U\in\{30,20,10,0\}.
 Z^*(U)
 \]
 
-і побачити, коли route capacity стає limiting.
+і побачити, коли маршрут спроможність стає limiting.
 
-Це сильніший research design, ніж лише binary open/closed scenario.
+Це сильніший дослідження дизайн, ніж лише binary open/замкнений сценарій.
 
 ---
 
-## Поглиблення: capacity sensitivity
+## Поглиблення: спроможність чутливість
 
-Якщо route capacity \(U\) велика і baseline flow:
+Якщо маршрут спроможність \(U\) велика і baseline потік:
 
 \[
 x_{23}=30,
@@ -1506,7 +1506,7 @@ x_{23}=30,
 U\ge30
 \]
 
-не впливає на baseline optimum.
+не впливає на baseline оптимум.
 
 Коли:
 
@@ -1514,19 +1514,19 @@ U\ge30
 U<30,
 \]
 
-constraint becomes active.
+обмеження стає активний.
 
-Тоді model починає reroute.
+Тоді модель починає reroute.
 
 Це точний analogue plateau/breakpoint logic із T2.L1:
 
-> parameter впливає лише після того, як стає active restriction.
+> параметр впливає лише після того, як стає активний restriction.
 
-Такі structural parallels між lessons важливі.
+Такі структурний parallels між lessons важливі.
 
 ---
 
-## Поглиблення: imbalance як model design choice
+## Поглиблення: imbalance як модель дизайн choice
 
 Якщо:
 
@@ -1540,25 +1540,25 @@ constraint becomes active.
 
 ### Dummy destination
 
-Якщо supply > demand, dummy destination може означати:
+Якщо постачання > потреба, dummy destination може означати:
 
-- unused stock;
+- unused запас;
 - storage;
 - reserve.
 
-Потрібно визначити cost.
+Потрібно визначити вартість.
 
-### Dummy source
+### Dummy джерело
 
-Якщо demand > supply, dummy source може означати:
+Якщо потреба > постачання, dummy джерело може означати:
 
-- unmet demand;
+- unmet потреба;
 - emergency acquisition;
 - shortage penalty.
 
-Знову потрібен cost/penalty.
+Знову потрібен вартість/penalty.
 
-Якщо поставити dummy cost = 0 без explanation, model може трактувати shortage як безкоштовне.
+Якщо поставити dummy вартість = 0 без explanation, модель може трактувати shortage як безкоштовне.
 
 Отже:
 
@@ -1566,21 +1566,21 @@ constraint becomes active.
 
 ---
 
-## Поглиблення: penalty for unmet demand
+## Поглиблення: penalty для unmet потреба
 
-Замість strict equality можна ввести shortage variable:
+Замість strict equality можна ввести shortage змінна:
 
 \[
 s_j\ge0.
 \]
 
-Demand equation:
+потреба рівняння:
 
 \[
 \sum_i x_{ij}+s_j=b_j.
 \]
 
-Objective:
+цільова функція:
 
 \[
 Z=
@@ -1595,9 +1595,9 @@ Z=
 p_j
 \]
 
-— penalty unmet demand.
+— penalty unmet потреба.
 
-Тоді model вирішує:
+Тоді модель вирішує:
 
 - коли краще expensive transport;
 - коли допустимий shortage.
@@ -1606,15 +1606,15 @@ p_j
 
 ---
 
-## Поглиблення: fixed route activation cost
+## Поглиблення: фіксований маршрут activation вартість
 
-Classical model:
+Classical модель:
 
 \[
 Cost_{ij}=c_{ij}x_{ij}.
 \]
 
-А якщо запуск route потребує fixed cost:
+А якщо запуск маршрут потребує фіксований вартість:
 
 \[
 f_{ij}
@@ -1622,19 +1622,19 @@ f_{ij}
 
 незалежно від quantity?
 
-Тоді потрібна binary variable:
+Тоді потрібна binary змінна:
 
 \[
 y_{ij}\in\{0,1\},
 \]
 
-і constraint:
+і обмеження:
 
 \[
 x_{ij}\le U_{ij}y_{ij}.
 \]
 
-Objective:
+цільова функція:
 
 \[
 Z=
@@ -1643,13 +1643,13 @@ Z=
 \sum f_{ij}y_{ij}.
 \]
 
-Це вже mixed-integer programming.
+Це вже mixed-integer програмування.
 
 Тут добре видно межу classical LP.
 
 ---
 
-## Поглиблення: multi-period extension
+## Поглиблення: multi-period розширення
 
 Для кількох періодів:
 
@@ -1657,7 +1657,7 @@ Z=
 x_{ijt}
 \]
 
-— flow route \(i\rightarrow j\) у time \(t\).
+— потік маршрут \(i\rightarrow j\) у time \(t\).
 
 Можна додати inventory:
 
@@ -1665,7 +1665,7 @@ x_{ijt}
 I_{it}.
 \]
 
-Balance:
+баланс:
 
 \[
 I_{i,t-1}+Supply_{it}
@@ -1679,13 +1679,13 @@ I_{it}.
 
 - коли переміщувати;
 - скільки зберігати;
-- чи переносити stock у наступний period.
+- чи переносити запас у наступний period.
 
-Це значно ближче до dynamic planning.
+Це значно ближче до динамічний planning.
 
 ---
 
-## Поглиблення: uncertainty supply і demand
+## Поглиблення: невизначеність постачання і потреба
 
 Baseline:
 
@@ -1693,125 +1693,125 @@ Baseline:
 a_i,\ b_j
 \]
 
-fixed.
+фіксований.
 
-Але в research problem вони можуть бути forecasts.
+Але в дослідження problem вони можуть бути forecasts.
 
 Тоді можна:
 
-### Scenario set
+### сценарій набір
 
-- low demand;
+- низький потреба;
 - nominal;
-- high demand.
+- високий потреба.
 
 ### Monte Carlo
 
-Sample demand values.
+вибірка потреба значення.
 
-### Robust optimization
+### Robust оптимізація
 
-Require feasibility across interval.
+Require допустимість через інтервал.
 
-### Chance constraints
+### Chance обмеження
 
-Allow small probability shortage.
+Allow малий ймовірність shortage.
 
-Вибір extension залежить від research question.
+Вибір розширення залежить від дослідницьке питання.
 
-Не потрібно автоматично робити stochastic model.
+Не потрібно автоматично робити стохастичний модель.
 
 ---
 
-## Поглиблення: independent verification as model culture
+## Поглиблення: незалежний перевірка як модель culture
 
 <figure>
-  <img src="figures/fig_07_verification_layers.svg" alt="Три рівні перевірки транспортної моделі">
-  <figcaption><strong>Рис. 7.</strong> PuLP/HiGHS agreement підтверджує computation, balance checks підтверджують feasibility, але лише domain validation може підтвердити, що модель відповідає реальному процесу.</figcaption>
+ <img src="figures/fig_07_verification_layers.svg" alt="Три рівні перевірки транспортної моделі">
+ <figcaption><strong>Рис. 7.</strong> PuLP/HiGHS agreement підтверджує обчислення, баланс перевірки підтверджують допустимість, але лише область валідація може підтвердити, що модель відповідає реальному процесу.</figcaption>
 </figure>
 
 Корисна послідовність:
 
-1. **Solver status** — algorithm completed.
-2. **Balance verification** — plan mathematically feasible.
-3. **Independent recomputation** — objective correct.
-4. **Second backend** — implementation consistency.
-5. **Scenario analysis** — structural response plausible.
-6. **Domain review** — assumptions meaningful.
+1. **розв’язувач статус** — алгоритм completed.
+2. **баланс перевірка** — план mathematically допустимий.
+3. **незалежний recomputation** — цільова функція коректний.
+4. **другий backend** — реалізація consistency.
+5. **сценарний аналіз** — структурний відгук правдоподібний.
+6. **область review** — припущення meaningful.
 
-Кожен layer відповідає на інше question.
+Кожен шар відповідає на інше питання.
 
 ---
 
-## Поглиблення: model audit T2.L2
+## Поглиблення: модель аудит T2.L2
 
-### Structure audit
+### структура аудит
 
-- sources complete?
+- джерела complete?
 - destinations complete?
-- routes correctly represented?
-- forbidden routes valid?
+- маршрути correctly represented?
+- заборонений маршрути valid?
 
-### Data audit
+### дані аудит
 
-- unit costs comparable?
-- same period/currency/unit?
-- supply/demand provenance known?
+- одиниця costs comparable?
+- той самий period/currency/одиниця?
+- постачання/потреба походження відомий?
 
-### Numerical audit
+### чисельний аудит
 
-- finite inputs?
-- balance correct?
-- solver optimal?
-- residuals small?
+- скінченний вхідні дані?
+- баланс коректний?
+- розв’язувач оптимальний?
+- residuals малий?
 
-### Scenario audit
+### сценарій аудит
 
-- closure scenarios meaningful?
-- cost shocks plausible?
-- supply shifts justified?
+- замикання scenarios meaningful?
+- вартість shocks правдоподібний?
+- постачання shifts justified?
 
-### Interpretation audit
+### інтерпретація аудит
 
-- local route cost not confused with system importance?
-- solver agreement not called validation?
+- локальний маршрут вартість не confused з система importance?
+- розв’язувач agreement не called валідація?
 - limitations stated?
 
 ---
 
-## Поглиблення: reproducibility package
+## Поглиблення: відтворюваність пакет
 
 Збережіть:
 
 - costs.csv;
 - supply.csv;
 - demand.csv;
-- forbidden routes;
-- solver versions;
-- baseline plan;
-- objective;
+- заборонений маршрути;
+- розв’язувач версії;
+- baseline план;
+- цільова функція;
 - residuals;
-- alternative backend result;
-- scenario definitions;
-- scenario results;
+- альтернатива backend результат;
+- сценарій definitions;
+- сценарій результати;
 - figures;
-- commit hash;
-- interpretation.
+- коміт хеш;
+- інтерпретація.
 
-Тоді інший researcher може відтворити не лише number 515, а весь experiment.
+Тоді інший researcher може відтворити не лише number 515, а весь експеримент.
 
 ---
 
-## Поглиблення: де classical transportation model закінчується
+## Поглиблення: де classical перевезення модель закінчується
 
 <figure>
-  <img src="figures/fig_08_model_limits.svg" alt="Межі classical transportation LP">
-  <figcaption><strong>Рис. 8.</strong> Якщо routes мають capacities, demand uncertain, рішення multi-period або costs nonlinear/fixed, classical balanced transportation LP стає лише baseline, а не фінальною моделлю.</figcaption>
+ <img src="figures/fig_08_model_limits.svg" alt="Межі classical перевезення LP">
+ <figcaption><strong>Рис. 8.</strong> Якщо маршрути мають capacities, потреба uncertain, рішення multi-period або costs нелінійний/фіксований, classical balanced перевезення LP стає лише baseline, а не фінальною моделлю.</figcaption>
 </figure>
 
 Головний principle:
 
-> **розширюйте model лише тоді, коли конкретне припущення baseline суперечить research object.**
+> **розширюйте модель лише тоді, коли конкретне припущення baseline суперечить дослідження об’єкт.**
 
 Складність має бути мотивована.
 
@@ -1827,84 +1827,84 @@ Z=515
 
 і питає:
 
-> «Чому не просто використовувати найдешевші routes?»
+> «Чому не просто використовувати найдешевші маршрути?»
 
-Аналітик показує plan і каже:
+Аналітик показує план і каже:
 
-> «Бо кожен cheap route конкурує за limited supply і destination demand. Якщо закрити S2→D3, total cost піднімається до 570, і network перебудовує одразу кілька flows. Якщо ж однаково збільшити всі D4 costs на 2, plan не зміниться, а objective зросте рівно на 70».
+> «Бо кожен cheap маршрут конкурує за limited постачання і destination потреба. Якщо закрити S2→D3, загальний вартість піднімається до 570, і мережа перебудовує одразу кілька потоки. Якщо ж однаково збільшити всі D4 costs на 2, план не зміниться, а цільова функція зросте рівно на 70».
 
 Тепер table перетворилася на explanation.
 
 Не:
 
-> «solver намалював matrix».
+> «розв’язувач намалював матриця».
 
 А:
 
-> **«ось які balances формують network, ось який route є системно важливим, ось яка зміна впливає на plan, а яка — лише на total cost».**
+> **«ось які баланси формують мережа, ось який маршрут є системно важливим, ось яка зміна впливає на план, а яка — лише на загальний вартість».**
 
-Саме це робить transportation model дослідницьким інструментом.
+Саме це робить перевезення модель дослідницьким інструментом.
 
 ---
 
-## 45. Data provenance
+## 45. дані походження
 
 Для costs потрібно знати:
 
-- unit;
+- одиниця;
 - period;
-- source;
+- джерело;
 - date;
-- whether constant;
+- whether сталий;
 - whether estimated;
-- uncertainty.
+- невизначеність.
 
-Для supply/demand:
+Для постачання/потреба:
 
 - measurement;
 - forecast;
 - normative target;
-- synthetic assumption.
+- синтетичний припущення.
 
-Без provenance numbers легко сприймаються як абсолютні.
+Без походження числа легко сприймаються як абсолютні.
 
 ---
 
-## 46. Scenario design
+## 46. сценарій дизайн
 
-Сильний experiment:
+Сильний експеримент:
 
-| Run | Change | Question |
+| запуск | зміна | питання |
 |---|---|---|
-| Baseline | none | control |
-| Closure | S2→D3 forbidden | structural dependence |
+| Baseline | none | контрольний |
+| замикання | S2→D3 заборонений | структурний dependence |
 | Price shock | c23 +4 | economic rerouting |
-| Destination shock | all D4 +2 | plan vs objective stability |
-| Supply redistribution | S1−10, S3+10 | source-location sensitivity |
+| Destination shock | усі D4 +2 | план порівняно з цільова функція стійкість |
+| постачання redistribution | S1−10, S3+10 | source-location чутливість |
 
-Перед solve запишіть prediction.
+Перед розв’язати запишіть прогноз.
 
 ---
 
-## 47. Route sensitivity vs network sensitivity
+## 47. маршрут чутливість порівняно з мережа чутливість
 
-Route sensitivity:
+маршрут чутливість:
 
-> як зміна одного route впливає на result?
+> як зміна одного маршрут впливає на результат?
 
-Network sensitivity:
+мережа чутливість:
 
-> як зміна supply/demand distribution перебудовує plan загалом?
+> як зміна постачання/потреба розподіл перебудовує план загалом?
 
-Це різні analysis levels.
+Це різні аналіз levels.
 
 У дисертації варто чітко вказувати, який рівень досліджується.
 
 ---
 
-## 48. Opportunity cost інтуїтивно
+## 48. Opportunity вартість інтуїтивно
 
-Чому closure S2→D3 коштує +55?
+Чому замикання S2→D3 коштує +55?
 
 Не тому, що:
 
@@ -1914,35 +1914,35 @@ Network sensitivity:
 
 і все.
 
-Rerouting changes multiple flows.
+Rerouting зміни множинний потоки.
 
-Втрата одного route створює opportunity cost у всій network.
+Втрата одного маршрут створює opportunity вартість у всій мережа.
 
 Це сильний приклад:
 
-> local change → global reoptimization.
+> локальний зміна → глобальний reoptimization.
 
 ---
 
-## 49. Alternative optimum
+## 49. альтернатива оптимум
 
-У деяких LP може існувати кілька optimal plans із однаковим cost.
+У деяких LP може існувати кілька оптимальний plans із однаковим вартість.
 
-Тоді solver повертає один.
+Тоді розв’язувач повертає один.
 
 Це не означає, що він є єдиним.
 
-У research question може бути важливо дослідити:
+У дослідницьке питання може бути важливо дослідити:
 
 - uniqueness;
-- alternative optima;
-- secondary criteria.
+- альтернатива optima;
+- secondary критерії.
 
-Baseline tests фіксують expected plan, але загальна методологія повинна пам’ятати про possibility multiple optima.
+Baseline тести фіксують очікуваний план, але загальна методологія повинна пам’ятати про possibility множинний optima.
 
 ---
 
-## 50. Allowed conclusion
+## 50. Allowed висновок
 
 Слабкий:
 
@@ -1950,30 +1950,30 @@ Baseline tests фіксують expected plan, але загальна мето�
 
 Кращий:
 
-> За baseline supply, demand і unit-cost matrix balanced transportation model має optimum cost 515 із планом, що повністю виконує всі balances.
+> За baseline постачання, потреба і unit-cost матриця balanced перевезення модель має оптимум вартість 515 із планом, що повністю виконує всі баланси.
 
 Ще сильніший:
 
-> Заборона route S2→D3 збільшує optimal cost до 570, тобто +55 або приблизно +10.7%; це свідчить про високу економічну значущість цього route в межах baseline model.
+> Заборона маршрут S2→D3 збільшує оптимальний вартість до 570, тобто +55 або приблизно +10.7%; це свідчить про високу економічну значущість цього маршрут в межах baseline модель.
 
 І обов’язково:
 
-> model не враховує route capacities, stochastic demand, delays та multi-period effects.
+> модель не враховує маршрут capacities, стохастичний потреба, delays та multi-period effects.
 
 ---
 
-## 51. Research Transfer
+## 51. дослідження Transfer
 
 Поставте питання:
 
-> де у моєму research object є структура «sources → flows → demands»?
+> де у моєму дослідження об’єкт є структура «джерела → потоки → потреби»?
 
 Можливі абстрактні аналоги:
 
-- information sources → processing nodes;
+- information джерела → processing nodes;
 - computing resources → tasks;
 - training resources → groups;
-- data streams → analytic consumers.
+- дані streams → analytic consumers.
 
 Шаблон:
 
@@ -2013,28 +2013,28 @@ Allowed conclusion:
 
 ---
 
-## 52. Не копіюйте military logistics буквально
+## 52. Не копіюйте військовий logistics буквально
 
-Research transfer не означає:
+дослідження transfer не означає:
 
 > взяти S1, S2, D1 і перейменувати.
 
-Потрібна structural analogy.
+Потрібна структурний analogy.
 
-Наприклад, у information system:
+Наприклад, у information система:
 
-- source = data source;
+- джерело = дані джерело;
 - destination = processing service;
-- flow = requests;
-- cost = latency or resource cost.
+- потік = requests;
+- вартість = latency або ресурс вартість.
 
-Але тільки якщо balance equations мають реальний зміст.
+Але тільки якщо баланс рівняння мають реальний зміст.
 
 ---
 
 ## Поглиблення: що саме означає «стійкий транспортний план»
 
-Baseline optimal plan має cost:
+Baseline оптимальний план має вартість:
 
 \[
 515.
@@ -2042,57 +2042,57 @@ Baseline optimal plan має cost:
 
 Але стійкість може означати різні речі.
 
-### Cost stability
+### вартість стійкість
 
-Невеликі зміни inputs мало змінюють total cost.
+Невеликі зміни вхідні дані мало змінюють загальний вартість.
 
-### Structural stability
+### структурний стійкість
 
-Positive routes залишаються приблизно тими самими.
+додатний маршрути залишаються приблизно тими самими.
 
-### Feasibility stability
+### допустимість стійкість
 
-Plan або його близька модифікація залишається feasible при змінах supply/demand.
+план або його близька модифікація залишається допустимий при змінах постачання/потреба.
 
-### Decision stability
+### Decision стійкість
 
-Основний practical conclusion не змінюється.
+Основний практичний висновок не змінюється.
 
 Ці meanings не слід змішувати.
 
-Наприклад, scenario all D4 costs +2:
+Наприклад, сценарій усі D4 costs +2:
 
-- plan structure stable;
-- objective value changes by 70.
+- план структура стійкий;
+- цільова функція значення зміни за 70.
 
 Отже:
 
-> structure stable, cost not identical.
+> структура стійкий, вартість не identical.
 
-Closure S2→D3:
+замикання S2→D3:
 
-- structure changes;
-- cost changes by 55.
+- структура зміни;
+- вартість зміни за 55.
 
-Це інший type sensitivity.
+Це інший type чутливість.
 
 ---
 
-## Поглиблення: fixed plan versus reoptimization
+## Поглиблення: фіксований план versus reoptimization
 
-Scenario analysis у course переважно робить:
+сценарний аналіз у курс переважно робить:
 
-> change inputs → solve again.
+> зміна вхідні дані → розв’язати again.
 
 Це **reoptimization**.
 
-Але decision support часто потребує іншого experiment.
+Але decision support часто потребує іншого експеримент.
 
-Припустимо baseline plan уже прийнятий.
+Припустимо baseline план уже прийнятий.
 
-Тоді scenario:
+Тоді сценарій:
 
-> route cost змінився після того, як plan зафіксовано.
+> маршрут вартість змінився після того, як план зафіксовано.
 
 Можна оцінити:
 
@@ -2115,31 +2115,31 @@ Regret=
 Cost(x^{base};scenario)-Z^*_{scenario}
 \]
 
-показує price of sticking to baseline plan.
+показує price sticking до baseline план.
 
-Це інше question, ніж:
+Це інше питання, ніж:
 
-> який новий optimum?
+> який новий оптимум?
 
 ---
 
 ## Поглиблення: синтетичний військовий приклад без чутливих даних
 
-Sources можна трактувати як три умовні пункти забезпечення навчального полігону.
+джерела можна трактувати як три умовні пункти забезпечення навчального полігону.
 
 Destinations — чотири умовні навчальні зони.
 
-Costs — synthetic generalized transportation scores.
+Costs — синтетичний generalized перевезення scores.
 
-Тоді model показує:
+Тоді модель показує:
 
-- як balance rules формують flows;
-- як closure route змінює global plan;
-- як supply redistribution змінює optimum.
+- як баланс rules формують потоки;
+- як замикання маршрут змінює глобальний план;
+- як постачання redistribution змінює оптимум.
 
-Вона **не** описує реальні маршрути, запаси, дислокацію чи operational logistics.
+Вона **не** описує реальні маршрути, запаси, дислокацію чи операційний logistics.
 
-Навчальний value полягає у transferable pattern:
+Навчальний значення полягає у transferable pattern:
 
 \[
 sources
@@ -2159,21 +2159,21 @@ reoptimization.
 
 Перед statement:
 
-> «route X критичний»
+> «маршрут X критичний»
 
 запитайте:
 
 1. Критичний у якому sense?
 2. За яким baseline?
-3. Що саме змінюємо — availability, cost чи capacity?
+3. Що саме змінюємо — availability, вартість чи спроможність?
 4. Який metric impact?
 5. Чи reoptimization allowed?
-6. Чи є alternative routes?
-7. Чи conclusion stable до supply/demand changes?
+6. Чи є альтернатива маршрути?
+7. Чи висновок стійкий до постачання/потреба зміни?
 
 Тоді замість fuzzy label отримаємо measurable statement:
 
-> за baseline closure S2→D3 збільшує optimal cost з 515 до 570.
+> за baseline замикання S2→D3 збільшує оптимальний вартість з 515 до 570.
 
 Це значно сильніше і перевірюваніше.
 
@@ -2181,63 +2181,63 @@ reoptimization.
 
 ## 53. Мінісловник T2.L2
 
-### Supply
+### постачання
 
-Доступний обсяг source.
+Доступний обсяг джерело.
 
-### Demand
+### потреба
 
 Потрібний обсяг destination.
 
-### Flow
+### потік
 
-Decision variable \(x_{ij}\).
+Decision змінна \(x_{ij}\).
 
-### Unit cost
+### одиниця вартість
 
-Cost per one flow unit.
+вартість per один потік одиниця.
 
 ### Balanced problem
 
-Total supply = total demand.
+загальний постачання = загальний потреба.
 
-### Feasible plan
+### допустимий план
 
-Plan, що виконує balances і non-negativity.
+план, що виконує баланси і non-negativity.
 
-### Forbidden route
+### заборонений маршрут
 
-Hard constraint \(x_{ij}=0\).
+Hard обмеження \(x_{ij}=0\).
 
-### Optimal plan
+### оптимальний план
 
-Feasible plan із minimum total cost.
+допустимий план із minimum загальний вартість.
 
-### Residual
+### нев’язка
 
-Numerical deviation from exact balance.
+чисельний deviation від точний баланс.
 
-### Independent verification
+### незалежний перевірка
 
-Перевірка іншою implementation/backend.
+Перевірка іншою реалізація/backend.
 
-### Scenario analysis
+### сценарний аналіз
 
-Reoptimization після зміни input conditions.
+Reoptimization після зміни вхідні дані conditions.
 
 ---
 
 ## 54. Мініексперимент
 
-### Question 1
+### питання 1
 
-Baseline total supply?
+Baseline загальний постачання?
 
 \[
 125.
 \]
 
-Demand?
+потреба?
 
 \[
 125.
@@ -2245,69 +2245,69 @@ Demand?
 
 Balanced.
 
-### Question 2
+### питання 2
 
-Closure S2→D3?
+замикання S2→D3?
 
 \[
 515\rightarrow570.
 \]
 
-### Question 3
+### питання 3
 
-Якщо всі D4 costs +2, чому plan може не змінитися?
+Якщо всі D4 costs +2, чому план може не змінитися?
 
-Бо relative costs routes to D4 не змінилися, а D4 demand fixed.
+Бо relative costs маршрути до D4 не змінилися, а D4 потреба фіксований.
 
-### Question 4
+### питання 4
 
-Чи доводить PuLP=HiGHS model adequacy?
+Чи доводить PuLP=HiGHS модель адекватність?
 
 Ні.
 
 ---
 
-## Поглиблення: від optimal flow до operational plan
+## Поглиблення: від оптимальний потік до операційний план
 
-Transportation model повертає flow quantities.
+перевезення модель повертає потік quantities.
 
-Але між mathematical plan і practical implementation є окремий layer.
+Але між математичний план і практичний реалізація є окремий шар.
 
-Наприклад, model може сказати:
+Наприклад, модель може сказати:
 
 \[
 x_{34}=35.
 \]
 
-Щоб перетворити це на practical plan, потрібно ще знати:
+Щоб перетворити це на практичний план, потрібно ще знати:
 
-- чи route physically available;
+- чи маршрут physically доступний;
 - чи є time windows;
-- чи достатня capacity;
+- чи достатня спроможність;
 - чи потрібні integer units;
-- чи є sequence constraints;
+- чи є sequence обмеження;
 - чи існують shared resources;
-- чи може cost змінитися during execution.
+- чи може вартість змінитися during execution.
 
 Тому корисно розділяти:
 
-### Planning model
+### Planning модель
 
-Шукає optimal flow за abstract constraints.
+Шукає оптимальний потік за abstract обмеження.
 
-### Execution model
+### Execution модель
 
-Додає calendar, capacity, availability та operational rules.
+Додає calendar, спроможність, availability та операційний rules.
 
 ### Monitoring
 
-Порівнює actual flow із planned.
+Порівнює actual потік із planned.
 
 ### Replanning
 
-За відхиленням inputs запускає new optimization.
+За відхиленням вхідні дані запускає new оптимізація.
 
-Це утворює closed modeling cycle:
+Це утворює замкнений modeling cycle:
 
 \[
 plan
@@ -2323,7 +2323,7 @@ reoptimize.
 
 Саме тут транспортна задача перестає бути textbook exercise і стає prototype decision-support workflow.
 
-У course ми зупиняємося на planning model, бо вона прозора й дозволяє чітко перевірити mathematical logic. Але Research Transfer повинен одразу позначити, які execution constraints відсутні.
+У курс ми зупиняємося на planning модель, бо вона прозора й дозволяє чітко перевірити математичний logic. Але дослідження Transfer повинен одразу позначити, які execution обмеження відсутні.
 
 ---
 
@@ -2331,27 +2331,27 @@ reoptimize.
 
 ### П’ять ідей
 
-1. Transportation model — система global balances, а не набір незалежних cheapest routes.
-2. Feasibility потрібно перевіряти незалежно від solver.
-3. Forbidden route і expensive route — різні model mechanisms.
-4. Local route change може викликати global rerouting.
-5. Independent solver agreement підтверджує computation, але не real-world adequacy.
+1. перевезення модель — система глобальний баланси, а не набір незалежних cheapest маршрути.
+2. допустимість потрібно перевіряти незалежно від розв’язувач.
+3. заборонений маршрут і expensive маршрут — різні модель mechanisms.
+4. локальний маршрут зміна може викликати глобальний rerouting.
+5. незалежний розв’язувач agreement підтверджує обчислення, але не реальний адекватність.
 
 ### Три формули
 
-Objective:
+цільова функція:
 
 \[
 Z=\sum_i\sum_jc_{ij}x_{ij}\rightarrow\min.
 \]
 
-Supply balance:
+постачання баланс:
 
 \[
 \sum_jx_{ij}=a_i.
 \]
 
-Demand balance:
+потреба баланс:
 
 \[
 \sum_ix_{ij}=b_j.
@@ -2359,35 +2359,35 @@ Demand balance:
 
 ### Дві помилки
 
-- «весь flow по cheapest routes»;
-- «optimal plan = реальний план без перевірки assumptions».
+- «весь потік по cheapest маршрути»;
+- «оптимальний план = реальний план без перевірки припущення».
 
 ### Одне питання
 
-> Який route або balance constraint у моїй model найбільше впливає на optimum і як я це покажу scenario analysis?
+> Який маршрут або баланс обмеження у моїй модель найбільше впливає на оптимум і як я це покажу сценарний аналіз?
 
 ### Наступний крок
 
-Відтворіть baseline 515, закрийте S2→D3 і поясніть не лише +55, а всю зміну flow structure.
+Відтворіть baseline 515, закрийте S2→D3 і поясніть не лише +55, а всю зміну потік структура.
 
 ---
 
 ## 56. Фінальна думка
 
-Транспортна задача добре показує, чому optimization — системна дисципліна.
+Транспортна задача добре показує, чому оптимізація — системна дисципліна.
 
-Окремий route може бути дешевим.
+Окремий маршрут може бути дешевим.
 
-Окремий source — великим.
+Окремий джерело — великим.
 
 Окремий destination — важливим.
 
-Але optimum виникає лише тоді, коли **всі balances виконуються одночасно**.
+Але оптимум виникає лише тоді, коли **всі баланси виконуються одночасно**.
 
-Тому головний результат T2.L2 — не matrix із числами.
+Тому головний результат T2.L2 — не матриця із числами.
 
 Це навичка бачити:
 
-> source, demand, flow, constraint, global trade-off, scenario і limitation
+> джерело, потреба, потік, обмеження, глобальний trade-off, сценарій і limitation
 
 як єдину математичну систему.

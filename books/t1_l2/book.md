@@ -1,4 +1,4 @@
-# MathModelingIT MiniBook T1.L2
+# MathModelingIT · Мінікнига T1.L2
 
 ## Класифікація математичних моделей
 
@@ -10,24 +10,24 @@
 
 ## 0. Паспорт книги
 
-**Код заняття:** T1.L2  
-**Тема:** класифікація математичних моделей  
-**Рівень:** вступний → середній  
-**Орієнтовний час читання:** 65–80 хвилин  
+**Код заняття:** T1.L2 
+**Тема:** класифікація математичних моделей 
+**Рівень:** вступний → середній 
+**Орієнтовний час читання:** 65–80 хвилин 
 **Попередні знання:** базова алгебра, графік функції, середнє та стандартне відхилення.
 
 Після цієї книги ви повинні вміти:
 
 - класифікувати модель за кількома ознаками одночасно;
-- пояснювати різницю між deterministic і stochastic model;
-- відрізняти trajectory від distribution;
-- пояснювати роль state equation;
-- відрізняти continuous-time і discrete-time description;
+- пояснювати різницю між детермінований і стохастичний модель;
+- відрізняти траєкторія від розподіл;
+- пояснювати роль стан рівняння;
+- відрізняти continuous-time і discrete-time опис;
 - розуміти Monte Carlo як експеримент над моделлю, а не «прогноз майбутнього»;
-- використовувати seed для reproducibility;
-- розрізняти mean effect і variability effect;
+- використовувати початкове значення генератора для відтворюваність;
+- розрізняти середнє вплив і мінливість вплив;
 - пояснювати, чому один об’єкт може мати кілька математичних моделей;
-- формулювати allowed conclusion відповідно до класу моделі.
+- формулювати allowed висновок відповідно до класу моделі.
 
 ---
 
@@ -69,17 +69,17 @@ t^*=\frac{120}{6}=20.
 
 Чи потрібна нам одна прогнозована лінія?
 
-Чи одна simulated trajectory?
+Чи одна змодельований траєкторія?
 
-Чи distribution можливих моментів вичерпання?
+Чи розподіл можливих моментів вичерпання?
 
 Усі ці питання стосуються одного об’єкта — запасу ресурсу.
 
 Але відповіді вимагають різних **класів моделей**.
 
 <figure>
-  <img src="figures/fig_01_one_object_many_models.svg" alt="Один об’єкт у кількох класах моделей">
-  <figcaption><strong>Рис. 1.</strong> Один і той самий ресурс можна описати детерміновано, стохастично, як discrete state process або як Monte Carlo experiment. Клас моделі визначає тип відповіді.</figcaption>
+ <img src="figures/fig_01_one_object_many_models.svg" alt="Один об’єкт у кількох класах моделей">
+ <figcaption><strong>Рис. 1.</strong> Один і той самий ресурс можна описати детерміновано, стохастично, як дискретний стан процес або як Monte Carlo експеримент. Клас моделі визначає тип відповіді.</figcaption>
 </figure>
 
 ---
@@ -88,23 +88,23 @@ t^*=\frac{120}{6}=20.
 
 Коли ми називаємо модель:
 
-> deterministic,
+> детермінований,
 
 ми фактично стверджуємо:
 
-> за однакових inputs model повертає той самий output.
+> за однакових вхідні дані модель повертає той самий результат.
 
 Коли називаємо:
 
-> stochastic,
+> стохастичний,
 
 додаємо:
 
-> хоча inputs parameters однакові, realization може змінюватися через random component.
+> хоча вхідні дані параметри однакові, реалізація може змінюватися через випадковий component.
 
 Коли говоримо:
 
-> dynamic,
+> динамічний,
 
 стверджуємо:
 
@@ -112,11 +112,11 @@ t^*=\frac{120}{6}=20.
 
 Коли:
 
-> discrete,
+> дискретний,
 
-час або state update відбувається кроками.
+час або стан update відбувається кроками.
 
-Отже, classification — це короткий спосіб описати **структуру assumptions**.
+Отже, класифікація — це короткий спосіб описати **структуру припущення**.
 
 ---
 
@@ -126,33 +126,33 @@ t^*=\frac{120}{6}=20.
 
 Наприклад:
 
-> stochastic, dynamic, discrete, simulation model.
+> стохастичний, динамічний, дискретний, моделювання модель.
 
 Ключові axes:
 
-### Deterministic / stochastic
+### детермінований / стохастичний
 
 Чи є randomness?
 
-### Static / dynamic
+### статичний / динамічний
 
-Чи змінюється state?
+Чи змінюється стан?
 
-### Continuous / discrete
+### неперервний / дискретний
 
-Час і state evolution описуються неперервно чи кроками?
+Час і стан evolution описуються неперервно чи кроками?
 
-### Linear / nonlinear
+### лінійний / нелінійний
 
-Relations між variables linear чи nonlinear?
+Relations між змінні лінійний чи нелінійний?
 
-### Analytical / simulation
+### аналітичний / моделювання
 
-Можна отримати closed-form result чи потрібне computational imitation?
+Можна отримати у замкненій формі результат чи потрібне computational imitation?
 
-### Descriptive / optimization
+### Descriptive / оптимізація
 
-Модель описує system чи шукає best decision?
+Модель описує система чи шукає найкращий decision?
 
 Ці axes не взаємовиключні.
 
@@ -169,8 +169,8 @@ S(t)=\max(0,S_0-vt).
 Де:
 
 - \(S(t)\) — залишок;
-- \(S_0\) — initial stock;
-- \(v\) — constant consumption rate;
+- \(S_0\) — початковий запас;
+- \(v\) — сталий витрата rate;
 - \(t\) — time.
 
 Для:
@@ -209,7 +209,7 @@ t=20
 S(20)=0.
 \]
 
-Результат — **одна trajectory**.
+Результат — **одна траєкторія**.
 
 ---
 
@@ -239,21 +239,21 @@ t^*=20.
 v=0,
 \]
 
-model повертає:
+модель повертає:
 
 \[
 t^*=\infty.
 \]
 
-Це корисний boundary case.
+Це корисний межа приклад.
 
 Він змушує запитати:
 
-> чи має нескінченний час предметний сенс, чи це лише математичне позначення «за таких assumptions ресурс не витрачається»?
+> чи має нескінченний час предметний сенс, чи це лише математичне позначення «за таких припущення ресурс не витрачається»?
 
 ---
 
-## 6. Continuous model
+## 6. неперервний модель
 
 Формула:
 
@@ -261,7 +261,7 @@ t^*=\infty.
 S(t)=S_0-vt
 \]
 
-визначена для будь-якого real \(t\ge0\).
+визначена для будь-якого реальний \(t\ge0\).
 
 Наприклад:
 
@@ -269,20 +269,20 @@ S(t)=S_0-vt
 t=3.7.
 \]
 
-Це continuous-time description.
+Це continuous-time опис.
 
 Але реальний процес може вимірюватися лише раз на добу, зміну, цикл або iteration.
 
-Тоді зручніше discrete model.
+Тоді зручніше дискретний модель.
 
 <figure>
-  <img src="figures/fig_02_continuous_vs_discrete.svg" alt="Continuous і discrete representation">
-  <figcaption><strong>Рис. 2.</strong> Continuous model описує state у будь-який момент часу; discrete model оновлює state кроками. Вони можуть описувати той самий process на різних рівнях деталізації.</figcaption>
+ <img src="figures/fig_02_continuous_vs_discrete.svg" alt="неперервний і дискретний representation">
+ <figcaption><strong>Рис. 2.</strong> неперервний модель описує стан у будь-який момент часу; дискретний модель оновлює стан кроками. Вони можуть описувати той самий процес на різних рівнях деталізації.</figcaption>
 </figure>
 
 ---
 
-## 7. Discrete dynamic model
+## 7. дискретний динамічний модель
 
 Запис:
 
@@ -292,10 +292,10 @@ S_{k+1}=\max(0,S_k-C_k).
 
 Де:
 
-- \(S_k\) — stock на кроці \(k\);
-- \(C_k\) — consumption на цьому кроці.
+- \(S_k\) — запас на кроці \(k\);
+- \(C_k\) — витрата на цьому кроці.
 
-Manual control case:
+ручний контрольний приклад:
 
 \[
 S_0=20.
@@ -321,29 +321,29 @@ S_2=8,
 S_3=0.
 \]
 
-Trajectory:
+траєкторія:
 
 \[
 [20,15,8,0].
 \]
 
-Це control case у tests.
+Це контрольний приклад у тести.
 
 ---
 
-## 8. Чому dynamic state важливий
+## 8. Чому динамічний стан важливий
 
-У dynamic model наступний result залежить від попереднього:
+У динамічний модель наступний результат залежить від попереднього:
 
 \[
 S_{k+1}=f(S_k,C_k).
 \]
 
-System має memory через state.
+система має memory через стан.
 
-Якщо на ранньому кроці consumption було великим, усі наступні states стартують із меншого stock.
+Якщо на ранньому кроці витрата було великим, усі наступні states стартують із меншого запас.
 
-Це відрізняє dynamic process від static formula, де output обчислюється без accumulation history.
+Це відрізняє динамічний процес від статичний формула, де результат обчислюється без accumulation history.
 
 ---
 
@@ -365,15 +365,15 @@ Baseline:
 \sigma=1.5.
 \]
 
-Оскільки negative consumption предметно беззмістовне, lesson model робить:
+Оскільки від’ємна витрата предметно беззмістовне, заняття модель робить:
 
 \[
 C_k=\max(0,C_k).
 \]
 
-Це вже stochastic model.
+Це вже стохастичний модель.
 
-Однакові parameters не гарантують однакову sequence.
+Однакові параметри не гарантують однакову sequence.
 
 ---
 
@@ -385,18 +385,18 @@ C_k=\max(0,C_k).
 
 не означає:
 
-> кожне consumption = 6.
+> кожне витрата = 6.
 
-Це center distribution.
+Це center розподіл.
 
-Окремі draws можуть бути:
+Окремі вибірки можуть бути:
 
 - 4.7;
 - 6.3;
 - 7.5;
 - 5.1.
 
-У long sample average tends toward model mean.
+У середнє у великій вибірці наближається до модель середнє.
 
 ---
 
@@ -416,7 +416,7 @@ Standard deviation:
 \sigma=0.5
 \]
 
-values tightly cluster around 6.
+значення щільно групуються навколо 6.
 
 При:
 
@@ -424,42 +424,42 @@ values tightly cluster around 6.
 \sigma=3.0
 \]
 
-spread much wider.
+розкид значно ширший.
 
-Mean може залишатися 6.
+середнє може залишатися 6.
 
 Отже:
 
-> зміна mean і зміна variability — різні model interventions.
+> зміна середнє і зміна мінливість — різні модель interventions.
 
 <figure>
-  <img src="figures/fig_03_mean_vs_variance.svg" alt="Вплив mean і standard deviation">
-  <figcaption><strong>Рис. 3.</strong> Зміна \(\mu\) пересуває центр distribution, а зміна \(\sigma\) змінює ширину. Ці два ефекти не треба змішувати.</figcaption>
+ <img src="figures/fig_03_mean_vs_variance.svg" alt="Вплив середнє і standard deviation">
+ <figcaption><strong>Рис. 3.</strong> Зміна \(\mu\) пересуває центр розподіл, а зміна \(\sigma\) змінює ширину. Ці два ефекти не треба змішувати.</figcaption>
 </figure>
 
 ---
 
-## 12. Одна stochastic trajectory
+## 12. Одна стохастичний траєкторія
 
-Для одного seed генерується конкретна sequence:
+Для одного початкове значення генератора генерується конкретна sequence:
 
 \[
 C_1,C_2,\ldots,C_{21}.
 \]
 
-Після цього отримуємо one stock path.
+Після цього отримуємо один запас шлях.
 
-Інший seed → інша sequence → інша path.
+Інший початкове значення генератора → інша sequence → інша шлях.
 
-Але це не означає, що одна path «правильна», а інша «помилкова».
+Але це не означає, що одна шлях «правильна», а інша «помилкова».
 
-Обидві — realizations тієї самої stochastic model.
+Обидві — realizations тієї самої стохастичний модель.
 
 ---
 
-## 13. Seed і reproducibility
+## 13. початкове значення генератора і відтворюваність
 
-Pseudo-random generator deterministic відносно seed.
+Pseudo-random generator детермінований відносно початкове значення генератора.
 
 Тому:
 
@@ -468,56 +468,56 @@ a = stochastic_consumption(..., seed=123)
 b = stochastic_consumption(..., seed=123)
 ~~~
 
-дають однаковий result.
+дають однаковий результат.
 
-Це перевіряється unit test.
+Це перевіряється одиниця перевірка.
 
-Seed потрібний, щоб:
+початкове значення генератора потрібний, щоб:
 
-- повторити experiment;
-- debug code;
+- повторити експеримент;
+- debug код;
 - порівняти scenarios;
-- відтворити figure.
+- відтворити рисунок.
 
-Seed не робить stochastic model більш «реалістичною».
+початкове значення генератора не робить стохастичний модель більш «реалістичною».
 
 ---
 
 ## 14. Дві траєкторії — два можливі світи
 
-У experiment використовуються:
+У експеримент використовуються:
 
-- seed=7;
-- seed=21.
+- початкове значення генератора=7;
+- початкове значення генератора=21.
 
-Дві stochastic paths відрізняються.
+Дві стохастичний шляхи відрізняються.
 
-Deterministic path — одна straight-like baseline trajectory.
+детермінований шлях — одна straight-like baseline траєкторія.
 
 <figure>
-  <img src="figures/fig_04_paths.svg" alt="Детермінована і дві стохастичні траєкторії">
-  <figcaption><strong>Рис. 4.</strong> Deterministic model дає одну траєкторію. Stochastic model при різних seeds дає різні realizations, хоча \(\mu,\sigma,S_0\) однакові.</figcaption>
+ <img src="figures/fig_04_paths.svg" alt="Детермінована і дві стохастичні траєкторії">
+ <figcaption><strong>Рис. 4.</strong> детермінований модель дає одну траєкторію. стохастичний модель при різних seeds дає різні realizations, хоча \(\mu,\sigma,S_0\) однакові.</figcaption>
 </figure>
 
 Найважливіше питання:
 
-> чи достатньо однієї random realization, щоб оцінити risk?
+> чи достатньо однієї випадковий реалізація, щоб оцінити ризик?
 
 Ні.
 
 ---
 
-## 15. Від stochastic path до Monte Carlo
+## 15. Від стохастичний шлях до Monte Carlo
 
-Monte Carlo повторює stochastic model багато разів.
+Monte Carlo повторює стохастичний модель багато разів.
 
-Для run \(r\):
+Для запуск \(r\):
 
 \[
 T^{(r)}
 \]
 
-— exhaustion step.
+— крок вичерпання ресурсу.
 
 Виконуємо:
 
@@ -531,30 +531,30 @@ Baseline:
 N=3000.
 \]
 
-У кожному run:
+У кожному запуск:
 
-1. генерується нова random consumption sequence;
-2. будується state path;
-3. фіксується first zero;
-4. якщо zero не досягнутий до horizon — записується missing/NaN.
+1. генерується нова випадкова послідовність витрат;
+2. будується стан шлях;
+3. фіксується перший нуля;
+4. якщо нуля не досягнутий до горизонт — записується missing/NaN.
 
 ---
 
-## 16. Monte Carlo не змінює model assumptions
+## 16. Monte Carlo не змінює модель припущення
 
 Важливий principle.
 
-Якщо consumption distribution неправильно обрана, 3000 runs не виправлять її.
+Якщо витрата розподіл неправильно обрана, 3000 реалізації не виправлять її.
 
-Якщо independence assumption неправильна, 1 000 000 runs не зроблять result адекватним.
+Якщо independence припущення неправильна, 1 000 000 реалізації не зроблять результат адекватним.
 
-Monte Carlo лише точніше досліджує **наслідки заданої stochastic model**.
+Monte Carlo лише точніше досліджує **наслідки заданої стохастичний модель**.
 
-> **More simulations ≠ better model.**
+> **Більше симуляцій ≠ краща модель.**
 
 ---
 
-## 17. Probability exhausted
+## 17. ймовірність exhausted
 
 Після simulations:
 
@@ -566,11 +566,11 @@ Monte Carlo лише точніше досліджує **наслідки зад
 
 Для baseline з:
 
-- horizon=21;
+- горизонт=21;
 - N=3000;
-- seed=2026
+- початкове значення генератора=2026
 
-lesson дає приблизно:
+заняття дає приблизно:
 
 \[
 \hat p\approx0.80.
@@ -578,7 +578,7 @@ lesson дає приблизно:
 
 Коректне формулювання:
 
-> за заданої stochastic consumption model приблизно 80% simulated realizations вичерпують stock до кінця 21-го кроку.
+> за заданої стохастичний витрата модель приблизно 80% змодельований realizations вичерпують запас до кінця 21-го кроку.
 
 Некоректне:
 
@@ -586,19 +586,19 @@ lesson дає приблизно:
 
 ---
 
-## 18. Conditional mean exhaustion step
+## 18. Умовне середнє крок вичерпання ресурсу
 
-Function summarize_exhaustion() бере лише finite exhaustion times.
+функція summarize_exhaustion() бере лише скінченний вичерпання ресурсу times.
 
-Тобто mean:
+Тобто середнє:
 
 \[
 \bar T_{finite}
 \]
 
-є conditional mean:
+є Умовне середнє:
 
-> середній exhaustion step **серед тих runs, де exhaustion відбулося в horizon**.
+> середній крок вичерпання ресурсу **серед тих реалізації, де вичерпання ресурсу відбулося в горизонт**.
 
 Baseline близько:
 
@@ -606,145 +606,145 @@ Baseline близько:
 20.1.
 \]
 
-Це не unconditional expected lifetime.
+Це не unconditional очікуваний lifetime.
 
 Це важливе distinction.
 
 ---
 
-## 19. Censoring intuition
+## 19. Censoring інтуїція
 
-Runs без exhaustion до horizon записані NaN.
+реалізації без вичерпання ресурсу до горизонт записані NaN.
 
 Вони містять інформацію:
 
 > \(T>21\).
 
-Якщо просто викинути їх і дивитися лише mean finite times, можна недооцінити uncertainty.
+Якщо просто викинути їх і дивитися лише середнє скінченний times, можна недооцінити невизначеність.
 
-Тому probability_exhausted і conditional timing потрібно показувати разом.
+Тому probability_exhausted і умовний timing потрібно показувати разом.
 
-У складніших задачах це пов’язано з censoring / survival analysis.
+У складніших задачах це пов’язано з censoring / survival аналіз.
 
 ---
 
 ## 20. Histogram
 
-Histogram exhaustion steps показує distribution finite outcomes.
+Histogram крок вичерпання ресурсуs показує розподіл скінченний результати.
 
 <figure>
-  <img src="figures/fig_05_monte_carlo_histogram.svg" alt="Monte Carlo distribution exhaustion step">
-  <figcaption><strong>Рис. 5.</strong> Monte Carlo замінює одну прогнозовану точку distribution можливих outcomes. Histogram треба читати разом із часткою runs без exhaustion у horizon.</figcaption>
+ <img src="figures/fig_05_monte_carlo_histogram.svg" alt="Monte Carlo розподіл крок вичерпання ресурсу">
+ <figcaption><strong>Рис. 5.</strong> Monte Carlo замінює одну прогнозовану точку розподіл можливих результати. Histogram треба читати разом із часткою реалізації без вичерпання ресурсу у горизонт.</figcaption>
 </figure>
 
 Вісь X:
 
-> exhaustion step.
+> крок вичерпання ресурсу.
 
 Вісь Y:
 
-> number of simulated runs.
+> number змодельованих реалізацій.
 
-Histogram не є probability law real system.
+Histogram не є закон розподілу реальний система.
 
-Він є empirical distribution generated by model.
+Він є empirical розподіл згенерований за модель.
 
 ---
 
 ## 21. Класифікація чотирьох representations
 
-### Model 1
+### модель 1
 
 \[
 S(t)=S_0-vt.
 \]
 
-- deterministic;
-- dynamic;
-- continuous;
-- linear until clipping;
-- analytical.
+- детермінований;
+- динамічний;
+- неперервний;
+- лінійний until обрізання;
+- аналітичний.
 
-### Model 2
+### модель 2
 
 \[
 C_k\sim N(\mu,\sigma^2).
 \]
 
-- stochastic;
-- discrete draws;
+- стохастичний;
+- дискретний вибірки;
 - probabilistic component.
 
-### Model 3
+### модель 3
 
 \[
 S_{k+1}=\max(0,S_k-C_k).
 \]
 
-- dynamic;
-- discrete;
-- nonlinear because of clipping;
-- stochastic if \(C_k\) stochastic.
+- динамічний;
+- дискретний;
+- нелінійний оскільки обрізання;
+- стохастичний якщо \(C_k\) стохастичний.
 
-### Model 4
+### модель 4
 
-3000 repeated runs.
+3000 repeated реалізації.
 
-- simulation / Monte Carlo;
-- stochastic;
-- produces distribution-level summary.
+- моделювання / Monte Carlo;
+- стохастичний;
+- produces distribution-level підсумок.
 
 ---
 
-## 22. Один об’єкт — різні research questions
+## 22. Один об’єкт — різні дослідницьке питанняs
 
-Deterministic question:
+детермінований питання:
 
-> коли resource reaches zero за constant rate?
+> коли ресурс досягає нуля за сталий rate?
 
-Stochastic single-run question:
+стохастичний single-run питання:
 
-> як може виглядати одна realization?
+> як може виглядати одна реалізація?
 
-Monte Carlo question:
+Monte Carlo питання:
 
-> який distribution exhaustion outcomes under assumed uncertainty?
+> який розподіл вичерпання ресурсу результати за assumed невизначеність?
 
-Dynamic question:
+динамічний питання:
 
-> як state evolves step by step?
+> як стан змінюється крок за кроком?
 
-Клас model повинен відповідати question.
+Клас модель повинен відповідати питання.
 
 Не навпаки.
 
 ---
 
-## 23. Static vs dynamic
+## 23. статичний порівняно з динамічний
 
-Static model може описувати relation:
+статичний модель може описувати relation:
 
 \[
 Y=f(X)
 \]
 
-без explicit time evolution.
+без явний time evolution.
 
-Dynamic model:
+динамічний модель:
 
 \[
 S_{k+1}=f(S_k,\ldots).
 \]
 
-У нашому lesson central object naturally dynamic.
+У нашому заняття центральний об’єкт naturally динамічний.
 
-Але classification axis still useful: не кожне research question потребує trajectory.
+Але класифікація axis усе ще корисний: не кожне дослідницьке питання потребує траєкторія.
 
 ---
 
-## 24. Analytical vs simulation
+## 24. аналітичний порівняно з моделювання
 
-Deterministic exhaustion:
+детермінований вичерпання ресурсу:
 
 \[
 t^*=\frac{S_0}{v}
@@ -752,25 +752,25 @@ t^*=\frac{S_0}{v}
 
 отримуємо analytically.
 
-Monte Carlo probability closed-form тут не використовується.
+Monte Carlo ймовірність у замкненій формі тут не використовується.
 
-Ми estimate через repeated simulation.
+Ми оцінка через repeated моделювання.
 
-Це не означає, що simulation «гірша».
+Це не означає, що моделювання «гірша».
 
-Вона відповідає на інший class question.
+Вона відповідає на інший class питання.
 
 ---
 
-## 25. Linear vs nonlinear detail
+## 25. лінійний порівняно з нелінійний detail
 
-До clipping:
+До обрізання:
 
 \[
 S(t)=S_0-vt
 \]
 
-linear in time.
+лінійний у time.
 
 Але:
 
@@ -778,23 +778,23 @@ linear in time.
 \max(0,S_0-vt)
 \]
 
-piecewise linear.
+piecewise лінійний.
 
-Discrete:
+дискретний:
 
 \[
 S_{k+1}=\max(0,S_k-C_k)
 \]
 
-також має nonlinear clipping.
+також має нелінійний обрізання.
 
-Classification іноді залежить від того, яку частину model structure аналізуємо.
+класифікація іноді залежить від того, яку частину модель структура аналізуємо.
 
 ---
 
-## 26. Descriptive vs optimization
+## 26. Descriptive порівняно з оптимізація
 
-T1.L2 models описують process.
+T1.L2 моделі описують процес.
 
 Вони не шукають:
 
@@ -808,17 +808,17 @@ T1.L2 models описують process.
 \min C(x).
 \]
 
-Отже, це descriptive/simulation models.
+Отже, це descriptive/моделювання моделі.
 
 Якщо додати decision:
 
-> який запас \(S_0\) мінімізує cost при risk constraint,
+> який запас \(S_0\) мінімізує вартість при ризик обмеження,
 
-model перетворюється на optimization.
+модель перетворюється на оптимізація.
 
 ---
 
-## 27. Scenario: low variance
+## 27. сценарій: низький variance
 
 Залишимо:
 
@@ -832,54 +832,54 @@ model перетворюється на optimization.
 \sigma=0.5.
 \]
 
-Expected direction:
+очікуваний напрям:
 
-- paths closer together;
-- exhaustion distribution narrower;
-- deterministic trajectory becomes stronger central reference.
+- шляхи closer together;
+- вичерпання ресурсу розподіл narrower;
+- детермінований траєкторія стає сильніший central reference.
 
-Не обов’язково every simulation exhausts exactly at 20.
+Не обов’язково every моделювання exhausts точно at 20.
 
 ---
 
-## 28. Scenario: high variance
+## 28. сценарій: високий variance
 
 \[
 \sigma=3.
 \]
 
-Expected:
+очікуваний:
 
-- wider trajectory spread;
-- more early and late exhaustion outcomes;
-- greater uncertainty.
+- wider траєкторія spread;
+- більше early і late вичерпання ресурсу результати;
+- greater невизначеність.
 
-Mean consumption assumption remains same.
+середнє витрата припущення remains той самий.
 
-Це experiment on **variability**, not mean.
+Це експеримент на **мінливість**, не середнє.
 
 <figure>
-  <img src="figures/fig_06_variance_scenarios.svg" alt="Сценарії low і high variance">
-  <figcaption><strong>Рис. 6.</strong> За однакового mean higher \(\sigma\) розширює family можливих trajectories та outcomes. Зміна uncertainty не тотожна зміні expected level.</figcaption>
+ <img src="figures/fig_06_variance_scenarios.svg" alt="Сценарії низький і високий variance">
+ <figcaption><strong>Рис. 6.</strong> За однакового середнє higher \(\sigma\) розширює family можливих trajectories та результати. Зміна невизначеність не тотожна зміні очікуваний рівень.</figcaption>
 </figure>
 
 ---
 
-## 29. Scenario: higher mean
+## 29. сценарій: higher середнє
 
 \[
 \mu=7.
 \]
 
-Deterministic analogue:
+детермінований analogue:
 
 \[
 t^*=\frac{120}{7}\approx17.14.
 \]
 
-Тобто center process shifts toward earlier depletion.
+Тобто center процес shifts toward earlier вичерпання.
 
-Це інший effect, ніж:
+Це інший вплив, ніж:
 
 \[
 \sigma\uparrow.
@@ -887,35 +887,35 @@ t^*=\frac{120}{7}\approx17.14.
 
 ---
 
-## 30. Mean effect vs variance effect
+## 30. середнє вплив порівняно з variance вплив
 
-Це одне з головних conceptual distinctions lesson.
+Це одне з головних conceptual distinctions заняття.
 
-### Mean increases
+### середнє зростає
 
-Distribution generally shifts.
+розподіл generally shifts.
 
-### Variance increases
+### Variance зростає
 
-Distribution generally spreads.
+розподіл generally spreads.
 
-У nonlinear/clipped process ці effects можуть взаємодіяти.
+У нелінійний/clipped процес ці effects можуть взаємодіяти.
 
-Тому не варто робити висновок лише за \(\mu\) і \(\sigma\) inputs — потрібен computational experiment.
+Тому не варто робити висновок лише за \(\mu\) і \(\sigma\) вхідні дані — потрібен computational експеримент.
 
 ---
 
-## 31. Effect clipping at zero consumption
+## 31. вплив обрізання at нуля витрата
 
-Normal distribution theoretically permits negative draws.
+Normal розподіл theoretically permits від’ємний вибірки.
 
-Model applies:
+модель applies:
 
 \[
 C_k=\max(0,C_k).
 \]
 
-Це changes distribution.
+Це зміни розподіл.
 
 При baseline:
 
@@ -923,17 +923,17 @@ C_k=\max(0,C_k).
 \mu=6,\sigma=1.5
 \]
 
-negative probability small.
+від’ємний ймовірність малий.
 
-При large \(\sigma\) clipping matters more.
+При великий \(\sigma\) обрізання має значення більше.
 
-Отже, stochastic model is not exactly normal consumption after transformation.
+Отже, стохастичний модель є не точно normal витрата після transformation.
 
-Це хороший “break” point.
+Це хороший “злам” точка.
 
 ---
 
-## 32. Зламай модель: very high variance
+## 32. Зламай модель: very високий variance
 
 Припустимо:
 
@@ -941,15 +941,15 @@ negative probability small.
 \sigma=10.
 \]
 
-Тоді raw normal draws often negative.
+Тоді необроблений normal вибірки часто від’ємний.
 
-Clipping creates pile-up at zero.
+обрізання creates pile-up at нуля.
 
-Distribution becomes strongly distorted.
+розподіл стає strongly distorted.
 
-Question:
+питання:
 
-> чи нормальний distribution із clipping still plausible domain model?
+> чи нормальний розподіл із обрізання усе ще правдоподібний область модель?
 
 Можливо, краще:
 
@@ -961,11 +961,11 @@ Question:
 
 ## 33. Зламай модель: independence
 
-Current draws independent.
+поточний вибірки незалежний.
 
-Але real consumption може мати autocorrelation.
+Але реальний витрата може мати autocorrelation.
 
-High consumption today → high tomorrow.
+високий витрата today → високий tomorrow.
 
 Тоді:
 
@@ -973,17 +973,17 @@ High consumption today → high tomorrow.
 Corr(C_k,C_{k+1})>0.
 \]
 
-Independent model може underestimate clusters of heavy use.
+незалежний модель може underestimate clusters heavy use.
 
 Modernization:
 
-- autoregressive process;
+- autoregressive процес;
 - regime-switching;
 - block sampling.
 
 ---
 
-## 34. Зламай модель: constant parameters
+## 34. Зламай модель: сталий параметри
 
 Baseline assumes:
 
@@ -991,9 +991,9 @@ Baseline assumes:
 \mu,\sigma
 \]
 
-constant over horizon.
+сталий над горизонт.
 
-Але process may change by phase.
+Але процес може зміна за phase.
 
 Наприклад:
 
@@ -1005,13 +1005,13 @@ constant over horizon.
 \end{cases}
 \]
 
-Тоді stationary stochastic model inadequate.
+Тоді stationary стохастичний модель inadequate.
 
 ---
 
-## 35. Зламай модель: no replenishment
+## 35. Зламай модель: немає replenishment
 
-Current state equation:
+поточний стан рівняння:
 
 \[
 S_{k+1}=\max(0,S_k-C_k).
@@ -1024,27 +1024,27 @@ S_{k+1}=
 \max(0,S_k+Q_k-C_k).
 \]
 
-Це вже інша dynamic model.
+Це вже інша динамічний модель.
 
 ---
 
-## 36. Зламай модель: horizon too short
+## 36. Зламай модель: горизонт too short
 
-Якщо horizon=10, більшість runs не exhausted.
+Якщо горизонт=10, більшість реалізації не exhausted.
 
-Probability exhausted low.
+ймовірність exhausted низький.
 
-Finite mean may describe only rare early cases.
+скінченний середнє може describe лише rare early приклади.
 
-Тоді conditional summary easily misread.
+Тоді умовний підсумок easily misread.
 
-Horizon is part of experiment design.
+горизонт є part дизайн експерименту.
 
 ---
 
-## 37. Verification: deterministic control
+## 37. перевірка: детермінований контрольний
 
-Test:
+перевірка:
 
 \[
 S(0)=120,
@@ -1058,63 +1058,63 @@ S(5)=90,
 S(20)=0.
 \]
 
-Такі simple controls protect mathematical implementation.
+Такі simple controls protect математичний реалізація.
 
 ---
 
-## 38. Verification: manual discrete path
+## 38. перевірка: ручний дискретний шлях
 
-Input:
+вхідні дані:
 
 \[
 20;\quad [5,7,10].
 \]
 
-Expected:
+очікуваний:
 
 \[
 [20,15,8,0].
 \]
 
-Якщо code returns other path, problem is not stochastic complexity.
+Якщо код returns other шлях, problem є не стохастичний complexity.
 
-Problem is core state update.
+Problem є core стан update.
 
 ---
 
-## 39. Verification: reproducibility
+## 39. перевірка: відтворюваність
 
-Same seed must produce same draws.
+той самий початкове значення генератора має produce той самий вибірки.
 
-Test uses:
+перевірка uses:
 
 \[
 seed=123.
 \]
 
-This is regression evidence for RNG workflow.
+Це regression свідчення для RNG workflow.
 
 ---
 
-## 40. Verification: range
+## 40. перевірка: range
 
-Stock:
+запас:
 
 \[
 S_k\ge0.
 \]
 
-Probability:
+ймовірність:
 
 \[
 0\le\hat p\le1.
 \]
 
-These are invariant checks.
+ці є invariant перевірки.
 
 ---
 
-## 41. Python без страху: deterministic
+## 41. Python без страху: детермінований
 
 ~~~python
 t = np.arange(0, 22)
@@ -1133,7 +1133,7 @@ S(t)=\max(0,120-6t).
 
 ---
 
-## 42. Python без страху: stochastic path
+## 42. Python без страху: стохастичний шлях
 
 ~~~python
 params = ResourceModelParams(
@@ -1149,7 +1149,7 @@ stock, consumption = stochastic_stock_path(
 )
 ~~~
 
-Змінюючи seed, ми змінюємо realization, не model parameters.
+Змінюючи початкове значення генератора, ми змінюємо реалізація, не модель параметри.
 
 ---
 
@@ -1165,19 +1165,19 @@ times = monte_carlo_exhaustion_times(
 summary = summarize_exhaustion(times)
 ~~~
 
-Summary:
+підсумок:
 
 - probability_exhausted;
-- mean finite exhaustion step;
-- median finite exhaustion step.
+- середнє скінченний крок вичерпання ресурсу;
+- медіана скінченний крок вичерпання ресурсу.
 
 ---
 
-## 44. Predict before Run
+## 44. прогнозувати до запуск
 
-Перед experiment запишіть.
+Перед експеримент запишіть.
 
-### Prediction A
+### прогноз 
 
 Що буде при:
 
@@ -1185,7 +1185,7 @@ Summary:
 \sigma=0.5?
 \]
 
-### Prediction B
+### прогноз B
 
 Що буде при:
 
@@ -1193,7 +1193,7 @@ Summary:
 \sigma=3?
 \]
 
-### Prediction C
+### прогноз C
 
 Що буде при:
 
@@ -1201,80 +1201,80 @@ Summary:
 \mu=7?
 \]
 
-Не потрібно вгадувати exact numbers.
+Не потрібно вгадувати точний числа.
 
 Потрібно прогнозувати:
 
 - shift;
 - spread;
-- probability direction.
+- ймовірність напрям.
 
 ---
 
-## 45. Research interpretation
+## 45. дослідження інтерпретація
 
-Strong conclusion:
+Strong висновок:
 
-> За deterministic assumptions \(S_0=120,v=6\) depletion time equals 20. Under stochastic independent clipped-normal consumption with \(\mu=6,\sigma=1.5\), horizon 21, 3000 runs and seed 2026, model estimates depletion within horizon at about 0.80. This is a property of the specified simulation assumptions, not a direct empirical probability of a real process.
+> За детермінований припущення \(S_0=120,v=6\) вичерпання time equals 20. за стохастичний незалежний clipped-normal витрата з \(\mu=6,\sigma=1.5\), горизонт 21, 3000 реалізації і початкове значення генератора 2026, модель оцінки вичерпання within горизонт at приблизно 0.80. Це property specified моделювання припущення, не direct empirical ймовірність реальний процес.
 
-Це conclusion with scope.
+Це висновок з scope.
 
 ---
 
 ## 46. Типові помилки мислення
 
-### «Deterministic model неправильна, бо reality random»
+### «детермінований модель неправильна, бо reality випадковий»
 
 Не обов’язково.
 
-Вона може бути useful baseline.
+Вона може бути корисний baseline.
 
 ### «Monte Carlo більш реалістична автоматично»
 
 Ні.
 
-Realism depends on assumptions.
+Realism depends на припущення.
 
-### «Одна random trajectory — forecast»
-
-Ні.
-
-Це realization.
-
-### «Mean exhaustion ≈20.1 означає, що ресурс закінчиться на 20.1»
+### «Одна випадковий траєкторія — forecast»
 
 Ні.
 
-Це summary conditional finite runs.
+Це реалізація.
 
-### «Seed 2026 додає достовірність»
+### «середнє вичерпання ресурсу ≈20.1 означає, що ресурс закінчиться на 20.1»
 
 Ні.
 
-Він додає reproducibility.
+Це підсумок умовний скінченний реалізації.
+
+### «початкове значення генератора 2026 додає достовірність»
+
+Ні.
+
+Він додає відтворюваність.
 
 ---
 
-## 47. Від моделі до Lab
+## 47. Від моделі до лабораторія
 
-Для цього заняття повний browser Lab ще не реалізований.
+Для цього заняття повний browser лабораторія ще не реалізований.
 
-Тому MiniBook формує теоретичну основу перед Python experiment.
+Тому мінікнига формує теоретичну основу перед Python експеримент.
 
 До практики потрібно спрогнозувати:
 
-1. low variance;
-2. high variance;
-3. higher mean;
-4. short horizon.
+1. низький variance;
+2. високий variance;
+3. higher середнє;
+4. short горизонт.
 
-Потім перевірити predictions у notebook/Python.
+Потім перевірити predictions у ноутбук/Python.
 
 ---
 
-## 48. Від MiniBook до Python
+## 48. Від мінікнига до Python
 
-Python package реалізує:
+Python пакет реалізує:
 
 - deterministic_stock();
 - deterministic_exhaustion_time();
@@ -1285,11 +1285,11 @@ Python package реалізує:
 - monte_carlo_exhaustion_times();
 - summarize_exhaustion().
 
-Тобто MiniBook пояснює structure, а package дозволяє reproduce calculations.
+Тобто мінікнига пояснює структура, а пакет дозволяє reproduce calculations.
 
 ---
 
-## 49. Research Transfer
+## 49. дослідження Transfer
 
 Поставте питання:
 
@@ -1327,17 +1327,17 @@ Allowed conclusion:
 
 ---
 
-## 50. Приклад Research Transfer
+## 50. Приклад дослідження Transfer
 
 Припустимо досліджується processing time information requests.
 
-Deterministic version:
+детермінований версія:
 
 \[
 T=n\bar t.
 \]
 
-Stochastic version:
+стохастичний версія:
 
 \[
 T=\sum_i T_i.
@@ -1345,28 +1345,28 @@ T=\sum_i T_i.
 
 Monte Carlo:
 
-> distribution total processing time.
+> розподіл загальний processing time.
 
-Це лише structural example.
+Це лише структурний приклад.
 
-Parameters мають походити з actual/synthetic justified data.
+параметри мають походити з actual/синтетичний justified дані.
 
 ---
 
-## 51. Model selection map
+## 51. модель selection map
 
 <figure>
-  <img src="figures/fig_07_model_selection_map.svg" alt="Карта вибору класу моделі">
-  <figcaption><strong>Рис. 7.</strong> Вибір класу починається з research question: чи важлива variability, state evolution, optimization або distribution outcomes.</figcaption>
+ <img src="figures/fig_07_model_selection_map.svg" alt="Карта вибору класу моделі">
+ <figcaption><strong>Рис. 7.</strong> Вибір класу починається з дослідницьке питання: чи важлива мінливість, стан evolution, оптимізація або розподіл результати.</figcaption>
 </figure>
 
-Questions:
+питання:
 
-- Need only baseline? → deterministic.
-- Need path over steps? → dynamic.
-- Randomness important? → stochastic.
-- Need risk distribution? → simulation/Monte Carlo.
-- Need best decision? → optimization extension.
+- Need лише baseline? → детермінований.
+- Need шлях над steps? → динамічний.
+- Randomness важливий? → стохастичний.
+- Need ризик розподіл? → моделювання/Monte Carlo.
+- Need найкращий decision? → оптимізація розширення.
 
 ---
 
@@ -1374,88 +1374,88 @@ Questions:
 
 Коли у дисертації написано:
 
-> «побудовано стохастичну дискретну динамічну імітаційну model»,
+> «побудовано стохастичну дискретну динамічну імітаційну модель»,
 
 читач повинен зрозуміти:
 
-- state changes stepwise;
+- стан зміни stepwise;
 - transition contains randomness;
-- results obtained computationally;
-- conclusion likely distribution-level.
+- результати obtained computationally;
+- висновок likely distribution-level.
 
-Classification must explain method.
+класифікація має explain метод.
 
 Не decorate text.
 
 ---
 
-## 53. Reproducibility package T1.L2
+## 53. відтворюваність пакет T1.L2
 
 Збережіть:
 
-- model code;
-- parameter values;
-- horizon;
-- seed;
+- модель код;
+- параметр значення;
+- горизонт;
+- початкове значення генератора;
 - n_runs;
-- scenario table;
-- generated paths;
-- Monte Carlo output;
-- summary;
-- software versions;
-- commit.
+- сценарій table;
+- згенерований шляхи;
+- Monte Carlo результат;
+- підсумок;
+- програмний версії;
+- коміт.
 
-Тоді probability estimate has identity.
+Тоді ймовірність оцінка має identity.
 
 ---
 
-## 54. What Monte Carlo proves
+## 54. що Monte Carlo proves
 
-Monte Carlo can show:
+Monte Carlo може show:
 
-> consequences of assumptions.
+> наслідки припущень.
 
-It does not prove:
+це не prove:
 
-- chosen distribution is correct;
-- parameters represent real system;
-- future will match simulated frequency;
-- independent draws are adequate.
+- chosen розподіл є коректний;
+- параметри represent реальний система;
+- future буде match змодельований frequency;
+- незалежний вибірки є adequate.
 
-This boundary must be explicit.
+це межа має бути явний.
 
 ---
 
 ## 55. Синтетичний військовий контекст
 
-Наш «ресурс» не є real ammunition, fuel, coordinates or classified stock.
+Наш «ресурс» не є реальний ammunition, fuel, coordinates або classified запас.
 
-Це synthetic stock for training.
+Це синтетичний запас для training.
 
-Такий design дозволяє вивчити:
+Такий дизайн дозволяє вивчити:
 
-- depletion;
-- uncertainty;
-- state;
-- risk
+- вичерпання;
+- невизначеність;
+- стан;
+- ризик
 
-без sensitive data.
+без sensitive дані.
 
-Transfer to real work requires separate data governance and domain validation.
+Transfer до реальний work requires separate дані governance і область валідація.
 
 ---
 
-## Поглиблення: однаковий mean не означає однаковий risk
+## Поглиблення: однаковий середнє не означає однаковий ризик
 
-Розглянемо дві hypothetical consumption models.
+Розглянемо дві hypothetical витрата моделі.
 
-### Model A
+### модель 
 
 \[
 C_k\sim N(6,0.5^2).
 \]
 
-### Model B
+### модель B
 
 \[
 C_k\sim N(6,3^2).
@@ -1467,9 +1467,9 @@ C_k\sim N(6,3^2).
 E[C_k]=6.
 \]
 
-Якщо дивитися лише на mean, вони здаються однаковими.
+Якщо дивитися лише на середнє, вони здаються однаковими.
 
-Але distribution of cumulative consumption:
+Але розподіл cumulative витрата:
 
 \[
 \sum_{k=1}^{n}C_k
@@ -1477,37 +1477,37 @@ E[C_k]=6.
 
 відрізняється.
 
-У Model B значно вища variability.
+У модель B значно вища мінливість.
 
-Отже, risk early exhaustion може змінюватися навіть при незмінному expected consumption.
+Отже, ризик early вичерпання ресурсу може змінюватися навіть при незмінному очікуваний витрата.
 
-Це фундаментальна причина, чому deterministic mean-based model не може автоматично замінити stochastic analysis.
+Це фундаментальна причина, чому детермінований mean-based модель не може автоматично замінити стохастичний аналіз.
 
 ---
 
-## Поглиблення: law of large numbers не робить один run representative
+## Поглиблення: law великий числа не робить один запуск representative
 
 Можна почути:
 
-> «Якщо mean = 6, то за 21 step average consumption буде майже 6».
+> «Якщо середнє = 6, то за 21 крок average витрата буде майже 6».
 
-У середньому across many experiments — так.
+У середньому через багато experiments — так.
 
-Але один finite realization може відхилитися.
+Але один скінченний реалізація може відхилитися.
 
-Law of large numbers говорить про convergence sample average при великому n.
+Law великий числа говорить про збіжність вибірка average при великому n.
 
 Вона не гарантує:
 
-> кожна коротка realization близька до mean.
+> кожна коротка реалізація близька до середнє.
 
-Для horizon=21 variability все ще може суттєво впливати на depletion.
+Для горизонт=21 мінливість все ще може суттєво впливати на вичерпання.
 
 ---
 
-## Поглиблення: uncertainty accumulates
+## Поглиблення: невизначеність accumulates
 
-State:
+стан:
 
 \[
 S_n=
@@ -1517,9 +1517,9 @@ S_0-\sum_{k=1}^{n}C_k
 \right).
 \]
 
-Навіть якщо each \(C_k\) має modest variability, sum variability accumulates.
+Навіть якщо кожний \(C_k\) має modest мінливість, sum мінливість accumulates.
 
-Для independent variables without clipping approximately:
+Для незалежний змінні без обрізання approximately:
 
 \[
 Var\left(\sum C_k\right)
@@ -1533,15 +1533,15 @@ Standard deviation sum:
 \sigma_{sum}=\sqrt n\,\sigma.
 \]
 
-Тобто uncertainty grows with horizon.
+Тобто невизначеність grows з горизонт.
 
-Це пояснює, чому stochastic paths diverge from deterministic baseline as time proceeds.
+Це пояснює, чому стохастичний шляхи diverge від детермінований baseline як time proceeds.
 
 ---
 
-## Поглиблення: correlation changes accumulated uncertainty
+## Поглиблення: correlation зміни accumulated невизначеність
 
-If consumptions correlated:
+якщо consumptions correlated:
 
 \[
 Var\left(\sum C_k\right)
@@ -1551,72 +1551,72 @@ Var\left(\sum C_k\right)
 2\sum_{i<j}Cov(C_i,C_j).
 \]
 
-Positive covariance increases cumulative variance.
+додатний covariance зростає cumulative variance.
 
-Thus iid assumption matters.
+отже iid припущення має значення.
 
-Two models can have same:
+два моделі може мають той самий:
 
 - \(\mu\);
 - \(\sigma\);
 
-but different autocorrelation and therefore different depletion risk.
+але інший autocorrelation і тому інший вичерпання ризик.
 
-This is a powerful example of hidden structural assumption.
+Це powerful приклад hidden структурний припущення.
 
 ---
 
-## Поглиблення: normal distribution and domain
+## Поглиблення: normal розподіл і область
 
-Why normal?
+чому normal?
 
-It is mathematically convenient.
+це є mathematically convenient.
 
-But consumption is non-negative.
+але витрата є non-negative.
 
-Normal has support:
+Normal має support:
 
 \[
 (-\infty,\infty).
 \]
 
-Clipping repairs impossible negative draws operationally, but changes distribution.
+обрізання repairs impossible від’ємний вибірки operationally, але зміни розподіл.
 
-Alternative positive distributions:
+альтернатива додатний distributions:
 
 - lognormal;
 - gamma;
 - truncated normal.
 
-Which one is appropriate depends on data and mechanism.
+який один є appropriate depends на дані і mechanism.
 
-No distribution should be chosen only because NumPy makes it easy.
+немає розподіл має бути chosen лише оскільки NumPy makes це easy.
 
 ---
 
-## Поглиблення: probability as model-conditional frequency
+## Поглиблення: ймовірність як model-conditional frequency
 
-When we report:
+коли ми report:
 
 \[
 \hat p\approx0.80,
 \]
 
-the full statement should mentally include:
+ full statement слід mentally include:
 
-> conditional on \(S_0=120\), clipped-normal iid consumption with \(\mu=6,\sigma=1.5\), horizon 21, and this implementation.
+> умовний на \(S_0=120\), clipped-normal iid витрата з \(\mu=6,\sigma=1.5\), горизонт 21, і це реалізація.
 
-This long condition often disappears in prose.
+це long умова часто disappears у prose.
 
-MiniBook trains habit of keeping it visible.
+мінікнига trains habit keeping це visible.
 
 ---
 
-## Поглиблення: Monte Carlo sampling error
+## Поглиблення: Monte Carlo sampling похибка
 
-Even if stochastic model fixed, estimated probability varies with finite N.
+Even якщо стохастичний модель фіксований, estimated ймовірність varies з скінченний N.
 
-If true model probability is \(p\), approximate standard error:
+якщо істинний модель ймовірність є \(p\), approximate standard похибка:
 
 \[
 SE(\hat p)
@@ -1624,7 +1624,7 @@ SE(\hat p)
 \sqrt{\frac{p(1-p)}{N}}.
 \]
 
-For:
+для:
 
 \[
 p\approx0.8,
@@ -1640,44 +1640,44 @@ SE\approx
 \approx0.0073.
 \]
 
-This does not measure model uncertainty.
+Це не measure модель невизначеність.
 
-It measures simulation sampling uncertainty.
+це measures моделювання sampling невизначеність.
 
-Very important distinction:
+Very важливий distinction:
 
-- parameter/model uncertainty;
-- Monte Carlo error.
+- параметр/модель невизначеність;
+- Monte Carlo похибка.
 
 ---
 
 ## Поглиблення: increasing N
 
-If N increases fourfold:
+якщо N зростає fourfold:
 
 \[
 N\rightarrow4N,
 \]
 
-Monte Carlo standard error halves approximately because:
+Monte Carlo standard похибка halves approximately оскільки:
 
 \[
 SE\propto\frac{1}{\sqrt N}.
 \]
 
-So precision improves slowly.
+тому точність improves slowly.
 
-To reduce SE by factor 10, need about 100× runs.
+до reduce SE за factor 10, need приблизно 100× реалізації.
 
-This is why number of simulations should be justified, not chosen mystically.
+Це чому number simulations має бути justified, не chosen mystically.
 
 ---
 
-## Поглиблення: convergence diagnostic
+## Поглиблення: збіжність diagnostic
 
-A useful computational experiment:
+ корисний computational експеримент:
 
-1. run N=100;
+1. запуск N=100;
 2. N=300;
 3. N=1000;
 4. N=3000;
@@ -1691,41 +1691,41 @@ Plot:
 
 versus N.
 
-If estimate stabilizes, simulation numerical precision improving.
+якщо оцінка stabilizes, моделювання чисельний точність improving.
 
-But again:
+але again:
 
-> convergence of \(\hat p_N\) does not validate the stochastic assumptions.
+> збіжність \(\hat p_N\) не validate стохастичний припущення.
 
 ---
 
-## Поглиблення: horizon and censoring
+## Поглиблення: горизонт і censoring
 
-Suppose true depletion time exceeds 21 in some runs.
+припустімо істинний вичерпання time exceeds 21 у some реалізації.
 
-We observe only:
+ми observe лише:
 
 \[
 T>21.
 \]
 
-That is right-censoring conceptually.
+це є right-censoring conceptually.
 
-If horizon extended to 30:
+якщо горизонт extended до 30:
 
-- more runs become finite;
-- probability_exhausted increases or stays same;
-- conditional mean finite times changes.
+- більше реалізації become скінченний;
+- probability_exhausted зростає або stays той самий;
+- Умовне середнє скінченний times зміни.
 
-Therefore summary depends on horizon.
+тому підсумок depends на горизонт.
 
-Horizon is not merely a plotting choice.
+горизонт є не merely plotting choice.
 
-It is part of research question.
+це є part дослідницьке питання.
 
 ---
 
-## Поглиблення: compare probability across horizons
+## Поглиблення: порівняти ймовірність через horizons
 
 Define:
 
@@ -1733,236 +1733,236 @@ Define:
 p(H)=P(T\le H).
 \]
 
-Then:
+тоді:
 
 \[
 p(H)
 \]
 
-is cumulative distribution function of depletion time under model.
+є cumulative розподіл функція вичерпання time за модель.
 
-Instead of one horizon 21, evaluate:
+натомість один горизонт 21, evaluate:
 
 \[
 H=18,19,20,21,22,24.
 \]
 
-This gives richer risk curve.
+це gives richer ризик curve.
 
-A single 0.80 becomes a function.
+ single 0.80 стає функція.
 
 ---
 
-## Поглиблення: quantile of exhaustion time
+## Поглиблення: quantile вичерпання ресурсу time
 
-If enough runs exhausted, one may estimate:
+якщо enough реалізації exhausted, один може оцінка:
 
 \[
 Q_{0.5},
 Q_{0.9}
 \]
 
-for finite or full time-to-event representation.
+для скінченний або full time-to-event representation.
 
-But handling non-exhausted runs needs care.
+але handling non-exhausted реалізації needs care.
 
-Simply dropping them changes interpretation.
+Simply dropping them зміни інтерпретація.
 
-This is why advanced analysis may use survival methods.
+Це чому advanced аналіз може use survival методи.
 
 ---
 
-## Поглиблення: deterministic model as expected-value proxy
+## Поглиблення: детермінований модель як expected-value proxy
 
-It is tempting to say:
+це є tempting до say:
 
 \[
 S_{det}(t)=E[S_{stoch}(t)].
 \]
 
-With clipping and nonlinear state boundary this is not generally exact.
+з обрізання і нелінійний стан межа Це не generally точний.
 
-Because:
+оскільки:
 
 \[
 E[\max(0,X)]\ne \max(0,E[X]).
 \]
 
-This is a key nonlinear expectation issue.
+Це key нелінійний expectation issue.
 
-Thus deterministic path using mean consumption is not automatically mean stochastic stock path.
+отже детермінований шлях using середнє витрата є не automatically середнє стохастичний запас шлях.
 
 ---
 
-## Поглиблення: Jensen-style intuition
+## Поглиблення: Jensen-style інтуїція
 
-Nonlinear transformations mean:
+нелінійний transformations середнє:
 
 \[
 E[f(X)]\ne f(E[X]).
 \]
 
-Clipping:
+обрізання:
 
 \[
 f(x)=\max(0,x)
 \]
 
-is nonlinear.
+є нелінійний.
 
-Therefore deterministic substitution of mean parameters can differ from ensemble mean.
+тому детермінований substitution середнє параметри може differ від ensemble середнє.
 
-This is one reason simulation adds information.
+Це один reason моделювання adds information.
 
 ---
 
-## Поглиблення: scenario table for model classes
+## Поглиблення: сценарій table для модель classes
 
-| Research need | Suitable baseline class | Main output |
+| дослідження need | Suitable baseline class | Main результат |
 |---|---|---|
-| nominal depletion | deterministic continuous | one time |
-| state by step | discrete dynamic | one trajectory |
-| one possible uncertain path | stochastic dynamic | realization |
-| risk by horizon | Monte Carlo | probability |
-| distribution of timing | Monte Carlo | distribution |
-| choose best reserve | optimization extension | decision |
+| nominal вичерпання | детермінований неперервний | один time |
+| стан за крок | дискретний динамічний | один траєкторія |
+| один possible uncertain шлях | стохастичний динамічний | реалізація |
+| ризик за горизонт | Monte Carlo | ймовірність |
+| розподіл timing | Monte Carlo | розподіл |
+| choose найкращий reserve | оптимізація розширення | decision |
 
-This table is not universal.
+це table є не universal.
 
-It is a decision aid.
+це є decision aid.
 
 ---
 
-## Поглиблення: model hierarchy instead of model competition
+## Поглиблення: модель hierarchy натомість модель competition
 
-Do not replace deterministic model with stochastic and throw first away.
+не replace детермінований модель з стохастичний і throw перший away.
 
 Use hierarchy:
 
-1. deterministic baseline;
-2. stochastic extension;
-3. dynamic simulation;
-4. uncertainty analysis.
+1. детермінований baseline;
+2. стохастичний розширення;
+3. динамічний моделювання;
+4. невизначеність аналіз.
 
-Each layer answers new questions.
+кожний шар answers new питання.
 
-The simpler model remains useful for sanity checks.
+ simpler модель remains корисний для перевірка здорового глуздуs.
 
 ---
 
-## Поглиблення: calibration question
+## Поглиблення: калібрування питання
 
-Where do:
+Where робити:
 
 \[
 \mu=6,\sigma=1.5
 \]
 
-come from?
+come від?
 
-In course — synthetic.
+у курс — синтетичний.
 
-In research they might be estimated from historical data.
+у дослідження вони might бути estimated від historical дані.
 
-Then uncertainty in estimates matters.
+тоді невизначеність у оцінки має значення.
 
-If sample small, \(\mu,\sigma\) themselves uncertain.
+якщо вибірка малий, \(\mu,\sigma\) themselves uncertain.
 
-Monte Carlo with fixed estimated parameters underrepresents total uncertainty.
+Monte Carlo з фіксований estimated параметри underrepresents загальний невизначеність.
 
 ---
 
 ## Поглиблення: posterior/predictive idea
 
-Advanced extension:
+Advanced розширення:
 
-Instead of fixed:
+натомість фіксований:
 
 \[
 \mu,\sigma,
 \]
 
-sample parameters from uncertainty distribution, then sample consumption.
+вибірка параметри від невизначеність розподіл, тоді вибірка витрата.
 
-This creates predictive uncertainty including parameter uncertainty.
+це creates predictive невизначеність including параметр невизначеність.
 
-Not required in T1.L2.
+не required у T1.L2.
 
-But conceptually important:
+але conceptually важливий:
 
-> stochastic observations and uncertain parameters are different layers.
+> стохастичний спостереження і uncertain параметри є інший layers.
 
 ---
 
 ## Поглиблення: break-the-model map
 
 <figure>
-  <img src="figures/fig_08_limits.svg" alt="Межі baseline stochastic model">
-  <figcaption><strong>Рис. 8.</strong> Baseline iid clipped-normal model can fail when consumption is autocorrelated, parameters change over time, replenishment exists, or horizon creates strong censoring.</figcaption>
+ <img src="figures/fig_08_limits.svg" alt="Межі baseline стохастичний модель">
+ <figcaption><strong>Рис. 8.</strong> Baseline iid clipped-normal модель може fail коли витрата є autocorrelated, параметри зміна над time, replenishment exists, або горизонт creates strong censoring.</figcaption>
 </figure>
 
-A mature model description should state which failure modes are plausible.
+ mature модель опис слід стан який відмова modes є правдоподібний.
 
 ---
 
-## Поглиблення: verification vs validation
+## Поглиблення: перевірка порівняно з валідація
 
-Verification asks:
+перевірка asks:
 
-> did we implement equations correctly?
-
-Examples:
-
-- manual path;
-- same seed;
-- nonnegative stock.
-
-Validation asks:
-
-> do assumptions represent target process sufficiently?
+> зробив ми implement рівняння correctly?
 
 Examples:
 
-- distribution fit;
+- ручний шлях;
+- той самий початкове значення генератора;
+- nonnegative запас.
+
+валідація asks:
+
+> робити припущення represent target процес sufficiently?
+
+Examples:
+
+- розподіл підгонка;
 - autocorrelation;
-- parameter stability;
+- параметр стійкість;
 - replenishment dynamics.
 
-Monte Carlo can be perfectly verified and poorly validated.
+Monte Carlo може бути perfectly verified і poorly validated.
 
 ---
 
-## Поглиблення: reproducibility of stochastic results
+## Поглиблення: відтворюваність стохастичний результати
 
-To reproduce probability estimate preserve:
+до reproduce ймовірність оцінка preserve:
 
-- code;
-- seed;
+- код;
+- початкове значення генератора;
 - N;
-- parameters;
-- horizon;
-- RNG library/version if exact identity matters.
+- параметри;
+- горизонт;
+- RNG library/версія якщо точний identity має значення.
 
-If only statistical reproducibility needed, exact same raw draws may be less important.
+якщо лише statistical відтворюваність потрібний, точний той самий необроблений вибірки може бути менше важливий.
 
-But course emphasizes exact computational traceability.
+але курс emphasizes точний computational traceability.
 
 ---
 
-## Поглиблення: safe military interpretation
+## Поглиблення: safe військовий інтерпретація
 
-In real military research, stochastic resource modeling may involve sensitive data.
+у реальний військовий дослідження, стохастичний ресурс modeling може involve sensitive дані.
 
-This MiniBook deliberately avoids:
+це мінікнига deliberately avoids:
 
-- actual stock levels;
-- real consumption rates;
+- actual запас levels;
+- реальний витрата rates;
 - location;
 - mission timelines.
 
-Transfer should preserve mathematical pattern while using authorized or synthetic data.
+Transfer слід preserve математичний pattern while using authorized або синтетичні дані.
 
-The mathematical lesson survives without operational detail.
+ математичний заняття survives без операційний detail.
 
 ---
 
@@ -1974,38 +1974,38 @@ The mathematical lesson survives without operational detail.
 
 Правильніший порядок:
 
-1. research question;
-2. type of uncertainty;
+1. дослідницьке питання;
+2. type невизначеність;
 3. time representation;
-4. available data;
-5. required output;
-6. verification strategy.
+4. доступний дані;
+5. required результат;
+6. перевірка strategy.
 
-Наприклад, якщо question:
+Наприклад, якщо питання:
 
-> яка nominal trajectory при fixed rate?
+> яка nominal траєкторія при фіксований rate?
 
 Monte Carlo зайва.
 
-If question:
+якщо питання:
 
-> яка ймовірність depletion before horizon?
+> яка ймовірність вичерпання до горизонт?
 
-Deterministic model alone insufficient.
+детермінований модель сам по собі insufficient.
 
-Method complexity повинна відповідати information need.
+метод complexity повинна відповідати information need.
 
 ---
 
-## Поглиблення: epistemic і aleatory uncertainty
+## Поглиблення: epistemic і aleatory невизначеність
 
-Корисно розрізняти два conceptual types.
+Корисно розрізняти два conceptual типи.
 
 ### Aleatory
 
-Variability modeled as inherent randomness.
+мінливість modeled як inherent randomness.
 
-Example:
+приклад:
 
 \[
 C_k\sim distribution.
@@ -2013,35 +2013,35 @@ C_k\sim distribution.
 
 ### Epistemic
 
-Uncertainty because we do not know parameters/model structure well.
+невизначеність оскільки ми не know параметри/модель структура well.
 
-Example:
+приклад:
 
 \[
 \mu\in[5.5,6.5].
 \]
 
-Monte Carlo over \(C_k\) captures aleatory layer.
+Monte Carlo над \(C_k\) captures aleatory шар.
 
-It does not automatically capture uncertainty about \(\mu\), \(\sigma\) or distribution family.
+це не automatically capture невизначеність приблизно \(\mu\), \(\sigma\) або розподіл family.
 
-This distinction becomes important in dissertation conclusions.
+це distinction стає важливий у dissertation висновки.
 
 ---
 
-## Поглиблення: deterministic scenario can represent epistemic alternatives
+## Поглиблення: детермінований сценарій може represent epistemic альтернативи
 
-Suppose uncertain mean:
+припустімо uncertain середнє:
 
 \[
 \mu\in\{5,6,7\}.
 \]
 
-Instead of one stochastic model, run three parameter scenarios.
+натомість один стохастичний модель, запуск три параметр scenarios.
 
-Then within each scenario optionally perform Monte Carlo.
+тоді within кожний сценарій optionally perform Monte Carlo.
 
-This creates nested structure:
+це creates nested структура:
 
 \[
 Parameter\ scenario
@@ -2049,13 +2049,13 @@ Parameter\ scenario
 Stochastic\ realizations.
 \]
 
-This is clearer than mixing all uncertainty into one undifferentiated distribution.
+Це clearer than mixing усі невизначеність into один undifferentiated розподіл.
 
 ---
 
-## Поглиблення: ensemble mean trajectory
+## Поглиблення: ensemble середнє траєкторія
 
-With many Monte Carlo paths compute:
+з багато Monte Carlo шляхи compute:
 
 \[
 \bar S_k=
@@ -2071,31 +2071,31 @@ Q_{0.1}(S_k),
 Q_{0.9}(S_k).
 \]
 
-Then plot band over time.
+тоді plot band над time.
 
-This answers:
+це answers:
 
-> how does uncertainty of state evolve?
+> як робить невизначеність стан evolve?
 
-It is richer than only exhaustion histogram.
+це є richer than лише вичерпання ресурсу histogram.
 
 ---
 
-## Поглиблення: uncertainty band is not confidence interval by default
+## Поглиблення: невизначеність band є не довірчий інтервал за default
 
-A 10–90% simulation quantile band describes model-generated outcome distribution.
+ 10–90% моделювання quantile band describes model-generated outcome розподіл.
 
-It is not automatically:
+це є не automatically:
 
-> 80% confidence interval for true state.
+> 80% довірчий інтервал для істинний стан.
 
-Confidence terminology relates to inferential uncertainty of estimated quantities.
+довірчий terminology relates до inferential невизначеність estimated quantities.
 
 Use precise language.
 
 ---
 
-## Поглиблення: event definition matters
+## Поглиблення: event definition має значення
 
 Event:
 
@@ -2103,142 +2103,142 @@ Event:
 T\le21
 \]
 
-differs from:
+differs від:
 
 \[
 S_{21}<10.
 \]
 
-Both can be risk metrics.
+обидва може бути ризик metrics.
 
-Before simulation define event precisely.
+до моделювання define event precisely.
 
-Otherwise same model can produce multiple “probabilities” that answer different questions.
-
----
-
-## Поглиблення: baseline as reference, not truth
-
-Deterministic T=20 is useful because:
-
-- easy to compute;
-- easy to verify;
-- provides scale.
-
-But stochastic analysis may show wide distribution.
-
-Do not use baseline as truth and stochastic values as “errors”.
-
-They are outputs of different model classes.
+Otherwise той самий модель може produce множинний “probabilities” це answer інший питання.
 
 ---
 
-## Поглиблення: scenario comparison design
+## Поглиблення: baseline як reference, не truth
+
+детермінований T=20 є корисний оскільки:
+
+- easy до compute;
+- easy до перевірити;
+- provides масштаб.
+
+але стохастичний аналіз може show wide розподіл.
+
+не use baseline як truth і стохастичний значення як “похибки”.
+
+вони є результати інший модель classes.
+
+---
+
+## Поглиблення: сценарій comparison дизайн
 
 Good table:
 
-| Scenario | \(\mu\) | \(\sigma\) | Horizon | Question |
+| сценарій | \(\mu\) | \(\sigma\) | горизонт | питання |
 |---|---:|---:|---:|---|
-| baseline | 6 | 1.5 | 21 | control |
-| stable | 6 | 0.5 | 21 | variability ↓ |
-| high_var | 6 | 3 | 21 | variability ↑ |
-| high_mean | 7 | 1.5 | 21 | level shift |
-| long_horizon | 6 | 1.5 | 30 | censoring effect |
+| baseline | 6 | 1.5 | 21 | контрольний |
+| стійкий | 6 | 0.5 | 21 | мінливість ↓ |
+| high_var | 6 | 3 | 21 | мінливість ↑ |
+| high_mean | 7 | 1.5 | 21 | рівень shift |
+| long_horizon | 6 | 1.5 | 30 | censoring вплив |
 
-This makes each run interpretable.
+це makes кожний запуск interpretable.
 
 ---
 
 ## Поглиблення: comparing distributions
 
-Beyond mean/median, compare:
+Beyond середнє/медіана, порівняти:
 
-- probability by horizon;
+- ймовірність за горизонт;
 - quantiles;
 - spread;
 - tail frequency.
 
-Two scenarios can have same mean exhaustion but different tails.
+два scenarios може мають той самий середнє вичерпання ресурсу але інший tails.
 
-Risk analysis often cares about tails.
-
----
-
-## Поглиблення: tail risk
-
-Suppose two models have mean depletion step 20.
-
-Model A tightly clustered around 20.
-
-Model B sometimes depletes at 15 and sometimes at 25.
-
-Same mean, different early-failure risk.
-
-Therefore mean alone can hide operationally relevant uncertainty.
+ризик аналіз часто cares приблизно tails.
 
 ---
 
-## Поглиблення: stochastic model verification
+## Поглиблення: tail ризик
 
-Verification can include:
+припустімо два моделі мають середнє вичерпання крок 20.
 
-- same seed same draws;
-- different seeds usually differ;
-- sample length correct;
-- nonnegative draws after clipping;
-- state monotone non-increasing when no replenishment;
-- exhaustion step first zero;
-- NaN only if no exhaustion.
+модель tightly clustered навколо 20.
 
-These are invariants.
+модель B sometimes depletes at 15 і sometimes at 25.
+
+той самий середнє, інший early-failure ризик.
+
+тому середнє сам по собі може hide operationally relevant невизначеність.
 
 ---
 
-## Поглиблення: validation with data
+## Поглиблення: стохастичний модель перевірка
 
-If real authorized data available, inspect:
+перевірка може include:
+
+- той самий початкове значення генератора той самий вибірки;
+- інший seeds usually differ;
+- вибірка length коректний;
+- nonnegative вибірки після обрізання;
+- стан monotone non-increasing коли немає replenishment;
+- крок вичерпання ресурсу перший нуля;
+- NaN лише якщо немає вичерпання ресурсу.
+
+ці є invariants.
+
+---
+
+## Поглиблення: валідація з дані
+
+якщо реальний authorized дані доступний, inspect:
 
 - histogram;
 - autocorrelation;
 - time trend;
 - seasonal/regime effects;
-- fit of candidate distributions.
+- підгонка кандидатний distributions.
 
-Then choose stochastic structure.
+тоді choose стохастичний структура.
 
-Simulation should come after data understanding.
-
----
-
-## Поглиблення: model comparison as dissertation evidence
-
-One useful research design:
-
-1. deterministic baseline;
-2. iid stochastic model;
-3. autocorrelated stochastic model;
-4. compare predictive/diagnostic performance.
-
-Then classification itself becomes substantive research tool.
+моделювання слід come після дані understanding.
 
 ---
 
-## Поглиблення: military-safe synthetic scenario
+## Поглиблення: модель comparison як dissertation свідчення
 
-Suppose resource is “computational capacity units” for a training exercise.
+один корисний дослідження дизайн:
 
-Consumption varies by simulation load.
+1. детермінований baseline;
+2. iid стохастичний модель;
+3. autocorrelated стохастичний модель;
+4. порівняти predictive/diagnostic ефективність.
 
-This preserves:
+тоді класифікація itself стає substantive дослідження tool.
 
-- depletion logic;
-- uncertainty;
-- state transition;
-- Monte Carlo risk,
+---
 
-without revealing real operational stocks.
+## Поглиблення: military-safe синтетичний сценарій
 
-This is appropriate for an open teaching repository.
+припустімо ресурс є “computational спроможність units” для training exercise.
+
+витрата varies за моделювання load.
+
+це preserves:
+
+- вичерпання logic;
+- невизначеність;
+- стан transition;
+- Monte Carlo ризик,
+
+без revealing реальний операційний stocks.
+
+Це appropriate для open навчальний repository.
 
 ---
 
@@ -2246,27 +2246,27 @@ This is appropriate for an open teaching repository.
 
 ### П’ять головних ідей
 
-1. Classification captures model assumptions.
-2. Deterministic trajectory and stochastic distribution answer different questions.
-3. Dynamic model has state memory.
-4. Monte Carlo explores uncertainty defined by the model.
-5. Seed supports reproducibility, not realism.
+1. класифікація captures модель припущення.
+2. детермінований траєкторія і стохастичний розподіл answer інший питання.
+3. динамічний модель має стан memory.
+4. Monte Carlo explores невизначеність defined за модель.
+5. початкове значення генератора supports відтворюваність, не realism.
 
 ### Три правила
 
-Deterministic:
+детермінований:
 
 \[
 S(t)=\max(0,S_0-vt).
 \]
 
-Dynamic:
+динамічний:
 
 \[
 S_{k+1}=\max(0,S_k-C_k).
 \]
 
-Monte Carlo estimate:
+Monte Carlo оцінка:
 
 \[
 \hat p=\frac{n_{event}}{N}.
@@ -2274,34 +2274,34 @@ Monte Carlo estimate:
 
 ### Дві помилки
 
-- one stochastic realization = forecast;
-- more simulations = more adequate model.
+- один стохастичний реалізація = forecast;
+- Більше симуляцій = більше adequate модель.
 
 ### Одне питання
 
-> Який class model відповідає моєму research question, а не просто моєму улюбленому Python tool?
+> Який class модель відповідає моєму дослідницьке питання, а не просто моєму улюбленому інструмент Python?
 
 ### Наступний крок
 
-Запустіть baseline, повторіть same seed, змініть \(\mu\) і \(\sigma\) окремо та поясніть різницю.
+Запустіть baseline, повторіть той самий початкове значення генератора, змініть \(\mu\) і \(\sigma\) окремо та поясніть різницю.
 
 ---
 
 ## 57. Фінальна думка
 
-Один і той самий process може мати кілька математичних моделей.
+Один і той самий процес може мати кілька математичних моделей.
 
 Це не contradiction.
 
 Це нормальна властивість modeling.
 
-Детермінована model дає baseline.
+Детермінована модель дає baseline.
 
-Stochastic model вводить uncertainty.
+стохастичний модель вводить невизначеність.
 
-Dynamic model показує evolution state.
+динамічний модель показує evolution стан.
 
-Monte Carlo формує distribution outcomes.
+Monte Carlo формує розподіл результати.
 
 Сильний дослідник не питає:
 
@@ -2309,4 +2309,4 @@ Monte Carlo формує distribution outcomes.
 
 Він питає:
 
-> **яка model structure потрібна, щоб коректно відповісти саме на моє research question — і які висновки вона після цього дозволяє зробити?**
+> **яка модель структура потрібна, щоб коректно відповісти саме на моє дослідницьке питання — і які висновки вона після цього дозволяє зробити?**

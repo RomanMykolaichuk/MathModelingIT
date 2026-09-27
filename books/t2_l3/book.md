@@ -1,37 +1,37 @@
-# MathModelingIT MiniBook T2.L3
+# MathModelingIT · Мінікнига T2.L3
 
 ## Математичні моделі задач нелінійного програмування
 
-### Коли пряма лінія перестає працювати: diminishing returns, локальні максимуми і перевірка оптимуму
+### Коли пряма лінія перестає працювати: спадна віддача, локальні максимуми і перевірка оптимуму
 
-> **Головна ідея книги:** у нелінійній оптимізації недостатньо отримати повідомлення **success=True**. Нелінійна форма objective може створювати saturation, interaction, curved feasible regions і кілька локальних максимумів. Тому сильний computational result повинен поєднувати формалізацію, feasibility checks, sensitivity, multi-start, незалежну перевірку і візуальну інтерпретацію landscape.
+> **Головна ідея книги:** у нелінійній оптимізації недостатньо отримати повідомлення **success=True**. Нелінійна форма цільова функція може створювати насичення, взаємодія, криволінійний область допустимих розв’язківs і кілька локальних максимумів. Тому сильний computational результат повинен поєднувати формалізацію, допустимість перевірки, чутливість, множинні початкові точки, незалежну перевірку і візуальну інтерпретацію поверхня.
 
 ---
 
 ## 0. Паспорт книги
 
-**Код заняття:** T2.L3  
-**Тема:** математичні моделі задач нелінійного програмування  
-**Рівень:** середній  
-**Орієнтовний час читання:** 70–85 хвилин  
-**Попередні знання:** поняття функції, constraint, derivative на інтуїтивному рівні, базова лінійна оптимізація.
+**Код заняття:** T2.L3 
+**Тема:** математичні моделі задач нелінійного програмування 
+**Рівень:** середній 
+**Орієнтовний час читання:** 70–85 хвилин 
+**Попередні знання:** поняття функції, обмеження, похідна на інтуїтивному рівні, базова лінійна оптимізація.
 
 Після цієї книги ви повинні вміти:
 
-- пояснювати, що робить optimization problem нелінійною;
-- відрізняти diminishing returns від linear returns;
-- читати saturation curve;
-- формулювати nonlinear objective і constraints;
-- інтерпретувати applied optimum T2.L3;
+- пояснювати, що робить оптимізація problem нелінійною;
+- відрізняти спадна віддача від лінійний returns;
+- читати крива насичення;
+- формулювати нелінійний цільова функція і обмеження;
+- інтерпретувати прикладний оптимум T2.L3;
 - розуміти роль стартової точки;
-- розрізняти local і global optimum;
-- пояснювати, чому local solver може успішно завершитися в різних точках;
-- використовувати multi-start як практичну перевірку;
-- використовувати grid search як independent sanity check у двох вимірах;
+- розрізняти локальний і глобальний оптимум;
+- пояснювати, чому локальний розв’язувач може успішно завершитися в різних точках;
+- використовувати множинні початкові точки як практичну перевірку;
+- використовувати пошук на сітці як незалежний перевірка здорового глузду у двох вимірах;
 - читати contour plot;
-- проводити sensitivity до total resource;
-- формулювати allowed conclusion без перебільшення;
-- знаходити аналог nonlinear effect у власній research problem.
+- проводити чутливість до загальний ресурс;
+- формулювати allowed висновок без перебільшення;
+- знаходити аналог нелінійний вплив у власній дослідження problem.
 
 ---
 
@@ -50,7 +50,7 @@
 R=100.
 \]
 
-На першому етапі додаткові units ресурсу дають значний effect.
+На першому етапі додаткові units ресурсу дають значний вплив.
 
 Але далі напрям насичується.
 
@@ -58,11 +58,11 @@ R=100.
 
 Наступні 10 — трохи менше.
 
-Після певного рівня ще одна unit майже не змінює result.
+Після певного рівня ще одна одиниця майже не змінює результат.
 
 Крім того, два напрями можуть слабко підсилювати один одного.
 
-У такій ситуації linear objective на кшталт:
+У такій ситуації лінійний цільова функція на кшталт:
 
 \[
 8x+6y
@@ -70,22 +70,22 @@ R=100.
 
 вже не описує бажану поведінку.
 
-Потрібна нелінійна model.
+Потрібна нелінійна модель.
 
 Дослідницьке питання:
 
-> **Як розподілити обмежений ресурс між двома напрямами, якщо їхня віддача насичується, а результат містить слабку interaction, і як перевірити, що чисельний optimizer не ввів нас в оману?**
+> **Як розподілити обмежений ресурс між двома напрямами, якщо їхня віддача насичується, а результат містить слабку взаємодія, і як перевірити, що чисельний оптимізатор не ввів нас в оману?**
 
 <figure>
-  <img src="figures/fig_01_linear_vs_nonlinear.svg" alt="Лінійна і нелінійна віддача">
-  <figcaption><strong>Рис. 1.</strong> У linear model marginal return сталий. У diminishing-returns model кожна наступна unit дає менший приріст, тому оптимальний розподіл уже не визначається простим порівнянням коефіцієнтів.</figcaption>
+ <img src="figures/fig_01_linear_vs_nonlinear.svg" alt="Лінійна і нелінійна віддача">
+ <figcaption><strong>Рис. 1.</strong> У лінійний модель граничний return сталий. У diminishing-returns модель кожна наступна одиниця дає менший приріст, тому оптимальний розподіл уже не визначається простим порівнянням коефіцієнтів.</figcaption>
 </figure>
 
 ---
 
 ## 2. Що означає нелінійність
 
-Функція нелінійна, якщо relationship між variables і result не можна подати лише як:
+Функція нелінійна, якщо relationship між змінні і результат не можна подати лише як:
 
 \[
 a_1x_1+a_2x_2+\dots+a_nx_n+b.
@@ -93,21 +93,21 @@ a_1x_1+a_2x_2+\dots+a_nx_n+b.
 
 Нелінійність може виникати через:
 
-- exponent;
-- logarithm;
-- square root;
-- product variables;
-- powers;
-- trigonometric functions;
+- експонента;
+- логарифм;
+- square корінь;
+- product змінні;
+- степені;
+- trigonometric функції;
 - thresholds;
 - piecewise effects;
 - ratios.
 
-У нашому applied case присутні одразу кілька nonlinear forms.
+У нашому прикладний приклад присутні одразу кілька нелінійний forms.
 
 ---
 
-## 3. Applied objective T2.L3
+## 3. прикладний цільова функція T2.L3
 
 Функція:
 
@@ -126,7 +126,7 @@ F(x,y)=
 F(x,y)\rightarrow\max.
 \]
 
-Constraints:
+обмеження:
 
 \[
 x+y\le R,
@@ -146,13 +146,13 @@ y\ge0.
 R=100.
 \]
 
-Ця formula навмисно синтетична.
+Ця формула навмисно синтетична.
 
-Вона потрібна для розуміння nonlinear behavior, а не для опису конкретної реальної військової системи.
+Вона потрібна для розуміння нелінійний поведінка, а не для опису конкретної реальної військової системи.
 
 ---
 
-## 4. Перший доданок: diminishing returns для x
+## 4. Перший доданок: спадна віддача для x
 
 Розглянемо:
 
@@ -184,7 +184,7 @@ e^{-0.05x}\rightarrow0.
 F_x(x)\rightarrow40.
 \]
 
-Тобто effect має upper saturation level близько 40.
+Тобто вплив має верхній насичення рівень близько 40.
 
 Це принципово інша поведінка, ніж:
 
@@ -195,13 +195,13 @@ F_x(x)\rightarrow40.
 яка росте безмежно.
 
 <figure>
-  <img src="figures/fig_02_diminishing_returns.svg" alt="Криві diminishing returns">
-  <figcaption><strong>Рис. 2.</strong> Експоненційні компоненти швидко ростуть на початку, але поступово виходять на saturation. Marginal gain зменшується зі збільшенням allocation.</figcaption>
+ <img src="figures/fig_02_diminishing_returns.svg" alt="Криві спадна віддача">
+ <figcaption><strong>Рис. 2.</strong> Експоненційні компоненти швидко ростуть на початку, але поступово виходять на насичення. граничний gain зменшується зі збільшенням розподіл.</figcaption>
 </figure>
 
 ---
 
-## 5. Marginal return як похідна
+## 5. граничний return як похідна
 
 Для:
 
@@ -209,7 +209,7 @@ F_x(x)\rightarrow40.
 F_x(x)=40(1-e^{-0.05x}),
 \]
 
-derivative:
+похідна:
 
 \[
 \frac{dF_x}{dx}=2e^{-0.05x}.
@@ -233,9 +233,9 @@ derivative:
 2e^{-3}\approx0.100.
 \]
 
-Тобто додаткова unit x стає менш корисною.
+Тобто додаткова одиниця x стає менш корисною.
 
-Це і є **diminishing marginal returns**.
+Це і є **diminishing граничний returns**.
 
 ---
 
@@ -247,7 +247,7 @@ derivative:
 F_y(y)=35(1-e^{-0.04y}),
 \]
 
-derivative:
+похідна:
 
 \[
 \frac{dF_y}{dy}=1.4e^{-0.04y}.
@@ -255,13 +255,13 @@ derivative:
 
 Він теж diminishing.
 
-Але має інший saturation level та іншу швидкість saturation.
+Але має інший насичення рівень та іншу швидкість насичення.
 
-Отже, optimum повинен балансувати два nonlinear response profiles.
+Отже, оптимум повинен балансувати два нелінійний відгук profiles.
 
 ---
 
-## 7. Interaction term
+## 7. взаємодія term
 
 Третій term:
 
@@ -269,7 +269,7 @@ derivative:
 0.15\sqrt{xy}.
 \]
 
-Він залежить від обох variables одночасно.
+Він залежить від обох змінні одночасно.
 
 Якщо:
 
@@ -283,19 +283,19 @@ x=0
 y=0,
 \]
 
-interaction term = 0.
+взаємодія term = 0.
 
-Коли обидва positive, з’являється додаткова utility.
+Коли обидва додатний, з’являється додаткова utility.
 
 Це weak synergy.
 
-У linear additive model:
+У лінійний additive модель:
 
 \[
 F(x,y)=F_x(x)+F_y(y)
 \]
 
-такої interaction немає.
+такої взаємодія немає.
 
 Тут:
 
@@ -305,9 +305,9 @@ F(x,y)\ne F_x(x)+F_y(y).
 
 ---
 
-## 8. Чому synergy впливає на balance
+## 8. Чому synergy впливає на баланс
 
-Без interaction optimizer міг би більше схилятися до напряму з кращим standalone marginal profile.
+Без взаємодія оптимізатор міг би більше схилятися до напряму з кращим standalone граничний profile.
 
 Term:
 
@@ -315,13 +315,13 @@ Term:
 \sqrt{xy}
 \]
 
-винагороджує ситуацію, де positive allocations є в обох directions.
+винагороджує ситуацію, де додатний allocations є в обох directions.
 
 Це не означає автоматично 50/50.
 
-Але робить extreme allocation менш attractive.
+Але робить extreme розподіл менш attractive.
 
-У baseline optimum:
+У baseline оптимум:
 
 \[
 x^*\approx48.659,
@@ -331,11 +331,11 @@ x^*\approx48.659,
 y^*\approx51.341.
 \]
 
-Результат близький до balance, але не exactly equal.
+Результат близький до баланс, але не точно equal.
 
 ---
 
-## 9. Constraint ресурс
+## 9. обмеження ресурс
 
 Маємо:
 
@@ -343,21 +343,21 @@ y^*\approx51.341.
 x+y\le100.
 \]
 
-У optimum:
+У оптимум:
 
 \[
 x^*+y^*\approx100.
 \]
 
-Resource practically fully used.
+ресурс practically fully використаний.
 
 Чому?
 
-Бо в baseline domain utility still increasing in both variables.
+Бо в baseline область utility усе ще increasing у обидва змінні.
 
-Якщо залишити resource unused, можна трохи збільшити x або y й покращити objective.
+Якщо залишити ресурс unused, можна трохи збільшити x або y й покращити цільова функція.
 
-Отже, constraint active:
+Отже, обмеження активний:
 
 \[
 x+y=100.
@@ -365,9 +365,9 @@ x+y=100.
 
 ---
 
-## 10. Baseline optimum
+## 10. Baseline оптимум
 
-Source-of-truth tests фіксують:
+Source-of-truth тести фіксують:
 
 \[
 x^*\approx48.6593,
@@ -377,61 +377,61 @@ x^*\approx48.6593,
 y^*\approx51.3407.
 \]
 
-Objective:
+цільова функція:
 
 \[
 F^*\approx74.49685.
 \]
 
-Resource used:
+ресурс використаний:
 
 \[
 100.
 \]
 
 <figure>
-  <img src="figures/fig_03_applied_surface.svg" alt="Поверхня applied objective">
-  <figcaption><strong>Рис. 3.</strong> Applied objective є гладкою nonlinear surface. Feasible region обмежена трикутником \(x\ge0\), \(y\ge0\), \(x+y\le100\); optimum лежить поблизу resource boundary.</figcaption>
+ <img src="figures/fig_03_applied_surface.svg" alt="Поверхня прикладний цільова функція">
+ <figcaption><strong>Рис. 3.</strong> прикладний цільова функція є гладкою нелінійний surface. область допустимих розв’язків обмежена трикутником \(x\ge0\), \(y\ge0\), \(x+y\le100\); оптимум лежить поблизу ресурс межа.</figcaption>
 </figure>
 
 ---
 
-## 11. Чому optimum не 50/50
+## 11. Чому оптимум не 50/50
 
-Рівний allocation:
+Рівний розподіл:
 
 \[
 (50,50)
 \]
 
-дуже близький до optimum.
+дуже близький до оптимум.
 
-Але coefficients двох saturation components різні:
+Але коефіцієнти двох насичення components різні:
 
 - 40 та 0.05 для x;
 - 35 та 0.04 для y.
 
-Тому marginal returns трохи різні.
+Тому граничний returns трохи різні.
 
-Solver знаходить balance, де small local reallocation уже не дає improvement у межах constraint.
+розв’язувач знаходить баланс, де малий локальний reallocation уже не дає improvement у межах обмеження.
 
 ---
 
-## 12. One-dimensional intuition
+## 12. One-dimensional інтуїція
 
-Якщо resource constraint active:
+Якщо ресурс обмеження активний:
 
 \[
 y=R-x.
 \]
 
-Тоді objective можна розглядати як:
+Тоді цільова функція можна розглядати як:
 
 \[
 H(x)=F(x,R-x).
 \]
 
-Optimum приблизно там, де:
+оптимум приблизно там, де:
 
 \[
 \frac{dH}{dx}=0.
@@ -439,15 +439,15 @@ Optimum приблизно там, де:
 
 Інтуїтивно:
 
-> marginal benefit перенести одну малу unit з y у x стає нульовим.
+> граничний виграш перенести одну малу одиниця з y у x стає нульовим.
 
-Тобто system balance досягнуто не через symmetry, а через equality relevant marginal trade-off.
+Тобто система баланс досягнуто не через symmetry, а через equality relevant граничний trade-off.
 
 ---
 
-## 13. Feasibility checks
+## 13. допустимість перевірки
 
-Після solver окремо перевіряємо:
+Після розв’язувач окремо перевіряємо:
 
 \[
 x\ge0,
@@ -467,23 +467,23 @@ x+y\le R,
 F(x,y)
 \]
 
-finite.
+скінченний.
 
-У source code verify_applied_solution() робить це незалежно.
+У джерело код verify_applied_solution() робить це незалежно.
 
-**success=True** і feasibility — різні твердження.
+**success=True** і допустимість — різні твердження.
 
 ---
 
 ## 14. Чому SLSQP
 
-Applied problem розв’язується через SLSQP.
+прикладний problem розв’язується через SLSQP.
 
-Цей method підтримує:
+Цей метод підтримує:
 
 - bounds;
-- inequality constraints;
-- smooth nonlinear objectives.
+- inequality обмеження;
+- smooth нелінійний objectives.
 
 Ми мінімізуємо:
 
@@ -509,7 +509,7 @@ Applied problem розв’язується через SLSQP.
 
 ## 15. Стартова точка
 
-Numerical nonlinear solver потребує initial guess:
+чисельний нелінійний розв’язувач потребує початковий guess:
 
 \[
 (x_0,y_0).
@@ -521,30 +521,30 @@ Numerical nonlinear solver потребує initial guess:
 (50,50).
 \]
 
-Для applied model assignment пропонує:
+Для прикладний модель assignment пропонує:
 
 - (10,10);
 - (80,10);
 - (10,80);
 - (50,50).
 
-У nonlinear optimization path algorithm може залежати від start.
+У nonлінійна оптимізація шлях алгоритм може залежати від початок.
 
 ---
 
-## 16. Applied model і start dependence
+## 16. прикладний модель і початок dependence
 
-Для smooth applied function у baseline різні reasonable starts сходяться близько до того самого optimum.
+Для smooth прикладний функція у baseline різні reasonable починається сходяться близько до того самого оптимум.
 
-Це корисний empirical evidence.
+Це корисний empirical свідчення.
 
-Але це не universal property nonlinear problems.
+Але це не universal property нелінійний problems.
 
-Саме тому course має другий case — deliberately non-convex landscape.
+Саме тому курс має другий приклад — deliberately невипуклий поверхня.
 
 ---
 
-## 17. Sensitivity to total resource
+## 17. чутливість до загальний ресурс
 
 Досліджуємо:
 
@@ -561,13 +561,13 @@ R\in\{60,80,100,120\}.
 | 100 | ≈48.66 | ≈51.34 | ≈74.50 |
 | 120 | ≈57.83 | ≈62.17 | ≈78.86 |
 
-Objective зростає.
+цільова функція зростає.
 
 Але increments зменшуються.
 
 ---
 
-## 18. Diminishing value additional resource
+## 18. Diminishing значення additional ресурс
 
 Приріст від 60 до 80:
 
@@ -596,13 +596,13 @@ Objective зростає.
 Але \(\Delta F\) зменшується.
 
 <figure>
-  <img src="figures/fig_04_resource_sensitivity.svg" alt="Sensitivity до total resource">
-  <figcaption><strong>Рис. 4.</strong> Additional resource покращує optimum, але marginal gain зменшується. Це прямий прояв diminishing returns на рівні optimal value function.</figcaption>
+ <img src="figures/fig_04_resource_sensitivity.svg" alt="чутливість до загальний ресурс">
+ <figcaption><strong>Рис. 4.</strong> Additional ресурс покращує оптимум, але граничний gain зменшується. Це прямий прояв спадна віддача на рівні оптимальний значення функція.</figcaption>
 </figure>
 
 ---
 
-## 19. Value function
+## 19. значення функція
 
 Визначимо:
 
@@ -611,25 +611,25 @@ V(R)=
 \max_{x+y\le R}F(x,y).
 \]
 
-Sensitivity table — samples function \(V(R)\).
+чутливість table — samples функція \(V(R)\).
 
-У nonlinear case вона curved.
+У нелінійний приклад вона криволінійний.
 
-Ключове question:
+Ключове питання:
 
-> як змінюється best achievable result при relaxation resource constraint?
+> як змінюється найкращий achievable результат при relaxation ресурс обмеження?
 
-Це часто значно важливіше, ніж один baseline optimum.
+Це часто значно важливіше, ніж один baseline оптимум.
 
 ---
 
-## 20. Non-convex case: навіщо друга модель
+## 20. невипуклий приклад: навіщо друга модель
 
-Applied function поводиться досить дружньо.
+прикладний функція поводиться досить дружньо.
 
-Щоб навчитися local optima, потрібна surface із кількома peaks.
+Щоб навчитися локальний optima, потрібна surface із кількома peaks.
 
-Course використовує:
+курс використовує:
 
 \[
 G(x,y)=
@@ -650,13 +650,13 @@ Bounds:
 -4\le y\le4.
 \]
 
-Ця function — навчальний landscape.
+Ця функція — навчальний поверхня.
 
-Вона не претендує на direct real-world military interpretation.
+Вона не претендує на direct реальний військовий інтерпретація.
 
 ---
 
-## 21. Чому landscape non-convex
+## 21. Чому поверхня невипуклий
 
 Trigonometric terms:
 
@@ -675,7 +675,7 @@ Quadratic term:
 
 формує broad downward trend.
 
-Linear:
+лінійний:
 
 \[
 0.15x
@@ -687,18 +687,18 @@ Linear:
 
 - кілька peaks;
 - кілька valleys;
-- local maxima.
+- локальний maxima.
 
 <figure>
-  <img src="figures/fig_05_nonconvex_contours.svg" alt="Contour non-convex landscape">
-  <figcaption><strong>Рис. 5.</strong> Non-convex landscape має кілька локальних максимумів. Різні start points можуть привести local solver у різні basins of attraction.</figcaption>
+ <img src="figures/fig_05_nonconvex_contours.svg" alt="Contour невипуклий поверхня">
+ <figcaption><strong>Рис. 5.</strong> невипуклий поверхня має кілька локальних максимумів. Різні початок точки можуть привести локальний розв’язувач у різні basins attraction.</figcaption>
 </figure>
 
 ---
 
-## 22. Local optimum
+## 22. локальний оптимум
 
-Point \(z^*\) є local maximum, якщо в невеликому neighborhood немає кращого point.
+точка \(z^*\) є локальний максимум, якщо в невеликому neighborhood немає кращого точка.
 
 Але десь далеко може існувати:
 
@@ -706,23 +706,23 @@ Point \(z^*\) є local maximum, якщо в невеликому neighborhood н
 G(\tilde z)>G(z^*).
 \]
 
-Тоді local optimum не global.
+Тоді локальний оптимум не глобальний.
 
-Це центральна проблема non-convex optimization.
+Це центральна проблема невипуклий оптимізація.
 
 ---
 
-## 23. Global optimum
+## 23. глобальний оптимум
 
-Global maximum задовольняє:
+глобальний максимум задовольняє:
 
 \[
 G(z^*)\ge G(z)
 \]
 
-для всіх feasible \(z\).
+для всіх допустимий \(z\).
 
-У bounded 2D teaching landscape можна наближено перевірити global region через dense grid search.
+У bounded 2D навчальний поверхня можна наближено перевірити глобальний область через dense пошук на сітці.
 
 У високій dimension це швидко стає expensive.
 
@@ -730,7 +730,7 @@ G(z^*)\ge G(z)
 
 ## 24. Що реально означає success=True
 
-Для local solver **success=True** означає, що algorithm задовольнив власний stopping condition.
+Для локальний розв’язувач **success=True** означає, що алгоритм задовольнив власний stopping умова.
 
 Не означає:
 
@@ -738,11 +738,11 @@ G(z^*)\ge G(z)
 
 Це фундаментальне правило:
 
-> **Convergence is not globality.**
+> **збіжність є не globality.**
 
 ---
 
-## 25. Start point як частина experiment
+## 25. початок точка як частина експеримент
 
 Запустимо:
 
@@ -756,34 +756,34 @@ G(z^*)\ge G(z)
 (2,2).
 \]
 
-Source-of-truth test вимагає, щоб отримані objectives відрізнялися більше ніж на 0.05.
+Source-of-truth перевірка вимагає, щоб отримані objectives відрізнялися більше ніж на 0.05.
 
-Отже, різні starts можуть привести до різних local solutions.
+Отже, різні починається можуть привести до різних локальний розв’язки.
 
 ---
 
-## 26. Basin of attraction
+## 26. Basin attraction
 
 Інтуїтивно surface схожа на гористу місцевість.
 
-Local optimizer — мандрівник, який іде вгору, але бачить лише local slope.
+локальний оптимізатор — мандрівник, який іде вгору, але бачить лише локальний slope.
 
 Якщо стартує біля одного peak, підніметься на нього.
 
 Якщо біля іншого — на інший.
 
-Область start points, що приводить до певного local optimum, називають basin of attraction.
+Область початок точки, що приводить до певного локальний оптимум, називають basin attraction.
 
 <figure>
-  <img src="figures/fig_06_multistart.svg" alt="Multi-start optimization">
-  <figcaption><strong>Рис. 6.</strong> Multi-start запускає local optimizer з різних точок. Якщо solutions різняться, start dependence є empirically demonstrated, а не лише теоретично згаданою.</figcaption>
+ <img src="figures/fig_06_multistart.svg" alt="множинні початкові точки оптимізація">
+ <figcaption><strong>Рис. 6.</strong> множинні початкові точки запускає локальний оптимізатор з різних точок. Якщо розв’язки різняться, початок dependence є empirically demonstrated, а не лише теоретично згаданою.</figcaption>
 </figure>
 
 ---
 
-## 27. Multi-start
+## 27. множинні початкові точки
 
-Course запускає starts:
+курс запускає починається:
 
 \[
 (-3,-3),\ (-3,2),\ (0,0),\ (2,2),\ (3,-2),\ (4,4).
@@ -791,14 +791,14 @@ Course запускає starts:
 
 Для кожного:
 
-1. solve local;
+1. розв’язати локальний;
 2. записати final x,y;
-3. objective;
-4. success.
+3. цільова функція;
+4. успіх.
 
-Потім sort by objective.
+Потім sort за цільова функція.
 
-Best known region:
+найкращий відомий область:
 
 \[
 x\approx0.956,
@@ -814,25 +814,25 @@ G\approx1.1145.
 
 ---
 
-## 28. Multi-start не є formal proof
+## 28. множинні початкові точки не є formal proof
 
-Навіть якщо 100 starts дали один best result, це ще не formal proof global optimality.
+Навіть якщо 100 починається дали один найкращий результат, це ще не formal proof глобальний optimality.
 
 Можливо:
 
 - вузький peak не потрапив у sampled basins;
-- solver skipped region;
+- розв’язувач skipped область;
 - boundaries insufficiently explored.
 
-Multi-start — strong practical check.
+множинні початкові точки — strong практичний перевірка.
 
 Не universal proof.
 
 ---
 
-## 29. Independent grid search
+## 29. незалежний пошук на сітці
 
-У 2D можна зробити coarse grid.
+У 2D можна зробити coarse сітка.
 
 Наприклад:
 
@@ -840,23 +840,23 @@ Multi-start — strong practical check.
 step=0.05.
 \]
 
-Перебираємо всі grid combinations у bounds.
+Перебираємо всі сітка combinations у bounds.
 
-Для кожного point обчислюємо G.
+Для кожного точка обчислюємо G.
 
-Беремо best.
+Беремо найкращий.
 
-Source-of-truth test вимагає:
+Source-of-truth перевірка вимагає:
 
 \[
 |G_{multistart}-G_{grid}|<0.01.
 \]
 
-Це independent sanity check.
+Це незалежний перевірка здорового глузду.
 
 ---
 
-## 30. Чому grid search корисний
+## 30. Чому пошук на сітці корисний
 
 Переваги:
 
@@ -864,15 +864,15 @@ Source-of-truth test вимагає:
 - не залежить від gradient;
 - оглядає всю bounded area;
 - легко visualise;
-- має інший failure mode, ніж local optimizer.
+- має інший відмова mode, ніж локальний оптимізатор.
 
-У 2D це сильний teaching verification.
+У 2D це сильний навчальний перевірка.
 
 ---
 
-## 31. Чому grid search погано масштабується
+## 31. Чому пошук на сітці погано масштабується
 
-Якщо на одну variable маємо 161 grid points, у 2D:
+Якщо на одну змінна маємо 161 сітка точки, у 2D:
 
 \[
 161^2\approx25921.
@@ -886,79 +886,79 @@ Source-of-truth test вимагає:
 
 вже величезне число.
 
-Це curse of dimensionality.
+Це curse dimensionality.
 
-Grid search — не general global optimization solution.
+пошук на сітці — не general глобальний оптимізація розв’язок.
 
 ---
 
-## 32. Grid resolution і accuracy
+## 32. сітка resolution і accuracy
 
-Step:
+крок:
 
 \[
 0.05
 \]
 
-означає, що grid не бачить точки між nodes.
+означає, що сітка не бачить точки між nodes.
 
-Зменшимо step:
+Зменшимо крок:
 
 - accuracy higher;
-- computations much more.
+- computations much більше.
 
-Тобто independent verifier теж має parameter і limitation.
+Тобто незалежний verifier теж має параметр і limitation.
 
 ---
 
-## 33. Contour plot як evidence
+## 33. Contour plot як свідчення
 
-Contour plot показує lines equal objective.
+Contour plot показує lines equal цільова функція.
 
 На ньому можна побачити:
 
 - peaks;
 - valleys;
 - basins;
-- start points;
-- solver endpoints.
+- початок точки;
+- розв’язувач endpoints.
 
-Це інформативніше за таблицю success values.
+Це інформативніше за таблицю успіх значення.
 
 <figure>
-  <img src="figures/fig_07_grid_vs_multistart.svg" alt="Grid search і multistart">
-  <figcaption><strong>Рис. 7.</strong> Multi-start і coarse grid використовують різні computational mechanisms. Їхня згода поблизу \(x\approx0.956, y\approx0\) підсилює confidence у знайденому best region.</figcaption>
+ <img src="figures/fig_07_grid_vs_multistart.svg" alt="пошук на сітці і multistart">
+ <figcaption><strong>Рис. 7.</strong> множинні початкові точки і coarse сітка використовують різні computational mechanisms. Їхня згода поблизу \(x\approx0.956, y\approx0\) підсилює довірчий у знайденому найкращий область.</figcaption>
 </figure>
 
 ---
 
-## 34. Visualization не доводить optimum
+## 34. Visualization не доводить оптимум
 
 Красивий contour plot не є formal proof.
 
 Resolution limited.
 
-Color scale може приховувати differences.
+Color масштаб може приховувати differences.
 
-Plot useful для:
+Plot корисний для:
 
-- intuition;
+- інтуїція;
 - anomaly detection;
 - communication.
 
-Але не замінює numeric verification.
+Але не замінює numeric перевірка.
 
 ---
 
-## 35. Constraints і bounds — різні механізми
+## 35. обмеження і bounds — різні механізми
 
-Applied model:
+прикладний модель:
 
 \[
 x+y\le R
 \]
 
-— general inequality constraint.
+— general inequality обмеження.
 
 Також:
 
@@ -976,39 +976,39 @@ Nonconvex:
 
 — box bounds.
 
-Solver algorithms можуть обробляти їх по-різному.
+розв’язувач algorithms можуть обробляти їх по-різному.
 
-Для modeler головне — mathematical meaning має бути explicit.
-
----
-
-## 36. Feasible vs local optimum
-
-Point може бути local maximum unconstrained, але infeasible.
-
-Optimization шукає optimum лише всередині feasible region.
-
-Boundary itself може містити optimum.
-
-Тому після numeric solve завжди перевіряємо constraints.
+Для modeler головне — математичний зміст має бути явний.
 
 ---
 
-## 37. KKT intuition
+## 36. допустимий порівняно з локальний оптимум
 
-У constrained smooth optimization formal theory використовує Karush–Kuhn–Tucker conditions.
+точка може бути локальний максимум unconstrained, але infeasible.
 
-На introductory level важлива idea:
+оптимізація шукає оптимум лише всередині область допустимих розв’язків.
 
-- якщо constraint inactive, optimum locally behaves like unconstrained stationary point;
-- якщо constraint active, optimum може лежати на boundary;
-- gradient objective взаємодіє з gradients constraints.
+межа itself може містити оптимум.
 
-У baseline applied problem resource constraint active.
+Тому після numeric розв’язати завжди перевіряємо обмеження.
 
 ---
 
-## 38. Lagrange multiplier intuition
+## 37. KKT інтуїція
+
+У constrained smooth оптимізація formal theory використовує Karush–Kuhn–Tucker conditions.
+
+На introductory рівень важлива idea:
+
+- якщо обмеження inactive, оптимум locally behaves like unconstrained stationary точка;
+- якщо обмеження активний, оптимум може лежати на межа;
+- gradient цільова функція взаємодіє з gradients обмеження.
+
+У baseline прикладний problem ресурс обмеження активний.
+
+---
+
+## 38. Lagrange multiplier інтуїція
 
 Для:
 
@@ -1016,11 +1016,11 @@ Boundary itself може містити optimum.
 x+y\le R
 \]
 
-multiplier можна інтерпретувати як local value additional resource.
+multiplier можна інтерпретувати як локальний значення additional ресурс.
 
-Це nonlinear analogue shadow-price intuition.
+Це нелінійний analogue shadow-price інтуїція.
 
-Якщо \(V(R)\) saturates, marginal value:
+Якщо \(V(R)\) saturates, граничний значення:
 
 \[
 \frac{dV}{dR}
@@ -1028,48 +1028,48 @@ multiplier можна інтерпретувати як local value additional r
 
 decreases.
 
-Sensitivity table already показує це без складної dual theory.
+чутливість table already показує це без складної dual theory.
 
 ---
 
-## 39. Convexity і concavity intuition
+## 39. Convexity і concavity інтуїція
 
 У maximization є важлива властивість.
 
 Якщо:
 
-- feasible set convex;
-- objective concave,
+- допустимий набір convex;
+- цільова функція concave,
 
-то local maximum є global maximum.
+то локальний максимум є глобальний максимум.
 
 Це дуже сильна гарантія.
 
-У deliberately non-convex landscape такої гарантії немає.
+У deliberately невипуклий поверхня такої гарантії немає.
 
-Саме тому один local solve недостатній.
+Саме тому один локальний розв’язати недостатній.
 
 ---
 
-## 40. Hessian intuition
+## 40. Hessian інтуїція
 
-Для двічі differentiable function curvature описує Hessian matrix.
+Для двічі differentiable функція curvature описує Hessian матриця.
 
-Не потрібно вручну обчислювати Hessian для кожної Lab.
+Не потрібно вручну обчислювати Hessian для кожної лабораторія.
 
 Але варто пам’ятати:
 
 - curvature determines shape;
-- negative curvature around point може підтримувати local maximum interpretation;
+- від’ємний curvature навколо точка може підтримувати локальний максимум інтерпретація;
 - mixed curvature може створювати saddles.
 
-Optimization algorithm взаємодіє з geometry, а не просто «перебирає числа».
+оптимізація алгоритм взаємодіє з geometry, а не просто «перебирає числа».
 
 ---
 
-## 41. Saddle point
+## 41. Saddle точка
 
-Point може мати zero gradient, але не бути optimum.
+точка може мати нуля gradient, але не бути оптимум.
 
 Наприклад:
 
@@ -1083,60 +1083,60 @@ H(x,y)=x^2-y^2.
 (0,0)
 \]
 
-gradient zero.
+gradient нуля.
 
-Але вздовж x function зростає, вздовж y — зменшується.
+Але вздовж x функція зростає, вздовж y — зменшується.
 
 Це saddle.
 
 Отже:
 
-> stationary point ≠ automatically optimum.
+> stationary точка ≠ automatically оптимум.
 
 ---
 
-## 42. Model adequacy applied case
+## 42. модель адекватність прикладний приклад
 
-Applied function synthetic.
+прикладний функція синтетичний.
 
-У real research потрібно обґрунтувати:
+У реальний дослідження потрібно обґрунтувати:
 
-- why exponential saturation;
-- why these coefficients;
-- why square-root synergy;
-- whether interaction positive;
-- whether resource continuous;
-- whether one period sufficient.
+- чому exponential насичення;
+- чому ці коефіцієнти;
+- чому square-root synergy;
+- whether взаємодія додатний;
+- whether ресурс неперервний;
+- whether один period sufficient.
 
-Без цього formula має teaching meaning only.
+Без цього формула має навчальний зміст лише.
 
 ---
 
-## 43. Calibration nonlinear model
+## 43. калібрування нелінійний модель
 
-Якщо є observed pairs:
+Якщо є спостережуваний pairs:
 
 \[
 (x_k,y_k,F_k),
 \]
 
-можна оцінювати coefficients:
+можна оцінювати коефіцієнти:
 
 \[
 40,\ 0.05,\ 35,\ 0.04,\ 0.15.
 \]
 
-Наприклад nonlinear least squares.
+Наприклад нелінійний метод найменших квадратів.
 
-Тоді optimization model пов’язується з data.
+Тоді оптимізація модель пов’язується з дані.
 
-Але з’являється uncertainty parameters.
+Але з’являється невизначеність параметри.
 
 ---
 
-## 44. Uncertainty optimum
+## 44. невизначеність оптимум
 
-Якщо coefficients uncertain, optimum:
+Якщо коефіцієнти uncertain, оптимум:
 
 \[
 x^*,y^*
@@ -1146,37 +1146,37 @@ x^*,y^*
 
 Можна:
 
-1. sample coefficients;
-2. solve optimization кожен run;
-3. analyse distribution optimal decisions.
+1. вибірка коефіцієнти;
+2. розв’язати оптимізація кожен запуск;
+3. analyse розподіл оптимальний decisions.
 
 Але тут є важлива методологічна розвилка.
 
 ### Reoptimization
 
-Кожна sampled world отримує власний optimum.
+Кожна sampled world отримує власний оптимум.
 
 Питання:
 
-> яким був би optimum, якби parameters були саме такими?
+> яким був би оптимум, якби параметри були саме такими?
 
-### Fixed-decision robustness
+### Fixed-decision стійкість
 
-Обираємо один decision \(x^*\) і оцінюємо його performance under uncertain parameters.
+Обираємо один decision \(x^*\) і оцінюємо його ефективність за uncertain параметри.
 
 Питання:
 
-> наскільки baseline decision robust, якщо real parameters інші?
+> наскільки baseline decision robust, якщо реальний параметри інші?
 
 Ці experiments не можна змішувати.
 
 ---
 
-## 45. Diminishing returns vs threshold effect
+## 45. спадна віддача порівняно з поріг вплив
 
-Diminishing returns — smooth decrease marginal gain.
+спадна віддача — smooth decrease граничний gain.
 
-Threshold — sharp change біля певного value.
+поріг — sharp зміна біля певного значення.
 
 Наприклад:
 
@@ -1188,51 +1188,51 @@ ax+b,&x\ge T.
 \end{cases}
 \]
 
-Такий model nonlinear/non-smooth.
+Такий модель нелінійний/non-smooth.
 
 Не всі nonlinearities однакові.
 
-Method selection залежить від structure.
+вибір методу залежить від структура.
 
 ---
 
-## 46. Non-smooth objective
+## 46. Non-smooth цільова функція
 
-Якщо objective має:
+Якщо цільова функція має:
 
-- absolute values;
+- absolute значення;
 - min/max;
 - discontinuities;
 
-gradient-based solver може мати difficulties.
+gradient-based розв’язувач може мати difficulties.
 
-Потрібно обирати method відповідно до mathematical properties.
+Потрібно обирати метод відповідно до математичний properties.
 
-Питання «який solver?» завжди йде **після** питання «яка структура model?».
+Питання «який розв’язувач?» завжди йде **після** питання «яка структура модель?».
 
 ---
 
-## 47. Чому property важливіша за brand solver
+## 47. Чому property важливіша за brand розв’язувач
 
-Перед вибором algorithm запитайте:
+Перед вибором алгоритм запитайте:
 
-- objective smooth?
+- цільова функція smooth?
 - convex/concave?
 - bounds?
-- constraints?
-- derivatives available?
+- обмеження?
+- derivatives доступний?
 - dimension?
-- discrete variables?
-- non-convex?
-- stochastic?
+- дискретний змінні?
+- невипуклий?
+- стохастичний?
 
-Після цього method.
+Після цього метод.
 
 Назва library — останній рівень, а не перший.
 
 ---
 
-## 48. Python без страху: applied objective
+## 48. Python без страху: прикладний цільова функція
 
 ~~~python
 def applied_utility(x, y):
@@ -1243,13 +1243,13 @@ def applied_utility(x, y):
     )
 ~~~
 
-Code mirrors formula.
+код mirrors формула.
 
-Це desirable для audit.
+Це desirable для аудит.
 
 ---
 
-## 49. Python без страху: applied solve
+## 49. Python без страху: прикладний розв’язати
 
 ~~~python
 sol = solve_applied(
@@ -1268,7 +1268,7 @@ F ≈ 74.497
 
 ---
 
-## 50. Python без страху: verification
+## 50. Python без страху: перевірка
 
 ~~~python
 checks = verify_applied_solution(
@@ -1279,11 +1279,11 @@ checks = verify_applied_solution(
 assert checks["all_passed"]
 ~~~
 
-Не вважайте success достатньою verification.
+Не вважайте успіх достатньою перевірка.
 
 ---
 
-## 51. Python без страху: sensitivity
+## 51. Python без страху: чутливість
 
 ~~~python
 rows = applied_sensitivity(
@@ -1297,9 +1297,9 @@ rows = applied_sensitivity(
 F^*(R)
 \]
 
-має non-decreasing trend для цього model.
+має non-decreasing trend для цього модель.
 
-Source test перевіряє саме це.
+джерело перевірка перевіряє саме це.
 
 ---
 
@@ -1310,13 +1310,13 @@ a = solve_nonconvex((0,0))
 b = solve_nonconvex((2,2))
 ~~~
 
-Якщо objective values різні:
+Якщо цільова функція значення різні:
 
-> local solver start dependence demonstrated.
+> локальний розв’язувач початок dependence demonstrated.
 
 ---
 
-## 53. Python без страху: multi-start
+## 53. Python без страху: множинні початкові точки
 
 ~~~python
 rows = multistart_nonconvex([
@@ -1329,9 +1329,9 @@ rows = multistart_nonconvex([
 ])
 ~~~
 
-Sort by objective.
+Sort за цільова функція.
 
-Best region near:
+найкращий область біля:
 
 \[
 (0.956,0).
@@ -1339,7 +1339,7 @@ Best region near:
 
 ---
 
-## 54. Python без страху: grid check
+## 54. Python без страху: сітка перевірка
 
 ~~~python
 grid = grid_search_nonconvex(
@@ -1359,44 +1359,44 @@ G_{grid}
 G_{best\ multistart}.
 \]
 
-Різниця < 0.01 у control test.
+Різниця < 0.01 у контрольний перевірка.
 
 ---
 
-## 55. Verification layers
+## 55. перевірка layers
 
-### Input validation
+### вхідні дані валідація
 
-- R positive;
-- start length = 2;
-- start non-negative applied case;
-- grid step positive.
+- R додатний;
+- початок length = 2;
+- початок non-negative прикладний приклад;
+- сітка крок додатний.
 
-### Feasibility
+### допустимість
 
-- x,y within constraints.
+- x,y within обмеження.
 
-### Solver convergence
+### розв’язувач збіжність
 
-- success status.
+- успіх статус.
 
-### Cross-method check
+### Cross-method перевірка
 
-- multi-start;
-- grid search.
+- множинні початкові точки;
+- пошук на сітці.
 
-### Model adequacy
+### модель адекватність
 
-- structure justified by domain/data.
+- структура justified за область/дані.
 
 <figure>
-  <img src="figures/fig_08_verification_layers.svg" alt="Рівні перевірки nonlinear optimization">
-  <figcaption><strong>Рис. 8.</strong> Надійний nonlinear result будується шарами: valid inputs → feasible solution → numerical convergence → multi-start / independent check → domain adequacy.</figcaption>
+ <img src="figures/fig_08_verification_layers.svg" alt="Рівні перевірки nonлінійна оптимізація">
+ <figcaption><strong>Рис. 8.</strong> Надійний нелінійний результат будується шарами: valid вхідні дані → допустимий розв’язок → чисельний збіжність → множинні початкові точки / незалежний перевірка → область адекватність.</figcaption>
 </figure>
 
 ---
 
-## 56. Зламай модель: one start only
+## 56. Зламай модель: один початок лише
 
 Запустили з:
 
@@ -1404,25 +1404,25 @@ G_{best\ multistart}.
 (0,0)
 \]
 
-і отримали success.
+і отримали успіх.
 
 Зупинилися.
 
-У non-convex landscape це insufficient.
+У невипуклий поверхня це insufficient.
 
-Break condition:
+злам умова:
 
-> інший start дає кращий objective.
+> інший початок дає кращий цільова функція.
 
 Модернізація:
 
-> multi-start.
+> множинні початкові точки.
 
 ---
 
-## 57. Зламай модель: coarse grid too coarse
+## 57. Зламай модель: coarse сітка too coarse
 
-Step:
+крок:
 
 \[
 1.0
@@ -1430,19 +1430,19 @@ Step:
 
 може пропустити narrow peak.
 
-Grid says best A.
+сітка says найкращий.
 
-Finer grid — best B.
+Finer сітка — найкращий B.
 
-Отже, grid resolution itself parameter.
+Отже, сітка resolution itself параметр.
 
-Need sensitivity to verification method.
+Need чутливість до перевірка метод.
 
 ---
 
-## 58. Зламай модель: invalid start
+## 58. Зламай модель: invalid початок
 
-Applied start:
+прикладний початок:
 
 \[
 (80,80)
@@ -1450,17 +1450,17 @@ Applied start:
 
 sum > R.
 
-Current function rescales start to feasible resource total.
+поточний функція rescales початок до допустимий ресурс загальний.
 
-Це convenient behavior.
+Це convenient поведінка.
 
-Але researcher повинен знати, що algorithm changed initial point.
+Але researcher повинен знати, що алгоритм changed початковий точка.
 
 Transparent logging важливе.
 
 ---
 
-## 59. Зламай модель: square root near zero
+## 59. Зламай модель: square корінь біля нуля
 
 Term:
 
@@ -1468,39 +1468,39 @@ Term:
 \sqrt{xy}
 \]
 
-має derivatives із higher sensitivity near zero.
+має derivatives із higher чутливість біля нуля.
 
-Якщо model допускає exact zero, mathematical smoothness changes.
+Якщо модель допускає точний нуля, математичний smoothness зміни.
 
-У current setup solver handles baseline.
+У поточний setup розв’язувач handles baseline.
 
-Але form objective впливає на numerical behavior.
+Але форма цільова функція впливає на чисельний поведінка.
 
 ---
 
-## 60. Зламай модель: wrong domain
+## 60. Зламай модель: помилковий область
 
-Якщо x або y negative, applied_utility returns negative infinity.
+Якщо x або y від’ємний, applied_utility returns від’ємний infinity.
 
 Це semantic guard.
 
-У real model domain restrictions повинні бути explicit constraints.
+У реальний модель область restrictions повинні бути явний обмеження.
 
 ---
 
-## 61. Зламай модель: coefficients без data
+## 61. Зламай модель: коефіцієнти без дані
 
-Якщо coefficients 40, 35, 0.05, 0.04, 0.15 не мають empirical basis, optimum має teaching meaning only.
+Якщо коефіцієнти 40, 35, 0.05, 0.04, 0.15 не мають empirical basis, оптимум має навчальний зміст лише.
 
-Це нормально для course.
+Це нормально для курс.
 
-Але dissertation result потребує parameter provenance.
+Але dissertation результат потребує параметр походження.
 
 ---
 
 ## Поглиблення: зведення constrained problem до однієї змінної
 
-У baseline resource constraint active:
+У baseline ресурс обмеження активний:
 
 \[
 x+y=R.
@@ -1512,30 +1512,30 @@ x+y=R.
 y=R-x.
 \]
 
-Підставимо в objective:
+Підставимо в цільова функція:
 
 \[
 H_R(x)=F(x,R-x).
 \]
 
-Feasible interval:
+допустимий інтервал:
 
 \[
 0\le x\le R.
 \]
 
-Це дуже корисний conceptual step.
+Це дуже корисний conceptual крок.
 
-Двовимірна constrained optimization problem стає one-dimensional problem.
+Двовимірна constrained оптимізація problem стає one-dimensional problem.
 
 Ми можемо:
 
 - побудувати graph \(H_R(x)\);
 - побачити максимум;
-- порівняти numerical solution;
+- порівняти чисельний розв’язок;
 - перевірити shape.
 
-Для \(R=100\) maximum \(H_{100}(x)\) лежить поблизу:
+Для \(R=100\) максимум \(H_{100}(x)\) лежить поблизу:
 
 \[
 x\approx48.66.
@@ -1547,11 +1547,11 @@ x\approx48.66.
 y\approx51.34.
 \]
 
-Це independent interpretation of solver result.
+Це незалежний інтерпретація розв’язувач результат.
 
 Важливо:
 
-> reduction works because we know active equality-like structure in optimum.
+> reduction works оскільки ми know активний equality-like структура у оптимум.
 
 Не кожну constrained problem можна так просто reduce.
 
@@ -1559,7 +1559,7 @@ y\approx51.34.
 
 ## Поглиблення: gradient як локальний компас
 
-Для smooth function gradient:
+Для smooth функція gradient:
 
 \[
 \nabla F(x,y)
@@ -1570,19 +1570,19 @@ y\approx51.34.
 \right)
 \]
 
-показує direction найшвидшого local increase.
+показує напрям найшвидшого локальний increase.
 
-У unconstrained maximization stationary candidate задовольняє:
+У unconstrained maximization stationary кандидатний задовольняє:
 
 \[
 \nabla F=0.
 \]
 
-Але в constrained problem optimum може лежати на boundary, де gradient не zero.
+Але в constrained problem оптимум може лежати на межа, де gradient не нуля.
 
 Baseline саме такий випадок.
 
-Resource boundary:
+ресурс межа:
 
 \[
 x+y=R.
@@ -1590,13 +1590,13 @@ x+y=R.
 
 Тому важливо не застосовувати правило:
 
-> «optimum там, де derivative = 0»
+> «оптимум там, де похідна = 0»
 
-без урахування constraints.
+без урахування обмеження.
 
 ---
 
-## Поглиблення: marginal balance на boundary
+## Поглиблення: граничний баланс на межа
 
 Якщо:
 
@@ -1604,13 +1604,13 @@ x+y=R.
 y=R-x,
 \]
 
-то small increase \(dx\) автоматично означає:
+то малий increase \(dx\) автоматично означає:
 
 \[
 dy=-dx.
 \]
 
-У optimum local gain from x має балансувати local loss from y з урахуванням interaction.
+У оптимум локальний gain від x має балансувати локальний втрата від y з урахуванням взаємодія.
 
 Тобто:
 
@@ -1620,21 +1620,21 @@ dy=-dx.
 
 Інтуїтивно:
 
-> якщо перенести дуже малу unit ресурсу з y у x, objective майже не зміниться.
+> якщо перенести дуже малу одиниця ресурсу з y у x, цільова функція майже не зміниться.
 
-Це глибша причина того, чому allocation близький до balance.
+Це глибша причина того, чому розподіл близький до баланс.
 
-Не «solver любить 50/50», а:
+Не «розв’язувач любить 50/50», а:
 
-> marginal trade-off balanced.
+> граничний trade-off balanced.
 
 ---
 
-## Поглиблення: curvature пояснює saturation
+## Поглиблення: curvature пояснює насичення
 
-Перша derivative показує marginal gain.
+Перша похідна показує граничний gain.
 
-Друга derivative:
+Друга похідна:
 
 \[
 \frac{d^2F}{dx^2}
@@ -1642,7 +1642,7 @@ dy=-dx.
 
 описує curvature.
 
-Для exponential saturation component:
+Для exponential насичення component:
 
 \[
 F_x(x)=40(1-e^{-0.05x}),
@@ -1656,33 +1656,33 @@ F_x(x)=40(1-e^{-0.05x}),
 -0.1e^{-0.05x}<0.
 \]
 
-Negative second derivative означає concavity цього component.
+від’ємний другий похідна означає concavity цього component.
 
 Тобто slope зменшується.
 
-Це математичний signature diminishing returns.
+Це математичний signature спадна віддача.
 
 ---
 
 ## Поглиблення: concavity не треба плутати з «кривою вниз на картинці»
 
-Graphical intuition корисна.
+Graphical інтуїція корисна.
 
 Але formal property важливіша.
 
-Concave objective over convex feasible set для maximization дає сильну гарантію:
+Concave цільова функція над convex допустимий набір для maximization дає сильну гарантію:
 
-> будь-який local optimum є global.
+> будь-який локальний оптимум є глобальний.
 
-Саме тому classification problem geometry має практичне значення.
+Саме тому класифікація problem geometry має практичне значення.
 
-У non-convex case такої гарантії немає.
+У невипуклий приклад такої гарантії немає.
 
 ---
 
-## Поглиблення: scaling variables
+## Поглиблення: scaling змінні
 
-Numerical optimization може поводитися гірше, якщо variables мають дуже різні scales.
+чисельний оптимізація може поводитися гірше, якщо змінні мають дуже різні scales.
 
 Наприклад:
 
@@ -1694,7 +1694,7 @@ x\in[0,1],
 y\in[0,10^6].
 \]
 
-Тоді gradient components можуть мати radically different magnitudes.
+Тоді gradient components можуть мати radically інший magnitudes.
 
 Корисно масштабувати:
 
@@ -1702,43 +1702,43 @@ y\in[0,10^6].
 \tilde x=\frac{x-x_{min}}{x_{max}-x_{min}}.
 \]
 
-У нашому teaching case x і y одного порядку, тому issue мінімальна.
+У нашому навчальний приклад x і y одного порядку, тому issue мінімальна.
 
-Але для Research Transfer scaling потрібно перевіряти.
+Але для дослідження Transfer scaling потрібно перевіряти.
 
 ---
 
-## Поглиблення: scaling objective
+## Поглиблення: scaling цільова функція
 
-Так само objective components можуть мати різні magnitudes.
+Так само цільова функція components можуть мати різні magnitudes.
 
-Якщо one component ~0.01, а інший ~100000, small component numerical solver майже «не бачить».
+Якщо один component ~0.01, а інший ~100000, малий component чисельний розв’язувач майже «не бачить».
 
 Це не обов’язково означає, що він предметно неважливий.
 
 Потрібно distinguish:
 
-- numerical scale;
+- чисельний масштаб;
 - conceptual importance.
 
-Особливо це важливо в weighted nonlinear objectives.
+Особливо це важливо в weighted нелінійний objectives.
 
 ---
 
-## Поглиблення: stopping tolerance
+## Поглиблення: stopping допуск
 
-Solver зупиняється не тоді, коли досягнуто mathematically exact optimum.
+розв’язувач зупиняється не тоді, коли досягнуто mathematically точний оптимум.
 
 Він використовує tolerances.
 
 Наприклад:
 
-- gradient norm small;
-- step small;
-- objective change small;
-- maximum iterations.
+- gradient norm малий;
+- крок малий;
+- цільова функція зміна малий;
+- максимум iterations.
 
-Тому два runs можуть дати:
+Тому два реалізації можуть дати:
 
 \[
 74.49684
@@ -1750,15 +1750,15 @@ Solver зупиняється не тоді, коли досягнуто mathema
 74.49685.
 \]
 
-Це не meaningful scientific difference.
+Це не meaningful науковий difference.
 
-Потрібно reporting precision узгоджувати з numerical tolerance та data quality.
+Потрібно reporting точність узгоджувати з чисельний допуск та дані якість.
 
 ---
 
-## Поглиблення: false precision nonlinear result
+## Поглиблення: false точність нелінійний результат
 
-Якщо parameters synthetic:
+Якщо параметри синтетичний:
 
 \[
 0.05,\ 0.04,\ 0.15,
@@ -1770,9 +1770,9 @@ Solver зупиняється не тоді, коли досягнуто mathema
 x^*=48.659312487
 \]
 
-створює false precision.
+створює false точність.
 
-У teaching interpretation достатньо:
+У навчальний інтерпретація достатньо:
 
 \[
 x^*\approx48.66,
@@ -1782,18 +1782,18 @@ x^*\approx48.66,
 y^*\approx51.34.
 \]
 
-Точніші digits потрібні для tests, але не обов’язково для scientific narrative.
+Точніші digits потрібні для тести, але не обов’язково для науковий narrative.
 
 Це важливе розділення:
 
-- computational precision;
-- reporting precision.
+- computational точність;
+- reporting точність.
 
 ---
 
-## Поглиблення: design of multi-start experiment
+## Поглиблення: дизайн множинні початкові точки експеримент
 
-Multi-start не повинен бути випадковим списком start points.
+множинні початкові точки не повинен бути випадковим списком початок точки.
 
 Корисно включити:
 
@@ -1803,7 +1803,7 @@ Multi-start не повинен бути випадковим списком sta
 (0,0)
 \]
 
-або center domain.
+або center область.
 
 ### Corners
 
@@ -1811,11 +1811,11 @@ Multi-start не повинен бути випадковим списком sta
 (-4,-4),\ (-4,4),\ (4,-4),\ (4,4).
 \]
 
-### Interior points
+### Interior точки
 
 кілька locations.
 
-### Random sample
+### випадковий вибірка
 
 за потреби.
 
@@ -1823,36 +1823,36 @@ Multi-start не повинен бути випадковим списком sta
 
 > покрити різні basins.
 
-У course використовується невеликий deterministic set, щоб experiment був reproducible.
+У курс використовується невеликий детермінований набір, щоб експеримент був reproducible.
 
 ---
 
-## Поглиблення: deterministic starts vs random starts
+## Поглиблення: детермінований починається порівняно з випадковий починається
 
-Deterministic starts:
+детермінований починається:
 
 - reproducible;
-- easy to compare;
-- можуть miss region systematically.
+- easy до порівняти;
+- можуть miss область systematically.
 
-Random starts:
+випадковий починається:
 
 - broader exploration;
-- require seed;
-- results vary with sample.
+- require початкове значення генератора;
+- результати vary з вибірка.
 
-Комбінований design:
+Комбінований дизайн:
 
-1. fixed canonical starts;
-2. random starts with seed.
+1. фіксований canonical починається;
+2. випадковий починається з початкове значення генератора.
 
-Це часто practical compromise.
+Це часто практичний compromise.
 
 ---
 
-## Поглиблення: best-of-multistart as lower bound on global optimum
+## Поглиблення: best-of-multistart як lower bound на глобальний оптимум
 
-У maximization якщо знайдено best value:
+У maximization якщо знайдено найкращий значення:
 
 \[
 G_{best}=1.1145,
@@ -1864,7 +1864,7 @@ G_{best}=1.1145,
 G_{global}\ge1.1145.
 \]
 
-Бо global optimum не може бути гіршим за знайдений feasible solution.
+Бо глобальний оптимум не може бути гіршим за знайдений допустимий розв’язок.
 
 Але не знаємо:
 
@@ -1872,21 +1872,21 @@ G_{global}\ge1.1145.
 G_{global}=1.1145
 \]
 
-без stronger proof.
+без сильніший proof.
 
-Тобто best found value дає **lower bound on global maximum value**.
+Тобто найкращий found значення дає **lower bound на глобальний максимум значення**.
 
 Це коректна логічна позиція.
 
 ---
 
-## Поглиблення: grid search як upper-proof не працює
+## Поглиблення: пошук на сітці як upper-proof не працює
 
-Coarse grid знаходить best among grid points.
+Coarse сітка знаходить найкращий among сітка точки.
 
-Це не upper bound на continuous maximum.
+Це не верхній bound на неперервний максимум.
 
-Між grid nodes може бути вищий point.
+Між сітка nodes може бути вищий точка.
 
 Отже:
 
@@ -1894,7 +1894,7 @@ Coarse grid знаходить best among grid points.
 G_{grid}
 \]
 
-— ще один feasible lower bound.
+— ще один допустимий lower bound.
 
 Якщо:
 
@@ -1902,19 +1902,19 @@ G_{grid}
 G_{grid}\approx G_{multistart},
 \]
 
-confidence grows.
+довірчий grows.
 
 Але formal gap unknown.
 
 ---
 
-## Поглиблення: branch-and-bound / global methods як наступний рівень
+## Поглиблення: branch-and-bound / глобальний методи як наступний рівень
 
-Для деяких non-convex problems існують global optimization methods:
+Для деяких невипуклий problems існують глобальний оптимізація методи:
 
 - branch-and-bound;
-- interval methods;
-- deterministic global solvers;
+- інтервал методи;
+- детермінований глобальний solvers;
 - evolutionary algorithms;
 - basin hopping;
 - differential evolution.
@@ -1924,167 +1924,167 @@ confidence grows.
 - dimension;
 - smoothness;
 - bounds;
-- derivative availability;
-- computational budget.
+- похідна availability;
+- computational бюджет.
 
 На T2.L3 головне не перелік algorithms.
 
 Головне:
 
-> local method потребує explicit verification strategy.
+> локальний метод потребує явний перевірка strategy.
 
 ---
 
-## Поглиблення: boundary optimum
+## Поглиблення: межа оптимум
 
-Nonconvex best region у course близький до:
+Nonconvex найкращий область у курс близький до:
 
 \[
 y\approx0.
 \]
 
-Тобто best solution лежить біля boundary.
+Тобто найкращий розв’язок лежить біля межа.
 
 Це важливий reminder.
 
-Optimum не обов’язково «в центрі красивого peak».
+оптимум не обов’язково «в центрі красивого peak».
 
-Bounds самі формують feasible landscape.
+Bounds самі формують допустимий поверхня.
 
-Тому visualization повинна показувати не лише objective, а й feasible domain.
+Тому visualization повинна показувати не лише цільова функція, а й допустимий область.
 
 ---
 
-## Поглиблення: active bounds і interpretation
+## Поглиблення: активний bounds і інтерпретація
 
-Якщо optimum має:
+Якщо оптимум має:
 
 \[
 y=0,
 \]
 
-це active lower bound.
+це активний lower bound.
 
-Предметна interpretation:
+Предметна інтерпретація:
 
-> у цій synthetic landscape model allocation y не дає достатньої marginal benefit near best region.
+> у цій синтетичний поверхня модель розподіл y не дає достатньої граничний виграш біля найкращий область.
 
 Але це не означає:
 
-> real direction y «не потрібний».
+> реальний напрям y «не потрібний».
 
-Toy landscape не має direct domain semantics.
+Toy поверхня не має direct область semantics.
 
-Це teaching example of local/global behavior.
+Це навчальний приклад локальний/глобальний поведінка.
 
 ---
 
-## Поглиблення: parameter sensitivity нелінійної форми
+## Поглиблення: параметр чутливість нелінійної форми
 
-Можна змінити coefficient interaction:
+Можна змінити коефіцієнт взаємодія:
 
 \[
 0.15\rightarrow0.05,\ 0.30.
 \]
 
-Question:
+питання:
 
-> як stronger/weaker synergy змінює allocation?
+> як сильніший/weaker synergy змінює розподіл?
 
-Або saturation rate:
+Або насичення rate:
 
 \[
 0.05\rightarrow0.03.
 \]
 
-Question:
+питання:
 
-> як slower saturation x змінює optimum?
+> як slower насичення x змінює оптимум?
 
 Такі experiments допомагають визначити:
 
-> які nonlinear assumptions найбільше формують decision.
+> які нелінійний припущення найбільше формують decision.
 
 ---
 
-## Поглиблення: structural uncertainty
+## Поглиблення: структурний невизначеність
 
-Parameter uncertainty:
+параметр невизначеність:
 
-> coefficient 0.05 неточний.
+> коефіцієнт 0.05 неточний.
 
-Structural uncertainty:
+структурний невизначеність:
 
-> можливо exponential saturation взагалі неправильна function family.
+> можливо exponential насичення взагалі неправильна функція family.
 
 Це глибша проблема.
 
-Можливі alternatives:
+Можливі альтернативи:
 
 - logarithmic;
 - Michaelis–Menten;
 - logistic;
-- piecewise linear.
+- piecewise лінійний.
 
-У research model варто порівнювати plausible structures, якщо data не підтримує одну однозначно.
+У дослідження модель варто порівнювати правдоподібний structures, якщо дані не підтримує одну однозначно.
 
 ---
 
-## Поглиблення: calibration before optimization
+## Поглиблення: калібрування до оптимізація
 
 Небезпечний workflow:
 
-1. invent nonlinear formula;
+1. invent нелінійний формула;
 2. optimize;
-3. report optimum.
+3. report оптимум.
 
 Сильніший:
 
-1. formulate mechanism hypothesis;
-2. collect/prepare data;
-3. estimate parameters;
-4. validate response function;
-5. quantify uncertainty;
-6. only then optimize;
-7. evaluate robustness decision.
+1. formulate mechanism гіпотеза;
+2. collect/prepare дані;
+3. оцінка параметри;
+4. validate відгук функція;
+5. quantify невизначеність;
+6. лише тоді optimize;
+7. evaluate стійкість decision.
 
-Optimization should sit **after** model calibration, not replace it.
+оптимізація слід sit **після** модель калібрування, не replace це.
 
 ---
 
-## Поглиблення: fixed-decision robustness
+## Поглиблення: fixed-decision стійкість
 
-Припустимо baseline optimum:
+Припустимо baseline оптимум:
 
 \[
 d_0=(48.66,51.34).
 \]
 
-Parameters uncertainty.
+параметри невизначеність.
 
 Є два experiments.
 
-### Reoptimize each draw
+### Reoptimize кожний draw
 
-Для кожного parameter sample знаходимо new optimum.
+Для кожного параметр вибірка знаходимо new оптимум.
 
-Отримуємо distribution:
+Отримуємо розподіл:
 
 \[
 d^*(\theta).
 \]
 
-### Keep \(d_0\) fixed
+### Keep \(d_0\) фіксований
 
-Для кожного parameter sample оцінюємо:
+Для кожного параметр вибірка оцінюємо:
 
 \[
 F(d_0;\theta).
 \]
 
-Це показує robustness actual chosen decision.
+Це показує стійкість actual chosen decision.
 
-Для decision support другий experiment часто не менш важливий.
+Для decision support другий експеримент часто не менш важливий.
 
 ---
 
@@ -2102,66 +2102,66 @@ F(d_0;\theta).
 
 Він відповідає:
 
-> скільки performance ми втрачаємо, якщо використовуємо baseline decision замість scenario-specific optimum?
+> скільки ефективність ми втрачаємо, якщо використовуємо baseline decision замість scenario-specific оптимум?
 
 Це сильний bridge до robust decision making.
 
 ---
 
-## Поглиблення: model audit T2.L3
+## Поглиблення: модель аудит T2.L3
 
-### Mathematical audit
+### математичний аудит
 
-- domain correct?
-- objective finite?
-- constraints explicit?
+- область коректний?
+- цільова функція скінченний?
+- обмеження явний?
 - smoothness understood?
 
-### Numerical audit
+### чисельний аудит
 
-- starts logged?
-- tolerance known?
+- починається logged?
+- допуск відомий?
 - scaling acceptable?
-- convergence checked?
+- збіжність checked?
 
-### Globality audit
+### Globality аудит
 
-- convexity/concavity known?
-- multi-start performed?
-- independent check available?
+- convexity/concavity відомий?
+- множинні початкові точки performed?
+- незалежний перевірка доступний?
 
-### Scientific audit
+### науковий аудит
 
-- formula justified?
-- parameters calibrated?
-- uncertainty acknowledged?
-- allowed conclusion conditional?
+- формула justified?
+- параметри калібрований?
+- невизначеність acknowledged?
+- allowed висновок умовний?
 
 ---
 
-## Поглиблення: reproducibility package
+## Поглиблення: відтворюваність пакет
 
-Для nonlinear experiment збережіть:
+Для нелінійний експеримент збережіть:
 
-- function definition;
-- parameter values;
+- функція definition;
+- параметр значення;
 - bounds;
-- constraints;
-- solver/method;
-- initial points;
+- обмеження;
+- розв’язувач/метод;
+- початковий точки;
 - tolerances;
-- random seed, якщо є;
-- all local solutions;
-- best objective;
-- grid resolution;
-- sensitivity results;
+- випадковий початкове значення генератора, якщо є;
+- усі локальний розв’язки;
+- найкращий цільова функція;
+- сітка resolution;
+- чутливість результати;
 - figures;
-- code version;
-- package versions.
+- код версія;
+- пакет версії.
 
-Особливо важливо зберігати starts.
+Особливо важливо зберігати починається.
 
-Без них colleague може не відтворити local solution.
+Без них colleague може не відтворити локальний розв’язок.
 
 ---
 
@@ -2179,39 +2179,39 @@ x=48.66,\quad y=51.34
 
 Аналітик відповідає:
 
-> «Бо два напрями мають різні saturation rates, а interaction винагороджує спільне використання. На boundary \(x+y=100\) optimum виникає там, де marginal trade-off balance. Якщо ресурс збільшувати, objective росте, але все повільніше».
+> «Бо два напрями мають різні насичення rates, а взаємодія винагороджує спільне використання. На межа \(x+y=100\) оптимум виникає там, де граничний trade-off баланс. Якщо ресурс збільшувати, цільова функція росте, але все повільніше».
 
-Потім керівник дивиться на non-convex case:
+Потім керівник дивиться на невипуклий приклад:
 
-> «А тут solver теж написав success. Чому ви запускаєте його шість разів?»
+> «А тут розв’язувач теж написав успіх. Чому ви запускаєте його шість разів?»
 
 Аналітик:
 
-> «Бо success означає local convergence. Різні starts приводять до різних peaks. Ми використовуємо multi-start і independent grid, щоб не переплутати локальний максимум із найкращим знайденим region».
+> «Бо успіх означає локальний збіжність. Різні починається приводять до різних peaks. Ми використовуємо множинні початкові точки і незалежний сітка, щоб не переплутати локальний максимум із найкращим знайденим область».
 
 Саме ця друга відповідь і є сутністю T2.L3.
 
 ---
 
-## 62. Scenario design nonlinear
+## 62. сценарій дизайн нелінійний
 
-Корисний plan:
+Корисний план:
 
-| Run | Change | Purpose |
+| запуск | зміна | Purpose |
 |---|---|---|
-| Baseline | R=100 | control |
-| Low R | 60 | diminishing returns |
-| Mid R | 80 | value function |
-| High R | 120 | saturation |
-| Starts | 4 starts | start sensitivity |
-| Nonconvex | 6 starts | local optima |
-| Grid | step=.05 | independent check |
+| Baseline | R=100 | контрольний |
+| низький R | 60 | спадна віддача |
+| Mid R | 80 | значення функція |
+| високий R | 120 | насичення |
+| починається | 4 починається | початок чутливість |
+| Nonconvex | 6 починається | локальний optima |
+| сітка | крок=.05 | незалежний перевірка |
 
-Перед запуском бажано записати prediction.
+Перед запуском бажано записати прогноз.
 
 ---
 
-## 63. Allowed conclusion applied case
+## 63. Allowed висновок прикладний приклад
 
 Слабкий:
 
@@ -2219,43 +2219,43 @@ x=48.66,\quad y=51.34
 
 Кращий:
 
-> Для synthetic nonlinear utility T2.L3 за R=100 SLSQP знаходить feasible solution \(x\approx48.659\), \(y\approx51.341\) з \(F\approx74.497\), використовуючи practically весь resource.
+> Для синтетичний нелінійний utility T2.L3 за R=100 SLSQP знаходить допустимий розв’язок \(x\approx48.659\), \(y\approx51.341\) з \(F\approx74.497\), використовуючи practically весь ресурс.
 
 Ще сильніше:
 
-> Sensitivity R=60–120 показує nonlinear increase optimal objective з diminishing marginal gains; отже additional resource має decreasing modeled value у цьому saturation structure.
+> чутливість R=60–120 показує нелінійний increase оптимальний цільова функція з diminishing граничний gains; отже additional ресурс має decreasing modeled значення у цьому насичення структура.
 
 ---
 
-## 64. Allowed conclusion nonconvex case
+## 64. Allowed висновок nonconvex приклад
 
 Слабкий:
 
-> global optimum = 1.1145.
+> глобальний оптимум = 1.1145.
 
 Обережніше:
 
-> У bounded toy landscape multi-start із заданого набору starts знаходить best solution поблизу \(x\approx0.956,y\approx0\) з objective >1.11; independent grid search step=.05 дає objective within .01, що підсилює confidence у цьому best region, але не є formal proof global optimality.
+> У bounded toy поверхня множинні початкові точки із заданого набору починається знаходить найкращий розв’язок поблизу \(x\approx0.956,y\approx0\) з цільова функція >1.11; незалежний пошук на сітці крок=.05 дає цільова функція within.01, що підсилює довірчий у цьому найкращий область, але не є formal proof глобальний optimality.
 
-Це саме той level precision, який підтримує evidence.
+Це саме той рівень точність, який підтримує свідчення.
 
 ---
 
-## 65. Research Transfer
+## 65. дослідження Transfer
 
 Поставте питання:
 
-> де у моєму research object очікується nonlinear response?
+> де у моєму дослідження об’єкт очікується нелінійний відгук?
 
 Можливі patterns:
 
-- diminishing returns;
-- saturation;
-- threshold;
+- спадна віддача;
+- насичення;
+- поріг;
 - synergy;
 - conflict;
 - quadratic penalty;
-- probability response;
+- ймовірність відгук;
 - exponential decay;
 - logistic growth.
 
@@ -2299,68 +2299,68 @@ Allowed conclusion:
 
 ---
 
-## 66. Не вставляйте nonlinear formula лише «щоб було складніше»
+## 66. Не вставляйте нелінійний формула лише «щоб було складніше»
 
 Nonlinearity повинна мати reason.
 
 Наприклад:
 
-- saturation observed in data;
+- насичення спостережуваний у дані;
 - physics;
-- known interaction;
+- відомий взаємодія;
 - theoretical mechanism.
 
-Formula без предметного пояснення не робить research stronger.
+формула без предметного пояснення не робить дослідження сильніший.
 
-Вона лише робить computation harder.
+Вона лише робить обчислення harder.
 
 ---
 
-## Поглиблення: що саме означає «надійний nonlinear optimum»
+## Поглиблення: що саме означає «надійний нелінійний оптимум»
 
-Для nonlinear optimization слово «надійний» повинно мати конкретний зміст.
+Для nonлінійна оптимізація слово «надійний» повинно мати конкретний зміст.
 
-### Numerical reliability
+### чисельний надійність
 
-Solver converged repeatedly.
+розв’язувач converged repeatedly.
 
-### Feasibility reliability
+### допустимість надійність
 
-Constraints independently verified.
+обмеження independently verified.
 
-### Start reliability
+### початок надійність
 
-Several starts lead to same or comparable best region.
+Several починається lead до той самий або comparable найкращий область.
 
-### Cross-method reliability
+### Cross-method надійність
 
-Independent grid or another method supports the same region.
+незалежний сітка або another метод supports той самий область.
 
-### Model reliability
+### модель надійність
 
-Functional form and parameters have domain/data justification.
+Functional форма і параметри мають область/дані justification.
 
-Ці levels утворюють evidence hierarchy.
+Ці levels утворюють свідчення hierarchy.
 
 Якщо є лише перший рівень:
 
-> solver success,
+> розв’язувач успіх,
 
 висновок слабкий.
 
-Якщо є всі п’ять, computational claim значно сильніший.
+Якщо є всі п’ять, computational твердження значно сильніший.
 
 ---
 
-## Поглиблення: synthetic military interpretation без operational claims
+## Поглиблення: синтетичний військовий інтерпретація без операційний claims
 
-Applied case можна уявити як allocation умовного навчального ресурсу між двома напрямами підготовки.
+прикладний приклад можна уявити як розподіл умовного навчального ресурсу між двома напрямами підготовки.
 
-Кожен напрям має saturation:
+Кожен напрям має насичення:
 
 > після певного рівня додаткове вкладення дає дедалі менший ефект.
 
-Interaction term означає:
+взаємодія term означає:
 
 > певна частина корисності виникає лише коли обидва напрями підтримуються разом.
 
@@ -2368,40 +2368,40 @@ Interaction term означає:
 
 Це pedagogical mechanism для пояснення:
 
-- diminishing returns;
+- спадна віддача;
 - synergy;
-- constrained nonlinear allocation.
+- constrained нелінійний розподіл.
 
-Nonconvex case взагалі не має domain semantics.
+Nonconvex приклад взагалі не має область semantics.
 
-Він навмисно є **mathematical stress test** для optimizer.
+Він навмисно є **математичний stress перевірка** для оптимізатор.
 
 Це теж важлива академічна дисципліна:
 
-> не кожен teaching example потрібно маскувати під «реалістичний military case».
+> не кожен навчальний приклад потрібно маскувати під «реалістичний військовий приклад».
 
 ---
 
-## Поглиблення: checklist перед claim про global optimum
+## Поглиблення: checklist перед твердження про глобальний оптимум
 
 Перед словами:
 
-> «знайдено глобальний optimum»
+> «знайдено глобальний оптимум»
 
 перевірте:
 
 1. Чи problem convex/concave у relevant sense?
-2. Чи theorem гарантує local=global?
-3. Якщо ні — які globality checks виконані?
-4. Скільки starts?
+2. Чи theorem гарантує локальний=глобальний?
+3. Якщо ні — які globality перевірки виконані?
+4. Скільки починається?
 5. Як вони обрані?
 6. Чи перевірені boundaries?
-7. Чи є independent method?
+7. Чи є незалежний метод?
 8. Який unresolved optimality gap?
 
 Якщо formal guarantee немає, коректніше писати:
 
-> best solution found under specified search and verification procedure.
+> найкращий розв’язок found за specified пошук і перевірка procedure.
 
 Це не слабкість.
 
@@ -2411,102 +2411,102 @@ Nonconvex case взагалі не має domain semantics.
 
 ## 67. Мінісловник T2.L3
 
-### Nonlinear function
+### нелінійний функція
 
-Function, що не є affine combination variables.
+функція, що не є affine combination змінні.
 
-### Diminishing returns
+### спадна віддача
 
-Decreasing marginal gain при зростанні input.
+Decreasing граничний gain при зростанні вхідні дані.
 
-### Saturation
+### насичення
 
-Approach to upper response limit.
+Approach до верхній відгук limit.
 
-### Interaction
+### взаємодія
 
-Effect одного variable залежить від іншого.
+вплив одного змінна залежить від іншого.
 
-### Local optimum
+### локальний оптимум
 
-Best point only in neighborhood.
+найкращий точка лише у neighborhood.
 
-### Global optimum
+### глобальний оптимум
 
-Best point over entire feasible region.
+найкращий точка над entire область допустимих розв’язків.
 
-### Start point
+### початок точка
 
-Initial guess numerical solver.
+початковий guess чисельний розв’язувач.
 
-### Basin of attraction
+### Basin attraction
 
-Region starts converging to same local optimum.
+область починається converging до той самий локальний оптимум.
 
-### Multi-start
+### множинні початкові точки
 
-Repeated local optimization from several starts.
+Repeated локальний оптимізація від several починається.
 
-### Grid search
+### пошук на сітці
 
-Explicit evaluation on discrete grid.
+явний evaluation на дискретний сітка.
 
 ### Contour plot
 
-Lines of equal objective value.
+Lines equal цільова функція значення.
 
-### Convergence
+### збіжність
 
-Algorithm stopping under numerical criterion.
+алгоритм stopping за чисельний критерій.
 
 ### Convexity / concavity
 
-Properties that determine whether local optimum can imply global optimum.
+Properties це determine whether локальний оптимум може imply глобальний оптимум.
 
 ---
 
 ## 68. Мініексперимент
 
-### Question 1
+### питання 1
 
 Чому \(F^*(R)\) зростає не лінійно?
 
-Через saturation/diminishing returns.
+Через насичення/спадна віддача.
 
-### Question 2
+### питання 2
 
-Чому different successful starts можуть мати різні objective?
+Чому інший successful починається можуть мати різні цільова функція?
 
-Non-convex landscape has multiple local maxima.
+невипуклий поверхня має множинний локальний maxima.
 
-### Question 3
+### питання 3
 
-Навіщо grid search?
+Навіщо пошук на сітці?
 
-Independent coarse verification.
+незалежний coarse перевірка.
 
-### Question 4
+### питання 4
 
-Чи grid step .05 proves global optimum?
+Чи сітка крок.05 proves глобальний оптимум?
 
 Ні.
 
 ---
 
-## Поглиблення: optimization landscape як частина наукового аргументу
+## Поглиблення: оптимізація поверхня як частина наукового аргументу
 
-У nonlinear research важливо зберігати не лише final point, а й evidence про landscape:
+У нелінійний дослідження важливо зберігати не лише final точка, а й свідчення про поверхня:
 
-- кілька starts;
+- кілька починається;
 - contour/surface;
-- objective values local solutions;
-- boundary checks;
-- independent grid result;
-- sensitivity.
+- цільова функція значення локальний розв’язки;
+- межа перевірки;
+- незалежний сітка результат;
+- чутливість.
 
-Тоді читач може побачити, чи conclusion залежить від одного lucky run.
+Тоді читач може побачити, чи висновок залежить від одного lucky запуск.
 
-Саме ця evidence bundle робить фразу «best solution found» науково перевірюваною.
+Саме ця свідчення bundle робить фразу «найкращий розв’язок found» науково перевірюваною.
 
 ---
 
@@ -2514,21 +2514,21 @@ Independent coarse verification.
 
 ### П’ять ідей
 
-1. Nonlinearity змінює geometry objective і optimization behavior.
-2. Diminishing returns означає decreasing marginal effect.
-3. success=True означає convergence, не globality.
-4. Multi-start і independent grid check підсилюють evidence.
-5. Model form повинна мати предметне або data-based обґрунтування.
+1. Nonlinearity змінює geometry цільова функція і оптимізація поведінка.
+2. спадна віддача означає decreasing граничний вплив.
+3. success=True означає збіжність, не globality.
+4. множинні початкові точки і незалежний сітка перевірка підсилюють свідчення.
+5. модель форма повинна мати предметне або data-based обґрунтування.
 
 ### Три формули
 
-Applied:
+прикладний:
 
 \[
 F(x,y)=40(1-e^{-0.05x})+35(1-e^{-0.04y})+0.15\sqrt{xy}.
 \]
 
-Resource:
+ресурс:
 
 \[
 x+y\le R.
@@ -2542,32 +2542,32 @@ G(x,y)=\sin(1.7x)\cos(1.3y)+0.15x-0.03(x^2+y^2).
 
 ### Дві помилки
 
-- «solver success = global optimum»;
-- «складніша formula = краща model».
+- «розв’язувач успіх = глобальний оптимум»;
+- «складніша формула = краща модель».
 
 ### Одне питання
 
-> Який nonlinear mechanism у моєму research object можна обґрунтувати даними або theory?
+> Який нелінійний mechanism у моєму дослідження об’єкт можна обґрунтувати даними або theory?
 
 ### Наступний крок
 
-Порівняйте applied sensitivity, запустіть nonconvex з кількох starts і перевірте best region grid search.
+Порівняйте прикладний чутливість, запустіть nonconvex з кількох починається і перевірте найкращий область пошук на сітці.
 
 ---
 
 ## 70. Фінальна думка
 
-Нелінійна optimization model наближає нас до систем, де effect рідко зростає вічно й пропорційно.
+Нелінійна оптимізація модель наближає нас до систем, де вплив рідко зростає вічно й пропорційно.
 
 Але разом із realism приходить нова відповідальність:
 
-- algorithm може залежати від start;
-- local optimum може маскуватися під «рішення»;
-- visualization може створювати false confidence;
-- verification потребує кількох незалежних підходів.
+- алгоритм може залежати від початок;
+- локальний оптимум може маскуватися під «рішення»;
+- visualization може створювати false довірчий;
+- перевірка потребує кількох незалежних підходів.
 
-Тому головний lesson T2.L3 не «як викликати SciPy optimizer».
+Тому головний заняття T2.L3 не «як викликати SciPy оптимізатор».
 
-Головний lesson:
+Головний заняття:
 
-> **чим складніша geometry model, тим сильнішим має бути ланцюг доказів, що обчислювальний результат справді означає те, що ми про нього стверджуємо.**
+> **чим складніша geometry модель, тим сильнішим має бути ланцюг доказів, що обчислювальний результат справді означає те, що ми про нього стверджуємо.**

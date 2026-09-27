@@ -168,7 +168,7 @@ def build_book(book_id: str, config: dict[str, str]) -> Path:
   </header>
   <div class="book-layout">
     <aside class="book-toc">
-      <p class="book-label">MINIBOOK · {book_id.upper()}</p>
+      <p class="book-label">МІНІКНИГА · {book_id.upper()}</p>
       {toc}
     </aside>
     <main class="book-content">
