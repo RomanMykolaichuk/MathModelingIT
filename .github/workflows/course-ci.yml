@@ -53,8 +53,13 @@ jobs:
           test -s books/t1_l3/metadata.yaml
           test -s web/books/t1_l3/index.html
           test -s web/books/t1_l3/figures/fig_08_project_architecture.svg
+          test -s books/t1_l4/book.md
+          test -s books/t1_l4/metadata.yaml
+          test -s web/books/t1_l4/index.html
+          test -s web/books/t1_l4/figures/fig_08_research_transfer.svg
           grep -q 'books/t1_l2/index.html' web/course-catalog.js
           grep -q 'books/t1_l3/index.html' web/course-catalog.js
+          grep -q 'books/t1_l4/index.html' web/course-catalog.js
           test -s books/t2_l1/book.md
           test -s books/t2_l1/metadata.yaml
           test -s web/books/t2_l1/index.html
@@ -82,7 +87,12 @@ jobs:
           test -s books/t2_l6/metadata.yaml
           test -s web/books/t2_l6/index.html
           test -s web/books/t2_l6/figures/fig_08_hybrid_method_map.svg
+          test -s books/t2_l7/book.md
+          test -s books/t2_l7/metadata.yaml
+          test -s web/books/t2_l7/index.html
+          test -s web/books/t2_l7/figures/fig_08_claim_boundary.svg
           grep -q 'books/t2_l6/index.html' web/course-catalog.js
+          grep -q 'books/t2_l7/index.html' web/course-catalog.js
           grep -q 'books/t2_l4/index.html' web/index.html
           grep -q 'books/t2_l5/index.html' web/index.html
           grep -q 'instructions/t1_l1_lab_instruction.pdf' web/index.html
