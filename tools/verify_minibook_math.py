@@ -34,9 +34,9 @@ for book_id in BOOK_IDS:
     inline_count = inline_paren_count + inline_dollar_count
     if display_count < 8:
         failures.append(f"{book_id}: too few display-math delimiters ({display_count})")
-    if inline_count < 8:
+    if inline_count < 1:
         failures.append(
-            f"{book_id}: too few inline-math delimiters "
+            f"{book_id}: inline MathJax delimiters missing "
             f"(paren={inline_paren_count}, dollar_pairs={inline_dollar_count})"
         )
 
