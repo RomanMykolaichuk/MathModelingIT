@@ -1,0 +1,34 @@
+book_id: t2_l7
+title: "Використання систем комп’ютерної математики в наукових дослідженнях"
+subtitle: "Від шумних спостережень до відтворюваного наукового висновку"
+lesson_path: lessons/t2_l7
+language: uk
+audience: adjuncts
+status: validated_draft
+theory_level: advanced
+estimated_reading_minutes: 90
+web_path: web/books/t2_l7/index.html
+python_package: lessons/t2_l7
+military_context: synthetic_non_sensitive
+canonical_source: books/t2_l7/book.md
+source_of_truth:
+  - lessons/t2_l7/README.md
+  - lessons/t2_l7/assignment.md
+  - lessons/t2_l7/experiment_config.json
+  - lessons/t2_l7/data/synthetic_observations.csv
+  - lessons/t2_l7/src/model.py
+  - lessons/t2_l7/src/experiment.py
+  - lessons/t2_l7/tests/test_model.py
+baseline:
+  experiment_id: t2_l7_92787dfc5ccd
+  q_hat: 11.9159423611
+  k_hat: 0.0985939001
+  equilibrium_hat: 120.8588193439
+  rmse: 1.4821542085
+  time_to_threshold: 9.1648572165
+  s_horizon_20: 106.8197556402
+  bootstrap_replications: 500
+  seed: 2026
+  threshold_ci_2_5: 8.942056
+  threshold_ci_97_5: 9.525210
+  threshold_finite_share: 1.0

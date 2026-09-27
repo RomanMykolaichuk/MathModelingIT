@@ -55,6 +55,14 @@ PUBLISHED = {
         "cta_label": "Відкрити Python-заняття →",
         "notes": "https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t1_l3/README.md",
     },
+    "t1_l4": {
+        "code": "T1.L4",
+        "title": "T1.L4 — Класифікація методів математичного моделювання",
+        "lab": "https://github.com/RomanMykolaichuk/MathModelingIT/tree/main/lessons/t1_l4",
+        "lab_label": "До Python-заняття",
+        "cta_label": "Відкрити Python-заняття →",
+        "notes": "https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t1_l4/README.md",
+    },
     "t2_l1": {
         "code": "T2.L1",
         "title": "T2.L1 — Задачі оптимізації в середовищі VS Code",
@@ -98,6 +106,14 @@ PUBLISHED = {
         "lab_label": "До Python-заняття",
         "cta_label": "Відкрити Python-заняття →",
         "notes": "https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t2_l6/README.md",
+    },
+    "t2_l7": {
+        "code": "T2.L7",
+        "title": "T2.L7 — Використання систем комп’ютерної математики в наукових дослідженнях",
+        "lab": "https://github.com/RomanMykolaichuk/MathModelingIT/tree/main/lessons/t2_l7",
+        "lab_label": "До Python-заняття",
+        "cta_label": "Відкрити Python-заняття →",
+        "notes": "https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t2_l7/README.md",
     },
 }
 

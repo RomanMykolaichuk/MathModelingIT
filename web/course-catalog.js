@@ -33,6 +33,8 @@ globalThis.MathModelingCatalog = [
     id:"t1_l4", code:"T1.L4", topic:1,
     title:"Класифікація методів математичного моделювання",
     status:"python",
+    notesUrl:"https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t1_l4/README.md",
+    theoryUrl:"books/t1_l4/index.html",
     challenge:"Яка властивість задачі визначає вибір методу, а не звичка дослідника?",
     transfer:"Зіставте дослідницьке питання, структуру задачі, метод і спосіб перевірки."
   },
@@ -96,6 +98,8 @@ globalThis.MathModelingCatalog = [
     id:"t2_l7", code:"T2.L7", topic:2,
     title:"Використання систем комп’ютерної математики в наукових дослідженнях",
     status:"python",
+    notesUrl:"https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t2_l7/README.md",
+    theoryUrl:"books/t2_l7/index.html",
     challenge:"Чи може мала похибка підгонки приховувати неправильну структуру моделі?",
     transfer:"Пов’яжіть калібрування, uncertainty, verification і допустимий науковий висновок."
   }
