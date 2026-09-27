@@ -39,6 +39,30 @@ PUBLISHED = {
         "lab": "../../index.html#resource",
         "notes": "https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t1_l1/README.md",
     },
+    "t2_l1": {
+        "code": "T2.L1",
+        "title": "T2.L1 — Задачі оптимізації в середовищі VS Code",
+        "lab": "https://github.com/RomanMykolaichuk/MathModelingIT/tree/main/lessons/t2_l1",
+        "lab_label": "До Python-заняття",
+        "cta_label": "Відкрити Python-заняття →",
+        "notes": "https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t2_l1/README.md",
+    },
+    "t2_l2": {
+        "code": "T2.L2",
+        "title": "T2.L2 — Математична модель транспортної задачі",
+        "lab": "https://github.com/RomanMykolaichuk/MathModelingIT/tree/main/lessons/t2_l2",
+        "lab_label": "До Python-заняття",
+        "cta_label": "Відкрити Python-заняття →",
+        "notes": "https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t2_l2/README.md",
+    },
+    "t2_l3": {
+        "code": "T2.L3",
+        "title": "T2.L3 — Математичні моделі задач нелінійного програмування",
+        "lab": "https://github.com/RomanMykolaichuk/MathModelingIT/tree/main/lessons/t2_l3",
+        "lab_label": "До Python-заняття",
+        "cta_label": "Відкрити Python-заняття →",
+        "notes": "https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t2_l3/README.md",
+    },
     "t2_l4": {
         "code": "T2.L4",
         "title": "T2.L4 — Математичне моделювання із застосуванням методів мережевого планування",
@@ -99,7 +123,7 @@ def build_book(book_id: str, config: dict[str, str]) -> Path:
     <a href="../../index.html">← MathModelingIT Lab</a>
     <nav>
       <a href="{config['notes']}" target="_blank" rel="noopener noreferrer">Конспект ↗</a>
-      <a href="{config['lab']}">До лабораторії</a>
+      <a href="{config['lab']}">{config.get('lab_label', 'До лабораторії')}</a>
     </nav>
   </header>
   <div class="book-layout">
@@ -111,7 +135,7 @@ def build_book(book_id: str, config: dict[str, str]) -> Path:
       {body}
       <section class="book-next">
         <p>Теорію пройдено. Наступний крок — перевірити інтуїцію експериментом.</p>
-        <a class="book-cta" href="{config['lab']}">Відкрити Lab {config['code']} →</a>
+        <a class="book-cta" href="{config['lab']}">{config.get('cta_label', f"Відкрити Lab {config['code']} →")}</a>
       </section>
     </main>
   </div>
