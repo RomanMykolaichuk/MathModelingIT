@@ -1,0 +1,42 @@
+book_id: t2_l5
+title: "Засоби розв’язування задач множинного вибору"
+subtitle: "Як обирати між альтернативами, не перетворюючи ваги на магію"
+lesson_path: lessons/t2_l5
+language: uk
+audience: adjuncts
+status: validated_draft
+theory_level: intermediate
+estimated_reading_minutes: 75
+lab_anchor: mcda
+web_path: web/books/t2_l5/index.html
+python_package: lessons/t2_l5
+military_context: synthetic_non_sensitive
+canonical_source: books/t2_l5/book.md
+source_of_truth:
+  - lessons/t2_l5/README.md
+  - lessons/t2_l5/assignment.md
+  - lessons/t2_l5/src/model.py
+  - lessons/t2_l5/tests/test_model.py
+baseline:
+  weights:
+    cost: 0.25
+    time: 0.20
+    reliability: 0.25
+    capacity: 0.20
+    risk: 0.10
+  wsm_ranking: "C > D > B > A"
+  wsm_score_C: 0.6166666667
+  topsis_ranking: "C > A > D > B"
+  topsis_score_C: 0.5868840374
+sensitivity:
+  focus: reliability
+  range: [0.10, 0.45]
+  at_0_10:
+    wsm_top: B
+    topsis_top: C
+robustness:
+  n: 3000
+  concentration: 80
+  seed: 2026
+  wsm_C_share_approx: 0.9423
+  topsis_C_share_approx: 0.8507

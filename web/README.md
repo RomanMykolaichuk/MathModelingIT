@@ -16,7 +16,7 @@
 
 ## Обов’язкові матеріали перед лабораторною
 
-Кожна повна інтерактивна лабораторія починається з двох кнопок **до** циклу Predict → Run → Explain → Break → Transfer:
+Кожна повна інтерактивна лабораторія має блок ресурсів **до** циклу Predict → Run → Explain → Break → Transfer:
 
 - **Конспект** — відкриває короткий lesson `README.md` у новій вкладці;
 - **Теорія** — відкриває web-версію MathModelingIT MiniBook, якщо книга вже опублікована;
@@ -91,6 +91,15 @@ Web-версії генерує:
 python tools/build_minibooks.py
 ```
 
-Наразі опубліковано T1.L1. Згенерована сторінка: `web/books/t1_l1/index.html`.
+Наразі опубліковано шість MiniBooks:
+
+- T1.L1 — `web/books/t1_l1/index.html`;
+- T2.L1 — `web/books/t2_l1/index.html`;
+- T2.L2 — `web/books/t2_l2/index.html`;
+- T2.L3 — `web/books/t2_l3/index.html`;
+- T2.L4 — `web/books/t2_l4/index.html`;
+- T2.L5 — `web/books/t2_l5/index.html`.
+
+Усі web-версії будуються з canonical `books/<lesson>/book.md`. PDF-версія MiniBook за технічним стандартом також повинна бути 1:1 конвертацією canonical Markdown без скорочення змісту.
 
 GitHub Pages workflow виконує MiniBook build перед публікацією, тому кнопка **Теорія** завжди веде на web-видання, а **Конспект** — на lesson README.

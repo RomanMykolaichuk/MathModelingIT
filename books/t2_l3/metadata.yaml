@@ -1,0 +1,33 @@
+book_id: t2_l3
+title: "Математичні моделі задач нелінійного програмування"
+subtitle: "Коли пряма лінія перестає працювати: diminishing returns, локальні максимуми і перевірка оптимуму"
+lesson_path: lessons/t2_l3
+language: uk
+audience: adjuncts
+status: validated_draft
+theory_level: intermediate
+estimated_reading_minutes: 80
+web_path: web/books/t2_l3/index.html
+python_package: lessons/t2_l3
+military_context: synthetic_non_sensitive
+canonical_source: books/t2_l3/book.md
+source_of_truth:
+  - lessons/t2_l3/README.md
+  - lessons/t2_l3/assignment.md
+  - lessons/t2_l3/src/model.py
+  - lessons/t2_l3/tests/test_model.py
+applied_baseline:
+  total_resource: 100
+  x_approx: 48.6593
+  y_approx: 51.3407
+  objective_approx: 74.49685
+sensitivity:
+  - [60, 30.56, 29.44, 60.04]
+  - [80, 39.58, 40.42, 68.52]
+  - [100, 48.66, 51.34, 74.50]
+  - [120, 57.83, 62.17, 78.86]
+nonconvex:
+  best_x_approx: 0.956
+  best_y_approx: 0.0
+  best_objective_approx: 1.1145
+  grid_step: 0.05
