@@ -2267,6 +2267,66 @@ Closure S2→D3?
 
 ---
 
+## Поглиблення: від optimal flow до operational plan
+
+Transportation model повертає flow quantities.
+
+Але між mathematical plan і practical implementation є окремий layer.
+
+Наприклад, model може сказати:
+
+\[
+x_{34}=35.
+\]
+
+Щоб перетворити це на practical plan, потрібно ще знати:
+
+- чи route physically available;
+- чи є time windows;
+- чи достатня capacity;
+- чи потрібні integer units;
+- чи є sequence constraints;
+- чи існують shared resources;
+- чи може cost змінитися during execution.
+
+Тому корисно розділяти:
+
+### Planning model
+
+Шукає optimal flow за abstract constraints.
+
+### Execution model
+
+Додає calendar, capacity, availability та operational rules.
+
+### Monitoring
+
+Порівнює actual flow із planned.
+
+### Replanning
+
+За відхиленням inputs запускає new optimization.
+
+Це утворює closed modeling cycle:
+
+\[
+plan
+\rightarrow
+execute
+\rightarrow
+observe
+\rightarrow
+update
+\rightarrow
+reoptimize.
+\]
+
+Саме тут транспортна задача перестає бути textbook exercise і стає prototype decision-support workflow.
+
+У course ми зупиняємося на planning model, бо вона прозора й дозволяє чітко перевірити mathematical logic. Але Research Transfer повинен одразу позначити, які execution constraints відсутні.
+
+---
+
 ## 55. Одна сторінка підсумку
 
 ### П’ять ідей
