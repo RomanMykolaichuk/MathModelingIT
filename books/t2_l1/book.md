@@ -1439,6 +1439,483 @@ e_C=9.
 
 ---
 
+## Поглиблення: optimization як карта компромісів, а не «машина рішень»
+
+У прикладній роботі дуже легко звести оптимізацію до одного рядка:
+
+> solver повернув \(x^*\).
+
+Але науково сильніша інтерпретація починається з іншого питання:
+
+> **які саме компроміси змусили optimum опинитися в цій точці?**
+
+Baseline allocation:
+
+\[
+x^*=(40,\ 17.5,\ 17.5,\ 25)
+\]
+
+не виникає з одного coefficient.
+
+Вона є результатом одночасної взаємодії:
+
+- effectiveness;
+- unit cost;
+- total resource;
+- total budget;
+- lower bounds;
+- upper bounds.
+
+Тому optimum корисно читати не як «рекомендацію числа», а як **структурний fingerprint** поточного scenario.
+
+У baseline:
+
+- A впирається у maximum;
+- D впирається у maximum;
+- resource повністю використаний;
+- budget повністю використаний;
+- B і C ділять залишок так, щоб одночасно зберегти balances constraints та maximize objective.
+
+Змінимо scenario — fingerprint зміниться.
+
+---
+
+## Поглиблення: повна таблиця сценаріїв
+
+Порівняємо кілька model states.
+
+| Scenario | R | B | Approx allocation | Objective | Main interpretation |
+|---|---:|---:|---|---:|---|
+| Baseline | 100 | 250 | (40,17.5,17.5,25) | 707.5 | resource і budget active |
+| Budget low | 100 | 230 | (35,30,10,25) | 675.0 | C pushed to lower bound |
+| Budget high | 100 | 270 | (40,15,25,20) | 735.0 | more allocation to C |
+| Near plateau | 100 | 295 | (40,25,30,5) | 765.0 | budget just sufficient |
+| Above plateau | 100 | 320 | same optimum | 765.0 | budget no longer limiting |
+
+<figure>
+  <img src="figures/fig_07_scenarios.svg" alt="Порівняння сценаріїв оптимізації">
+  <figcaption><strong>Рис. 7.</strong> Optimization result потрібно читати як family of scenario-dependent solutions. Зміна parameter змінює не лише objective, а й structure allocation та набір active constraints.</figcaption>
+</figure>
+
+Така таблиця дає значно сильніший research output, ніж один baseline row.
+
+Вона дозволяє побачити:
+
+- де solution stable;
+- де allocation rapidly changes;
+- де constraint перестає бути bottleneck;
+- де система входить у plateau.
+
+---
+
+## Поглиблення: чому sensitivity curve кусочно-лінійна
+
+У linear programming objective і constraints linear.
+
+Але function:
+
+\[
+V(B)=\max_x F(x;B)
+\]
+
+не обов’язково одна straight line на всьому діапазоні budget.
+
+Причина — зміна **active set**.
+
+У певному interval optimum може визначатися набором:
+
+- resource active;
+- budget active;
+- A upper active;
+- D upper active.
+
+Після зміни B одна змінна може відійти від bound, інша — дійти до bound.
+
+Тоді slope:
+
+\[
+\frac{\Delta V}{\Delta B}
+\]
+
+змінюється.
+
+Отже, breakpoints на sensitivity graph мають математичний зміст.
+
+Вони показують:
+
+> **де система переходить у новий optimization regime.**
+
+У research analysis саме ці breakpoints часто цікавіші за baseline optimum.
+
+---
+
+## Поглиблення: локальна marginal value і shadow price
+
+Якщо budget constraint active, невелике збільшення budget може збільшувати objective.
+
+У вузькому interval можна оцінити:
+
+\[
+\lambda_B\approx\frac{\Delta F^*}{\Delta B}.
+\]
+
+Наприклад, між 240 і 250:
+
+\[
+F^*(240)=692.5,
+\]
+
+\[
+F^*(250)=707.5.
+\]
+
+Тому:
+
+\[
+\lambda_B\approx
+\frac{707.5-692.5}{250-240}
+=
+1.5.
+\]
+
+Інтуїтивно:
+
+> у цьому локальному regime одна додаткова unit budget дає приблизно 1.5 objective units.
+
+Але не можна автоматично переносити це число на:
+
+\[
+B=320.
+\]
+
+Після plateau:
+
+\[
+\lambda_B\approx0.
+\]
+
+Shadow price — **локальна**, а не універсальна характеристика.
+
+---
+
+## Поглиблення: sensitivity до effectiveness coefficient
+
+Тепер змінюємо не resource, а model coefficient.
+
+Baseline:
+
+\[
+e_C=9.
+\]
+
+Scenario:
+
+\[
+e_C=11.
+\]
+
+Це інше питання.
+
+Budget sensitivity відповідає:
+
+> що буде, якщо зміниться доступне обмеження?
+
+Coefficient sensitivity:
+
+> що буде, якщо ми інакше оцінюємо віддачу direction C?
+
+Це особливо важливо, якщо effectiveness coefficients оцінені експертно або за data.
+
+Якщо невелика зміна:
+
+\[
+9\rightarrow9.5
+\]
+
+різко перебудовує optimum, conclusion fragile.
+
+Якщо allocation майже не змінюється, model більш stable до цього assumption.
+
+Тому sensitivity analysis потрібно будувати не лише навколо constraints, а й навколо **найменш надійних parameters**.
+
+---
+
+## Поглиблення: що робити, якщо coefficient невідомий точно
+
+Припустимо:
+
+\[
+e_C\in[8,11].
+\]
+
+Є кілька підходів.
+
+### Scenario analysis
+
+Запустити:
+
+\[
+e_C=8,\ 9,\ 10,\ 11.
+\]
+
+Порівняти optimum.
+
+### Monte Carlo around coefficients
+
+Якщо є distribution, sample coefficients і solve repeatedly.
+
+### Robust optimization
+
+Шукати decision, який працює прийнятно для worst/plausible parameter combinations.
+
+Ці підходи відповідають на різні questions.
+
+Не потрібно одразу переходити до найскладнішого.
+
+Початкова дисципліна:
+
+> **позначити uncertainty там, де вона реально є.**
+
+---
+
+## Поглиблення: nominal optimum і robust decision — не одне й те саме
+
+Nominal optimization питає:
+
+> яке decision найкраще для одного заданого набору parameters?
+
+Robust perspective:
+
+> яке decision залишається прийнятним, якщо parameters трохи помилкові?
+
+Можливо, nominal optimum:
+
+\[
+x^*=(40,17.5,17.5,25)
+\]
+
+дуже чутливий.
+
+Інший allocation має трохи нижчий baseline objective, але краще поводиться у wider scenario range.
+
+Тоді decision-maker може свідомо обрати не nominal maximum.
+
+Це не «відмова від математики».
+
+Це зміна decision criterion.
+
+---
+
+## Поглиблення: multiple optima і чому один vector може бути не єдиним
+
+У LP інколи objective line паралельна face feasible region.
+
+Тоді існує багато solutions із тим самим objective.
+
+Solver повертає одну.
+
+Це не означає:
+
+> тільки вона optimal.
+
+Якщо multiple optima існують, можна застосувати secondary criterion.
+
+Наприклад:
+
+1. maximize primary effectiveness;
+2. серед усіх primary-optimal solutions minimize imbalance;
+3. або maximize reserve;
+4. або minimize switching cost.
+
+Це називають lexicographic / hierarchical optimization.
+
+Навіть якщо baseline T2.L1 має контрольний optimum, загальна методологія повинна пам’ятати про non-uniqueness.
+
+---
+
+## Поглиблення: constraints як наукові гіпотези
+
+Constraint часто сприймається як «відомий факт»:
+
+\[
+x_C\le30.
+\]
+
+Але іноді upper bound — це теж assumption.
+
+Наприклад:
+
+- estimate capacity;
+- normative threshold;
+- expert restriction;
+- historical maximum.
+
+Тоді constraint має provenance.
+
+Корисно мати таблицю:
+
+| Constraint | Meaning | Source | Confidence |
+|---|---|---|---|
+| \(\sum x_i\le100\) | total resource | measured | high |
+| budget≤250 | financial limit | policy | high |
+| \(x_C\le30\) | capacity | expert estimate | medium |
+
+Це перетворює model із набору inequalities на **audit-ready research artifact**.
+
+---
+
+## Поглиблення: infeasibility як змістовний результат
+
+Припустимо lower bounds вимагають:
+
+\[
+\sum l_i > R.
+\]
+
+Тоді жоден allocation не може satisfy constraints.
+
+Або minimum budget requirement перевищує B.
+
+Solver повідомить infeasible.
+
+Не потрібно трактувати це як:
+
+> «програма не спрацювала».
+
+Іноді найцінніший model result:
+
+> **задані вимоги взаємно несумісні.**
+
+Тоді research question змінюється:
+
+- яке requirement послабити;
+- наскільки;
+- якою ціною;
+- який constraint створює conflict.
+
+---
+
+## Поглиблення: optimization model audit
+
+Перед фінальним висновком корисно пройти чотири рівні.
+
+### Semantic audit
+
+- кожна decision variable має реальний зміст?
+- objective відповідає research goal?
+- кожен constraint має пояснення?
+
+### Numerical audit
+
+- units узгоджені?
+- inputs finite?
+- bounds valid?
+- solver status success?
+
+### Solution audit
+
+- feasibility independently checked?
+- objective independently recomputed?
+- active constraints identified?
+
+### Stability audit
+
+- sensitivity performed?
+- uncertain parameters varied?
+- plateau / breakpoints identified?
+
+Якщо хоча б один рівень пропущено, statement «optimal» може бути technically correct, але scientifically weak.
+
+---
+
+## Поглиблення: reproducibility package T2.L1
+
+Для відтворюваного optimization experiment збережіть:
+
+- input table;
+- coefficient definitions;
+- units;
+- bounds;
+- total resource;
+- budget;
+- solver method;
+- software versions;
+- baseline result;
+- feasibility checks;
+- scenario table;
+- sensitivity graph;
+- commit hash;
+- interpretation;
+- limitations.
+
+Screenshot із objective value не є reproducibility package.
+
+---
+
+## Поглиблення: межі linear baseline
+
+<figure>
+  <img src="figures/fig_08_model_limits.svg" alt="Межі лінійної оптимізаційної моделі">
+  <figcaption><strong>Рис. 8.</strong> Linear baseline потрібно розширювати лише тоді, коли предметна логіка вимагає diminishing returns, interactions, discrete decisions або uncertainty. Складність не є самоціллю.</figcaption>
+</figure>
+
+Linear model сильна саме своєю прозорістю.
+
+Але вона має assumptions:
+
+- constant marginal effectiveness;
+- additive contributions;
+- continuous decision variables;
+- fixed coefficients;
+- fixed bounds;
+- one-stage decision.
+
+Якщо хоча б одна з цих assumptions критично порушується, потрібно змінювати model class.
+
+Важливо не казати:
+
+> linear programming «погана».
+
+Правильніше:
+
+> вона відповідає одній структурі assumptions.
+
+Наступне питання завжди:
+
+> чи відповідають ці assumptions нашому research object?
+
+---
+
+## Поглиблення: напівхудожнє повернення до сцени
+
+Після першого solve керівник бачить:
+
+\[
+707.5
+\]
+
+і питає:
+
+> «То це максимум?»
+
+Аналітик відповідає:
+
+> «Для baseline linear model — так. Але budget і resource повністю active. Якщо budget збільшити, objective росте до приблизно 765. Після близько 295 budget перестає бути bottleneck. Далі потрібен не додатковий budget, а зміна resource/bounds або самої structure model».
+
+Тепер optimization result став управлінсько зрозумілим.
+
+Не просто:
+
+> «solver сказав 707.5».
+
+А:
+
+> **«ось чому 707.5, ось що обмежує систему, ось де додатковий budget має цінність, а ось де перестає».**
+
+Це і є повноцінна інтерпретація.
+
+---
+
 ## 45. Scenario design
 
 Сильний experiment:
