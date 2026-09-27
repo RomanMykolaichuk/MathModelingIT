@@ -2087,6 +2087,126 @@ Allowed conclusion:
 
 ---
 
+## Поглиблення: що саме оптимізація доводить — і чого не доводить
+
+Після всіх розрахунків корисно чітко розділити чотири твердження.
+
+### Твердження 1. Feasibility
+
+Ми довели, що знайдений vector виконує constraints:
+
+\[
+l_i\le x_i\le u_i,
+\]
+
+\[
+\sum x_i\le R,
+\]
+
+\[
+\sum c_ix_i\le B.
+\]
+
+Це твердження про **допустимість**.
+
+### Твердження 2. Optimality у mathematical model
+
+Для linear problem і коректно завершеного HiGHS solver можемо говорити про optimum у сформульованій LP model.
+
+Тобто серед усіх feasible vectors саме model objective не має кращого значення.
+
+Це твердження про **математичну модель**.
+
+### Твердження 3. Stability
+
+Sensitivity показує, чи conclusion зберігається при зміні:
+
+- budget;
+- resource;
+- effectiveness coefficients;
+- bounds.
+
+Це твердження про **стійкість результату**.
+
+### Твердження 4. Real-world usefulness
+
+Лише після перевірки:
+
+- meaning coefficients;
+- data provenance;
+- constraint adequacy;
+- units;
+- uncertainty
+
+можна обговорювати usefulness для реального decision support.
+
+Це вже не purely mathematical theorem.
+
+Саме тут проходить межа між:
+
+> «optimal in model»
+
+і:
+
+> «useful decision in organization».
+
+---
+
+## Поглиблення: синтетичний військовий приклад без operational claims
+
+Щоб не створювати ілюзію роботи з реальними planning data, уявімо чотири умовні напрями підтримки навчального заходу.
+
+- A — підготовка інформаційних матеріалів;
+- B — технічна підтримка;
+- C — аналітична підтримка;
+- D — резервна організаційна спроможність.
+
+Effectiveness coefficients не є бойовими показниками.
+
+Це synthetic teaching scores.
+
+Тоді model question звучить:
+
+> як розподілити умовний ресурс між чотирма видами підтримки, якщо кожен має minimum/maximum level, різну умовну effectiveness і різну unit cost?
+
+Цей приклад корисний не numbers.
+
+Корисна structure:
+
+\[
+decision\ variables
+\rightarrow
+constraints
+\rightarrow
+objective
+\rightarrow
+optimum
+\rightarrow
+sensitivity.
+\]
+
+Саме structure потрібно переносити у власне дослідження.
+
+---
+
+## Поглиблення: checklist перед словами «оптимальний розподіл»
+
+Перед тим як написати conclusion, поставте сім запитань.
+
+1. **Що саме є decision variable?**
+2. **Чому objective має саме таку форму?**
+3. **Звідки взяті coefficients?**
+4. **Які constraints hard, а які estimated?**
+5. **Чи independently verified feasibility?**
+6. **Які parameters змінюють optimum найбільше?**
+7. **Яке найсильніше твердження підтримує model без виходу за її assumptions?**
+
+Якщо відповіді відсутні, слово «optimal» звучить сильніше, ніж evidence.
+
+Якщо відповіді задокументовані, optimization experiment стає частиною відтворюваного дослідження.
+
+---
+
 ## 51. Мінісловник T2.L1
 
 ### Decision variable
