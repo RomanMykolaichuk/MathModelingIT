@@ -180,6 +180,18 @@ minibooks:
       canonical_source: books/t1_l1/book.md
       web_path: web/books/t1_l1/index.html
       status: validated_draft
+    - id: t2_l1
+      canonical_source: books/t2_l1/book.md
+      web_path: web/books/t2_l1/index.html
+      status: validated_draft
+    - id: t2_l2
+      canonical_source: books/t2_l2/book.md
+      web_path: web/books/t2_l2/index.html
+      status: validated_draft
+    - id: t2_l3
+      canonical_source: books/t2_l3/book.md
+      web_path: web/books/t2_l3/index.html
+      status: validated_draft
     - id: t2_l4
       canonical_source: books/t2_l4/book.md
       web_path: web/books/t2_l4/index.html
