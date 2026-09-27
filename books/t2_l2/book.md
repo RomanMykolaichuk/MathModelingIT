@@ -2032,6 +2032,153 @@ Research transfer не означає:
 
 ---
 
+## Поглиблення: що саме означає «стійкий транспортний план»
+
+Baseline optimal plan має cost:
+
+\[
+515.
+\]
+
+Але стійкість може означати різні речі.
+
+### Cost stability
+
+Невеликі зміни inputs мало змінюють total cost.
+
+### Structural stability
+
+Positive routes залишаються приблизно тими самими.
+
+### Feasibility stability
+
+Plan або його близька модифікація залишається feasible при змінах supply/demand.
+
+### Decision stability
+
+Основний practical conclusion не змінюється.
+
+Ці meanings не слід змішувати.
+
+Наприклад, scenario all D4 costs +2:
+
+- plan structure stable;
+- objective value changes by 70.
+
+Отже:
+
+> structure stable, cost not identical.
+
+Closure S2→D3:
+
+- structure changes;
+- cost changes by 55.
+
+Це інший type sensitivity.
+
+---
+
+## Поглиблення: fixed plan versus reoptimization
+
+Scenario analysis у course переважно робить:
+
+> change inputs → solve again.
+
+Це **reoptimization**.
+
+Але decision support часто потребує іншого experiment.
+
+Припустимо baseline plan уже прийнятий.
+
+Тоді scenario:
+
+> route cost змінився після того, як plan зафіксовано.
+
+Можна оцінити:
+
+\[
+Cost(x^{base};scenario)
+\]
+
+без reoptimization.
+
+Потім порівняти з:
+
+\[
+Z^*_{scenario}.
+\]
+
+Різниця:
+
+\[
+Regret=
+Cost(x^{base};scenario)-Z^*_{scenario}
+\]
+
+показує price of sticking to baseline plan.
+
+Це інше question, ніж:
+
+> який новий optimum?
+
+---
+
+## Поглиблення: синтетичний військовий приклад без чутливих даних
+
+Sources можна трактувати як три умовні пункти забезпечення навчального полігону.
+
+Destinations — чотири умовні навчальні зони.
+
+Costs — synthetic generalized transportation scores.
+
+Тоді model показує:
+
+- як balance rules формують flows;
+- як closure route змінює global plan;
+- як supply redistribution змінює optimum.
+
+Вона **не** описує реальні маршрути, запаси, дислокацію чи operational logistics.
+
+Навчальний value полягає у transferable pattern:
+
+\[
+sources
+\rightarrow
+flows
+\rightarrow
+demands
+\rightarrow
+constraints
+\rightarrow
+reoptimization.
+\]
+
+---
+
+## Поглиблення: checklist перед висновком про маршрут
+
+Перед statement:
+
+> «route X критичний»
+
+запитайте:
+
+1. Критичний у якому sense?
+2. За яким baseline?
+3. Що саме змінюємо — availability, cost чи capacity?
+4. Який metric impact?
+5. Чи reoptimization allowed?
+6. Чи є alternative routes?
+7. Чи conclusion stable до supply/demand changes?
+
+Тоді замість fuzzy label отримаємо measurable statement:
+
+> за baseline closure S2→D3 збільшує optimal cost з 515 до 570.
+
+Це значно сильніше і перевірюваніше.
+
+---
+
 ## 53. Мінісловник T2.L2
 
 ### Supply
