@@ -1,6 +1,6 @@
 # MathModelingIT Lab
 
-Статична дослідницька платформа для GitHub Pages. Її завдання — скоротити шлях від відкриття курсу до першого осмисленого обчислювального експерименту, не підміняючи Python/notebooks.
+Статична дослідницька платформа для GitHub Pages. Її завдання — скоротити шлях від відкриття курсу до першого осмисленого обчислювального експерименту, не підміняючи Python/блокноти Jupyter.
 
 ## Навчальний цикл
 
@@ -18,11 +18,11 @@
 
 Кожна повна інтерактивна лабораторія має блок ресурсів **до** циклу Predict → Run → Explain → Break → Transfer:
 
-- **Конспект** — відкриває короткий lesson `README.md` у новій вкладці;
+- **Конспект** — відкриває короткий заняття `README.md` у новій вкладці;
 - **Теорія** — відкриває web-версію MathModelingIT MiniBook, якщо книга вже опублікована;
 - **Інструкція до лабораторної (PDF)** — відкриває версіонований PDF з `web/instructions/` у новій вкладці.
 
-PDF-інструкція формується на основі чинних `README.md` та `assignment.md`, описує саме браузерний сценарій роботи та окремо зазначає, де повний Python assignment має ширший обсяг.
+PDF-інструкція формується на основі чинних `README.md` та `assignment.md`, описує саме браузерний сценарій роботи та окремо зазначає, де повний Python завдання має ширший обсяг.
 
 Ця пара ресурсів є частиною Definition of Done для кожної майбутньої інтерактивної лабораторії.
 
@@ -32,14 +32,14 @@ PDF-інструкція формується на основі чинних `RE
 
 - T1.L1 — ресурсна модель;
 - T2.L4 — CPM / critical path / delay experiment;
-- T2.L5 — WSM / TOPSIS / sensitivity.
+- T2.L5 — WSM / TOPSIS / чутливість.
 
-Решта занять присутні в course map і ведуть до чинних Python lesson packages. Це дозволяє масштабувати інтерактивність поступово, не створюючи 11 незалежних мінісайтів.
+Решта занять присутні в course map і ведуть до чинних Python заняття packages. Це дозволяє масштабувати інтерактивність поступово, не створюючи 11 незалежних мінісайтів.
 
 ## Режими
 
-- **Student** — експеримент, пояснення, прогрес і model passport.
-- **Instructor** — додаткові teaching checkpoints та research-transfer підказки.
+- **Слухач** — експеримент, пояснення, прогрес і модель passport.
+- **Викладач** — додаткові teaching checkpoints та дослідження-transfer підказки.
 
 Режим, прогрес і рефлексії зберігаються локально в браузері. Облікові записи та сервер не потрібні.
 
@@ -60,9 +60,9 @@ Python-side parity перевіряє `tools/verify_web_control_cases.py`.
 Course CI виконує:
 
 1. syntax check JavaScript;
-2. Node control cases;
-3. Python verification тих самих control cases;
-4. повний `tools/course_smoke.py` для 11 lesson packages і capstone.
+2. Node контрольні приклади;
+3. Python перевірка тих самих контрольні приклади;
+4. повний `tools/course_smoke.py` для 11 заняття packages і capstone.
 
 Таким чином browser layer не може непомітно розійтися з контрольними результатами Python.
 
@@ -74,10 +74,10 @@ Course CI виконує:
 
 Для кожного наступного заняття browser laboratory додається лише після визначення:
 
-1. baseline control case;
+1. базовий сценарій контрольний приклад;
 2. параметра для інтерактивного експерименту;
-3. counterexample / “break the model” case;
-4. research-transfer question;
+3. counterexample / “break the модель” case;
+4. дослідження-transfer question;
 5. Python↔JavaScript parity check.
 
 
@@ -105,4 +105,4 @@ python tools/build_minibooks.py
 
 Усі web-версії будуються з canonical `books/<lesson>/book.md`. PDF-версія MiniBook за технічним стандартом також повинна бути 1:1 конвертацією canonical Markdown без скорочення змісту.
 
-GitHub Pages workflow виконує MiniBook build перед публікацією, тому кнопка **Теорія** завжди веде на web-видання, а **Конспект** — на lesson README.
+GitHub Pages процес виконує MiniBook build перед публікацією, тому кнопка **Теорія** завжди веде на web-видання, а **Конспект** — на заняття README.
