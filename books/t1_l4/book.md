@@ -1,4 +1,4 @@
-# MathмодельingIT · Мінікнига T1.L4
+# MathModelingIT MiniBook T1.L4
 
 ## Класифікація методів математичного моделювання
 
@@ -10,85 +10,85 @@
 
 ## 0. Паспорт книги
 
-**Код заняття:** T1.L4 
-**Тема:** класифікація методів математичного моделювання 
-**Рівень:** середній 
+**Код заняття:** T1.L4  
+**Тема:** класифікація методів математичного моделювання  
+**Рівень:** середній  
 **Орієнтовний час читання:** 75–90 хвилин.
 
 Після книги ви повинні вміти:
 
-- визначати тип результат: число, формула, оптимум, ймовірність, шлях, ранжування;
-- відрізняти чисельний і символьний методи;
-- пояснювати, коли потрібна оптимізація;
-- розуміти Монте-Карло як метод невизначеність поширення;
-- розпізнавати мережева структура;
-- розуміти MCDA як формалізоване багатокритеріальне порівняння;
-- вибирати інструмент Python після Вибір методу;
-- формулювати ПЕРЕВІРКА для кожного класу методу;
-- проектувати ланцюг вибору методу для дисертація fragment.
+- визначати тип output: число, formula, optimum, probability, path, ranking;
+- відрізняти numerical і symbolic methods;
+- пояснювати, коли потрібна optimization;
+- розуміти Monte Carlo як method uncertainty propagation;
+- розпізнавати network structure;
+- розуміти MCDA як formalized multi-criteria comparison;
+- вибирати Python tool після method selection;
+- формулювати verification для кожного класу методу;
+- проектувати method-selection chain для dissertation fragment.
 
 ---
 
 ## 1. Сцена: «Я знаю SciPy — отже, розв’яжу все SciPy»
 
-Дослідник добре знає одну бібліотека і починає будь-яку задачу з думки:
+Дослідник добре знає одну library і починає будь-яку задачу з думки:
 
 > «Як це зробити через SciPy?»
 
-Але задача може вимагати точний символьний вираз, граф структура, ранжування альтернативи, невизначеність розподіл або з обмеженнями оптимум.
+Але problem може вимагати exact symbolic expression, graph structure, ranking alternatives, uncertainty distribution або constrained optimum.
 
 Тому ключова дисципліна:
 
-> **задача структура → метод → інструмент Python → ПЕРЕВІРКА → інтерпретація.**
+> **Problem structure → method → Python tool → verification → interpretation.**
 
 <figure>
- <img src="figures/fig_01_метод_selection.svg" alt="Ланцюг вибору методу">
- <figcaption><strong>Рис. 1.</strong> інструмент Python є четвертим кроком, а не першим. Спочатку потрібно зрозуміти задача структура та очікуваний результат.</figcaption>
+  <img src="figures/fig_01_method_selection.svg" alt="Ланцюг вибору методу">
+  <figcaption><strong>Рис. 1.</strong> Python tool є четвертим кроком, а не першим. Спочатку потрібно зрозуміти problem structure та expected output.</figcaption>
 </figure>
 
 ---
 
-## 2. Шість питання перед вибором методу
+## 2. Шість questions перед вибором методу
 
 Перед coding запитайте:
 
-1. Який результат потрібен?
-2. Чи є невизначеність?
-3. Чи є цільова функція та обмеження?
-4. Чи важлива мережева структура?
-5. Чи є кілька критерії?
-6. Чи існує аналітичний/символьний еталон?
+1. Який result потрібен?
+2. Чи є uncertainty?
+3. Чи є objective та constraints?
+4. Чи важлива network structure?
+5. Чи є multiple criteria?
+6. Чи існує analytical/symbolic benchmark?
 
-### Вибір методу матриця
+### Method selection matrix
 
-| задача структура | метод | інструмент Python | результат |
+| Problem structure | Method | Python tool | Result |
 |---|---|---|---|
-| корінь рівняння | чисельний пошук кореня | SciPy | кількість |
-| точний вираз | символьний алгебра | SymPy | формула |
-| найкращий допустимий розподіл | лінійна оптимізація | SciPy linprog | оптимум |
-| ризик за випадковість | Монте-Карло | NumPy RNG | ймовірність/розподіл |
-| залежність вузьке місце | граф/мережевий | мережаX | шлях/структура |
-| multi-criteria вибір | MCDA | pandas/NumPy | оцінка/ранжування |
+| root of equation | numerical root finding | SciPy | number |
+| exact expression | symbolic algebra | SymPy | formula |
+| best feasible allocation | linear optimization | SciPy linprog | optimum |
+| risk under randomness | Monte Carlo | NumPy RNG | probability/distribution |
+| dependency bottleneck | graph/network | NetworkX | path/structure |
+| multi-criteria choice | MCDA | pandas/NumPy | score/ranking |
 
 ---
 
-# ВИПАДОК — ЧИСЕЛЬНИЙ ПОШУК КОРЕНЯ
+# CASE A — NUMERICAL ROOT FINDING
 
-## 3. задача
+## 3. Problem
 
-Find додатний час \(t\) коли:
+Find positive time \(t\) when:
 
 \[
 f(t)=120-6t-0.2t^2
 \]
 
-досягає нуль:
+reaches zero:
 
 \[
 f(t)=0.
 \]
 
-очікуваний результат: один числове значення. це suggests чисельний пошук кореня.
+Expected output: one numerical value. This suggests numerical root finding.
 
 Bracket:
 
@@ -96,7 +96,7 @@ Bracket:
 t\in[0,30].
 \]
 
-тому що:
+Because:
 
 \[
 f(0)=120>0,
@@ -106,103 +106,103 @@ f(0)=120>0,
 f(30)=-240<0,
 \]
 
- неперервний функція має корінь всередині.
+a continuous function has a root inside.
 
 ---
 
-## 4. чисельний результат
+## 4. Numerical result
 
-SciPy root_scalar з Brent метод дає:
+SciPy root_scalar with Brent method gives:
 
 \[
 t^*\approx13.7228132327.
 \]
 
-ПЕРЕВІРКА:
+Verification:
 
 \[
 |f(t^*)|<10^{-8}.
 \]
 
-розв’язувач статус самостійно є weaker ніж Нев’язка перевірка.
+Solver status alone is weaker than residual check.
 
 <figure>
- <img src="figures/fig_02_root_numeric_symbolic.svg" alt="чисельний і символьний корінь">
- <figcaption><strong>Рис. 2.</strong> чисельний корінь дає з рухомою комою значення; символьний метод дає точний вираз. збіг забезпечує Міжметодна перевірка.</figcaption>
+  <img src="figures/fig_02_root_numeric_symbolic.svg" alt="Numerical and symbolic root">
+  <figcaption><strong>Рис. 2.</strong> Numerical root gives a floating-point value; symbolic method gives an exact expression. Agreement provides cross-method verification.</figcaption>
 </figure>
 
 ---
 
-# ВИПАДОК B — СИМВОЛЬНИЙ АНАЛІЗ
+# CASE B — SYMBOLIC ANALYSIS
 
-## 5. той самий рівняння, різний питання
+## 5. Same equation, different question
 
-тепер запитати:
+Now ask:
 
-> що є точний аналітичний вираз для roots?
+> what is the exact analytical expression for the roots?
 
-SymPy повертає:
+SymPy returns:
 
 \[
 t=-15\pm5\sqrt{33}.
 \]
 
-додатний корінь:
+Positive root:
 
 \[
 -15+5\sqrt{33}
 \approx13.7228132327.
 \]
 
-той самий об’єкт, різний desired результат, тому різний метод.
+Same object, different desired output, therefore different method.
 
 ---
 
-## 6. чисельний і символьний
+## 6. Numerical vs symbolic
 
-### чисельний
+### Numerical
 
-корисний коли:
+Useful when:
 
-- функція є complicated;
-- точний форма недоступний;
-- лише числовий корінь є потрібні.
+- function is complicated;
+- exact form unavailable;
+- only numeric root is needed.
 
-### символьний
+### Symbolic
 
-корисний коли:
+Useful when:
 
-- точний залежність має значення;
-- формула підтримує further аналіз;
-- похідні або limits є потрібні.
+- exact dependence matters;
+- formula supports further analysis;
+- derivatives or limits are needed.
 
-Жоден підхід не є універсально кращим.
+Neither is universally superior.
 
-міжметодний збіг є сильний ПЕРЕВІРКА.
-
----
-
-## 7. чому точний робить не завжди середнє корисний
-
- точний вираз може бути huge, жорсткий до interpret або чисельно незручною.
-
-якщо лише один скалярний результат є потрібний, стійкий чисельний метод може бути кращий.
-
-метод якість є judged against потреба дослідження.
+Cross-method agreement is strong verification.
 
 ---
 
-# ВИПАДОК C — ЛІНІЙНА ОПТИМІЗАЦІЯ
+## 7. Why exact does not always mean useful
 
-## 8. задача
+An exact expression may be huge, hard to interpret or numerically inconvenient.
 
-максимізувати:
+If only one scalar result is required, a robust numerical method may be better.
+
+Method quality is judged against research need.
+
+---
+
+# CASE C — LINEAR OPTIMIZATION
+
+## 8. Problem
+
+Maximize:
 
 \[
 F=8x_1+6x_2
 \]
 
-subject до:
+subject to:
 
 \[
 x_1+x_2\le100,
@@ -216,25 +216,25 @@ x_1+x_2\le100,
 x_1,x_2\ge0.
 \]
 
-ми seek найкращий допустимий рішення, не корінь або формула.
+We seek a best feasible decision, not a root or formula.
 
 ---
 
-## 9. базовий оптимум
+## 9. Baseline optimum
 
-SciPy linprog повертає:
+SciPy linprog returns:
 
 \[
 x_1=40,\qquad x_2=60.
 \]
 
-цільова функція:
+Objective:
 
 \[
 F^*=8\cdot40+6\cdot60=680.
 \]
 
-обидва глобальний обмеження є активний:
+Both global constraints are active:
 
 \[
 40+60=100,
@@ -245,72 +245,72 @@ F^*=8\cdot40+6\cdot60=680.
 \]
 
 <figure>
- <img src="figures/fig_03_lp_geometry.svg" alt="Геометрія лінійна оптимізація">
- <figcaption><strong>Рис. 3.</strong> пошук кореня шукає нуль, оптимізація шукає найкращий точка допустима область. У базовий оптимум лежить на intersection двох активні обмеження.</figcaption>
+  <img src="figures/fig_03_lp_geometry.svg" alt="Геометрія linear optimization">
+  <figcaption><strong>Рис. 3.</strong> Root finding шукає zero, optimization шукає best point feasible region. У baseline optimum лежить на intersection двох active constraints.</figcaption>
 </figure>
 
 ---
 
-## 10. чому пошук кореня не може замінює оптимізація
+## 10. Why root finding cannot replace optimization
 
-там є ні один рівняння \(f(t)=0\). натомість ми мають:
+There is no single equation \(f(t)=0\). Instead we have:
 
-- цільова функція;
-- допустима область;
-- нерівностей.
+- objective;
+- feasible region;
+- inequalities.
 
- клас методу необхідно зберігати ці змісту.
+The method class must preserve these semantics.
 
-ПЕРЕВІРКА перевірки:
+Verification checks:
 
-- Невід’ємність;
-- ресурс;
-- бюджет;
-- незалежний перерахунок цільова функція.
-
----
-
-## 11. повний перебір і оптимізація
-
- сітка може enumerate багато кандидат точки.
-
-але крок сітки вносить наближення і масштабується погано.
-
-лінійний програмування exploits математичний структура безпосередньо.
-
- fact що повний перебір може розв’язання tiny навчальний випадок робить не робити це preferred клас методу.
+- non-negativity;
+- resource;
+- budget;
+- independent recomputation of objective.
 
 ---
 
-# ВИПАДОК D — РИЗИК ЗА МЕТОДОМ МОНТЕ-КАРЛО
+## 11. Brute force versus optimization
 
-## 12. задача
+A grid could enumerate many candidate points.
 
-Single-step споживання:
+But grid resolution introduces approximation and scales poorly.
+
+Linear programming exploits mathematical structure directly.
+
+The fact that brute force can solve a tiny teaching case does not make it the preferred method class.
+
+---
+
+# CASE D — MONTE CARLO RISK
+
+## 12. Problem
+
+Single-step consumption:
 
 \[
 C_k\sim N(6,1.5^2)
 \]
 
-з від’ємний значення clipped до zero.
+with negative values clipped to zero.
 
-для 20 кроки:
+For 20 steps:
 
 \[
 C_{tot}=\sum_{k=1}^{20}C_k.
 \]
 
-питання:
+Question:
 
-> що є ймовірність що загальний споживання exceeds 120?
+> what is the probability that total consumption exceeds 120?
 
-це є ймовірність/розподіл питання.
+This is a probability/distribution question.
 
 ---
 
-## 13. базове моделювання
+## 13. Baseline simulation
 
-для:
+For:
 
 \[
 N=10000,
@@ -320,134 +320,134 @@ N=10000,
 seed=2026,
 \]
 
- курс реалізація оцінки:
+the course implementation estimates:
 
 \[
 \hat p\approx0.5021.
 \]
 
-номінальний середнє загальний є:
+Nominal mean total is:
 
 \[
 20\cdot6=120,
 \]
 
-отже результат поблизу one-half є правдоподібну.
+so a result near one-half is plausible.
 
 <figure>
- <img src="figures/fig_04_monte_carlo_risk.svg" alt="Monte Carlo risk розподіл">
- <figcaption><strong>Рис. 4.</strong> Монте-Карло відповідає на рівні розподілу питання. пропускна спроможність поріг splits змодельовані підсумки у подія і non-event результати.</figcaption>
+  <img src="figures/fig_04_monte_carlo_risk.svg" alt="Monte Carlo risk distribution">
+  <figcaption><strong>Рис. 4.</strong> Monte Carlo answers a distribution-level question. Capacity threshold splits simulated totals into event and non-event outcomes.</figcaption>
 </figure>
 
 ---
 
-## 14. інтерпретація
+## 14. Interpretation
 
-правильний:
+Correct:
 
-> за заданий iid з обрізаним нормальним розподілом модель, про 50.21% змодельовані підсумки перевищують 120.
+> under the specified iid clipped-normal model, about 50.21% of simulated totals exceed 120.
 
 Incorrect:
 
-> реальний процес має точно 50.21% ризик.
+> the real process has exactly 50.21% risk.
 
-моделювання оцінки consequences припущення.
-
----
-
-## 15. чому оптимізація є неправильний тут
-
- поточний питання має ні змінна рішення і ні цільова функція до максимізувати.
-
-Adding оптимізація може відповідати інший питання.
-
-для приклад:
-
-> що пропускна спроможність мінімізує вартість subject до ризик нижче 5%?
-
-що може обґрунтовано поєднати моделювання і оптимізація.
+Simulation estimates consequences of assumptions.
 
 ---
 
-# ВИПАДОК E — МЕРЕЖЕВИЙ МЕТОД
+## 15. Why optimization is wrong here
 
-## 16. працювати граф
+The current question has no decision variable and no objective to maximize.
+
+Adding optimization would answer another question.
+
+For example:
+
+> what capacity minimizes cost subject to risk below 5%?
+
+That would legitimately combine simulation and optimization.
+
+---
+
+# CASE E — NETWORK METHOD
+
+## 16. Work graph
 
 Edges:
 
-- початок→, вага 3;
-- початок→B, 4;
-- →C, 5;
+- Start→A, weight 3;
+- Start→B, 4;
+- A→C, 5;
 - B→C, 2;
-- C→завершення, 4.
+- C→Finish, 4.
 
-питання:
+Question:
 
-> який залежність шлях determines загальний тривалість?
+> which dependency path determines total duration?
 
-це є graph-structure питання.
+This is a graph-structure question.
 
 ---
 
-## 17. критичний шлях
+## 17. Critical path
 
-через:
+Via A:
 
 \[
 3+5+4=12.
 \]
 
-через B:
+Via B:
 
 \[
 4+2+4=10.
 \]
 
-тому:
+Therefore:
 
 \[
 Start\rightarrow A\rightarrow C\rightarrow Finish
 \]
 
-має довжина:
+has length:
 
 \[
 12.
 \]
 
 <figure>
- <img src="figures/fig_05_мережа_path.svg" alt="мініприклад критичного шляху">
- <figcaption><strong>Рис. 5.</strong> мережевий метод використовує структура залежностей безпосередньо. Longest зважений DAG шлях є початок→→C→завершення, довжиною 12.</figcaption>
+  <img src="figures/fig_05_network_path.svg" alt="Critical path mini-case">
+  <figcaption><strong>Рис. 5.</strong> Network method uses dependency structure directly. Longest weighted DAG path is Start→A→C→Finish, length 12.</figcaption>
 </figure>
 
 ---
 
-## 18. чому граф представлення має значення
+## 18. Why graph representation matters
 
- тривалість таблиця самостійно може приховувати топологія.
+A duration table alone can hide topology.
 
-мережевий представлення preserves:
+Network representation preserves:
 
-- вузол ідентичність;
-- edge напрям;
-- залежність;
-- шлях.
+- node identity;
+- edge direction;
+- dependency;
+- path.
 
-коли топологія є питання, граф метод є природний.
+When topology is the question, graph method is natural.
 
 ---
 
-# ВИПАДОК F — БАГАТОКРИТЕРІАЛЬНИЙ АНАЛІЗ РІШЕНЬ
+# CASE F — MULTI-CRITERIA DECISION ANALYSIS
 
-## 19. альтернативи
+## 19. Alternatives
 
-| Alt | вартість | час | надійність |
+| Alt | Cost | Time | Reliability |
 |---|---:|---:|---:|
-| | 80 | 7 |.90 |
-| B | 65 | 9 |.82 |
-| C | 95 | 5 |.96 |
+| A | 80 | 7 | .90 |
+| B | 65 | 9 | .82 |
+| C | 95 | 5 | .96 |
 
-ваги:
+Weights:
 
 \[
 w_{cost}=0.30,\quad
@@ -455,34 +455,34 @@ w_{time}=0.25,\quad
 w_{rel}=0.45.
 \]
 
-вартість/час є вартість критерії, надійність є Вигода.
+Cost/time are cost criteria, reliability is benefit.
 
 ---
 
-## 20. Нормалізація відношенням
+## 20. Ratio normalization
 
-для вартість:
+For cost:
 
 \[
 r_{cost,i}=
 \frac{\min(cost)}{cost_i}.
 \]
 
-для час:
+For time:
 
 \[
 r_{time,i}=
 \frac{\min(time)}{time_i}.
 \]
 
-для надійність:
+For reliability:
 
 \[
 r_{rel,i}=
 \frac{rel_i}{\max(rel)}.
 \]
 
-оцінка:
+Score:
 
 \[
 S_i=
@@ -493,9 +493,9 @@ S_i=
 
 ---
 
-## 21. базове ранжування
+## 21. Baseline ranking
 
-наближений оцінки:
+Approximate scores:
 
 \[
 S_C\approx0.9053,
@@ -509,236 +509,236 @@ S_A\approx0.8442,
 S_B\approx0.8233.
 \]
 
-ранжування:
+Ranking:
 
 \[
 C>A>B.
 \]
 
 <figure>
- <img src="figures/fig_06_mcda_ranking.svg" alt="MCDA ranking mini-case">
- <figcaption><strong>Рис. 6.</strong> MCDA створює умовний ранжування за явний ваги і критерій напрямах. ранжування є не цільова функція властивість незалежний метод.</figcaption>
+  <img src="figures/fig_06_mcda_ranking.svg" alt="MCDA ranking mini-case">
+  <figcaption><strong>Рис. 6.</strong> MCDA produces a conditional ranking under explicit weights and criterion directions. Ranking is not an objective property independent of method.</figcaption>
 </figure>
 
 ---
 
-## 22. MCDA і оптимізація
+## 22. MCDA versus optimization
 
-LP chooses неперервний рішення змінні за жорсткий обмеження.
+LP chooses continuous decision variables under hard constraints.
 
-MCDA compares дискретний альтернативи за кілька критерії.
+MCDA compares discrete alternatives under multiple criteria.
 
-вони може coexist у більший рішення робочий процес, але вони є не синонімами.
+They can coexist in a larger decision workflow, but they are not synonymous.
 
 ---
 
-# ВИБІР МЕТОДУ ЯК ДОСЛІДНИЦЬКЕ МІРКУВАННЯ
+# METHOD SELECTION AS RESEARCH REASONING
 
-## 23. результат тип є спочатку класифікатор
+## 23. Output type is the first classifier
 
-### кількість
+### Number
 
-корінь, інтеграл, параметр оцінка.
+Root, integral, parameter estimate.
 
-### формула
+### Formula
 
-символьний вираз.
+Symbolic expression.
 
-### оптимум
+### Optimum
 
-оптимізація.
+Optimization.
 
-### розподіл/ймовірність
+### Distribution/probability
 
-Монте-Карло або статистичну метод.
+Monte Carlo or statistical method.
 
-### шлях/структура
+### Path/structure
 
-граф/мережевий метод.
+Graph/network method.
 
-### ранжування
+### Ranking
 
 MCDA.
 
- форма потрібної відповіді часто одразу звужує вибір методу.
+The requested answer shape often narrows method choice immediately.
 
 ---
 
-## 24. Невизначеність — другий класифікатор
+## 24. Uncertainty is the second classifier
 
-запитати:
+Ask:
 
-> є вхідні дані або спостереження випадковий або невизначені?
+> are inputs or observations random or uncertain?
 
-якщо так, ймовірнісний шар може бути потрібний.
+If yes, a probabilistic layer may be required.
 
-але Монте-Карло слід не бути added лише тому що невизначеність “sounds науковий”.
+But Monte Carlo should not be added only because uncertainty “sounds scientific”.
 
-визначити випадковий змінні, розподіли і припущення явно.
+Define random variables, distributions and assumptions explicitly.
 
 ---
 
-## 25. Обмеження — третій класифікатор
+## 25. Constraints are the third classifier
 
-якщо задача має цільова функція:
+If problem has objective:
 
 \[
 F(x)\rightarrow\max
 \]
 
-subject до:
+subject to:
 
 \[
 g_i(x)\le0,
 \]
 
-оптимізація є природний клас.
+optimization is a natural class.
 
-без рішення цільова функція, оптимізація може бути category похибка.
-
----
-
-## 26. Мережева структура — четвертий класифікатор
-
-якщо зв’язки між сутностями визначають результат, зберігати їх як графову структуру.
-
-приклади:
-
-- проєкт залежності;
-- communication топологія;
-- потік мережевий;
-- залежність граф.
+Without a decision objective, optimization may be a category error.
 
 ---
 
-## 27. Кілька критеріїв — п’ятий класифікатор
+## 26. Network structure is the fourth classifier
 
-коли альтернативи є judged за допомогою кілька non-еквівалент критерії, один скалярний показник може потребувати явний перевага припущення.
+If relationships between entities determine output, preserve them as graph structure.
 
-MCDA робить їх видимою через:
+Examples:
 
-- критерій напрямах;
-- нормалізація;
-- ваги;
-- агрегування.
-
----
-
-## 28. аналітичний еталон є ПЕРЕВІРКА можливість
-
-навіть коли кінцевий метод чисельний, запитати:
-
-> є там простіший точний випадок?
-
-приклади:
-
-- чисельний корінь перевірений за допомогою символьний корінь;
-- чисельний ODE перевірений за допомогою закритий форма;
-- Монте-Карло перевіряється за грубою очікуваною оцінкою;
-- оптимізація перевірений за допомогою ручний corner точки.
-
-це є відтворювана дослідницька дисципліна.
+- project dependencies;
+- communication topology;
+- flow network;
+- dependency graph.
 
 ---
 
-## 29. метод, алгоритм, реалізація
+## 27. Multiple criteria are the fifth classifier
 
-Distinguish три рівні.
+When alternatives are judged by several non-equivalent criteria, one scalar metric may require explicit preference assumptions.
 
-### клас методу
+MCDA makes them visible through:
 
-чисельний пошук кореня.
+- criterion directions;
+- normalization;
+- weights;
+- aggregation.
 
-### алгоритм
+---
 
-Brent метод.
+## 28. Analytical benchmark is a verification opportunity
 
-### реалізація
+Even when final method numerical, ask:
+
+> is there a simpler exact case?
+
+Examples:
+
+- numerical root checked by symbolic root;
+- numerical ODE checked by closed form;
+- Monte Carlo checked against rough expectation;
+- optimization checked by manual corner points.
+
+This is reusable research discipline.
+
+---
+
+## 29. Method, algorithm, implementation
+
+Distinguish three levels.
+
+### Method class
+
+Numerical root finding.
+
+### Algorithm
+
+Brent method.
+
+### Implementation
 
 SciPy root_scalar.
 
-або:
+Or:
 
-### клас методу
+### Method class
 
-лінійний програмування.
+Linear programming.
 
-### алгоритм/обчислювальна основа
+### Algorithm/backend
 
 HiGHS.
 
-### реалізація
+### Implementation
 
 SciPy linprog.
 
-це відмінність покращує дисертація методологія мовою.
+This distinction improves dissertation methodology language.
 
 ---
 
-## 30. ПЕРЕВІРКА необхідно відповідати метод
+## 30. Verification must match method
 
-| метод | ПЕРЕВІРКА |
+| Method | Verification |
 |---|---|
-| корінь | Нев’язка |
-| символьний | підстановка/спрощення |
-| оптимізація | допустимість + цільова функція |
-| Монте-Карло | зерно генератора + збіжність/діапазон |
-| мережевий | ручний шлях допустимість/довжина |
-| MCDA | напрямах + ваги + оцінка перерахунок |
+| root | residual |
+| symbolic | substitution/simplification |
+| optimization | feasibility + objective |
+| Monte Carlo | seed + convergence/range |
+| network | manual path validity/length |
+| MCDA | directions + weights + score recomputation |
 
 <figure>
- <img src="figures/fig_07_перевірка_matrix.svg" alt="перевірка matrix by метод">
- <figcaption><strong>Рис. 7.</strong> Вибір методу містить вибір перевірки. результат без перевірка, специфічна для методу є неповним.</figcaption>
+  <img src="figures/fig_07_verification_matrix.svg" alt="Verification matrix by method">
+  <figcaption><strong>Рис. 7.</strong> Method selection includes verification selection. A result without a method-specific check is incomplete.</figcaption>
 </figure>
 
 ---
 
-## 31. Зламай Вибір методу: молоток задача
+## 31. Зламай method selection: the hammer problem
 
-якщо дослідник knows один інструмент добре, кожен задача може look подібно що інструмент.
+If researcher knows one tool well, every problem can look like that tool.
 
- ймовірність питання forced у оптимізація є ні довший той самий Дослідницьке питання.
+A probability question forced into optimization is no longer the same research question.
 
- граф задача flattened у таблиця може lose топологія.
+A graph problem flattened into a table may lose topology.
 
- питання ранжування, зведене до однієї довільної оцінки може приховувати переваги.
+A ranking question reduced to one arbitrary score may hide preferences.
 
- відмова є концептуальний, не syntactic.
-
----
-
-## 32. Зламай Вибір методу: зайва складність
-
- простий точний формула існує.
-
-дослідник launches 100,000 Монте-Карло запуски до оцінка той самий скалярний.
-
- результат може бути близький, але додає:
-
-- вибірка шум;
-- обчислювальний вартість;
-- більше параметри.
-
-складність слід earn його place.
+The failure is conceptual, not syntactic.
 
 ---
 
-## 33. Зламай Вибір методу: культ точності
+## 32. Зламай method selection: unnecessary complexity
 
- символьний вираз може бути точний але uselessly великий.
+A simple exact formula exists.
 
-якщо рішення потребує лише стійкий скалярний з допуск, чисельний метод може communicate кращий.
+Researcher launches 100,000 Monte Carlo runs to estimate the same scalar.
 
-науковий rigor є не measured за допомогою вираз довжина.
+The result may be close, but adds:
+
+- sampling noise;
+- computational cost;
+- more parameters.
+
+Complexity should earn its place.
 
 ---
 
-## 34. гібридний методи
+## 33. Зламай method selection: exactness fetish
 
-реальний дослідження часто combines:
+A symbolic expression can be exact but uselessly large.
+
+If decision requires only a robust scalar with tolerance, numerical method may communicate better.
+
+Scientific rigor is not measured by expression length.
+
+---
+
+## 34. Hybrid methods
+
+Real research often combines:
 
 \[
-дані
+Data
 \rightarrow
 Calibration
 \rightarrow
@@ -746,28 +746,28 @@ Simulation
 \rightarrow
 Optimization
 \rightarrow
-чутливість.
+Sensitivity.
 \]
 
-кожен stage відповідає різний питання.
+Each stage answers a different question.
 
-метод класифікація є не про вибір один метод forever.
+Method classification is not about choosing one method forever.
 
-це є про вибір кожен метод навмисно.
+It is about choosing each method deliberately.
 
 ---
 
-## 35. послідовний метод ускладнення
+## 35. Sequential method escalation
 
- sensible стратегія:
+A sensible strategy:
 
-1. simplest базовий;
-2. перевірити;
-3. ідентифікувати пропущений структура;
-4. add метод шар;
-5. перевірити знову.
+1. simplest baseline;
+2. verify;
+3. identify missing structure;
+4. add method layer;
+5. verify again.
 
-для невизначеність:
+For uncertainty:
 
 \[
 Deterministic
@@ -777,7 +777,7 @@ Stochastic
 Monte\ Carlo.
 \]
 
-для рішення:
+For decisions:
 
 \[
 Descriptive
@@ -789,55 +789,55 @@ Robustness.
 
 ---
 
-## 36. обчислювальний вартість
+## 36. Computational cost
 
-метод вибір також залежить на масштаб.
+Method choice also depends on scale.
 
-символьний розв’язання може explode у складність.
+Symbolic solving may explode in complexity.
 
-пошук по сітці може стати impossible у високий вимір.
+Grid search may become impossible in high dimension.
 
-Монте-Карло може потребувати багато запуски.
+Monte Carlo may require many runs.
 
-граф algorithms може масштаб добре на розріджений structures.
+Graph algorithms may scale well on sparse structures.
 
-обчислювальний допустимість belongs до метод justification.
-
----
-
-## 37. Інтерпретованість
-
-різний методи expose різний докази.
-
-символьний формула виявляє залежність.
-
-Монте-Карло виявляє розподіл.
-
-оптимізація виявляє активні обмеження.
-
-мережевий метод виявляє топологія.
-
-MCDA виявляє компроміси.
-
-обрати метод according до що потребує до бути explained, не лише computed.
+Computational feasibility belongs to method justification.
 
 ---
 
-## 38. Прогноз до інструмент
+## 37. Interpretability
 
-до running кожен випадок, записати expectation.
+Different methods expose different evidence.
 
-- корінь між 0 і 30.
-- LP ймовірно використовує усі ресурс і бюджет.
-- Монте-Карло ризик поблизу 0.5 тому що середнє загальний≈пропускна спроможність.
-- branch appears довший ніж B.
-- C може lead MCDA через до час/надійність.
+Symbolic formula reveals dependence.
 
-ПРОГНОЗ turns метод використовувати у експеримент.
+Monte Carlo reveals distribution.
+
+Optimization reveals active constraints.
+
+Network method reveals topology.
+
+MCDA reveals trade-offs.
+
+Choose method according to what needs to be explained, not only computed.
 
 ---
 
-## 39. PYTHON БЕЗ СТРАХУ: корінь
+## 38. Predict before tool
+
+Before running each case, record expectation.
+
+- Root between 0 and 30.
+- LP likely uses all resource and budget.
+- Monte Carlo risk near 0.5 because mean total≈capacity.
+- A branch appears longer than B.
+- C may lead MCDA due to time/reliability.
+
+Prediction turns method use into experiment.
+
+---
+
+## 39. Python without fear: root
 
 ~~~python
 root = numerical_root()
@@ -847,7 +847,7 @@ assert abs(value) < 1e-8
 
 ---
 
-## 40. PYTHON БЕЗ СТРАХУ: LP
+## 40. Python without fear: LP
 
 ~~~python
 result = linear_optimization()
@@ -855,7 +855,7 @@ assert result["resource_used"] <= 100
 assert result["budget_used"] <= 240
 ~~~
 
-контроль:
+Control:
 
 \[
 F^*=680.
@@ -863,7 +863,7 @@ F^*=680.
 
 ---
 
-## 41. PYTHON БЕЗ СТРАХУ: Монте-Карло
+## 41. Python without fear: Monte Carlo
 
 ~~~python
 risk = monte_carlo_risk(
@@ -872,7 +872,7 @@ risk = monte_carlo_risk(
 )
 ~~~
 
-контроль:
+Control:
 
 \[
 risk\approx0.5021.
@@ -880,13 +880,13 @@ risk\approx0.5021.
 
 ---
 
-## 42. PYTHON БЕЗ СТРАХУ: мережевий
+## 42. Python without fear: network
 
 ~~~python
 path, length = critical_path()
 ~~~
 
-контроль:
+Control:
 
 \[
 Start\rightarrow A\rightarrow C\rightarrow Finish,
@@ -898,13 +898,13 @@ length=12.
 
 ---
 
-## 43. PYTHON БЕЗ СТРАХУ: MCDA
+## 43. Python without fear: MCDA
 
 ~~~python
 ranking = weighted_sum_decision()
 ~~~
 
-контроль:
+Control:
 
 \[
 C>A>B.
@@ -912,88 +912,88 @@ C>A>B.
 
 ---
 
-## 44. ВІДТВОРЮВАНІСТЬ через метод класи
+## 44. Reproducibility across method classes
 
-кожен випадок слід записати:
+Each case should record:
 
-- вхідні дані;
-- метод;
-- параметри;
-- Python реалізація;
-- зерно генератора де суттєвий;
-- ПЕРЕВІРКА;
-- результат.
+- inputs;
+- method;
+- parameters;
+- Python implementation;
+- seed where relevant;
+- verification;
+- output.
 
- точний метадані differs, але походження даних і результату принцип залишається.
+The exact metadata differs, but provenance principle remains.
 
 ---
 
-## 45. Вибір методу таблиця для дисертація
+## 45. Method selection table for a dissertation
 
-для кожен дослідження робота fill:
+For each research task fill:
 
-| питання | структура | результат | метод | альтернатива | ПЕРЕВІРКА |
+| Question | Structure | Output | Method | Alternative | Verification |
 |---|---|---|---|---|---|
 
-це prevents методологія chapter з becoming list libraries.
+This prevents the methodology chapter from becoming a list of libraries.
 
 ---
 
-## 46. альтернатива метод аналіз
+## 46. Alternative method analysis
 
-добрий дослідження explains не лише що було selected, але правдоподібну альтернативи.
+Good research explains not only what was selected, but plausible alternatives.
 
-приклад корінь:
+Example root:
 
-- Brent: стійкий bracketed скалярний корінь;
-- Newton: faster поблизу розв’язок але потребує початок/похідна поведінку;
-- SymPy: точний коли tractable.
+- Brent: robust bracketed scalar root;
+- Newton: faster near solution but requires start/derivative behavior;
+- SymPy: exact when tractable.
 
-Selection є argument.
+Selection is an argument.
 
 ---
 
-## 47. коли методи не погоджуються
+## 47. When methods disagree
 
-припустімо символьний і чисельний корінь відрізнятися significantly.
+Suppose symbolic and numerical root differ significantly.
 
-робити не середнє їх.
+Do not average them.
 
 Investigate:
 
-- неправильний рівняння;
-- неправильний branch;
-- допуск;
-- предметна область;
-- coding похибка.
+- wrong equation;
+- wrong branch;
+- tolerance;
+- domain;
+- coding error.
 
-Disagreement є діагностика докази.
-
----
-
-## 48. коли методи узгоджуються
-
-збіг strengthens довірчий у реалізація.
-
-але якщо обидва encode той самий неправильний припущення, предметна область модель може усе ще бути неправильний.
-
-це відмінність repeats throughout курс.
+Disagreement is diagnostic evidence.
 
 ---
 
-## 49. синтетичний військовий контекст
+## 48. When methods agree
 
- six випадки може представляти abstract роботи такий як поріг timing, навчальний розподіл ресурсів, невизначені синтетичний споживання, проєкт залежності і альтернатива selection.
+Agreement strengthens confidence in implementation.
 
-ні реальний операційний дані є потрібні.
+But if both encode same wrong assumptions, domain model can still be wrong.
 
- transferable об’єкт є математичний структура.
+This distinction repeats throughout the course.
 
 ---
 
-## 50. Перенесення в дослідження
+## 49. Synthetic military context
 
-для один дисертація fragment fill:
+The six cases may represent abstract tasks such as threshold timing, training resource allocation, uncertain synthetic consumption, project dependencies and alternative selection.
+
+No real operational data are needed.
+
+The transferable object is mathematical structure.
+
+---
+
+## 50. Research Transfer
+
+For one dissertation fragment fill:
 
 ~~~text
 Research question:
@@ -1029,130 +1029,130 @@ Allowed conclusion:
 
 ---
 
-## 51. приклад Перенесення
+## 51. Example transfer
 
-питання:
+Question:
 
-> оцінка параметри з шумний спостереження.
+> estimate parameters from noisy observations.
 
-результат:
+Output:
 
-> параметр оцінки plus невизначеність.
+> parameter estimates plus uncertainty.
 
-кандидат метод:
+Candidate method:
 
-> нелінійний метод найменших квадратів plus бутстреп.
+> nonlinear least squares plus bootstrap.
 
-мережаX може бути inappropriate unless граф структура фактично існує.
+NetworkX would be inappropriate unless graph structure actually exists.
 
-метод justification необхідно орієнтир задача.
-
----
-
-## 52. докази ієрархія
-
- сильний результат містить:
-
-1. валідний вхідні дані;
-2. обґрунтований метод;
-3. перевірена обчислення;
-4. чутливість/невизначеність коли потрібні;
-5. обмежений інтерпретація.
-
-метод вибір є лише один link у докази ланцюг.
+Method justification must reference the problem.
 
 ---
 
-## 53. “найкращий метод” є контекстний
+## 52. Evidence hierarchy
 
-там є ні універсальний переможець.
+A strong result includes:
 
- метод є придатний відносний до:
+1. valid inputs;
+2. justified method;
+3. verified computation;
+4. sensitivity/uncertainty when needed;
+5. bounded interpretation.
 
-- питання;
-- припущення;
-- дані;
-- результат;
-- обчислювальний обмеження;
-- ПЕРЕВІРКА opportunities.
-
-це є чому класифікація є практичний методологія, не taxonomy trivia.
+Method choice is only one link in evidence chain.
 
 ---
 
-## 54. Підсумок на одній сторінці
+## 53. “Best method” is contextual
 
-### П’ять головних ідей
+There is no universal winner.
 
-1. задача структура selects метод.
-2. результат тип є спочатку класифікатор.
-3. Python бібліотека є реалізація, не методологія.
-4. ПЕРЕВІРКА необхідно відповідати клас методу.
-5. гібридний workпотікs є нормальний коли питання зміна.
+A method is suitable relative to:
 
-### Три правила
+- question;
+- assumptions;
+- data;
+- output;
+- computational constraints;
+- verification opportunities.
 
-корінь:
+This is why classification is practical methodology, not taxonomy trivia.
+
+---
+
+## 54. One-page summary
+
+### Five ideas
+
+1. Problem structure selects method.
+2. Output type is the first classifier.
+3. Python library is implementation, not methodology.
+4. Verification must match method class.
+5. Hybrid workflows are normal when questions change.
+
+### Three rules
+
+Root:
 
 \[
 f(t^*)=0.
 \]
 
-оптимізація:
+Optimization:
 
 \[
 F(x)\rightarrow\max
-\quad\text{subject to обмеження}.
+\quad\text{subject to constraints}.
 \]
 
-Монте-Карло:
+Monte Carlo:
 
 \[
 \hat p=\frac{events}{runs}.
 \]
 
-### Дві типові помилки
+### Two errors
 
-- familiar інструмент → forced метод;
-- successful код → обґрунтований методологія.
+- familiar tool → forced method;
+- successful code → justified methodology.
 
-### Одне питання
+### One question
 
-> що властивість my дослідження задача forces me до обрати це метод?
+> What property of my research problem forces me to choose this method?
 
-### Наступний крок
+### Next step
 
 Build:
 
 \[
-питання\rightarrow метод\rightarrow Tool\rightarrow перевірка.
+Question\rightarrow Method\rightarrow Tool\rightarrow Verification.
 \]
 
 <figure>
- <img src="figures/fig_08_дослідження_transfer.svg" alt="перенесення в дослідження метод chain">
- <figcaption><strong>Рис. 8.</strong> Вибір методу стає dissertation-ready коли ланцюг з питання до ПЕРЕВІРКА є явний і відтворюваний.</figcaption>
+  <img src="figures/fig_08_research_transfer.svg" alt="Research transfer method chain">
+  <figcaption><strong>Рис. 8.</strong> Method selection becomes dissertation-ready when the chain from question to verification is explicit and reproducible.</figcaption>
 </figure>
 
 ---
 
 ## 55. Фінальна думка
 
-методи є не menu з який ми pick найбільш sophisticated name.
+Methods are not a menu from which we pick the most sophisticated name.
 
-вони є математичний відповідає до структурний питання.
+They are mathematical answers to structural questions.
 
- корінь метод finds нуль.
+A root method finds a zero.
 
-оптимізація finds найкращий допустимий рішення.
+Optimization finds a best feasible decision.
 
-Монте-Карло propagates невизначеність.
+Monte Carlo propagates uncertainty.
 
-мережевий метод exposes структура залежностей.
+Network method exposes dependency structure.
 
-MCDA formalizes multi-criteria перевага.
+MCDA formalizes multi-criteria preference.
 
-символьний алгебра виявляє точний структура.
+Symbolic algebra reveals exact structure.
 
- основний competence є будучи able до сказати:
+The core competence is being able to say:
 
-> **“My задача має це структура, тому це метод є доречний, це є як I буде перевірити це, і ці є limits висновок.”**
+> **“My problem has this structure, therefore this method is appropriate, this is how I will verify it, and these are the limits of the conclusion.”**
