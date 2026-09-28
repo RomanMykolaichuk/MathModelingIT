@@ -1,10 +1,10 @@
-# Instructor Notes — T1.L1
+# Викладач нотатки — T1.L1
 
 ## Роль заняття в дисципліні
 
 Це еталонне заняття, яке вводить наскрізну логіку всього курсу:
 
-**problem → mathematical model → Python model → experiment → visualization → interpretation → research transfer.**
+**задача → mathematical модель → Python модель → experiment → візуалізація → інтерпретація → перенесення в дослідження.**
 
 Не слід перетворювати заняття на вступ до синтаксису Python. Код тут виконує роль формального і виконуваного представлення моделі.
 
@@ -129,7 +129,7 @@ python lessons/t1_l1/src/experiment.py
 - base resource at t=10 = `40.0`;
 - economy resource at t=10 = `70.0`.
 
-## Research transfer
+## перенесення в дослідження
 
 Після практики дати 5–7 хвилин на власну постановку. Не оцінювати складність математики; оцінювати коректність структури:
 
