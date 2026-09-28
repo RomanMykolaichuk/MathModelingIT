@@ -15,7 +15,7 @@ Each PDF is derived from the corresponding:
 - `lessons/<lesson>/README.md`;
 - `lessons/<lesson>/assignment.md`.
 
-The PDF describes the browser workflow **Predict → Run → Explain → Break → Transfer** and explicitly points to the full Python assignment when the Python scope is broader than the browser teaching subset.
+The PDF describes the browser workпотік **Predict → Run → Explain → Break → Transfer** and explicitly points to the full Python assignment when the Python scope is broader than the browser teaching subset.
 
 ## Naming rule
 
@@ -45,4 +45,4 @@ From the repository root:
 python tools/generate_lab_pdfs.py
 ```
 
-The generator writes the current PDFs into this directory. Course CI and the GitHub Pages workflow run the generator automatically before validation/deployment.
+The generator writes the current PDFs into this directory. Course CI and the GitHub Pages workпотік run the generator automatically before validation/deployment.

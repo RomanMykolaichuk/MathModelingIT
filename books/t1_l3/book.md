@@ -1,4 +1,4 @@
-# MathModelingIT · Мінікнига T1.L3
+# MathмодельingIT · Мінікнига T1.L3
 
 ## Організація математичного моделювання
 
@@ -68,7 +68,7 @@ plot_final_v2_really_final.png
 Саме це питання є центральним у T1.L3.
 
 <figure>
- <img src="figures/fig_01_reproducibility_chain.svg" alt="Ланцюг від research question до Git">
+ <img src="figures/fig_01_reproducibility_chain.svg" alt="Ланцюг від дослідницьке питання до Git">
  <figcaption><strong>Рис. 1.</strong> Відтворюваність виникає з повного ланцюга: питання → дані → конфігурація → модель/код → експеримент → результати → метадані → Git стан.</figcaption>
 </figure>
 
@@ -102,23 +102,23 @@ plot_final_v2_really_final.png
 У заняття зафіксовано:
 
 \[
-Research\ question
+дослідження\ питання
 \rightarrow
-Data
+дані
 \rightarrow
-Config
+конфігурація
 \rightarrow
-Model
+модель
 \rightarrow
 Code
 \rightarrow
-Experiment
+експеримент
 \rightarrow
-Verification
+перевірка
 \rightarrow
-Outputs
+результати
 \rightarrow
-Metadata
+Metaдані
 \rightarrow
 Interpretation
 \rightarrow
@@ -156,7 +156,7 @@ Y=
 
 Де:
 
-- \(Y\) — modeled результативність;
+- \(Y\) — модельed результативність;
 - \(R\) — ресурс;
 - \(L\) — навантаження;
 - \(b\) — базовий рівень;
@@ -222,7 +222,7 @@ Y=32.
 Y=\max(0,\cdots).
 \]
 
-Тому modeled результативність не від’ємний.
+Тому модельed результативність не від’ємний.
 
 Наприклад:
 
@@ -318,7 +318,7 @@ Y=b+\alpha R-\beta L
 
 ## 10. конфігурація як явний контракт
 
-базовий experiment_config.json:
+базовий експеримент_конфігурація.json:
 
 ~~~json
 {
@@ -336,7 +336,7 @@ Y=b+\alpha R-\beta L
 конфігурація робить параметри видимою.
 
 <figure>
- <img src="figures/fig_02_config_separation.svg" alt="Розділення model code і config">
+ <img src="figures/fig_02_конфігурація_separation.svg" alt="Розділення код моделі і конфігурація">
  <figcaption><strong>Рис. 2.</strong> модель код визначає математичний співвідношення, а конфігурація — конкретні параметри експеримент. Це дозволяє змінювати сценарій план без редагування основний функція.</figcaption>
 </figure>
 
@@ -374,8 +374,8 @@ for _ in range(200):
 | сценарій | ресурс | навантаження |
 |---|---:|---:|
 | базовий | 40 | 50 |
-| resource_low | 30 | 50 |
-| resource_high | 50 | 50 |
+| ресурс_low | 30 | 50 |
+| ресурс_high | 50 | 50 |
 | load_low | 40 | 35 |
 | load_high | 40 | 65 |
 
@@ -420,7 +420,7 @@ R=40,L=50
 Y=32.
 \]
 
-### resource_low
+### ресурс_low
 
 \[
 R=30,L=50
@@ -430,7 +430,7 @@ R=30,L=50
 Y=14.
 \]
 
-### resource_high
+### ресурс_high
 
 \[
 R=50,L=50
@@ -467,7 +467,7 @@ Y=14.
 Зверніть увагу:
 
 \[
-resource\_high=50,
+ресурс\_high=50,
 \]
 
 і:
@@ -525,7 +525,7 @@ n=200
 seed=2026.
 \]
 
-run_experiment() створює:
+run_експеримент() створює:
 
 ~~~python
 rng = np.random.default_rng(2026)
@@ -572,18 +572,18 @@ rng = np.random.default_rng(2026)
 
 ## 20. Підсумкові показники
 
-summarize_results() обчислює:
+summarize_результатs() обчислює:
 
 - deterministic_response;
-- mean_observed;
+- середнє значення_observed;
 - std_observed;
 - p10;
 - p90.
 
-Це scenario-level підсумок.
+Це на рівні сценарію підсумок.
 
 <figure>
- <img src="figures/fig_04_raw_to_summary.svg" alt="Від raw results до summary">
+ <img src="figures/fig_04_raw_to_підсумок.svg" alt="Від raw результатs до підсумок">
  <figcaption><strong>Рис. 4.</strong> первинний дані зберігає кожну стохастичний повторення, підсумок стискає її до показників. Для відтворюваності бажано мати обидва рівні.</figcaption>
 </figure>
 
@@ -596,8 +596,8 @@ README дає контрольні значення поблизу:
 | сценарій | детермінований | середнє спостережуваний |
 |---|---:|---:|
 | базовий | 32.0 | ≈32.29 |
-| resource_low | 14.0 | ≈14.07 |
-| resource_high | 50.0 | ≈50.11 |
+| ресурс_low | 14.0 | ≈14.07 |
+| ресурс_high | 50.0 | ≈50.11 |
 | load_low | 50.0 | ≈50.16 |
 | load_high | 14.0 | ≈13.78 |
 
@@ -633,10 +633,10 @@ p90:
 
 ## 23. метадані
 
-metadata.json містить:
+metaдані.json містить:
 
-- experiment_id;
-- config_hash;
+- експеримент_id;
+- конфігурація_hash;
 - зерно генератора;
 - повторення;
 - scenario_count;
@@ -670,7 +670,7 @@ metadata.json містить:
 
 \[
 h=
-SHA256(canonical\ config).
+SHA256(canonical\ конфігурація).
 \]
 
 короткий форма спочатку 12 hex chars.
@@ -688,7 +688,7 @@ t1_l3_0c5d08ed47eb
 ~~~
 
 <figure>
- <img src="figures/fig_05_experiment_identity.svg" alt="Experiment ID через config hash">
+ <img src="figures/fig_05_експеримент_identity.svg" alt="експеримент ID через конфігурація hash">
  <figcaption><strong>Рис. 5.</strong> конфігурація хеш створює детермінований ідентичність конфігурації. Але повна ВІДТВОРЮВАНІСТЬ потребує також код, дані і програмне середовище.</figcaption>
 </figure>
 
@@ -705,7 +705,7 @@ t1_l3_0c5d08ed47eb
 - код той самий;
 - сценарії CSV той самий;
 - NumPy той самий;
-- model.py той самий;
+- модель.py той самий;
 - OS/середовище той самий.
 
 Отже, конфігурація хеш — корисний, але частковим ідентичність.
@@ -719,11 +719,11 @@ t1_l3_0c5d08ed47eb
 Рекомендований ланцюг:
 
 \[
-Result
+результат
 \rightarrow
-ExperimentID
+експериментID
 \rightarrow
-Config/Data
+конфігурація/дані
 \rightarrow
 GitCommit.
 \]
@@ -778,7 +778,7 @@ n_{rows}=n_{scenarios}\times n_{replications}.
 
 ### повний запуск ВІДТВОРЮВАНІСТЬ
 
-той самий вхідні дані давати ідентичні результати DataFrame.
+той самий вхідні дані давати ідентичні результати даніFrame.
 
 ---
 
@@ -874,7 +874,7 @@ Kernel стан є не.
 
 ## 35. результати слід бути згенерований, не відредаговані
 
-results.csv і summary.csv є похідні.
+результатs.csv і підсумок.csv є похідні.
 
 робити не вручну правильний їх.
 
@@ -903,7 +903,7 @@ really_final.csv
 - експеримент ID каталог;
 - метадані alongside результати.
 
-для великий дослідження проєкт, experiment_id може name запуск каталог.
+для великий дослідження проєкт, експеримент_id може name запуск каталог.
 
 ---
 
@@ -933,7 +933,7 @@ experiment_config.json
 
 незмінний.
 
-зміна resource_high з 50 до 55.
+зміна ресурс_high з 50 до 55.
 
 конфігурація хеш незмінний.
 
@@ -941,7 +941,7 @@ experiment_config.json
 
 тому:
 
-> config_hash ≠ повний хеш експерименту.
+> конфігурація_hash ≠ повний хеш експерименту.
 
 Modernization:
 
@@ -950,7 +950,7 @@ Modernization:
 
 ---
 
-## 39. Зламай робочий процес: той самий конфігурація, змінений model.py
+## 39. Зламай робочий процес: той самий конфігурація, змінений модель.py
 
 зміна:
 
@@ -1123,13 +1123,13 @@ output files:
 \[
 Figure
 \rightarrow
-Summary/RawData
+підсумок/Rawдані
 \rightarrow
-ExperimentID
+експериментID
 \rightarrow
-Config
+конфігурація
 \rightarrow
-InputData
+Inputдані
 \rightarrow
 Commit.
 \]
@@ -1500,7 +1500,7 @@ src + конфігурація + дані + зерно генератора.
 
 ## 66. Зламай систему: результат без ідентичність
 
-припустімо summary.csv каже:
+припустімо підсумок.csv каже:
 
 ~~~text
 baseline mean_observed=32.29
@@ -1621,7 +1621,7 @@ outputs/<experiment_id>/
 
  малий CSV/JSON index може містити:
 
-- experiment_id;
+- експеримент_id;
 - date;
 - коміт;
 - конфігурація;
@@ -1651,7 +1651,7 @@ outputs/<experiment_id>/
 до практичний:
 
 1. запуск базовий;
-2. записати experiment_id;
+2. записати експеримент_id;
 3. перевірити Y=32;
 4. rerun і порівнювати результати;
 5. зміна лише зерно генератора;
@@ -1710,7 +1710,7 @@ Git
 
 ## Поглиблення: ВІДТВОРЮВАНІСТЬ має кілька рівнів ідентичність
 
-У базовий experiment_id залежить від конфігурація.
+У базовий експеримент_id залежить від конфігурація.
 
 Але повний обчислювальний результат залежить на broader стан.
 
@@ -1719,13 +1719,13 @@ Git
 ### конфігурація ідентичність
 
 \[
-ID_{config}=Hash(config).
+ID_{конфігурація}=Hash(конфігурація).
 \]
 
 ### дані ідентичність
 
 \[
-ID_{data}=Hash(input\ files).
+ID_{дані}=Hash(input\ files).
 \]
 
 ### код ідентичність
@@ -1748,8 +1748,8 @@ ID_{code}=commit\ SHA.
 ID_{run}
 =
 f(
-ID_{config},
-ID_{data},
+ID_{конфігурація},
+ID_{дані},
 ID_{code},
 ID_{env}
 ).
@@ -1783,7 +1783,7 @@ ID_{env}
 Imagine:
 
 - коміт = abc123;
-- model.py відредаговані locally;
+- модель.py відредаговані locally;
 - експеримент запуск;
 - зміна не committed.
 
@@ -1810,7 +1810,7 @@ Imagine:
 Add:
 
 \[
-h_{data}=SHA256(file\ bytes).
+h_{дані}=SHA256(file\ bytes).
 \]
 
 тоді метадані може включати контрольну суму даних сценарію.
@@ -1861,7 +1861,7 @@ pip freeze
 - SymPy;
 - Matplotlib.
 
-для GPU workflows також обчислювальна основа версії.
+для GPU workпотікs також обчислювальна основа версії.
 
 ---
 
@@ -1907,7 +1907,7 @@ Transformation скрипт створює processed дані з первинн�
 
 ## Поглиблення: попередня обробка є частина модель pipeline
 
-Researchers інколи think:
+дослідженняers інколи think:
 
 > попередня обробка є лише preparation.
 
@@ -1930,7 +1930,7 @@ JSON конфігурація є корисний, але може містит�
 - дозволений ranges;
 - defaults.
 
-поточний validate_config перевірки:
+поточний validate_конфігурація перевірки:
 
 - зерно генератора;
 - повторення;
@@ -1956,7 +1956,7 @@ Bad вхідні дані слід бути rejected до дорогий обч�
 
 ## Поглиблення: результат determinism
 
-для той самий конфігурація/дані/код/зерно генератора базовий первинний DataFrame слід бути identical.
+для той самий конфігурація/дані/код/зерно генератора базовий первинний даніFrame слід бути identical.
 
 тест:
 
@@ -1968,7 +1968,7 @@ pd.testing.assert_frame_equal(a, b)
 
 це перевірки точний обчислювальний повторюваність.
 
-для деяких parallel/GPU workflows bitwise ідентичність може не бути realistic.
+для деяких parallel/GPU workпотікs bitwise ідентичність може не бути realistic.
 
 тоді ВІДТВОРЮВАНІСТЬ критерій необхідно використовувати допуски.
 
@@ -2004,7 +2004,7 @@ Common для стохастичний HPC.
 
 створити реєстр:
 
-| experiment_id | коміт | конфігурація | дані | призначення | статус |
+| експеримент_id | коміт | конфігурація | дані | призначення | статус |
 |---|---|---|---|---|---|
 | exp001 | abc | cfg1 | d1 | базовий | accepted |
 | exp002 | def | cfg2 | d1 | чутливість | exploratory |
@@ -2015,7 +2015,7 @@ Common для стохастичний HPC.
 
 ## Поглиблення: exploratory і confirmatory запуски
 
-During exploration дослідник tries багато configs.
+During exploration дослідник tries багато конфігураціяs.
 
 пізніше select аналіз план.
 
@@ -2057,7 +2057,7 @@ Table 3.2  -> experiment_id Q -> summary.csv
 кращий:
 
 \[
-data
+дані
 \rightarrow
 script
 \rightarrow
@@ -2131,9 +2131,9 @@ SHA256(figure.png).
 концептуально походження даних і результату форми граф:
 
 \[
-Data
+дані
 \rightarrow
-Experiment
+експеримент
 \rightarrow
 Output
 \rightarrow
@@ -2143,9 +2143,9 @@ Publication.
 і:
 
 \[
-Code+Config
+Code+конфігурація
 \rightarrow
-Experiment.
+експеримент.
 \]
 
 метадані stores edges.
@@ -2262,7 +2262,7 @@ Technical метадані:
 - unnamed файли;
 - ручний зміни;
 - пропущений seeds;
-- незадокументовані configs;
+- незадокументовані конфігураціяs;
 - screenshots без джерело;
 - notebooks з прихований стан.
 
@@ -2425,7 +2425,7 @@ Human understands призначення.
 
 ---
 
-## Поглиблення: походження даних і результату як граф database ідея
+## Поглиблення: походження даних і результату як граф даніbase ідея
 
 для великий дослідження program походження даних і результату може бути represented як граф:
 
@@ -2524,7 +2524,7 @@ Y^{obs}=\max(0,Y+\varepsilon).
 ідентичність експерименту:
 
 \[
-ID=f(Hash(config)).
+ID=f(Hash(конфігурація)).
 \]
 
 ### Дві помилки

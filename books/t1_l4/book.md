@@ -1,4 +1,4 @@
-# MathModelingIT · Мінікнига T1.L4
+# MathмодельingIT · Мінікнига T1.L4
 
 ## Класифікація методів математичного моделювання
 
@@ -42,7 +42,7 @@
 > **задача структура → метод → інструмент Python → ПЕРЕВІРКА → інтерпретація.**
 
 <figure>
- <img src="figures/fig_01_method_selection.svg" alt="Ланцюг вибору методу">
+ <img src="figures/fig_01_метод_selection.svg" alt="Ланцюг вибору методу">
  <figcaption><strong>Рис. 1.</strong> інструмент Python є четвертим кроком, а не першим. Спочатку потрібно зрозуміти задача структура та очікуваний результат.</figcaption>
 </figure>
 
@@ -67,7 +67,7 @@
 | точний вираз | символьний алгебра | SymPy | формула |
 | найкращий допустимий розподіл | лінійна оптимізація | SciPy linprog | оптимум |
 | ризик за випадковість | Монте-Карло | NumPy RNG | ймовірність/розподіл |
-| залежність вузьке місце | граф/мережевий | NetworkX | шлях/структура |
+| залежність вузьке місце | граф/мережевий | мережаX | шлях/структура |
 | multi-criteria вибір | MCDA | pandas/NumPy | оцінка/ранжування |
 
 ---
@@ -127,7 +127,7 @@ t^*\approx13.7228132327.
 розв’язувач статус самостійно є weaker ніж Нев’язка перевірка.
 
 <figure>
- <img src="figures/fig_02_root_numeric_symbolic.svg" alt="Numerical and symbolic root">
+ <img src="figures/fig_02_root_numeric_symbolic.svg" alt="чисельний і символьний корінь">
  <figcaption><strong>Рис. 2.</strong> чисельний корінь дає з рухомою комою значення; символьний метод дає точний вираз. збіг забезпечує Міжметодна перевірка.</figcaption>
 </figure>
 
@@ -178,7 +178,7 @@ t=-15\pm5\sqrt{33}.
 
 Жоден підхід не є універсально кращим.
 
-Cross-method збіг є сильний ПЕРЕВІРКА.
+міжметодний збіг є сильний ПЕРЕВІРКА.
 
 ---
 
@@ -245,7 +245,7 @@ F^*=8\cdot40+6\cdot60=680.
 \]
 
 <figure>
- <img src="figures/fig_03_lp_geometry.svg" alt="Геометрія linear optimization">
+ <img src="figures/fig_03_lp_geometry.svg" alt="Геометрія лінійна оптимізація">
  <figcaption><strong>Рис. 3.</strong> пошук кореня шукає нуль, оптимізація шукає найкращий точка допустима область. У базовий оптимум лежить на intersection двох активні обмеження.</figcaption>
 </figure>
 
@@ -335,7 +335,7 @@ seed=2026,
 отже результат поблизу one-half є правдоподібну.
 
 <figure>
- <img src="figures/fig_04_monte_carlo_risk.svg" alt="Monte Carlo risk distribution">
+ <img src="figures/fig_04_monte_carlo_risk.svg" alt="Monte Carlo risk розподіл">
  <figcaption><strong>Рис. 4.</strong> Монте-Карло відповідає на рівні розподілу питання. пропускна спроможність поріг splits змодельовані підсумки у подія і non-event результати.</figcaption>
 </figure>
 
@@ -416,7 +416,7 @@ Start\rightarrow A\rightarrow C\rightarrow Finish
 \]
 
 <figure>
- <img src="figures/fig_05_network_path.svg" alt="Critical path mini-case">
+ <img src="figures/fig_05_мережа_path.svg" alt="мініприклад критичного шляху">
  <figcaption><strong>Рис. 5.</strong> мережевий метод використовує структура залежностей безпосередньо. Longest зважений DAG шлях є початок→→C→завершення, довжиною 12.</figcaption>
 </figure>
 
@@ -687,7 +687,7 @@ SciPy linprog.
 | MCDA | напрямах + ваги + оцінка перерахунок |
 
 <figure>
- <img src="figures/fig_07_verification_matrix.svg" alt="Verification matrix by method">
+ <img src="figures/fig_07_перевірка_matrix.svg" alt="перевірка matrix by метод">
  <figcaption><strong>Рис. 7.</strong> Вибір методу містить вибір перевірки. результат без перевірка, специфічна для методу є неповним.</figcaption>
 </figure>
 
@@ -738,7 +738,7 @@ SciPy linprog.
 реальний дослідження часто combines:
 
 \[
-Data
+дані
 \rightarrow
 Calibration
 \rightarrow
@@ -746,7 +746,7 @@ Simulation
 \rightarrow
 Optimization
 \rightarrow
-Sensitivity.
+чутливість.
 \]
 
 кожен stage відповідає різний питання.
@@ -1043,7 +1043,7 @@ Allowed conclusion:
 
 > нелінійний метод найменших квадратів plus бутстреп.
 
-NetworkX може бути inappropriate unless граф структура фактично існує.
+мережаX може бути inappropriate unless граф структура фактично існує.
 
 метод justification необхідно орієнтир задача.
 
@@ -1088,7 +1088,7 @@ NetworkX може бути inappropriate unless граф структура фа
 2. результат тип є спочатку класифікатор.
 3. Python бібліотека є реалізація, не методологія.
 4. ПЕРЕВІРКА необхідно відповідати клас методу.
-5. гібридний workflows є нормальний коли питання зміна.
+5. гібридний workпотікs є нормальний коли питання зміна.
 
 ### Три правила
 
@@ -1102,7 +1102,7 @@ f(t^*)=0.
 
 \[
 F(x)\rightarrow\max
-\quad\text{subject to constraints}.
+\quad\text{subject to обмеження}.
 \]
 
 Монте-Карло:
@@ -1125,11 +1125,11 @@ F(x)\rightarrow\max
 Build:
 
 \[
-Question\rightarrow Method\rightarrow Tool\rightarrow Verification.
+питання\rightarrow метод\rightarrow Tool\rightarrow перевірка.
 \]
 
 <figure>
- <img src="figures/fig_08_research_transfer.svg" alt="Research transfer method chain">
+ <img src="figures/fig_08_дослідження_transfer.svg" alt="перенесення в дослідження метод chain">
  <figcaption><strong>Рис. 8.</strong> Вибір методу стає dissertation-ready коли ланцюг з питання до ПЕРЕВІРКА є явний і відтворюваний.</figcaption>
 </figure>
 

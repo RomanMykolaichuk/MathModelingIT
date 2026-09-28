@@ -1,4 +1,4 @@
-# MathModelingIT · Мінікнига T1.L2
+# MathмодельingIT · Мінікнига T1.L2
 
 ## Класифікація математичних моделей
 
@@ -78,7 +78,7 @@ t^*=\frac{120}{6}=20.
 Але відповіді вимагають різних **класів моделей**.
 
 <figure>
- <img src="figures/fig_01_one_object_many_models.svg" alt="Один об’єкт у кількох класах моделей">
+ <img src="figures/fig_01_one_object_many_модельs.svg" alt="Один об’єкт у кількох класах моделей">
  <figcaption><strong>Рис. 1.</strong> Один і той самий ресурс можна описати детерміновано, стохастично, як дискретний стан процес або як Монте-Карло експеримент. Клас моделі визначає тип відповіді.</figcaption>
 </figure>
 
@@ -276,7 +276,7 @@ t=3.7.
 Тоді зручніше дискретна модель.
 
 <figure>
- <img src="figures/fig_02_continuous_vs_discrete.svg" alt="Continuous і discrete representation">
+ <img src="figures/fig_02_неперервний_vs_дискретний.svg" alt="неперервний і дискретне подання">
  <figcaption><strong>Рис. 2.</strong> неперервна модель описує стан у будь-який момент часу; дискретна модель оновлює стан кроками. Вони можуть описувати той самий процес на різних рівнях деталізації.</figcaption>
 </figure>
 
@@ -433,7 +433,7 @@ C_k=\max(0,C_k).
 > зміна середнє і зміна мінливість — різні модель interventions.
 
 <figure>
- <img src="figures/fig_03_mean_vs_variance.svg" alt="Вплив mean і standard deviation">
+ <img src="figures/fig_03_середнє значення_vs_дисперсія.svg" alt="Вплив середнє значення і стандартне відхилення">
  <figcaption><strong>Рис. 3.</strong> Зміна \(\mu\) пересуває центр розподіл, а зміна \(\sigma\) змінює ширину. Ці два ефекти не треба змішувати.</figcaption>
 </figure>
 
@@ -633,7 +633,7 @@ N=3000.
 гістограма вичерпання кроки показує розподіл скінченні результати.
 
 <figure>
- <img src="figures/fig_05_monte_carlo_histogram.svg" alt="Monte Carlo distribution exhaustion step">
+ <img src="figures/fig_05_monte_carlo_histogram.svg" alt="Monte Carlo розподіл кроку вичерпання">
  <figcaption><strong>Рис. 5.</strong> Монте-Карло замінює одну прогнозовану точку розподіл можливих результати. гістограма треба читати разом із часткою запуски без вичерпання у горизонт.</figcaption>
 </figure>
 
@@ -859,7 +859,7 @@ T1.L2 моделі описують процес.
 Це експеримент на **мінливість**, не середнє.
 
 <figure>
- <img src="figures/fig_06_variance_scenarios.svg" alt="Сценарії low і high variance">
+ <img src="figures/fig_06_дисперсія_scenarios.svg" alt="Сценарії low і висока дисперсія">
  <figcaption><strong>Рис. 6.</strong> За однакового середнє вище \(\sigma\) розширює сімейство можливих траєкторії та результати. Зміна невизначеність не тотожна зміні очікуваний рівень.</figcaption>
 </figure>
 
@@ -1279,7 +1279,7 @@ Realism залежить на припущення.
 - deterministic_stock();
 - deterministic_exhaustion_time();
 - stochastic_consumption();
-- discrete_stock_path();
+- дискретний_stock_path();
 - stochastic_stock_path();
 - exhaustion_step();
 - monte_carlo_exhaustion_times();
@@ -1356,7 +1356,7 @@ T=\sum_i T_i.
 ## 51. Карта вибору моделі
 
 <figure>
- <img src="figures/fig_07_model_selection_map.svg" alt="Карта вибору класу моделі">
+ <img src="figures/fig_07_модель_selection_map.svg" alt="Карта вибору класу моделі">
  <figcaption><strong>Рис. 7.</strong> Вибір класу починається з Дослідницьке питання: чи важлива мінливість, еволюція стану, оптимізація або розподіл результати.</figcaption>
 </figure>
 
@@ -1481,7 +1481,7 @@ E[C_k]=6.
 
 Отже, ризик ранній вичерпання може змінюватися навіть при незмінному очікуваний споживання.
 
-Це фундаментальна причина, чому детермінований mean-based модель не може автоматично замінити стохастичний аналіз.
+Це фундаментальна причина, чому детермінований середнє значення-based модель не може автоматично замінити стохастичний аналіз.
 
 ---
 
@@ -1551,7 +1551,7 @@ Var\left(\sum C_k\right)
 2\sum_{i<j}Cov(C_i,C_j).
 \]
 
-додатний covariance збільшує накопичений дисперсія.
+додатний coдисперсія збільшує накопичений дисперсія.
 
 отже iid припущення має значення.
 
@@ -1897,7 +1897,7 @@ Advanced розширення:
 ## Поглиблення: карта «зламай модель»
 
 <figure>
- <img src="figures/fig_08_limits.svg" alt="Межі baseline stochastic model">
+ <img src="figures/fig_08_limits.svg" alt="Межі базовий сценарій stochastic модель">
  <figcaption><strong>Рис. 8.</strong> базовий iid з обрізаним нормальним розподілом модель може відмовити коли споживання є автокорельований, параметри зміна над час, поповнення існує, або горизонт створює сильний цензурування.</figcaption>
 </figure>
 
@@ -2003,12 +2003,12 @@ Advanced розширення:
 
 ### випадковий
 
-мінливість modeled як внутрішня випадковість.
+мінливість модельed як внутрішня випадковість.
 
 приклад:
 
 \[
-C_k\sim distribution.
+C_k\sim розподіл.
 \]
 
 ### епістемічний
@@ -2142,7 +2142,7 @@ S_{21}<10.
 | базовий | 6 | 1.5 | 21 | контроль |
 | стійкий | 6 | 0.5 | 21 | мінливість ↓ |
 | high_var | 6 | 3 | 21 | мінливість ↑ |
-| high_mean | 7 | 1.5 | 21 | рівень зміщення |
+| high_середнє значення | 7 | 1.5 | 21 | рівень зміщення |
 | long_horizon | 6 | 1.5 | 30 | цензурування ефект |
 
 це робить кожен запуск interpretable.
