@@ -1,12 +1,12 @@
-# Capstone — від дослідницького питання до відтворюваного обчислювального висновку
+# підсумковий проєкт — від дослідницького питання до відтворюваного обчислювального висновку
 
 **Статус:** `content_stable`
 
-Capstone інтегрує ключові підходи дисципліни в одному mini-research project. Це не дванадцяте заняття, а підсумкова дослідницька робота, у якій ад’юнкт має продемонструвати, що здатний самостійно організувати повний computational modeling workflow.
+підсумковий проєкт інтегрує ключові підходи дисципліни в одному мініпроєкт дослідження. Це не дванадцяте заняття, а підсумкова дослідницька робота, у якій ад’юнкт має продемонструвати, що здатний самостійно організувати повний процес обчислювального моделювання.
 
 ## Дослідницька логіка
 
-**research question → hypothesis → synthetic observations → mathematical model → parameter calibration → intervention optimization → independent verification → sensitivity → uncertainty → figures/tables → metadata → scientific conclusion**
+**дослідницьке питання → hypothesis → synthetic observations → mathematical модель → parameter calibration → intervention optimization → незалежна перевірка → чутливість → невизначеність → figures/tables → metadata → scientific conclusion**
 
 ## Дослідницьке питання
 
@@ -46,13 +46,13 @@ S(T;u,v)\rightarrow\max.
 - динамічне математичне моделювання;
 - калібрування параметрів через `scipy.optimize.least_squares`;
 - нелінійна оптимізація через `SLSQP`;
-- незалежна `grid search` verification;
-- batch sensitivity analysis;
-- bootstrap uncertainty;
+- незалежна `grid search` перевірка;
+- batch чутливість аналіз;
+- bootstrap невизначеність;
 - `pandas` для таблиць;
 - `Matplotlib` для figures;
 - deterministic experiment fingerprint;
-- research conclusion з чітким розділенням між результатом моделі та твердженням про реальну систему.
+- дослідження conclusion з чітким розділенням між результатом моделі та твердженням про реальну систему.
 
 ## Очікувані контрольні результати
 
@@ -61,7 +61,7 @@ S(T;u,v)\rightarrow\max.
 - `q_hat`: 11–13.5;
 - `k_hat`: 0.085–0.12;
 - RMSE < 2.5;
-- оптимізований terminal state має бути вищим за baseline;
+- оптимізований terminal state має бути вищим за базовий сценарій;
 - SLSQP та grid search повинні давати близькі результати.
 
 Точні числа є наслідком конкретного synthetic dataset і не повинні трактуватись як параметри реальної системи.
@@ -94,7 +94,7 @@ python -m pytest capstone/tests -q
 python capstone/src/experiment.py
 ```
 
-Результати experiment runner створює у `capstone/outputs/`:
+Результати experiment Запускner створює у `capstone/outputs/`:
 
 - `summary.json`;
 - `budget_sensitivity.csv`;
@@ -105,4 +105,4 @@ python capstone/src/experiment.py
 
 ## Ключове правило інтерпретації
 
-**Калібрування + оптимізація + bootstrap підсилюють обґрунтованість computational conclusion, але не перетворюють synthetic model на емпірично валідовану модель реальної системи.**
+**Калібрування + оптимізація + bootstrap підсилюють обґрунтованість computational conclusion, але не перетворюють synthetic модель на емпірично валідовану модель реальної системи.**

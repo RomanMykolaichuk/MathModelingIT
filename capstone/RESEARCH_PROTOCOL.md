@@ -1,27 +1,27 @@
-# Research protocol
+# дослідження protocol
 
 Перед запуском експерименту зафіксувати:
 
-- research question;
+- дослідницьке питання;
 - hypothesis;
-- model version;
-- data source and generation procedure;
-- fixed/random parameters;
-- optimization objective and constraints;
-- verification method;
-- sensitivity factors;
-- uncertainty method and seed;
-- expected outputs;
+- модель version;
+- дані source and generation procedure;
+- fixed/random параметри;
+- optimization цільова функція and обмеження;
+- перевірка метод;
+- чутливість factors;
+- невизначеність метод and seed;
+- очікувані результати;
 - criteria for accepting/rejecting the computational hypothesis.
 
 Після запуску зафіксувати:
 
 - experiment ID;
-- fitted parameters;
+- fitted параметри;
 - error metrics;
 - optimal decision and feasibility;
-- verification gap;
-- sensitivity results;
-- uncertainty interval;
+- перевірка gap;
+- чутливість результати;
+- невизначеність interval;
 - limitations;
-- conclusion restricted to what the model and data actually support.
+- conclusion restricted to what the модель and дані actually support.
