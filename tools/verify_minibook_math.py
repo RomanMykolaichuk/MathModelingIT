@@ -10,7 +10,7 @@ failures: list[str] = []
 for book_id in BOOK_IDS:
     html = ROOT / "web" / "books" / book_id / "index.html"
     if not html.exists():
-        failures.append(f"{book_id}: generated HTML missing")
+        failures.append(f"{book_id}: відсутній згенерований HTML")
         continue
 
     text = html.read_text(encoding="utf-8")
@@ -36,7 +36,7 @@ for book_id in BOOK_IDS:
         failures.append(f"{book_id}: too few display-math delimiters ({display_count})")
     if inline_count < 1:
         failures.append(
-            f"{book_id}: inline MathJax delimiters missing "
+            f"{book_id}: відсутні роздільники вбудованих формул MathJax "
             f"(paren={inline_paren_count}, dollar_pairs={inline_dollar_count})"
         )
 
@@ -47,7 +47,7 @@ for book_id in BOOK_IDS:
 
 if failures:
     raise SystemExit(
-        "MiniBook math rendering checks failed:\n- " + "\n- ".join(failures)
+        "Перевірки відображення формул у мінікнизі не пройдено:\n- " + "\n- ".join(failures)
     )
 
 print(f"MiniBook math rendering: PASS for {len(BOOK_IDS)} books")
