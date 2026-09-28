@@ -1,4 +1,4 @@
-"""Reproducible mini-research experiment for T2.L7."""
+"""Відтворюваний експеримент-мінідослідження для T2.L7."""
 
 from __future__ import annotations
 
@@ -77,11 +77,11 @@ def run(output_dir: Path | None = None) -> dict[str, float | str]:
 
     fig, ax = plt.subplots(figsize=(8, 5))
     dense_t = np.linspace(0, horizon, 300)
-    ax.scatter(t, y, label="Synthetic observations")
-    ax.plot(dense_t, analytical_trajectory(dense_t, s0=s0, q=fit["q"], k=fit["k"]), label="Calibrated analytical model")
-    ax.set_xlabel("Time")
-    ax.set_ylabel("State S(t)")
-    ax.set_title("T2.L7 — calibration of the research model")
+    ax.scatter(t, y, label="Синтетичні спостереження")
+    ax.plot(dense_t, analytical_trajectory(dense_t, s0=s0, q=fit["q"], k=fit["k"]), label="Калібрована аналітична модель")
+    ax.set_xlabel("Час")
+    ax.set_ylabel("Стан S(t)")
+    ax.set_title("T2.L7 — калібрування дослідницької моделі")
     ax.legend()
     fig.tight_layout()
     fig.savefig(output_dir / "calibration_fit.png", dpi=160)
@@ -89,9 +89,9 @@ def run(output_dir: Path | None = None) -> dict[str, float | str]:
 
     fig, ax = plt.subplots(figsize=(8, 5))
     ax.plot(scenarios["q_multiplier"], scenarios["time_to_threshold"], marker="o")
-    ax.set_xlabel("q multiplier")
-    ax.set_ylabel("Time to threshold")
-    ax.set_title("Sensitivity to the replenishment parameter q")
+    ax.set_xlabel("Множник q")
+    ax.set_ylabel("Час до порогового значення")
+    ax.set_title("Чутливість до параметра поповнення q")
     fig.tight_layout()
     fig.savefig(output_dir / "sensitivity.png", dpi=160)
     plt.close(fig)
@@ -99,9 +99,9 @@ def run(output_dir: Path | None = None) -> dict[str, float | str]:
     finite_threshold = bootstrap["time_to_threshold"].replace([np.inf, -np.inf], np.nan).dropna()
     fig, ax = plt.subplots(figsize=(8, 5))
     ax.hist(finite_threshold, bins=25)
-    ax.set_xlabel("Time to threshold")
-    ax.set_ylabel("Frequency")
-    ax.set_title("Bootstrap uncertainty of the research prediction")
+    ax.set_xlabel("Час до порогового значення")
+    ax.set_ylabel("Частота")
+    ax.set_title("Бутстреп-оцінювання невизначеності дослідницького прогнозу")
     fig.tight_layout()
     fig.savefig(output_dir / "bootstrap_threshold.png", dpi=160)
     plt.close(fig)
