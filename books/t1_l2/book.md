@@ -126,7 +126,7 @@ t^*=\frac{120}{6}=20.
 
 Наприклад:
 
-> стохастична, dynamic, discrete, імітаційна модель.
+> стохастична, динамічна, дискретна, імітаційна модель.
 
 Ключові осі класифікації:
 
@@ -273,16 +273,16 @@ t=3.7.
 
 Але реальний процес може вимірюватися лише раз на добу, зміну, цикл або iteration.
 
-Тоді зручніше discrete model.
+Тоді зручніше використовувати дискретну модель.
 
 <figure>
   <img src="figures/fig_02_continuous_vs_discrete.svg" alt="Continuous і discrete representation">
-  <figcaption><strong>Рис. 2.</strong> Continuous model описує state у будь-який момент часу; discrete model оновлює state кроками. Вони можуть описувати той самий process на різних рівнях деталізації.</figcaption>
+  <figcaption><strong>Рис. 2.</strong> Неперервна модель описує стан у будь-який момент часу; дискретна модель оновлює стан кроками. Вони можуть описувати той самий процес на різних рівнях деталізації.</figcaption>
 </figure>
 
 ---
 
-## 7. Discrete динамічна модель
+## 7. Дискретна динамічна модель
 
 Запис:
 
@@ -292,8 +292,8 @@ S_{k+1}=\max(0,S_k-C_k).
 
 Де:
 
-- \(S_k\) — stock на кроці \(k\);
-- \(C_k\) — consumption на цьому кроці.
+- \(S_k\) — запас на кроці \(k\);
+- \(C_k\) — споживання на цьому кроці.
 
 Manual control case:
 
@@ -321,7 +321,7 @@ S_2=8,
 S_3=0.
 \]
 
-Trajectory:
+Траєкторія:
 
 \[
 [20,15,8,0].
@@ -331,7 +331,7 @@ Trajectory:
 
 ---
 
-## 8. Чому dynamic state важливий
+## 8. Чому динамічний стан важливий
 
 У динамічна модель наступний result залежить від попереднього:
 
@@ -339,11 +339,11 @@ Trajectory:
 S_{k+1}=f(S_k,C_k).
 \]
 
-System має memory через state.
+Система має пам’ять через стан.
 
-Якщо на ранньому кроці consumption було великим, усі наступні states стартують із меншого stock.
+Якщо на ранньому кроці споживання було великим, усі наступні стани починаються з меншого запасу.
 
-Це відрізняє dynamic process від static formula, де output обчислюється без accumulation history.
+Це відрізняє динамічний процес від статичної формули, де результат обчислюється без накопичення попередньої історії.
 
 ---
 
@@ -365,7 +365,7 @@ C_k\sim\mathcal N(\mu,\sigma^2).
 \sigma=1.5.
 \]
 
-Оскільки negative consumption предметно беззмістовне, lesson model робить:
+Оскільки від’ємне споживання предметно беззмістовне, модель заняття робить так:
 
 \[
 C_k=\max(0,C_k).
@@ -385,7 +385,7 @@ C_k=\max(0,C_k).
 
 не означає:
 
-> кожне consumption = 6.
+> кожне споживання = 6.
 
 Це center розподіл.
 
@@ -396,7 +396,7 @@ C_k=\max(0,C_k).
 - 7.5;
 - 5.1.
 
-У long sample average tends toward model mean.
+У великій вибірці середнє прямує до середнього значення, заданого моделлю.
 
 ---
 
@@ -426,11 +426,11 @@ values tightly cluster around 6.
 
 spread much wider.
 
-Mean може залишатися 6.
+Середнє значення може залишатися 6.
 
 Отже:
 
-> зміна mean і зміна мінливість — різні model interventions.
+> зміна середнього значення і зміна мінливості — різні втручання в модель.
 
 <figure>
   <img src="figures/fig_03_mean_vs_variance.svg" alt="Вплив mean і standard deviation">
@@ -439,7 +439,7 @@ Mean може залишатися 6.
 
 ---
 
-## 12. Одна stochastic траєкторія
+## 12. Одна стохастична траєкторія
 
 Для одного зерно генератора генерується конкретна sequence:
 
@@ -447,7 +447,7 @@ Mean може залишатися 6.
 C_1,C_2,\ldots,C_{21}.
 \]
 
-Після цього отримуємо one stock path.
+Після цього отримуємо одну траєкторію запасу.
 
 Інший зерно генератора → інша sequence → інша path.
 
@@ -457,9 +457,9 @@ C_1,C_2,\ldots,C_{21}.
 
 ---
 
-## 13. Seed і відтворюваність
+## 13. Початкове зерно генератора і відтворюваність
 
-Pseudo-random generator deterministic відносно зерно генератора.
+Псевдовипадковий генератор є детермінованим відносно початкового зерна.
 
 Тому:
 
@@ -472,52 +472,52 @@ b = stochastic_consumption(..., seed=123)
 
 Це перевіряється unit test.
 
-Seed потрібний, щоб:
+Початкове зерно генератора потрібне, щоб:
 
-- повторити experiment;
+- повторити експеримент;
 - debug code;
 - порівняти сценарійs;
 - відтворити figure.
 
-Seed не робить стохастична модель більш «реалістичною».
+Початкове зерно генератора не робить стохастичну модель більш «реалістичною».
 
 ---
 
 ## 14. Дві траєкторії — два можливі світи
 
-У experiment використовуються:
+В експерименті використовуються:
 
 - зерно генератора=7;
 - зерно генератора=21.
 
-Дві stochastic paths відрізняються.
+Дві стохастичні траєкторії відрізняються.
 
-Deterministic path — одна straight-like базовий сценарій траєкторія.
+Детермінована траєкторія — одна пряма базова траєкторія.
 
 <figure>
   <img src="figures/fig_04_paths.svg" alt="Детермінована і дві стохастичні траєкторії">
-  <figcaption><strong>Рис. 4.</strong> Deterministic model дає одну траєкторію. Stochastic model при різних зерно генератораs дає різні realizations, хоча \(\mu,\sigma,S_0\) однакові.</figcaption>
+  <figcaption><strong>Рис. 4.</strong> Детермінована модель дає одну траєкторію. Стохастична модель за різних початкових зерен генератора дає різні реалізації, хоча \(\mu,\sigma,S_0\) однакові.</figcaption>
 </figure>
 
 Найважливіше питання:
 
-> чи достатньо однієї random realization, щоб оцінити risk?
+> чи достатньо однієї випадкової реалізації, щоб оцінити ризик?
 
 Ні.
 
 ---
 
-## 15. Від stochastic path до Монте-Карло
+## 15. Від стохастичної траєкторії до Монте-Карло
 
 Монте-Карло повторює стохастична модель багато разів.
 
-Для run \(r\):
+Для запуску \(r\):
 
 \[
 T^{(r)}
 \]
 
-— exhaustion step.
+— крок вичерпання.
 
 Виконуємо:
 
@@ -531,30 +531,30 @@ r=1,\ldots,N.
 N=3000.
 \]
 
-У кожному run:
+У кожному запуску:
 
-1. генерується нова random consumption sequence;
-2. будується state path;
+1. генерується нова випадкова послідовність споживання;
+2. будується траєкторія стану;
 3. фіксується first zero;
 4. якщо zero не досягнутий до horizon — записується missing/NaN.
 
 ---
 
-## 16. Монте-Карло не змінює model assumptions
+## 16. Монте-Карло не змінює припущень моделі
 
 Важливий principle.
 
-Якщо consumption розподіл неправильно обрана, 3000 runs не виправлять її.
+Якщо розподіл споживання обрано неправильно, 3000 запусків цього не виправлять.
 
 Якщо independence assumption неправильна, 1 000 000 runs не зроблять result адекватним.
 
 Монте-Карло лише точніше досліджує **наслідки заданої стохастична модель**.
 
-> **More simulations ≠ better model.**
+> **Більше симуляцій ≠ краща модель.**
 
 ---
 
-## 17. Probability exhausted
+## 17. Ймовірність вичерпання
 
 Після simulations:
 
@@ -578,7 +578,7 @@ lesson дає приблизно:
 
 Коректне формулювання:
 
-> за заданої stochastic consumption model приблизно 80% simulated realizations вичерпують stock до кінця 21-го кроку.
+> за заданої стохастичної моделі споживання приблизно 80% змодельованих реалізацій вичерпують запас до кінця 21-го кроку.
 
 Некоректне:
 
@@ -586,27 +586,27 @@ lesson дає приблизно:
 
 ---
 
-## 18. Conditional mean exhaustion step
+## 18. Умовне середнє кроку вичерпання
 
-Function summarize_exhaustion() бере лише finite exhaustion times.
+Функція `summarize_exhaustion()` бере лише скінченні значення часу вичерпання.
 
-Тобто mean:
+Тобто середнє:
 
 \[
 \bar T_{finite}
 \]
 
-є conditional mean:
+є умовним середнім:
 
-> середній exhaustion step **серед тих runs, де exhaustion відбулося в horizon**.
+> середній крок вичерпання **серед тих запусків, де вичерпання відбулося в межах горизонту моделювання**.
 
-Baseline близько:
+Для базового сценарію приблизно:
 
 \[
 20.1.
 \]
 
-Це не unconditional expected lifetime.
+Це не безумовне математичне сподівання часу існування запасу.
 
 Це важливе distinction.
 
@@ -620,7 +620,7 @@ Runs без exhaustion до horizon записані NaN.
 
 > \(T>21\).
 
-Якщо просто викинути їх і дивитися лише mean finite times, можна недооцінити невизначеність.
+Якщо просто викинути їх і дивитися лише середні скінченні значення часу, можна недооцінити невизначеність.
 
 Тому probability_exhausted і conditional timing потрібно показувати разом.
 
@@ -628,81 +628,81 @@ Runs без exhaustion до horizon записані NaN.
 
 ---
 
-## 20. Histogram
+## 20. Гістограма
 
-Histogram exhaustion steps показує розподіл finite outcomes.
+Гістограма кроків вичерпання показує розподіл скінченних результатів.
 
 <figure>
   <img src="figures/fig_05_monte_carlo_histogram.svg" alt="Monte Carlo distribution exhaustion step">
-  <figcaption><strong>Рис. 5.</strong> Монте-Карло замінює одну прогнозовану точку розподіл можливих outcomes. Histogram треба читати разом із часткою runs без exhaustion у horizon.</figcaption>
+  <figcaption><strong>Рис. 5.</strong> Монте-Карло замінює одну прогнозовану точку розподілом можливих результатів. Гістограму треба читати разом із часткою запусків без вичерпання в межах горизонту моделювання.</figcaption>
 </figure>
 
 Вісь X:
 
-> exhaustion step.
+> крок вичерпання.
 
 Вісь Y:
 
 > number of simulated runs.
 
-Histogram не є probability law real system.
+Гістограма не є законом імовірності реальної системи.
 
-Він є empirical розподіл generated by model.
+Вона є емпіричним розподілом, згенерованим моделлю.
 
 ---
 
 ## 21. Класифікація чотирьох representations
 
-### Model 1
+### Модель 1
 
 \[
 S(t)=S_0-vt.
 \]
 
-- deterministic;
-- dynamic;
-- continuous;
+- детермінована;
+- динамічна;
+- неперервна;
 - linear until clipping;
-- analytical.
+- аналітична.
 
-### Model 2
+### Модель 2
 
 \[
 C_k\sim N(\mu,\sigma^2).
 \]
 
-- stochastic;
-- discrete draws;
-- probabilistic component.
+- стохастична;
+- дискретні випадкові вибірки;
+- імовірнісна складова.
 
-### Model 3
+### Модель 3
 
 \[
 S_{k+1}=\max(0,S_k-C_k).
 \]
 
-- dynamic;
-- discrete;
-- nonlinear because of clipping;
-- stochastic if \(C_k\) stochastic.
+- динамічна;
+- дискретна;
+- нелінійна через обмеження нулем;
+- стохастична, якщо \(C_k\) stochastic.
 
-### Model 4
+### Модель 4
 
 3000 repeated runs.
 
-- simulation / Монте-Карло;
-- stochastic;
+- імітаційна / Монте-Карло;
+- стохастична;
 - produces розподіл-level summary.
 
 ---
 
 ## 22. Один об’єкт — різні дослідницьке питанняs
 
-Deterministic question:
+Питання для детермінованої моделі:
 
 > коли resource reaches zero за constant rate?
 
-Stochastic single-run question:
+Питання для одного стохастичного запуску:
 
 > як може виглядати одна realization?
 
@@ -710,41 +710,41 @@ Stochastic single-run question:
 
 > який розподіл exhaustion outcomes under assumed невизначеність?
 
-Dynamic question:
+Питання для динамічної моделі:
 
-> як state evolves step by step?
+> як стан змінюється крок за кроком?
 
-Клас model повинен відповідати question.
+Клас моделі повинен відповідати питанню.
 
 Не навпаки.
 
 ---
 
-## 23. Static vs dynamic
+## 23. Статична та динамічна моделі
 
-Static model може описувати relation:
+Статична модель може описувати залежність:
 
 \[
 Y=f(X)
 \]
 
-без explicit time evolution.
+без явного опису зміни в часі.
 
-Dynamic model:
+Динамічна модель:
 
 \[
 S_{k+1}=f(S_k,\ldots).
 \]
 
-У нашому lesson central object naturally dynamic.
+У нашому занятті центральний об’єкт природно є динамічним.
 
-Але classification axis still useful: не кожне дослідницьке питання потребує траєкторія.
+Але вісь класифікації все одно корисна: не кожне дослідницьке питання потребує траєкторія.
 
 ---
 
-## 24. Analytical vs simulation
+## 24. Аналітичний та імітаційний підходи
 
-Deterministic exhaustion:
+Детерміноване вичерпання:
 
 \[
 t^*=\frac{S_0}{v}
@@ -752,17 +752,17 @@ t^*=\frac{S_0}{v}
 
 отримуємо analytically.
 
-Монте-Карло probability closed-form тут не використовується.
+Аналітична формула для ймовірності в Монте-Карло тут не використовується.
 
-Ми estimate через repeated simulation.
+Ми оцінюємо її через багаторазову симуляцію.
 
-Це не означає, що simulation «гірша».
+Це не означає, що імітація «гірша».
 
 Вона відповідає на інший class question.
 
 ---
 
-## 25. Linear vs nonlinear detail
+## 25. Лінійність і нелінійність докладніше
 
 До clipping:
 
@@ -770,7 +770,7 @@ t^*=\frac{S_0}{v}
 S(t)=S_0-vt
 \]
 
-linear in time.
+лінійна за часом.
 
 Але:
 
@@ -778,7 +778,7 @@ linear in time.
 \max(0,S_0-vt)
 \]
 
-piecewise linear.
+кусково-лінійна.
 
 Discrete:
 
@@ -786,13 +786,13 @@ Discrete:
 S_{k+1}=\max(0,S_k-C_k)
 \]
 
-також має nonlinear clipping.
+також має нелінійне обмеження.
 
-Classification іноді залежить від того, яку частину model structure аналізуємо.
+Класифікація іноді залежить від того, яку частину структури моделі аналізуємо.
 
 ---
 
-## 26. Descriptive vs optimization
+## 26. Описова та оптимізаційна постановки
 
 T1.L2 models описують process.
 
@@ -808,17 +808,17 @@ T1.L2 models описують process.
 \min C(x).
 \]
 
-Отже, це descriptive/імітаційна модельs.
+Отже, це описові/імітаційні моделі.
 
 Якщо додати decision:
 
 > який запас \(S_0\) мінімізує cost при risk constraint,
 
-model перетворюється на optimization.
+модель перетворюється на оптимізаційну задачу.
 
 ---
 
-## 27. Scenario: low variance
+## 27. Сценарій: низька дисперсія
 
 Залишимо:
 
@@ -832,46 +832,46 @@ model перетворюється на optimization.
 \sigma=0.5.
 \]
 
-Expected direction:
+Очікуваний напрям зміни:
 
 - paths closer together;
 - exhaustion розподіл narrower;
-- deterministic траєкторія becomes stronger central reference.
+- детермінована траєкторія стає надійнішим центральним орієнтиром.
 
-Не обов’язково every simulation exhausts exactly at 20.
+Не обов’язково кожна симуляція дає вичерпання рівно на 20-му кроці.
 
 ---
 
-## 28. Scenario: high variance
+## 28. Сценарій: висока дисперсія
 
 \[
 \sigma=3.
 \]
 
-Expected:
+Очікуємо:
 
 - wider траєкторія spread;
 - more early and late exhaustion outcomes;
 - greater невизначеність.
 
-Mean consumption assumption remains same.
+Припущення щодо середнього споживання залишається тим самим.
 
-Це experiment on **мінливість**, not mean.
+Це експеримент із **мінливістю**, а не із середнім значенням.
 
 <figure>
   <img src="figures/fig_06_variance_scenarios.svg" alt="Сценарії low і high variance">
-  <figcaption><strong>Рис. 6.</strong> За однакового mean higher \(\sigma\) розширює family можливих trajectories та outcomes. Зміна невизначеність не тотожна зміні expected level.</figcaption>
+  <figcaption><strong>Рис. 6.</strong> За однакового середнього значення більша \(\sigma\) розширює множину можливих траєкторій і результатів. Зміна невизначеності не тотожна зміні очікуваного рівня.</figcaption>
 </figure>
 
 ---
 
-## 29. Scenario: higher mean
+## 29. Сценарій: більше середнє значення
 
 \[
 \mu=7.
 \]
 
-Deterministic analogue:
+Детермінований аналог:
 
 \[
 t^*=\frac{120}{7}\approx17.14.
@@ -887,29 +887,29 @@ t^*=\frac{120}{7}\approx17.14.
 
 ---
 
-## 30. Mean effect vs variance effect
+## 30. Вплив середнього значення та дисперсії
 
 Це одне з головних conceptual distinctions lesson.
 
-### Mean increases
+### Середнє значення зростає
 
-Distribution generally shifts.
+Розподіл загалом зміщується.
 
-### Variance increases
+### Дисперсія зростає
 
-Distribution generally spreads.
+Розподіл загалом розширюється.
 
-У nonlinear/clipped process ці effects можуть взаємодіяти.
+У нелінійному процесі з обмеженням нулем ці ефекти можуть взаємодіяти.
 
-Тому не варто робити висновок лише за \(\mu\) і \(\sigma\) inputs — потрібен computational experiment.
+Тому не варто робити висновок лише за вхідними \(\mu\) і \(\sigma\) — потрібен обчислювальний експеримент.
 
 ---
 
-## 31. Effect clipping at zero consumption
+## 31. Вплив обмеження споживання нулем
 
 Normal розподіл theoretically permits negative draws.
 
-Model applies:
+Модель застосовує:
 
 \[
 C_k=\max(0,C_k).
@@ -923,17 +923,17 @@ C_k=\max(0,C_k).
 \mu=6,\sigma=1.5
 \]
 
-negative probability small.
+ймовірність від’ємного значення мала.
 
 При large \(\sigma\) clipping matters more.
 
-Отже, стохастична модель is not exactly normal consumption after transformation.
+Отже, після перетворення стохастична модель уже не має точно нормального розподілу споживання.
 
-Це хороший “break” point.
+Це хороший точка «перевірки меж».
 
 ---
 
-## 32. Зламай модель: very high variance
+## 32. Зламай модель: дуже висока дисперсія
 
 Припустимо:
 
@@ -1070,7 +1070,7 @@ Input:
 20;\quad [5,7,10].
 \]
 
-Expected:
+Очікуємо:
 
 \[
 [20,15,8,0].
@@ -1715,7 +1715,7 @@ If horizon extended to 30:
 
 - more runs become finite;
 - probability_exhausted increases or stays same;
-- conditional mean finite times changes.
+- conditional середні скінченні значення часу changes.
 
 Therefore summary depends on horizon.
 
