@@ -50,7 +50,7 @@ decks:
   - id: t2_l3
     title: "Математичні моделі задач нелінійного програмування"
     status: initial_pptx_generated
-    core_message: "Для нелінійних моделей success=True не гарантує глобальний оптимум."
+    core_message: "Для нелінійних моделей значення `success=True` саме по собі не гарантує глобальний оптимум."
   - id: t2_l4
     title: "Математичне моделювання із застосуванням методів мережевого планування"
     status: initial_pptx_generated
@@ -70,7 +70,7 @@ decks:
 
 next_steps:
   - review_initial_decks
-  - replace generic charts with lesson-generated figures where needed
+  - замінити загальні діаграми рисунками, згенерованими для відповідних занять, де це потрібно
   - expand speaker narratives
-  - run visual QA for all 11 decks
+  - виконати візуальну перевірку всіх 11 презентацій
   - decide whether to commit final pptx binaries or attach them as release artifacts

@@ -62,15 +62,15 @@ function renderCatalog() {
     const card=document.createElement("article");
     card.className="panel catalog-card";
     const source="https://github.com/RomanMykolaichuk/MathModelingIT/tree/main/lessons/"+item.id;
-    const status=item.status==="interactive"?"інтерактивна лабораторія":"Python package";
+    const status=item.status==="interactive"?"інтерактивна лабораторія":"Python-пакет";
     card.innerHTML=
       '<span class="catalog-code">'+item.code+'</span>'+
       '<span class="catalog-status '+item.status+'">'+status+'</span>'+
       '<h3>'+item.title+'</h3>'+
       '<p><strong>Challenge:</strong> '+item.challenge+'</p>'+
-      '<p class="instructor-only"><strong>Transfer:</strong> '+item.transfer+'</p>'+
+      '<p class="instructor-only"><strong>Перенесення:</strong> '+item.transfer+'</p>'+
       '<div class="catalog-actions">'+
-      (item.status==="interactive"?'<a class="primary" href="'+item.anchor+'">Відкрити Lab</a>':'')+
+      (item.status==="interactive"?'<a class="primary" href="'+item.anchor+'">Відкрити лабораторію</a>':'')+
       (item.notesUrl?'<a href="'+item.notesUrl+'" target="_blank" rel="noopener noreferrer">Конспект ↗</a>':'')+
       (item.theoryUrl?'<a href="'+item.theoryUrl+'" target="_blank" rel="noopener noreferrer">Теорія ↗</a>':'')+
       (item.instructionPdf?'<a href="'+item.instructionPdf+'" target="_blank" rel="noopener noreferrer">PDF-інструкція ↗</a>':'')+
@@ -157,7 +157,7 @@ function renderNetwork() {
   const baseline=E.cpm(E.BASE_TASKS).duration;
   const affected=result.duration>baseline+1e-9;
   $("network-insight").textContent=delay===0
-    ?"Baseline: 17 одиниць, критичний шлях A → C → E → G."
+    ?"Базовий сценарій: 17 одиниць, критичний шлях A → C → E → G."
     :affected
       ?"Затримка вийшла за доступний резерв і збільшила строк проєкту на "+fmt(result.duration-baseline)+"."
       :"Затримка поглинута резервом: локальна зміна не змінила загальний строк.";

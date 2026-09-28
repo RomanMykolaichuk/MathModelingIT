@@ -25,34 +25,34 @@
   const BASE_WEIGHTS={cost:.25,time:.20,reliability:.25,capacity:.20,risk:.10};
 
   function resourceValue(t, s0, rate, clampZero=true) {
-    if (t < 0 || s0 < 0 || rate < 0) throw new Error("resource inputs must be non-negative");
+    if (t < 0 || s0 < 0 || rate < 0) throw new Error("вхідні параметри ресурсної моделі мають бути невід’ємними");
     const value = s0 - rate*t;
     return clampZero ? Math.max(0,value) : value;
   }
 
   function depletionTime(s0, rate) {
-    if (s0 < 0 || rate < 0) throw new Error("resource inputs must be non-negative");
+    if (s0 < 0 || rate < 0) throw new Error("вхідні параметри ресурсної моделі мають бути невід’ємними");
     return rate === 0 ? Infinity : s0/rate;
   }
 
   function applyDelay(tasks, task, delay) {
-    if (delay < 0) throw new Error("delay must be non-negative");
-    if (!tasks.some(t=>t.task===task)) throw new Error("unknown task");
+    if (delay < 0) throw new Error("затримка має бути невід’ємною");
+    if (!tasks.some(t=>t.task===task)) throw new Error("невідома робота");
     return tasks.map(t=>({task:t.task,duration:t.duration+(t.task===task?delay:0),preds:t.preds.slice()}));
   }
 
   function cpm(tasks) {
     const by = Object.fromEntries(tasks.map(t => [t.task, t]));
     const order = tasks.map(t => t.task);
-    if (new Set(order).size !== order.length) throw new Error("task identifiers must be unique");
+    if (new Set(order).size !== order.length) throw new Error("ідентифікатори робіт мають бути унікальними");
     order.forEach(n=>{
-      if (by[n].duration < 0) throw new Error("task duration must be non-negative");
-      by[n].preds.forEach(p=>{ if (!by[p]) throw new Error("unknown predecessor"); });
+      if (by[n].duration < 0) throw new Error("тривалість роботи має бути невід’ємною");
+      by[n].preds.forEach(p=>{ if (!by[p]) throw new Error("невідомий попередник"); });
     });
 
     const es={}, ef={}, best={}, bestPath={}, visiting=new Set(), visited=new Set(), topo=[];
     function visit(n){
-      if (visiting.has(n)) throw new Error("project network must be a DAG");
+      if (visiting.has(n)) throw new Error("мережа проєкту має бути орієнтованим ациклічним графом (DAG)");
       if (visited.has(n)) return;
       visiting.add(n);
       by[n].preds.forEach(visit);
@@ -97,7 +97,7 @@
   }
 
   function focusedWeights(reliabilityWeight) {
-    if (reliabilityWeight < 0 || reliabilityWeight > 1) throw new Error("weight must be in [0,1]");
+    if (reliabilityWeight < 0 || reliabilityWeight > 1) throw new Error("вага має бути в межах [0,1]");
     const out={reliability:reliabilityWeight};
     const scale=(1-reliabilityWeight)/(1-BASE_WEIGHTS.reliability);
     Object.keys(BASE_WEIGHTS).forEach(k=>{

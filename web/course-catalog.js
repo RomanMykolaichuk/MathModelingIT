@@ -27,7 +27,7 @@ globalThis.MathModelingCatalog = [
     notesUrl:"https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t1_l3/README.md",
     theoryUrl:"books/t1_l3/index.html",
     challenge:"Чому колега не отримав ваш результат за тим самим описом експерименту?",
-    transfer:"Сформуйте мінімальний reproducibility package для власного дослідження."
+    transfer:"Сформуйте мінімальний пакет відтворюваності для власного дослідження."
   },
   {
     id:"t1_l4", code:"T1.L4", topic:1,
@@ -63,7 +63,7 @@ globalThis.MathModelingCatalog = [
     notesUrl:"https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t2_l3/README.md",
     theoryUrl:"books/t2_l3/index.html",
     challenge:"Чому success=True ще не доводить, що знайдено глобальний оптимум?",
-    transfer:"Заплануйте multistart або незалежну перевірку розв’язку."
+    transfer:"Заплануйте багатостартовий пошук або незалежну перевірку розв’язку."
   },
   {
     id:"t2_l4", code:"T2.L4", topic:2,
@@ -73,7 +73,7 @@ globalThis.MathModelingCatalog = [
     theoryUrl:"books/t2_l4/index.html",
     instructionPdf:"instructions/t2_l4_lab_instruction.pdf",
     challenge:"Чому затримка однієї роботи змінює строк проєкту, а іншої — ні?",
-    transfer:"Перетворіть етапи власного дослідження на DAG і знайдіть bottleneck."
+    transfer:"Перетворіть етапи власного дослідження на орієнтований ациклічний граф (DAG) і знайдіть вузьке місце."
   },
   {
     id:"t2_l5", code:"T2.L5", topic:2,
@@ -92,7 +92,7 @@ globalThis.MathModelingCatalog = [
     notesUrl:"https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t2_l6/README.md",
     theoryUrl:"books/t2_l6/index.html",
     challenge:"Що саме доводить збіг символічного та чисельного розв’язків?",
-    transfer:"Заплануйте independent verification різними математичними представленнями."
+    transfer:"Заплануйте незалежну перевірку різними математичними представленнями."
   },
   {
     id:"t2_l7", code:"T2.L7", topic:2,
@@ -101,6 +101,6 @@ globalThis.MathModelingCatalog = [
     notesUrl:"https://github.com/RomanMykolaichuk/MathModelingIT/blob/main/lessons/t2_l7/README.md",
     theoryUrl:"books/t2_l7/index.html",
     challenge:"Чи може мала похибка підгонки приховувати неправильну структуру моделі?",
-    transfer:"Пов’яжіть калібрування, uncertainty, verification і допустимий науковий висновок."
+    transfer:"Пов’яжіть калібрування, невизначеність, перевірку і допустимий науковий висновок."
   }
 ];

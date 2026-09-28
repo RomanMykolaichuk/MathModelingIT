@@ -6,7 +6,7 @@ course:
   development_status: content_complete
   qa_status: automated_ci_enabled
   presentation_status: initial_pptx_pack_generated
-  principle: "problem -> mathematical model -> Python model -> experiment -> visualization -> interpretation -> research conclusion"
+  principle: "прикладна задача -> математична модель -> модель у Python -> експеримент -> візуалізація -> інтерпретація -> науковий висновок"
 
 stack:
   core:
@@ -40,7 +40,7 @@ lessons:
     lesson: 2
     title: "Класифікація математичних моделей"
     python_focus: [numpy, random, matplotlib, monte_carlo, pytest]
-    practical_result: "Один об’єкт у детермінованій, стохастичній, дискретній динамічній та Monte Carlo моделях; comparison, reproducibility та scenario analysis"
+    practical_result: "Один об’єкт у детермінованій, стохастичній, дискретній динамічній та Monte Carlo моделях; порівняння, відтворюваність та сценарний аналіз"
     status: content_stable
 
   - id: t1_l3
@@ -48,7 +48,7 @@ lessons:
     lesson: 3
     title: "Організація математичного моделювання"
     python_focus: [python, numpy, pandas, jupyter, json_config, metadata, hashing, pytest, git]
-    practical_result: "Research question -> data/config -> model -> reproducible experiment -> verification -> outputs/metadata -> Git traceability"
+    practical_result: "Дослідницьке питання -> дані/конфігурація -> модель -> відтворюваний експеримент -> перевірка -> результати/метадані -> простежуваність у Git"
     status: content_stable
 
   - id: t1_l4
@@ -56,7 +56,7 @@ lessons:
     lesson: 4
     title: "Класифікація методів математичного моделювання"
     python_focus: [scipy.optimize, sympy, numpy, pandas, networkx, monte_carlo, mcda, pytest]
-    practical_result: "Method selection laboratory: problem structure -> method -> Python tool -> verification -> interpretation"
+    practical_result: "Лабораторія вибору методу: структура задачі -> метод -> інструмент Python -> перевірка -> інтерпретація"
     status: content_stable
 
   - id: t2_l1
@@ -72,7 +72,7 @@ lessons:
     lesson: 2
     title: "Математична модель транспортної задачі"
     python_focus: [pandas, numpy, pulp, scipy.optimize, matplotlib, pytest]
-    practical_result: "CSV -> транспортна LP-модель -> оптимальні потоки -> independent verification -> scenario analysis -> visualization"
+    practical_result: "CSV -> транспортна модель лінійного програмування -> оптимальні потоки -> незалежна перевірка -> сценарний аналіз -> візуалізація"
     status: content_stable
 
   - id: t2_l3
@@ -80,7 +80,7 @@ lessons:
     lesson: 3
     title: "Математичні моделі задач нелінійного програмування"
     python_focus: [numpy, scipy.optimize, slsqp, multistart, grid_search, pandas, matplotlib, pytest]
-    practical_result: "Нелінійний розподіл ресурсу з diminishing returns -> SLSQP -> feasibility checks -> sensitivity analysis; non-convex multi-start -> grid-search verification -> contour visualization"
+    practical_result: "Нелінійний розподіл ресурсу зі спадною граничною віддачею -> SLSQP -> перевірки допустимості -> аналіз чутливості; неопукла задача -> багатостартовий пошук -> перевірка пошуком по сітці -> контурна візуалізація"
     status: content_stable
 
   - id: t2_l4
@@ -104,7 +104,7 @@ lessons:
     lesson: 6
     title: "Системи комп'ютерної математики та їх можливості для математичного моделювання"
     python_focus: [sympy, symbolic_algebra, differentiation, integration, lambdify, numpy, scipy.integrate, solve_ivp, matplotlib, pytest]
-    practical_result: "Symbolic ODE model -> equilibrium/closed-form solution -> differentiation/integration -> symbolic residual verification -> lambdify -> independent SciPy solve_ivp verification -> sensitivity experiment"
+    practical_result: "Символьна модель ОДР -> рівновага/аналітичний розв’язок -> диференціювання/інтегрування -> символьна перевірка нев’язки -> lambdify -> незалежна чисельна перевірка SciPy solve_ivp -> експеримент чутливості"
     status: content_stable
 
   - id: t2_l7
@@ -118,7 +118,7 @@ lessons:
 capstone:
   path: capstone
   status: content_stable
-  practical_result: "Integrated mini-research project: calibration -> constrained optimization -> independent verification -> sensitivity -> bootstrap uncertainty -> reproducibility metadata -> scientific conclusion"
+  practical_result: "Інтегрований мініпроєкт дослідження: калібрування -> оптимізація з обмеженнями -> незалежна перевірка -> чутливість -> бутстреп-оцінювання невизначеності -> метадані відтворюваності -> науковий висновок"
 
 web_lab:
   path: web
