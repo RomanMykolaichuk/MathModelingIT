@@ -158,7 +158,7 @@ def main() -> int:
     report_path = args.report if args.report.is_absolute() else root / args.report
     report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding='utf-8')
 
-    print(f"Course smoke: {'PASS' if report['ok'] else 'FAIL'}; failures={len(failures)}")
+    print(f"Перевірка курсу: {'ПРОЙДЕНО' if report['ok'] else 'ПОМИЛКА'}; помилок={len(failures)}")
     for item in failures:
         print(json.dumps(item, ensure_ascii=False)[:2000])
     print(f"Report: {report_path}")
