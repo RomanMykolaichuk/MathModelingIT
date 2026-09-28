@@ -1,33 +1,33 @@
-# MathModelingIT MiniBook T1.L3
+# MathModelingIT · Мінікнига T1.L3
 
 ## Організація математичного моделювання
 
 ### Як перетворити код на відтворюваний дослідницький процес
 
-> **Головна ідея книги:** математична модель у науковому дослідженні — це не лише формула й не лише notebook. Це простежуваний workflow, де research question, data, configuration, code, seed, outputs, metadata і Git state дозволяють іншому досліднику відтворити саме той результат, на який ви посилаєтесь у статті чи дисертації.
+> **Головна ідея книги:** математична модель у науковому дослідженні — це не лише формула й не лише ноутбук. Це простежуваний робочий процес, де Дослідницьке питання, дані, конфігурація, code, зерно генератора, результати, метадані і Git state дозволяють іншому досліднику відтворити саме той результат, на який ви посилаєтесь у статті чи дисертації.
 
 ---
 
 ## 0. Паспорт книги
 
-**Код заняття:** T1.L3  
-**Тема:** організація математичного моделювання  
-**Рівень:** середній  
-**Орієнтовний час читання:** 70–85 хвилин  
-**Попередні знання:** базова Python-модель, CSV/JSON, поняття random seed, Git на рівні commit.
+**Код заняття:** T1.L3 
+**Тема:** організація математичного моделювання 
+**Рівень:** середній 
+**Орієнтовний час читання:** 70–85 хвилин 
+**Попередні знання:** базова Python-модель, CSV/JSON, поняття random зерно генератора, Git на рівні коміт.
 
 Після цієї книги ви повинні вміти:
 
-- розділяти research question, data, model, config, code і outputs;
-- пояснювати, чому notebook не повинен бути єдиним джерелом логіки;
-- виносити parameters experiment у config;
-- використовувати seed як частину experiment identity;
-- формувати raw results і summary окремо;
-- розуміти роль metadata;
-- пояснювати config hash;
-- відрізняти reproducibility від adequacy;
-- пов’язувати result → experiment ID → config/data → Git commit;
-- проектувати мінімальний reproducible computational experiment для власного дослідження.
+- розділяти Дослідницьке питання, дані, model, конфігурація, code і результати;
+- пояснювати, чому ноутбук не повинен бути єдиним джерелом логіки;
+- виносити параметри experiment у конфігурація;
+- використовувати зерно генератора як частину ідентичність експерименту;
+- формувати Первинні результати і підсумок окремо;
+- розуміти роль метадані;
+- пояснювати конфігурація хеш;
+- відрізняти ВІДТВОРЮВАНІСТЬ від адекватність;
+- пов’язувати result → experiment ID → конфігурація/дані → коміт Git;
+- проектувати мінімальний відтворюваний Обчислювальний експеримент для власного дослідження.
 
 ---
 
@@ -37,23 +37,23 @@
 
 У текст вставлено figure.
 
-На ньому п’ять scenarios.
+На ньому п’ять сценарії.
 
 Через пів року керівник запитує:
 
-> «Які parameters використовувалися саме тут?»
+> «Які параметри використовувалися саме тут?»
 
-Відкривається notebook.
+Відкривається ноутбук.
 
-У ньому десятки cells.
+У ньому десятки комірки.
 
 Деякі виконані в іншому порядку.
 
-Частина parameters змінювалась вручну.
+Частина параметри змінювалась вручну.
 
 CSV уже оновлений.
 
-Seed не зафіксовано.
+зерно генератора не зафіксовано.
 
 Файл figure називається:
 
@@ -63,37 +63,37 @@ plot_final_v2_really_final.png
 
 І головне питання стає несподівано складним:
 
-> **чи можемо ми точно відтворити той computational result, на який посилається dissertation text?**
+> **чи можемо ми точно відтворити той computational result, на який посилається дисертація text?**
 
 Саме це питання є центральним у T1.L3.
 
 <figure>
-  <img src="figures/fig_01_reproducibility_chain.svg" alt="Ланцюг від research question до Git">
-  <figcaption><strong>Рис. 1.</strong> Відтворюваність виникає з повного ланцюга: question → data → config → model/code → experiment → outputs → metadata → Git state.</figcaption>
+ <img src="figures/fig_01_reproducibility_chain.svg" alt="Ланцюг від research question до Git">
+ <figcaption><strong>Рис. 1.</strong> Відтворюваність виникає з повного ланцюга: питання → дані → конфігурація → model/code → experiment → результати → метадані → Git state.</figcaption>
 </figure>
 
 ---
 
-## 2. Reproducibility — властивість workflow
+## 2. ВІДТВОРЮВАНІСТЬ — властивість робочий процес
 
 Поширена помилка:
 
-> «У мене є notebook, отже experiment reproducible».
+> «У мене є ноутбук, отже experiment відтворюваний».
 
 Не обов’язково.
 
-Notebook може містити:
+ноутбук може містити:
 
-- hidden state;
-- cells executed out of order;
-- manually changed variables;
-- local files;
-- undocumented package versions;
-- random draws without seed.
+- прихований state;
+- комірки виконані out порядок;
+- manually змінений змінні;
+- локальний файли;
+- незадокументовані версії пакетів;
+- випадкові вибірки без зерно генератора.
 
-Тому reproducibility — це не format.
+Тому ВІДТВОРЮВАНІСТЬ — це не format.
 
-Це property whole workflow.
+Це property весь робочий процес.
 
 ---
 
@@ -127,27 +127,27 @@ Git.
 
 Кожен елемент має окрему роль.
 
-Якщо все змішано в одному notebook, простежуваність слабшає.
+Якщо все змішано в одному ноутбук, простежуваність слабшає.
 
 ---
 
-## 4. Research question — початок identity
+## 4. Дослідницьке питання — початок ідентичність
 
-Baseline question:
+базовий питання:
 
 > Як змінюється очікувана результативність системи при зміні ресурсу або навантаження, і як організувати цей experiment так, щоб його можна було точно повторити?
 
-Це навмисно simple mathematics.
+Це навмисно простий mathematics.
 
-Бо lesson досліджує не складність formula.
+Бо lesson досліджує не складність формула.
 
-Він досліджує **organization of evidence**.
+Він досліджує **organization докази**.
 
 ---
 
 ## 5. Математична модель
 
-Deterministic part:
+детермінований part:
 
 \[
 Y=
@@ -156,14 +156,14 @@ Y=
 
 Де:
 
-- \(Y\) — modeled performance;
-- \(R\) — resource;
-- \(L\) — load;
-- \(b\) — baseline level;
-- \(\alpha\) — resource gain;
-- \(\beta\) — load penalty.
+- \(Y\) — modeled результативність;
+- \(R\) — ресурс;
+- \(L\) — навантаження;
+- \(b\) — базовий рівень;
+- \(\alpha\) — ресурс виграш;
+- \(\beta\) — навантаження штраф.
 
-Baseline:
+базовий:
 
 \[
 b=20,
@@ -179,7 +179,7 @@ b=20,
 
 ---
 
-## 6. Manual control case
+## 6. ручний контрольний приклад
 
 При:
 
@@ -208,21 +208,21 @@ Y=20+72-60=32.
 Y=32.
 \]
 
-Це базовий verification case.
+Це базовий ПЕРЕВІРКА випадок.
 
-Якщо Python не повертає 32, проблема в implementation.
+Якщо Python не повертає 32, проблема в реалізація.
 
 ---
 
-## 7. Clipping at zero
+## 7. обмеження знизу нулем
 
-Model uses:
+Model використовує:
 
 \[
 Y=\max(0,\cdots).
 \]
 
-Тому modeled performance не negative.
+Тому modeled результативність не від’ємний.
 
 Наприклад:
 
@@ -230,7 +230,7 @@ Y=\max(0,\cdots).
 R=0,\quad L=100.
 \]
 
-Raw expression:
+первинний вираз:
 
 \[
 20-120=-100.
@@ -242,15 +242,15 @@ Raw expression:
 Y=0.
 \]
 
-Це modeling assumption.
+Це modeling припущення.
 
 Не універсальний mathematical law.
 
 ---
 
-## 8. Stochastic observation
+## 8. стохастичний спостереження
 
-Observed result:
+спостережуваний result:
 
 \[
 Y^{obs}=
@@ -263,25 +263,25 @@ Y^{obs}=
 \varepsilon\sim N(0,\sigma^2).
 \]
 
-Baseline:
+базовий:
 
 \[
 \sigma=4.
 \]
 
-Deterministic model defines expected structural response.
+детермінована модель defines очікуваний structural відгук.
 
-Noise models run-to-run variation.
+шум models між запусками варіативність.
 
 ---
 
 ## 9. Model vs experiment
 
-Це ключове distinction.
+Це ключове відмінність.
 
 ### Model
 
-Form:
+форма:
 
 \[
 Y=\max(0,b+\alpha R-\beta L).
@@ -289,16 +289,16 @@ Y=\max(0,b+\alpha R-\beta L).
 
 ### Experiment
 
-Includes:
+містить:
 
-- which scenarios;
-- how many replications;
-- seed;
+- який сценарії;
+- як багато повторення;
+- зерно генератора;
 - noise_sd;
-- outputs;
-- summary.
+- результати;
+- підсумок.
 
-Змінити replications:
+Змінити повторення:
 
 \[
 200\rightarrow1000
@@ -312,13 +312,13 @@ Includes:
 Y=b+\alpha R-\beta L
 \]
 
-на nonlinear formula — зміна model.
+на нелінійний формула — зміна model.
 
 ---
 
-## 10. Config як explicit contract
+## 10. конфігурація як явний контракт
 
-Baseline experiment_config.json:
+базовий experiment_config.json:
 
 ~~~json
 {
@@ -333,16 +333,16 @@ Baseline experiment_config.json:
 }
 ~~~
 
-Config робить parameters visible.
+конфігурація робить параметри видимою.
 
 <figure>
-  <img src="figures/fig_02_config_separation.svg" alt="Розділення model code і config">
-  <figcaption><strong>Рис. 2.</strong> Model code визначає mathematical relation, а config — конкретні параметри experiment. Це дозволяє змінювати scenario design без редагування core function.</figcaption>
+ <img src="figures/fig_02_config_separation.svg" alt="Розділення model code і config">
+ <figcaption><strong>Рис. 2.</strong> Model code визначає mathematical співвідношення, а конфігурація — конкретні параметри experiment. Це дозволяє змінювати сценарій план без редагування основний функція.</figcaption>
 </figure>
 
 ---
 
-## 11. Чому magic numbers небезпечні
+## 11. Чому приховані константи небезпечні
 
 Погано:
 
@@ -352,40 +352,40 @@ for _ in range(200):
     obs = rng.normal(y, 4)
 ~~~
 
-Numbers hidden inside code.
+Numbers прихований всередині code.
 
 Через місяць незрозуміло:
 
 - що 200;
 - чому 4;
-- чи 1.8 baseline;
-- чи цей file used for final result.
+- чи 1.8 базовий;
+- чи цей файл використано для кінцевий result.
 
 Краще:
 
-> parameters live in config.
+> параметри зберігатися у конфігурація.
 
 ---
 
-## 12. Scenarios як data
+## 12. сценарії як дані
 
-Scenario table:
+таблиця сценаріїв:
 
-| scenario | resource | load |
+| сценарій | ресурс | навантаження |
 |---|---:|---:|
-| baseline | 40 | 50 |
+| базовий | 40 | 50 |
 | resource_low | 30 | 50 |
 | resource_high | 50 | 50 |
 | load_low | 40 | 35 |
 | load_high | 40 | 65 |
 
-Scenario definitions зберігаються в CSV.
+сценарій definitions зберігаються в CSV.
 
-Це data layer.
+Це дані layer.
 
 ---
 
-## 13. Чому scenarios не треба hard-code
+## 13. Чому сценарії не треба hard-code
 
 Hard-coded:
 
@@ -400,17 +400,17 @@ scenarios = [
 
 Але CSV:
 
-- easier audit;
-- easier compare;
-- easier replace;
-- easier version-control diff;
-- separates experiment design from algorithm.
+- easier аудит;
+- easier порівнювати;
+- easier замінює;
+- easier контроль версій diff;
+- separates план експерименту з алгоритм.
 
 ---
 
-## 14. Baseline deterministic scenario values
+## 14. базовий детермінований сценарій значення
 
-### baseline
+### базовий
 
 \[
 R=40,L=50
@@ -462,7 +462,7 @@ Y=14.
 
 ---
 
-## 15. Однаковий output — різний mechanism
+## 15. Однаковий результат — різний механізм
 
 Зверніть увагу:
 
@@ -476,50 +476,50 @@ resource\_high=50,
 load\_low=50.
 \]
 
-Same deterministic response.
+той самий детермінований відгук.
 
-Але first mechanism:
+Але спочатку механізм:
 
-> resource increased.
+> ресурс increased.
 
 Second:
 
-> load decreased.
+> навантаження decreased.
 
 <figure>
-  <img src="figures/fig_03_same_output_different_mechanism.svg" alt="Однаковий результат різних сценаріїв">
-  <figcaption><strong>Рис. 3.</strong> Однакове числове \(Y=50\) не означає однаковий mechanism. Scenario identity і input values потрібно зберігати разом із result.</figcaption>
+ <img src="figures/fig_03_same_output_different_mechanism.svg" alt="Однаковий результат різних сценаріїв">
+ <figcaption><strong>Рис. 3.</strong> Однакове числове \(Y=50\) не означає однаковий механізм. сценарій ідентичність і вхідні дані значення потрібно зберігати разом із result.</figcaption>
 </figure>
 
-Це важливий reason not to save only final metric.
+Це важливий reason не до зберігати лише кінцевий показник.
 
 ---
 
-## 16. Replications
+## 16. повторення
 
-Для кожного scenario:
+Для кожного сценарій:
 
 \[
 n=200
 \]
 
-stochastic observations.
+стохастичний спостереження.
 
-Якщо scenarios=5:
+Якщо сценарії=5:
 
 \[
 5\cdot200=1000
 \]
 
-raw rows.
+первинний рядки.
 
-Row count — simple sanity check.
+рядок count — простий перевірка здорового глузду.
 
 ---
 
-## 17. Seed як experiment parameter
+## 17. зерно генератора як experiment параметр
 
-Baseline:
+базовий:
 
 \[
 seed=2026.
@@ -531,48 +531,48 @@ run_experiment() creates:
 rng = np.random.default_rng(2026)
 ~~~
 
-Same config + same scenarios + same code → same raw results.
+той самий конфігурація + той самий сценарії + той самий code → той самий Первинні результати.
 
-Це перевіряється test.
+Це перевіряється тест.
 
 ---
 
-## 18. Reproducibility and randomness
+## 18. ВІДТВОРЮВАНІСТЬ і випадковість
 
 Це не contradiction.
 
-Stochastic experiment може бути reproducible, якщо pseudo-random sequence controlled.
+стохастичний experiment може бути відтворюваний, якщо pseudo-випадкова послідовність контрольоване.
 
 Тоді:
 
-> randomness exists inside model, but computational realization is repeatable.
+> випадковість exists всередині model, але computational реалізація є повторюваний.
 
-Це fundamental idea scientific computing.
+Це fundamental idea наукові обчислення.
 
 ---
 
-## 19. Raw results vs summary
+## 19. Первинні результати vs підсумок
 
-Raw results містять one row per replication.
+Первинні результати містять один рядок на повторення.
 
 Наприклад:
 
 - scenario_id;
-- resource;
-- load;
-- replication;
+- ресурс;
+- навантаження;
+- повторення;
 - deterministic_response;
 - observed_response.
 
-Summary агрегує.
+підсумок агрегує.
 
-Це два різні artifacts.
+Це два різні артефакти.
 
 ---
 
-## 20. Summary metrics
+## 20. Підсумкові показники
 
-summarize_results() computes:
+summarize_results() обчислює:
 
 - deterministic_response;
 - mean_observed;
@@ -580,102 +580,102 @@ summarize_results() computes:
 - p10;
 - p90.
 
-Це scenario-level summary.
+Це scenario-level підсумок.
 
 <figure>
-  <img src="figures/fig_04_raw_to_summary.svg" alt="Від raw results до summary">
-  <figcaption><strong>Рис. 4.</strong> Raw data зберігає кожну stochastic replication, summary стискає її до показників. Для відтворюваності бажано мати обидва рівні.</figcaption>
+ <img src="figures/fig_04_raw_to_summary.svg" alt="Від raw results до summary">
+ <figcaption><strong>Рис. 4.</strong> первинний дані зберігає кожну стохастичний повторення, підсумок стискає її до показників. Для відтворюваності бажано мати обидва рівні.</figcaption>
 </figure>
 
 ---
 
-## 21. Baseline observed means
+## 21. базовий спостережуваний означає
 
-README gives control values near:
+README дає контрольні значення поблизу:
 
-| Scenario | Deterministic | Mean observed |
+| сценарій | детермінований | середнє спостережуваний |
 |---|---:|---:|
-| baseline | 32.0 | ≈32.29 |
+| базовий | 32.0 | ≈32.29 |
 | resource_low | 14.0 | ≈14.07 |
 | resource_high | 50.0 | ≈50.11 |
 | load_low | 50.0 | ≈50.16 |
 | load_high | 14.0 | ≈13.78 |
 
-Observed means not exactly deterministic values because finite random sample.
+спостережуваний означає не точно детермінований значення тому що скінченний random вибірка.
 
-But close.
+але close.
 
 ---
 
-## 22. Why p10 and p90
+## 22. чому p10 і p90
 
-Mean alone hides spread.
+середнє самостійно hides spread.
 
 p10:
 
-> 10% observations below approximately this value.
+> 10% спостереження нижче приблизно це значення.
 
 p90:
 
-> 90% observations below this value.
+> 90% спостереження нижче це значення.
 
-Interval:
+інтервал:
 
 \[
 [p10,p90]
 \]
 
-is not a formal confidence interval by default.
+є не формальний довірчий інтервал за допомогою default.
 
-It is empirical quantile range.
+It є empirical квантиль діапазон.
 
 ---
 
-## 23. Metadata
+## 23. метадані
 
-metadata.json includes:
+metadata.json містить:
 
 - experiment_id;
 - config_hash;
-- seed;
-- replications;
+- зерно генератора;
+- повторення;
 - scenario_count;
-- model parameters;
-- workflow note.
+- model параметри;
+- робочий процес note.
 
-Metadata answers:
+метадані answers:
 
-> what exactly generated these outputs?
-
----
-
-## 24. Canonical JSON
-
-Hashing must be stable.
-
-If JSON keys are reordered, experiment config meaning unchanged.
-
-Function canonical_json:
-
-- sort_keys=True;
-- stable separators.
-
-Then SHA-256.
-
-This supports deterministic identity.
+> що точно згенерований ці результати?
 
 ---
 
-## 25. Config hash
+## 24. канонічний JSON
+
+хешування необхідно be стійкий.
+
+якщо JSON ключі є перевпорядковані, experiment конфігурація зміст unchanged.
+
+функція canonical_json:
+
+- sort_keys=істинний;
+- стійкий separators.
+
+тоді SHA-256.
+
+це підтримує детермінований ідентичність.
+
+---
+
+## 25. конфігурація хеш
 
 \[
 h=
 SHA256(canonical\ config).
 \]
 
-Short form first 12 hex chars.
+Short форма спочатку 12 hex chars.
 
-Baseline:
+базовий:
 
 ~~~text
 0c5d08ed47eb
@@ -688,33 +688,33 @@ t1_l3_0c5d08ed47eb
 ~~~
 
 <figure>
-  <img src="figures/fig_05_experiment_identity.svg" alt="Experiment ID через config hash">
-  <figcaption><strong>Рис. 5.</strong> Config hash створює deterministic identity конфігурації. Але повна reproducibility потребує також code, data і software environment.</figcaption>
+ <img src="figures/fig_05_experiment_identity.svg" alt="Experiment ID через config hash">
+ <figcaption><strong>Рис. 5.</strong> конфігурація хеш створює детермінований ідентичність конфігурації. Але повна ВІДТВОРЮВАНІСТЬ потребує також code, дані і програмне середовище.</figcaption>
 </figure>
 
 ---
 
-## 26. Що config hash доводить
+## 26. Що конфігурація хеш доводить
 
 Він доводить:
 
-> canonical config content same.
+> canonical конфігурація content той самий.
 
 Він не доводить:
 
-- code same;
-- scenarios CSV same;
-- NumPy same;
-- model.py same;
-- OS/environment same.
+- code той самий;
+- сценарії CSV той самий;
+- NumPy той самий;
+- model.py той самий;
+- OS/середовище той самий.
 
-Отже, config hash — useful, but partial identity.
+Отже, конфігурація хеш — корисний, але partial ідентичність.
 
 ---
 
-## 27. Git commit
+## 27. коміт Git
 
-Git commit identifies code state.
+коміт Git ідентифікує code state.
 
 Рекомендований chain:
 
@@ -728,166 +728,166 @@ Config/Data
 GitCommit.
 \]
 
-Якщо figure у dissertation has this trace, it can be rebuilt.
+Якщо figure у дисертація має це trace, it може be rebuilt.
 
 ---
 
-## 28. Software environment
+## 28. програмне середовище
 
-Навіть same code може behave differently with changed dependencies.
+Навіть той самий code може поводитися differently з змінений залежності.
 
-Тому reproducibility package має include:
+Тому ВІДТВОРЮВАНІСТЬ пакет має включати:
 
-- Python version;
+- Python версія;
 - requirements;
-- package versions.
+- версії пакетів.
 
-Current repo pins dependencies.
+поточний repo pins залежності.
 
-Це strong foundation.
+Це сильний foundation.
 
 ---
 
-## 29. Verification hierarchy
+## 29. ПЕРЕВІРКА hierarchy
 
-### Hand calculation
+### Hand обчислення
 
 \[
 Y(40,50)=32.
 \]
 
-### Bounds
+### межі
 
 \[
 Y\ge0.
 \]
 
-### Seed reproducibility
+### зерно генератора ВІДТВОРЮВАНІСТЬ
 
-Same RNG seed → same observation sequence.
+той самий RNG зерно генератора → той самий спостереження послідовність.
 
-### Row count
+### рядок count
 
 \[
 n_{rows}=n_{scenarios}\times n_{replications}.
 \]
 
-### Config hash stability
+### конфігурація хеш стійкість
 
-Key order does not matter.
+Key порядок робить не matter.
 
-### Full run reproducibility
+### Full запуск ВІДТВОРЮВАНІСТЬ
 
-Same inputs produce identical results DataFrame.
+той самий вхідні дані produce identical results DataFrame.
 
 ---
 
-## 30. Tests are part of research infrastructure
+## 30. тести є part дослідження інфраструктура
 
-Unit tests not only software engineering.
+одиниця тести не лише програмний engineering.
 
-They capture invariant knowledge.
+They охоплювати інваріантний knowledge.
 
-For T1.L3 tests document:
+для T1.L3 тести document:
 
-- baseline equation;
+- базовий рівняння;
 - clipping;
-- input validity;
-- RNG reproducibility;
-- workflow size;
-- config identity;
-- metadata semantics.
+- вхідні дані validity;
+- RNG ВІДТВОРЮВАНІСТЬ;
+- робочий процес size;
+- конфігурація ідентичність;
+- метадані semantics.
 
-This makes tests executable documentation.
+це робить тести виконувана документація.
 
 ---
 
-## 31. Reproducible wrong model
+## 31. відтворюваний неправильний model
 
-Important sentence:
+важливий sentence:
 
 > **Відтворюваність неправильного припущення не робить модель адекватною.**
 
-A perfectly reproducible experiment can consistently reproduce wrong assumptions.
+ ідеально відтворюваний experiment може послідовно reproduce неправильний припущення.
 
-Therefore two axes:
+тому two axes:
 
-- reproducibility;
-- validity/adequacy.
-
----
-
-## 32. Reproducibility vs repeatability vs replicability
-
-Terminology varies across disciplines.
-
-For this course practical meaning:
-
-> another researcher can recreate the same computational result from preserved artifacts.
-
-Do not get lost in terminology.
-
-Focus on traceability.
+- ВІДТВОРЮВАНІСТЬ;
+- validity/адекватність.
 
 ---
 
-## 33. Notebook role
+## 32. ВІДТВОРЮВАНІСТЬ vs repeatability vs replicability
 
-Notebook is useful for:
+термінологія змінюється через дисципліни.
+
+для це course практичний зміст:
+
+> інший дослідник може відтворити той самий computational result з збережені артефакти.
+
+робити не get втрачено у термінологія.
+
+фокус на traceability.
+
+---
+
+## 33. ноутбук role
+
+ноутбук є корисний для:
 
 - exploration;
 - narrative;
 - visualization;
-- interactive analysis.
+- interactive аналіз.
 
-But core model logic should live in src/.
+але основний model logic слід зберігатися у src/.
 
-Why?
+чому?
 
 - importable;
 - testable;
 - reusable;
 - easier CI;
-- less hidden state.
+- менше прихований state.
 
 ---
 
-## 34. Hidden state problem
+## 34. прихований state задача
 
-In notebook:
+у ноутбук:
 
-cell 10 may depend on variable changed in cell 3 after cell 7 already ran.
+cell 10 може depend на змінна змінений у cell 3 після cell 7 вже ran.
 
-File appears correct.
+файл appears правильний.
 
-Kernel state is not.
+Kernel state є не.
 
-Strong workflow:
+сильний робочий процес:
 
-> Restart kernel → Run all → same output.
+> Restart kernel → запуск усі → однаковий результат.
 
-Even stronger:
+Even сильнішого:
 
-> main experiment runs from command line independent of notebook.
+> main experiment запуски з команда line незалежний ноутбук.
 
 ---
 
-## 35. Outputs should be generated, not edited
+## 35. результати слід be згенерований, не відредаговані
 
-results.csv and summary.csv are derivatives.
+results.csv і summary.csv є похідні.
 
-Do not manually correct them.
+робити не manually правильний them.
 
-If result wrong:
+якщо result неправильний:
 
-- fix model/config/data;
+- fix model/конфігурація/дані;
 - rerun.
 
-Manual editing breaks provenance.
+ручний editing breaks походження даних і результату.
 
 ---
 
-## 36. Naming outputs
+## 36. Naming результати
 
 Avoid:
 
@@ -897,33 +897,33 @@ final2.csv
 really_final.csv
 ~~~
 
-Better:
+кращий:
 
-- fixed paths inside experiment directory;
-- experiment ID directory;
-- metadata alongside outputs.
+- фіксований шляхи всередині experiment каталог;
+- experiment ID каталог;
+- метадані alongside результати.
 
-For large research project, experiment_id can name run folder.
+для великий дослідження проєкт, experiment_id може name запуск каталог.
 
 ---
 
-## 37. Scenario provenance
+## 37. сценарій походження даних і результату
 
-If scenarios.csv changes, config hash alone does not detect it.
+якщо scenarios.csv зміни, конфігурація хеш самостійно робить не detect it.
 
-This reveals current limitation.
+це reveals поточний limitation.
 
 Possible improvement:
 
-- data file hash;
-- combined experiment hash;
-- Git commit captures file state.
+- дані файл хеш;
+- combined хеш експерименту;
+- коміт Git captures файл state.
 
-This is excellent “break the model/workflow” case.
+це є excellent “Зламай модель/робочий процес” випадок.
 
 ---
 
-## 38. Зламай workflow: same config, changed CSV
+## 38. Зламай робочий процес: той самий конфігурація, змінений CSV
 
 Keep:
 
@@ -933,167 +933,167 @@ experiment_config.json
 
 unchanged.
 
-Change resource_high from 50 to 55.
+зміна resource_high з 50 до 55.
 
-Config hash unchanged.
+конфігурація хеш unchanged.
 
-But experiment changed.
+але experiment змінений.
 
-Therefore:
+тому:
 
-> config_hash ≠ complete experiment hash.
+> config_hash ≠ complete хеш експерименту.
 
 Modernization:
 
-- hash config + input files;
-- or rely on Git state + explicit file hashes.
+- хеш конфігурація + вхідні дані файли;
+- або rely на Git state + явний файл hashes.
 
 ---
 
-## 39. Зламай workflow: same config, changed model.py
+## 39. Зламай робочий процес: той самий конфігурація, змінений model.py
 
-Change:
+зміна:
 
 \[
 \alpha=1.8
 \]
 
-default in code while config still supplies 1.8? No effect.
+default у code поки конфігурація усе ще supplies 1.8? No ефект.
 
-But change formula itself:
+але зміна формула itself:
 
 \[
 Y=b+\alpha\log(1+R)-\beta L.
 \]
 
-Config hash unchanged.
+конфігурація хеш unchanged.
 
-Experiment identity string unchanged.
+ідентичність експерименту string unchanged.
 
-Result different.
+Result різний.
 
-Hence code version must be recorded.
-
----
-
-## 40. Зламай workflow: unpinned dependencies
-
-Suppose future NumPy behavior changes.
-
-Same code/config may produce different output or warning.
-
-Therefore dependency snapshot matters.
+Hence code версія необхідно be зафіксований.
 
 ---
 
-## 41. Зламай workflow: seed removed
+## 40. Зламай робочий процес: unpinned залежності
 
-Without fixed seed:
+припустімо future NumPy поведінку зміни.
 
-- raw results change;
-- debugging harder;
-- figure not exactly reproducible.
+той самий code/конфігурація може produce різний результат або warning.
 
-Statistical summary may be similar, but exact artifact identity lost.
+тому залежність snapshot має значення.
 
 ---
 
-## 42. Зламай workflow: manual figure edits
+## 41. Зламай робочий процес: зерно генератора removed
 
-If figure exported, then manually adjusted data points in image editor, code can no longer reproduce figure.
+без фіксований зерно генератора:
 
-Allowed manual changes:
+- Первинні результати зміна;
+- debugging складніших;
+- figure не точно відтворюваний.
+
+статистичну підсумок може be подібний, але точний артефакт ідентичність втрачено.
+
+---
+
+## 42. Зламай робочий процес: ручний figure edits
+
+якщо figure експортований, тоді manually скориговані дані точки у зображення редактор, code може no longer reproduce figure.
+
+Allowed ручний зміни:
 
 - layout;
 - labels;
 - typography.
 
-Not allowed:
+не allowed:
 
-- change values without source update.
+- зміна значення без джерело update.
 
 ---
 
-## 43. Config change vs model change
+## 43. конфігурація зміна vs model зміна
 
-Change:
+зміна:
 
 \[
 noise\_sd=4\rightarrow6.
 \]
 
-Experiment config change.
+Experiment конфігурація зміна.
 
-Change:
+зміна:
 
 \[
 Y=\max(0,b+\alpha R-\beta L)
 \]
 
-to nonlinear relation.
+до нелінійний співвідношення.
 
-Model change.
+Model зміна.
 
-These should be reviewed differently.
+ці слід be переглядатися differently.
 
 ---
 
-## 44. Sensitivity via scenarios
+## 44. чутливість via сценарії
 
-Scenarios alter inputs:
+сценарії alter вхідні дані:
 
-- resource;
-- load.
+- ресурс;
+- навантаження.
 
-Config alters global model/experiment parameters:
+конфігурація alters глобальний model/experiment параметри:
 
-- replications;
-- seed;
+- повторення;
+- зерно генератора;
 - noise_sd.
 
-This separation gives structured design.
+це розділення дає структурований план.
 
 ---
 
 ## 45. Noise_sd experiment
 
-If:
+якщо:
 
 \[
 \sigma=4\rightarrow8,
 \]
 
-deterministic response unchanged.
+детермінований відгук unchanged.
 
-Mean observed likely remains around deterministic value in symmetric, non-clipped regions.
+середнє спостережуваний ймовірно залишається близько детермінований значення у симетричний, non-clipped regions.
 
-Spread increases.
+Spread збільшує.
 
-At low deterministic values clipping may affect mean.
+у низький детермінований значення clipping може affect середнє.
 
-This connects T1.L3 with T1.L2 uncertainty concepts.
+це пов’язує T1.L3 з T1.L2 невизначеність concepts.
 
 ---
 
-## 46. Replications experiment
+## 46. повторення experiment
 
-Increase:
+збільшення:
 
 \[
 n=200\rightarrow2000.
 \]
 
-Raw summary means often stabilize.
+первинний підсумок означає часто stabilize.
 
-But more runs do not fix wrong model.
+але більше запуски робити не fix неправильний model.
 
-Same lesson as Monte Carlo.
+той самий lesson як Монте-Карло.
 
 ---
 
 ## 47. Git traceability
 
-A strong report block:
+ сильний report block:
 
 ~~~text
 experiment_id: t1_l3_0c5d08ed47eb
@@ -1107,18 +1107,18 @@ output files:
   - metadata.json
 ~~~
 
-This is small but powerful.
+це є малий але сильний.
 
 ---
 
-## 48. Figure provenance
+## 48. Figure походження даних і результату
 
 <figure>
-  <img src="figures/fig_06_figure_provenance.svg" alt="Простежуваність рисунка">
-  <figcaption><strong>Рис. 6.</strong> Figure у publication повинна мати шлях назад до output data, experiment ID, config/data та code version.</figcaption>
+ <img src="figures/fig_06_figure_provenance.svg" alt="Простежуваність рисунка">
+ <figcaption><strong>Рис. 6.</strong> Figure у публікація повинна мати шлях назад до результат дані, experiment ID, конфігурація/дані та code версія.</figcaption>
 </figure>
 
-Ideal chain:
+ідеальний chain:
 
 \[
 Figure
@@ -1136,89 +1136,89 @@ Commit.
 
 ---
 
-## 49. Metadata as scientific evidence
+## 49. метадані як науковий докази
 
-Metadata is not decoration.
+метадані є не decoration.
 
-It allows questions:
+It дозволяє питання:
 
-- what seed?
-- what config?
-- how many scenarios?
-- which parameters?
-- what experiment identity?
+- що зерно генератора?
+- що конфігурація?
+- як багато сценарії?
+- який параметри?
+- що ідентичність експерименту?
 
-Without metadata output file is orphaned.
+без метадані результат файл є orphaned.
 
 ---
 
-## 50. Reproducibility checklist
+## 50. ВІДТВОРЮВАНІСТЬ checklist
 
-Before citing result:
+до citing result:
 
-### Research question
+### Дослідницьке питання
 
-Known?
+відомий?
 
-### Data
+### дані
 
-Stored and documented?
+Stored і documented?
 
 ### Model
 
-Formula and assumptions explicit?
+формула і припущення явний?
 
-### Config
+### конфігурація
 
-Parameters externalized?
+параметри externalized?
 
 ### Execution
 
-One command?
+один команда?
 
-### Verification
+### ПЕРЕВІРКА
 
-Control case?
+контрольний приклад?
 
-### Metadata
+### метадані
 
-Experiment ID/hash?
+Experiment ID/хеш?
 
 ### Git
 
-Code version known?
+Code версія відомий?
 
-### Interpretation
+### інтерпретація
 
 No overclaim?
 
 ---
 
-## 51. Predict before Run
+## 51. Predict до запуск
 
-Before changing config, write:
+до зміною конфігурація, write:
 
-### If replications ↑
+### якщо повторення ↑
 
-What changes?
+що зміни?
 
-### If noise_sd ↑
+### якщо noise_sd ↑
 
-What changes?
+що зміни?
 
-### If seed changes only
+### якщо зерно генератора зміни лише
 
-What changes?
+що зміни?
 
-Expected:
+очікуваний:
 
-- raw observations change;
-- deterministic response unchanged;
-- distribution shape similar in aggregate.
+- первинний спостереження зміна;
+- детермінований відгук unchanged;
+- розподіл shape подібний у aggregate.
 
 ---
 
-## 52. Python без страху: deterministic response
+## 52. Python без страху: детермінований відгук
 
 ~~~python
 y = deterministic_response(
@@ -1228,11 +1228,11 @@ y = deterministic_response(
 assert y == 32
 ~~~
 
-This is direct verification.
+це є direct ПЕРЕВІРКА.
 
 ---
 
-## 53. Python без страху: run experiment
+## 53. Python без страху: запуск experiment
 
 ~~~python
 results = run_experiment(
@@ -1241,7 +1241,7 @@ results = run_experiment(
 )
 ~~~
 
-Expected row count:
+очікуваний рядок count:
 
 \[
 5\times200=1000.
@@ -1249,23 +1249,23 @@ Expected row count:
 
 ---
 
-## 54. Python без страху: summary
+## 54. Python без страху: підсумок
 
 ~~~python
 summary = summarize_results(results)
 ~~~
 
-Output includes:
+результат містить:
 
-- deterministic;
-- mean;
+- детермінований;
+- середнє;
 - std;
 - p10;
 - p90.
 
 ---
 
-## 55. Python без страху: config hash
+## 55. Python без страху: конфігурація хеш
 
 ~~~python
 experiment_id = (
@@ -1273,7 +1273,7 @@ experiment_id = (
 )
 ~~~
 
-Baseline:
+базовий:
 
 ~~~text
 t1_l3_0c5d08ed47eb
@@ -1281,49 +1281,49 @@ t1_l3_0c5d08ed47eb
 
 ---
 
-## 56. Why hash key order stable
+## 56. чому хеш key порядок стійкий
 
-Config:
+конфігурація:
 
 ~~~json
 {"seed":2026,"replications":200}
 ~~~
 
-and:
+і:
 
 ~~~json
 {"replications":200,"seed":2026}
 ~~~
 
-same semantic mapping.
+той самий semantic mapping.
 
-canonical_json sorts keys.
+canonical_json sorts ключі.
 
-Thus same hash.
+отже той самий хеш.
 
-This is unit-tested.
-
----
-
-## 57. Synthetic military context
-
-Suppose \(Y\) is synthetic performance indicator of training-support process.
-
-\(R\) — conditional resource.
-
-\(L\) — conditional workload.
-
-No real unit, no actual operational performance.
-
-The case demonstrates workflow, not real decision recommendation.
+це є перевірено тестами.
 
 ---
 
-## 58. Research Transfer
+## 57. синтетичний military context
 
-Question:
+припустімо \(Y\) є синтетичний результативність indicator training-support process.
 
-> Як організувати computational experiment для одного fragment власної dissertation?
+\(R\) — умовний ресурс.
+
+\(L\) — умовний workload.
+
+No реальний одиниця, no фактичний operational результативність.
+
+ випадок demonstrates робочий процес, не реальний рішення recommendation.
+
+---
+
+## 58. Перенесення в дослідження
+
+питання:
+
+> Як організувати Обчислювальний експеримент для одного fragment власної дисертація?
 
 Template:
 
@@ -1365,245 +1365,245 @@ Allowed conclusion:
 
 ---
 
-## 59. Example transfer: model calibration workflow
+## 59. приклад transfer: model калібрування робочий процес
 
-Imagine dissertation model estimates parameter from synthetic data.
+Imagine дисертація model оцінки параметр з Синтетичні дані.
 
-Reproducible workflow:
+відтворюваний робочий процес:
 
-1. raw data file;
-2. preprocessing script;
-3. calibration config;
-4. seed;
-5. fitted parameters;
+1. первинний дані файл;
+2. preprocessing скрипт;
+3. калібрування конфігурація;
+4. зерно генератора;
+5. підігнаний параметри;
 6. diagnostic plots;
-7. metadata;
-8. commit;
+7. метадані;
+8. коміт;
 9. result table.
 
-T1.L3 structure transfers directly.
+T1.L3 структура переноситься безпосередньо.
 
 ---
 
-## 60. Versioning data
+## 60. Versioning дані
 
-Git works well for small text CSV.
+Git працює well для малий text CSV.
 
-Large or sensitive data may need:
+великий або чутливий дані може need:
 
-- data registry;
+- дані registry;
 - object storage;
 - checksum;
-- access-controlled repository.
+- access-controlled репозиторій.
 
-Important principle remains:
+важливий principle залишається:
 
-> result must reference exact data version.
+> result необхідно reference точний дані версія.
 
 ---
 
-## 61. Sensitive/closed data
+## 61. чутливий/closed дані
 
-In military research, data may not be publishable.
+у military дослідження, дані може не be publishable.
 
-Reproducibility still possible inside controlled environment.
+ВІДТВОРЮВАНІСТЬ усе ще possible всередині контрольоване середовище.
 
 Preserve:
 
-- data version ID;
-- hash;
+- дані версія ID;
+- хеш;
 - schema;
 - access conditions;
-- code/config.
+- code/конфігурація.
 
-Public artifact can use synthetic equivalent while documenting difference.
-
----
-
-## 62. Environment snapshot
-
-Requirements file gives dependency versions.
-
-For stronger reproducibility also record:
-
-- Python version;
-- OS/container image;
-- hardware if relevant;
-- CUDA/GPU for stochastic/numerical workloads where results depend on backend.
-
-Not every experiment needs all details.
-
-Record what can materially change results.
+Public артефакт може використовувати синтетичний equivalent поки documenting різниця.
 
 ---
 
-## 63. Deterministic outputs are not automatically reproducible
+## 62. середовище snapshot
 
-Even deterministic formula can fail reproducibility if:
+Requirements файл дає залежність версії.
 
-- data changed;
-- code changed;
-- config unknown;
-- preprocessing hidden.
+для сильнішого ВІДТВОРЮВАНІСТЬ також record:
 
-Randomness is not the only threat.
+- Python версія;
+- OS/container зображення;
+- hardware якщо суттєвий;
+- CUDA/GPU для стохастичний/чисельний workloads де results depend на backend.
+
+не кожен experiment needs усі details.
+
+Record що може суттєво зміна results.
 
 ---
 
-## 64. Reproducibility levels
+## 63. детермінований результати є не автоматично відтворюваний
 
-### Level 0
+Even детермінований формула може fail ВІДТВОРЮВАНІСТЬ якщо:
 
-Screenshot only.
+- дані змінений;
+- code змінений;
+- конфігурація unknown;
+- preprocessing прихований.
 
-### Level 1
+випадковість є не лише threat.
 
-Notebook + data.
+---
 
-### Level 2
+## 64. ВІДТВОРЮВАНІСТЬ levels
 
-src + config + data + seed.
+### рівень 0
 
-### Level 3
+Screenshot лише.
 
-tests + metadata + Git commit.
+### рівень 1
 
-### Level 4
+ноутбук + дані.
 
-environment + automated pipeline/CI.
+### рівень 2
 
-Course aims toward Level 3–4.
+src + конфігурація + дані + зерно генератора.
+
+### рівень 3
+
+тести + метадані + коміт Git.
+
+### рівень 4
+
+середовище + automated pipeline/CI.
+
+Course aims до рівень 3–4.
 
 <figure>
-  <img src="figures/fig_07_reproducibility_levels.svg" alt="Рівні відтворюваності">
-  <figcaption><strong>Рис. 7.</strong> Reproducibility посилюється шарами: artifact → code/data → config/seed → tests/metadata/Git → automated environment.</figcaption>
+ <img src="figures/fig_07_reproducibility_levels.svg" alt="Рівні відтворюваності">
+ <figcaption><strong>Рис. 7.</strong> ВІДТВОРЮВАНІСТЬ посилюється шарами: артефакт → code/дані → конфігурація/зерно генератора → тести/метадані/Git → automated середовище.</figcaption>
 </figure>
 
 ---
 
-## 65. CI as reproducibility assistant
+## 65. CI як ВІДТВОРЮВАНІСТЬ assistant
 
-Course CI executes tests and notebooks.
+Course CI executes тести і notebooks.
 
-It cannot prove research validity.
+It cannot довести дослідження validity.
 
-But it can detect:
+але it може detect:
 
 - broken imports;
-- changed control values;
-- missing files;
-- non-executable notebook.
+- змінений контрольні значення;
+- missing файли;
+- non-executable ноутбук.
 
-Automation reduces accidental drift.
+Automation зменшує accidental drift.
 
 ---
 
-## 66. Зламай систему: result without identity
+## 66. Зламай систему: result без ідентичність
 
-Suppose summary.csv says:
+припустімо summary.csv says:
 
 ~~~text
 baseline mean_observed=32.29
 ~~~
 
-but no config/hash/commit.
+але no конфігурація/хеш/коміт.
 
-Can we use number?
+може we використовувати кількість?
 
-We can read it.
+We може read it.
 
-Can we defend its provenance?
+може we defend its походження даних і результату?
 
 Weakly.
 
-Thus result without identity is scientifically fragile.
+отже result без ідентичність є scientifically fragile.
 
 ---
 
-## 67. Typical thinking errors
+## 67. типову thinking похибки
 
-### «Якщо код є, результат reproducible»
+### «Якщо код є, результат відтворюваний»
 
-Not enough.
+не достатньо.
 
-### «Same config hash = same experiment»
+### «той самий конфігурація хеш = той самий experiment»
 
-Not if data/code differ.
+не якщо дані/code differ.
 
-### «Git replaces metadata»
-
-No.
-
-Git identifies repository state, metadata identifies run.
-
-### «Seed makes stochastic conclusion true»
+### «Git replaces метадані»
 
 No.
 
-Seed makes run repeatable.
+Git ідентифікує репозиторій state, метадані ідентифікує запуск.
 
-### «Reproducible = valid»
+### «зерно генератора робить стохастичний висновок істинний»
 
 No.
 
-Wrong model can reproduce perfectly.
+зерно генератора робить запуск повторюваний.
+
+### «відтворюваний = valid»
+
+No.
+
+неправильний model може reproduce ідеально.
 
 ---
 
-## 68. Model audit vs workflow audit
+## 68. Model аудит vs робочий процес аудит
 
-### Model audit
+### Model аудит
 
-- formula;
-- assumptions;
-- parameters;
-- adequacy.
+- формула;
+- припущення;
+- параметри;
+- адекватність.
 
-### Workflow audit
+### робочий процес аудит
 
-- files;
-- config;
+- файли;
+- конфігурація;
 - execution;
-- metadata;
+- метадані;
 - versioning.
 
-Strong dissertation computational work needs both.
+сильний дисертація computational працювати needs обидва.
 
 ---
 
 ## 69. One-command principle
 
-A good experiment should have a clear command:
+ good experiment слід мають clear команда:
 
 ~~~bash
 python -m lessons.t1_l3.src.experiment
 ~~~
 
-This reduces hidden manual steps.
+це зменшує прихований ручний кроки.
 
-If full rebuild requires 17 undocumented clicks, reproducibility suffers.
-
----
-
-## 70. Immutable raw inputs
-
-Ideally raw input is not overwritten by experiment.
-
-Derived data goes to outputs.
-
-This preserves source.
-
-For transformations, save script and intermediate if scientifically relevant.
+якщо full rebuild потребує 17 незадокументовані clicks, ВІДТВОРЮВАНІСТЬ suffers.
 
 ---
 
-## 71. Output overwrite issue
+## 70. Immutable первинний вхідні дані
 
-Current lesson writes fixed outputs directory.
+Ideally первинний вхідні дані є не overwritten за допомогою experiment.
 
-For teaching this is simple.
+похідні дані goes до результати.
 
-For research scale, overwriting old experiment may be undesirable.
+це preserves джерело.
+
+для transformations, зберігати скрипт і intermediate якщо scientifically суттєвий.
+
+---
+
+## 71. результат overwrite issue
+
+поточний lesson writes фіксований результати каталог.
+
+для навчальний це є простий.
+
+для дослідження масштаб, overwriting старий experiment може be undesirable.
 
 Modernization:
 
@@ -1611,59 +1611,59 @@ Modernization:
 outputs/<experiment_id>/
 ~~~
 
-or timestamp + hash.
+або позначка часу + хеш.
 
-Then runs coexist.
+тоді запуски coexist.
 
 ---
 
 ## 72. Experiment registry
 
-A small CSV/JSON index can contain:
+ малий CSV/JSON index може contain:
 
 - experiment_id;
 - date;
-- commit;
-- config;
+- коміт;
+- конфігурація;
 - note;
 - status.
 
-This helps large dissertation projects.
+це helps великий дисертація projects.
 
-Not required baseline, but natural extension.
+не required базовий, але natural extension.
 
 ---
 
-## 73. Allowed conclusion
+## 73. Допустимий висновок
 
-Strong:
+сильний:
 
-> For config hash 0c5d08ed47eb, seed 2026 and five scenarios with 200 replications each, baseline deterministic response is 32 and mean observed is approximately 32.29. The result is reproducible for the same code, config, scenario data and software environment.
+> для конфігурація хеш 0c5d08ed47eb, зерно генератора 2026 і five сценарії з 200 повторення кожен, базовий детермінований відгук є 32 і середнє спостережуваний є приблизно 32.29. result є відтворюваний для той самий code, конфігурація, сценарій дані і програмне середовище.
 
-Also state:
+також state:
 
-> This does not validate linear resource/load assumptions.
+> це робить не validate лінійний ресурс/навантаження припущення.
 
 ---
 
 ## 74. Від MiniBook до practice
 
-Before practical:
+до практичний:
 
-1. run baseline;
+1. запуск базовий;
 2. record experiment_id;
-3. verify Y=32;
-4. rerun and compare results;
-5. change only seed;
-6. change config;
-7. add scenarios;
-8. record Git commit.
+3. перевірити Y=32;
+4. rerun і порівнювати results;
+5. зміна лише зерно генератора;
+6. зміна конфігурація;
+7. add сценарії;
+8. record коміт Git.
 
 ---
 
-## 75. Research artifact passport
+## 75. дослідження артефакт passport
 
-Create for each important result:
+Create для кожен важливий result:
 
 ~~~text
 Result:
@@ -1681,15 +1681,15 @@ Limitations:
 Publication use:
 ~~~
 
-This is practical dissertation discipline.
+це є практичний дисертація discipline.
 
 ---
 
-## 76. Workflow architecture
+## 76. робочий процес architecture
 
 <figure>
-  <img src="figures/fig_08_project_architecture.svg" alt="Архітектура reproducible project">
-  <figcaption><strong>Рис. 8.</strong> Хороша структура розділяє source code, inputs, config, notebooks і generated outputs. Кожен шар має власну responsibility.</figcaption>
+ <img src="figures/fig_08_project_architecture.svg" alt="Архітектура reproducible project">
+ <figcaption><strong>Рис. 8.</strong> Хороша структура розділяє джерело code, вхідні дані, конфігурація, notebooks і згенерований результати. Кожен шар має власну responsibility.</figcaption>
 </figure>
 
 Recommended:
@@ -1708,39 +1708,39 @@ Git
 
 ---
 
-## Поглиблення: reproducibility має кілька рівнів identity
+## Поглиблення: ВІДТВОРЮВАНІСТЬ має кілька рівнів ідентичність
 
-У baseline experiment_id залежить від config.
+У базовий experiment_id залежить від конфігурація.
 
-Але повний computational result depends on broader state.
+Але повний computational result залежить на broader state.
 
 Корисно мислити шарами.
 
-### Config identity
+### конфігурація ідентичність
 
 \[
 ID_{config}=Hash(config).
 \]
 
-### Data identity
+### дані ідентичність
 
 \[
 ID_{data}=Hash(input\ files).
 \]
 
-### Code identity
+### Code ідентичність
 
-Git commit:
+коміт Git:
 
 \[
 ID_{code}=commit\ SHA.
 \]
 
-### Environment identity
+### середовище ідентичність
 
-Dependency lock / container digest.
+залежність lock / container digest.
 
-### Run identity
+### запуск ідентичність
 
 Може комбінувати:
 
@@ -1755,57 +1755,57 @@ ID_{env}
 ).
 \]
 
-Course implementation intentionally simpler.
+Course реалізація intentionally simpler.
 
-Але ця hierarchy показує шлях розвитку dissertation infrastructure.
-
----
-
-## Поглиблення: why Git commit alone is not enough
-
-Git commit tells exact repository state only if:
-
-- all relevant files tracked;
-- no uncommitted changes;
-- external data version known;
-- environment known.
-
-If local script modified but not committed, commit SHA points to another state.
-
-Therefore a publication run should ideally start from a clean working tree.
-
-If not, this is a reproducibility limitation.
+Але ця hierarchy показує шлях розвитку дисертація інфраструктура.
 
 ---
 
-## Поглиблення: dirty working tree
+## Поглиблення: чому коміт Git самостійно є не достатньо
+
+коміт Git tells точний репозиторій state лише якщо:
+
+- усі суттєвий файли tracked;
+- no uncommitted зміни;
+- external дані версія відомий;
+- середовище відомий.
+
+якщо локальний скрипт modified але не committed, коміт SHA точки до інший state.
+
+тому публікація запуск слід ideally початок з clean робочий tree.
+
+якщо не, це є ВІДТВОРЮВАНІСТЬ limitation.
+
+---
+
+## Поглиблення: незбережені зміни робочого дерева
 
 Imagine:
 
-- commit = abc123;
-- model.py edited locally;
-- experiment run;
-- change not committed.
+- коміт = abc123;
+- model.py відредаговані locally;
+- experiment запуск;
+- зміна не committed.
 
-Metadata records abc123.
+метадані фіксує abc123.
 
-Later checkout abc123 gives old model.
+пізніше checkout abc123 дає старий model.
 
-Result cannot be reproduced exactly.
+Result cannot be reproduced точно.
 
 Possible improvement:
 
-- refuse publication run when repo dirty;
+- refuse публікація запуск коли repo dirty;
 - record diff;
 - auto-capture patch.
 
-For course, awareness is enough.
+для course, awareness є достатньо.
 
 ---
 
-## Поглиблення: input data hashing
+## Поглиблення: вхідні дані дані хешування
 
-Config hash protects config.
+конфігурація хеш захищає конфігурація.
 
 Add:
 
@@ -1813,46 +1813,46 @@ Add:
 h_{data}=SHA256(file\ bytes).
 \]
 
-Then metadata can include a scenario-data checksum.
+тоді метадані може включати scenario-data checksum.
 
-Now scenario change detectable even if filename same.
+Now сценарій зміна detectable even якщо filename той самий.
 
-This directly fixes one break-the-workflow case.
+це безпосередньо fixes один break-the-workflow випадок.
 
 ---
 
-## Поглиблення: code version in metadata
+## Поглиблення: code версія у метадані
 
-Current metadata note says reproducible for same code/config/data/environment.
+поточний метадані note says відтворюваний для той самий code/конфігурація/дані/середовище.
 
-A stronger implementation could automatically query the Git commit and store it.
+ сильнішого реалізація could автоматично query коміт Git і store it.
 
-If Git unavailable, metadata should state:
+якщо Git недоступний, метадані слід state:
 
 ~~~text
 git_commit: unavailable
 ~~~
 
-rather than invent certainty.
+rather ніж invent certainty.
 
 ---
 
-## Поглиблення: dependency snapshot
+## Поглиблення: залежність snapshot
 
-Pinned requirements in repository help.
+Pinned requirements у репозиторій допомагають.
 
-But installed environment can still differ if user ignores them.
+але installed середовище може усе ще differ якщо user ignores them.
 
-A run can record:
+ запуск може record:
 
 ~~~text
 python --version
 pip freeze
 ~~~
 
-or selected critical versions.
+або selected критичний версії.
 
-For scientific work useful fields include:
+для науковий працювати корисний fields включати:
 
 - Python;
 - NumPy;
@@ -1861,35 +1861,35 @@ For scientific work useful fields include:
 - SymPy;
 - Matplotlib.
 
-For GPU workflows also backend versions.
+для GPU workflows також backend версії.
 
 ---
 
-## Поглиблення: environment reproducibility vs portability
+## Поглиблення: середовище ВІДТВОРЮВАНІСТЬ vs portability
 
-Exact environment replication is strong but can become brittle over years.
+точний середовище повторення є сильний але може become brittle над years.
 
-Alternative goal:
+альтернатива goal:
 
-> portable reproducibility.
+> portable ВІДТВОРЮВАНІСТЬ.
 
-That means code works under a documented version range, with tests verifying outputs/tolerances.
+що означає code працює за documented версія діапазон, з тести verifying результати/tolerances.
 
-There is a trade-off between freezing everything exactly and maintaining a portable tested package.
+там є trade-off між freezing everything точно і maintaining portable tested пакет.
 
-Course chooses pinned stack for educational stability.
+Course chooses pinned stack для educational стійкість.
 
 ---
 
-## Поглиблення: raw data should be immutable
+## Поглиблення: первинний дані слід be immutable
 
-A strong rule:
+ сильний rule:
 
-> raw input is never overwritten by experiment.
+> первинний вхідні дані є ніколи overwritten за допомогою experiment.
 
-Why?
+чому?
 
-If the same file is modified in-place, historical result loses source.
+якщо той самий файл є modified in-place, historical result loses джерело.
 
 Prefer:
 
@@ -1899,145 +1899,145 @@ data/processed/
 outputs/
 ~~~
 
-Transformation script creates processed data from raw.
+Transformation скрипт creates processed дані з первинний.
 
-Then provenance is explicit.
-
----
-
-## Поглиблення: preprocessing is part of model pipeline
-
-Researchers sometimes think:
-
-> preprocessing is just preparation.
-
-But filtering, imputation, normalization and aggregation can change results.
-
-Therefore preprocessing code belongs in reproducibility chain.
-
-If a CSV is manually cleaned in a spreadsheet and overwritten, provenance weakens.
+тоді походження даних і результату є явний.
 
 ---
 
-## Поглиблення: experiment config schema
+## Поглиблення: preprocessing є part model pipeline
 
-JSON config is useful, but can contain invalid types.
+Researchers інколи think:
 
-For larger project define schema:
+> preprocessing є just preparation.
 
-- required keys;
-- type constraints;
+але filtering, imputation, нормалізація і агрегування може зміна results.
+
+тому preprocessing code belongs у ВІДТВОРЮВАНІСТЬ chain.
+
+якщо CSV є manually cleaned у spreadsheet і overwritten, походження даних і результату weakens.
+
+---
+
+## Поглиблення: experiment конфігурація schema
+
+JSON конфігурація є корисний, але може contain invalid типи.
+
+для larger проєкт визначити schema:
+
+- required ключі;
+- тип обмеження;
 - allowed ranges;
 - defaults.
 
-Current validate_config checks:
+поточний validate_config перевірки:
 
-- seed;
-- replications;
+- зерно генератора;
+- повторення;
 - model;
-- positive replications;
-- nonnegative noise_sd.
+- додатний повторення;
+- невід’ємні noise_sd.
 
-This is first step toward schema validation.
-
----
-
-## Поглиблення: why explicit validation matters
-
-Without validation a negative replication count or negative noise value could fail strangely later.
-
-Validation creates early, meaningful error.
-
-This is part of scientific quality.
-
-Bad inputs should be rejected before expensive computation.
+це є спочатку крок до schema валідація.
 
 ---
 
-## Поглиблення: output determinism
+## Поглиблення: чому явний валідація має значення
 
-For same config/data/code/seed baseline raw DataFrame should be identical.
+без валідація від’ємний повторення count або від’ємний шум значення could fail strangely пізніше.
 
-Test:
+валідація creates early, meaningful похибка.
+
+це є part науковий якість.
+
+Bad вхідні дані слід be rejected до expensive computation.
+
+---
+
+## Поглиблення: результат determinism
+
+для той самий конфігурація/дані/code/зерно генератора базовий первинний DataFrame слід be identical.
+
+тест:
 
 ~~~python
 pd.testing.assert_frame_equal(a, b)
 ~~~
 
-This is stronger than saying that means are close.
+це є сильнішого ніж saying що означає є close.
 
-It checks exact computational repeatability.
+It перевірки точний computational repeatability.
 
-For some parallel/GPU workflows bitwise identity may not be realistic.
+для деяких parallel/GPU workflows bitwise ідентичність може не be realistic.
 
-Then reproducibility criterion must use tolerances.
-
----
-
-## Поглиблення: exact vs statistical reproducibility
-
-### Exact
-
-Same raw numbers.
-
-Appropriate for this CPU pseudo-random workflow.
-
-### Numerical
-
-Differences within tolerance.
-
-Common for floating-point solvers.
-
-### Statistical
-
-Different draws but same distribution-level conclusions.
-
-Common for stochastic HPC.
-
-Before claiming reproducibility define which level intended.
+тоді ВІДТВОРЮВАНІСТЬ критерій необхідно використовувати tolerances.
 
 ---
 
-## Поглиблення: experiment registry design
+## Поглиблення: точний vs статистичну ВІДТВОРЮВАНІСТЬ
 
-When dissertation has many runs, one metadata file per output directory is not enough for overview.
+### точний
+
+той самий первинний numbers.
+
+Appropriate для це CPU псевдовипадковий робочий процес.
+
+### чисельний
+
+Differences у межах допуск.
+
+Common для floating-point solvers.
+
+### статистичну
+
+різний draws але той самий distribution-level висновки.
+
+Common для стохастичний HPC.
+
+до claiming ВІДТВОРЮВАНІСТЬ визначити який рівень intended.
+
+---
+
+## Поглиблення: experiment registry план
+
+коли дисертація має багато запуски, один метадані файл на результат каталог є не достатньо для overview.
 
 Create registry:
 
-| experiment_id | commit | config | data | purpose | status |
+| experiment_id | коміт | конфігурація | дані | purpose | status |
 |---|---|---|---|---|---|
-| exp001 | abc | cfg1 | d1 | baseline | accepted |
-| exp002 | def | cfg2 | d1 | sensitivity | exploratory |
+| exp001 | abc | cfg1 | d1 | базовий | accepted |
+| exp002 | def | cfg2 | d1 | чутливість | exploratory |
 
-This prevents “which run was final?” confusion.
+це prevents “який запуск було кінцевий?” confusion.
 
 ---
 
-## Поглиблення: exploratory vs confirmatory runs
+## Поглиблення: exploratory vs confirmatory запуски
 
-During exploration researcher tries many configs.
+During exploration дослідник tries багато configs.
 
-Later select analysis plan.
+пізніше select аналіз plan.
 
-It is useful to mark:
+It є корисний до mark:
 
 - exploratory;
-- validation;
-- final/publication.
+- валідація;
+- кінцевий/публікація.
 
-Otherwise result selection can be opaque.
+Otherwise result selection може be opaque.
 
-Metadata can include purpose tag.
+метадані може включати purpose tag.
 
 ---
 
-## Поглиблення: publication artifact mapping
+## Поглиблення: публікаційний артефакт mapping
 
-Suppose dissertation contains:
+припустімо дисертація містить:
 
 - Table 3.2;
 - Figure 3.4;
-- metric in paragraph.
+- показник у paragraph.
 
 Create mapping:
 
@@ -2046,15 +2046,15 @@ Figure 3.4 -> experiment_id X -> script Y -> output Z
 Table 3.2  -> experiment_id Q -> summary.csv
 ~~~
 
-Then revision becomes manageable.
+тоді revision стає manageable.
 
 ---
 
-## Поглиблення: one source of truth for figures
+## Поглиблення: один еталонна реалізація для figures
 
-Do not copy values manually from terminal into Excel, then chart.
+робити не copy значення manually з terminal у Excel, тоді chart.
 
-Better:
+кращий:
 
 \[
 data
@@ -2064,71 +2064,71 @@ script
 figure.
 \]
 
-If style adjustment needed, script controls it.
+якщо style adjustment потрібні, скрипт controls it.
 
-This keeps numbers linked to computation.
+це зберігає numbers linked до computation.
 
 ---
 
-## Поглиблення: checksums for publication artifacts
+## Поглиблення: checksums для публікація артефакти
 
-For final figure or table, optional checksum can prove file identity.
+для кінцевий figure або table, optional checksum може довести файл ідентичність.
 
-For example:
+для приклад:
 
 \[
 SHA256(figure.png).
 \]
 
-This may be overkill for classroom use.
+це може be overkill для classroom використовувати.
 
-But useful in audited pipelines.
+але корисний у audited pipelines.
 
 ---
 
-## Поглиблення: reproducibility under closed-data constraints
+## Поглиблення: ВІДТВОРЮВАНІСТЬ за closed-data обмеження
 
-Military and defence research may have data that cannot leave secure environment.
+Military і defence дослідження може мають дані що cannot leave secure середовище.
 
-Reproducibility can still be designed.
+ВІДТВОРЮВАНІСТЬ може усе ще be designed.
 
-Inside secure network preserve:
+всередині secure мережевий preserve:
 
-- exact raw data;
-- version/hash;
+- точний первинний дані;
+- версія/хеш;
 - scripts;
-- config;
-- environment;
-- outputs;
+- конфігурація;
+- середовище;
+- результати;
 - access rules.
 
-Outside secure network publish:
+поза secure мережевий publish:
 
-- synthetic dataset;
+- синтетичний dataset;
 - schema;
-- method;
-- limitations.
+- метод;
+- обмеження.
 
-Do not confuse public reproducibility with internal reproducibility.
-
----
-
-## Поглиблення: synthetic twin dataset
-
-A useful pattern:
-
-1. confidential real dataset used in secure analysis;
-2. synthetic dataset preserves structure, not sensitive values;
-3. public repo demonstrates workflow;
-4. secure metadata links internal result to real data version.
-
-This supports teaching and method transparency without disclosing sensitive content.
+робити не confuse public ВІДТВОРЮВАНІСТЬ з internal ВІДТВОРЮВАНІСТЬ.
 
 ---
 
-## Поглиблення: provenance graph
+## Поглиблення: синтетичний twin dataset
 
-Conceptually provenance forms graph:
+ корисний шаблон:
+
+1. confidential реальний dataset використано у secure аналіз;
+2. синтетичний dataset preserves структура, не чутливий значення;
+3. public repo demonstrates робочий процес;
+4. secure метадані links internal result до реальні дані версія.
+
+це підтримує навчальний і метод transparency без disclosing чутливий content.
+
+---
+
+## Поглиблення: походження даних і результату граф
+
+концептуально походження даних і результату форми граф:
 
 \[
 Data
@@ -2140,7 +2140,7 @@ Output
 Publication.
 \]
 
-And:
+і:
 
 \[
 Code+Config
@@ -2148,167 +2148,167 @@ Code+Config
 Experiment.
 \]
 
-Metadata stores the edges.
+метадані stores edges.
 
-This graph is a useful mental model for dissertation computational work.
+це граф є корисний mental model для дисертація computational працювати.
 
 ---
 
-## Поглиблення: why notebook outputs should not be trusted blindly
+## Поглиблення: чому ноутбук результати слід не be trusted blindly
 
-Notebook cell can display result from old kernel state even if code cell later edited.
+ноутбук cell може display result з старий kernel state even якщо code cell пізніше відредаговані.
 
-Therefore final notebook should be:
+тому кінцевий ноутбук слід be:
 
 1. restart kernel;
-2. run all;
-3. verify no error;
-4. compare key outputs;
-5. save executed version.
+2. запуск усі;
+3. перевірити no похибка;
+4. порівнювати key результати;
+5. зберігати виконані версія.
 
-Course smoke execution supports this discipline.
-
----
-
-## Поглиблення: CI is not a substitute for local provenance
-
-CI says repository version passes checks.
-
-But if publication result was produced locally with uncommitted changes, CI cannot know.
-
-Thus CI and metadata complement each other.
+Course smoke execution підтримує це discipline.
 
 ---
 
-## Поглиблення: failure recovery
+## Поглиблення: CI є не substitute для локальний походження даних і результату
 
-Reproducible workflow also helps when experiment fails.
+CI says репозиторій версія passes перевірки.
 
-If run produces unexpected result, compare:
+але якщо публікація result було produced locally з uncommitted зміни, CI cannot know.
 
-- config diff;
-- data diff;
-- commit diff;
-- dependency diff.
+отже CI і метадані complement кожен інший.
 
-Without provenance troubleshooting becomes guessing.
+---
+
+## Поглиблення: відмова recovery
+
+відтворюваний робочий процес також helps коли experiment fails.
+
+якщо запуск produces unexpected result, порівнювати:
+
+- конфігурація diff;
+- дані diff;
+- коміт diff;
+- залежність diff.
+
+без походження даних і результату troubleshooting стає guessing.
 
 ---
 
 ## Поглиблення: experiment comparison
 
-Two experiments should be compared by explicit differences.
+Two experiments слід be compared за допомогою явний differences.
 
-Example:
+приклад:
 
 ~~~text
 A: seed=2026, noise_sd=4, reps=200
 B: seed=2026, noise_sd=8, reps=200
 ~~~
 
-Then causal interpretation is clearer because only one factor changed.
+тоді causal інтерпретація є зрозуміліше тому що лише один фактор змінений.
 
-If many parameters change simultaneously, attribution weakens.
+якщо багато параметри зміна simultaneously, attribution weakens.
 
-This is computational experimental design.
+це є computational experimental план.
 
 ---
 
-## Поглиблення: controlled change principle
+## Поглиблення: контрольоване зміна principle
 
-One-factor change is not always scientifically sufficient, but pedagogically useful.
+One-factor зміна є не завжди scientifically sufficient, але pedagogically корисний.
 
-It allows:
+It дозволяє:
 
 \[
 \Delta output
 \]
 
-to be associated with one parameter change.
+до be associated з один параметр зміна.
 
-For complex interactions use factorial or scenario designs.
+для complex interactions використовувати factorial або сценарій designs.
 
-The key is explicit design.
-
----
-
-## Поглиблення: metadata should describe purpose, not only mechanics
-
-Technical metadata:
-
-- seed;
-- hash;
-- versions.
-
-Scientific metadata:
-
-- research question;
-- scenario meaning;
-- expected effect;
-- acceptance criterion.
-
-Both matter.
-
-A perfectly identified run with unknown purpose is still hard to interpret.
+ key є явний план.
 
 ---
 
-## Поглиблення: reproducibility debt
+## Поглиблення: метадані слід describe purpose, не лише mechanics
 
-Just as software has technical debt, research can accumulate reproducibility debt.
+Technical метадані:
+
+- зерно генератора;
+- хеш;
+- версії.
+
+науковий метадані:
+
+- Дослідницьке питання;
+- сценарій зміст;
+- очікуваний ефект;
+- acceptance критерій.
+
+обидва matter.
+
+ ідеально identified запуск з unknown purpose є усе ще hard до interpret.
+
+---
+
+## Поглиблення: ВІДТВОРЮВАНІСТЬ debt
+
+Just як програмний має technical debt, дослідження може accumulate ВІДТВОРЮВАНІСТЬ debt.
 
 Examples:
 
-- unnamed files;
-- manual changes;
+- unnamed файли;
+- ручний зміни;
 - missing seeds;
-- undocumented configs;
-- screenshots without source;
-- notebooks with hidden state.
+- незадокументовані configs;
+- screenshots без джерело;
+- notebooks з прихований state.
 
-Debt grows with time.
+Debt зростає з час.
 
-T1.L3 aims to prevent it early in PhD workflow.
+T1.L3 aims до prevent it early у PhD робочий процес.
 
 ---
 
-## Поглиблення: minimum viable reproducibility package
+## Поглиблення: мінімум viable ВІДТВОРЮВАНІСТЬ пакет
 
-If time limited, preserve at least:
+якщо час limited, preserve у least:
 
-1. README command;
+1. README команда;
 2. code;
-3. input data;
-4. config;
-5. seed;
-6. tests;
-7. metadata;
-8. commit SHA;
-9. dependency file.
+3. вхідні дані дані;
+4. конфігурація;
+5. зерно генератора;
+6. тести;
+7. метадані;
+8. коміт SHA;
+9. залежність файл.
 
-This small package gives large benefit.
+це малий пакет дає великий benefit.
 
 ---
 
 ## Поглиблення: publication-grade experiment
 
-A classroom experiment is reproducible when files rerun.
+ classroom experiment є відтворюваний коли файли rerun.
 
-A publication-grade experiment should additionally answer:
+ publication-grade experiment слід additionally відповідати:
 
-- which result entered which table/figure?
-- who/what generated it?
-- under which code state?
-- was the repository clean?
-- were dependencies recorded?
-- were source data immutable?
-- can artifact be regenerated automatically?
+- який result entered який table/figure?
+- хто/що згенерований it?
+- за який code state?
+- було репозиторій clean?
+- були залежності зафіксований?
+- були джерело дані immutable?
+- може артефакт be regenerated автоматично?
 
-This adds traceability from computation to publication.
+це adds traceability з computation до публікація.
 
 ---
 
-## Поглиблення: artifact manifest
+## Поглиблення: маніфест артефактів
 
 Create manifest:
 
@@ -2323,45 +2323,45 @@ checksum:
 publication_target:
 ~~~
 
-Then figure/table becomes first-class research artifact.
+тоді figure/table стає first-class дослідження артефакт.
 
 ---
 
 ## Поглиблення: pipeline idempotence
 
-Run pipeline twice with same inputs.
+запуск pipeline twice з той самий вхідні дані.
 
-Expected:
+очікуваний:
 
-- same raw results;
-- same summary;
-- same metadata;
-- same figures, modulo non-semantic metadata.
+- той самий Первинні результати;
+- той самий підсумок;
+- той самий метадані;
+- той самий figures, modulo non-semantic метадані.
 
-This property is called idempotent/repeatable behavior in practical terms.
+це property є called idempotent/повторюваний поведінку у практичний terms.
 
-If rerun accumulates duplicate rows or changes result, workflow needs correction.
-
----
-
-## Поглиблення: side effects
-
-Dangerous experiment script may:
-
-- overwrite raw data;
-- modify config;
-- depend on current working directory;
-- append to old output.
-
-Good runner should minimize side effects.
-
-Outputs should go to designated location only.
+якщо rerun accumulates duplicate рядки або зміни result, робочий процес needs correction.
 
 ---
 
-## Поглиблення: relative paths
+## Поглиблення: побічні ефекти
 
-Using paths relative to script/project improves portability.
+небезпечний experiment скрипт може:
+
+- overwrite первинний дані;
+- modify конфігурація;
+- depend на поточний робочий каталог;
+- append до старий результат.
+
+Good runner слід minimize побічні ефекти.
+
+результати слід go до designated location лише.
+
+---
+
+## Поглиблення: відносні шляхи
+
+використання шляхи відносний до скрипт/проєкт покращує portability.
 
 Hard-coded:
 
@@ -2369,17 +2369,17 @@ Hard-coded:
 C:\Users\Name\Desktop\data.csv
 ~~~
 
-breaks on another machine.
+breaks на інший machine.
 
-Project-relative path supports cloning.
+Project-relative шлях підтримує cloning.
 
 ---
 
-## Поглиблення: timestamp is not identity
+## Поглиблення: позначка часу є не ідентичність
 
-Timestamp tells when run happened.
+позначка часу tells коли запуск happened.
 
-It does not tell what parameters were used.
+It робить не tell що параметри були використано.
 
 So:
 
@@ -2387,15 +2387,15 @@ So:
 run_2026_09_27
 ~~~
 
-is weaker than config/data/code hash identity.
+є weaker ніж конфігурація/дані/code хеш ідентичність.
 
-Timestamp can supplement, not replace provenance.
+позначка часу може supplement, не замінює походження даних і результату.
 
 ---
 
-## Поглиблення: human-readable label + hash
+## Поглиблення: зрозумілий людині label + хеш
 
-Best of both:
+найкращий обидва:
 
 ~~~text
 baseline_noise4_0c5d08ed47eb
@@ -2403,7 +2403,7 @@ baseline_noise4_0c5d08ed47eb
 
 Human understands purpose.
 
-Hash ensures exact config identity.
+хеш ensures точний конфігурація ідентичність.
 
 ---
 
@@ -2414,86 +2414,86 @@ Future improvement:
 experiment runner creates:
 
 - results;
-- summary;
-- metadata;
+- підсумок;
+- метадані;
 - figures;
 - short Markdown report.
 
-Then publication draft references generated artifacts.
+тоді публікація draft references згенерований артефакти.
 
-This reduces manual transcription errors.
+це зменшує ручний transcription похибки.
 
 ---
 
-## Поглиблення: provenance as graph database idea
+## Поглиблення: походження даних і результату як граф database idea
 
-For large research program provenance could be represented as graph:
+для великий дослідження program походження даних і результату could be represented як граф:
 
-- data node;
+- дані node;
 - model node;
 - experiment node;
-- artifact node;
-- publication node.
+- артефакт node;
+- публікація node.
 
 Edges:
 
-- uses;
-- generated;
+- використовує;
+- згенерований;
 - derived_from;
 - cited_in.
 
-You do not need Neo4j for T1.L3.
+You робити не need Neo4j для T1.L3.
 
-But thinking in graph terms clarifies traceability.
+але thinking у граф terms clarifies traceability.
 
 ---
 
-## Поглиблення: reproducibility review before submission
+## Поглиблення: ВІДТВОРЮВАНІСТЬ review до submission
 
-Before submitting article/dissertation chapter:
+до submitting article/дисертація chapter:
 
-1. clone repository fresh;
-2. create environment from requirements;
-3. run tests;
-4. run experiment;
-5. regenerate outputs;
-6. compare key metrics/artifacts;
-7. verify citations point to correct run.
+1. clone репозиторій fresh;
+2. create середовище з requirements;
+3. запуск тести;
+4. запуск experiment;
+5. regenerate результати;
+6. порівнювати key metrics/артефакти;
+7. перевірити citations точка до правильний запуск.
 
-This is practical pre-publication QA.
+це є практичний pre-publication QA.
 
 ---
 
 ## Поглиблення: archival longevity
 
-GitHub repository may change.
+GitHub репозиторій може зміна.
 
-For final research archive consider:
+для кінцевий дослідження archive consider:
 
 - tagged release;
 - DOI archive;
-- institutional repository;
+- institutional репозиторій;
 - checksum bundle.
 
-Course repository teaches workflow; dissertation preservation may require longer-term archive.
+Course репозиторій teaches робочий процес; дисертація preservation може потребувати longer-term archive.
 
 ---
 
-## Поглиблення: reproducibility and human-readable documentation
+## Поглиблення: ВІДТВОРЮВАНІСТЬ і зрозумілий людині документація
 
-Machine metadata alone insufficient.
+Machine метадані самостійно недостатньою.
 
-README should explain:
+README слід explain:
 
 - purpose;
-- command;
-- inputs;
-- outputs;
-- limitations.
+- команда;
+- вхідні дані;
+- результати;
+- обмеження.
 
-Future researcher may understand JSON hash but not why experiment exists.
+Future дослідник може understand JSON хеш але не чому experiment exists.
 
-Scientific reproducibility requires technical and conceptual documentation.
+науковий ВІДТВОРЮВАНІСТЬ потребує technical і conceptual документація.
 
 ---
 
@@ -2501,27 +2501,27 @@ Scientific reproducibility requires technical and conceptual documentation.
 
 ### П’ять головних ідей
 
-1. Reproducibility is workflow property.
-2. Model and experiment configuration are different.
-3. Seed, data, config and code version all matter.
-4. Metadata gives run identity.
-5. Reproducibility does not prove adequacy.
+1. ВІДТВОРЮВАНІСТЬ є робочий процес property.
+2. Model і experiment конфігурація є різний.
+3. зерно генератора, дані, конфігурація і code версія усі matter.
+4. метадані дає запуск ідентичність.
+5. ВІДТВОРЮВАНІСТЬ робить не довести адекватність.
 
 ### Три правила
 
-Manual baseline:
+ручний базовий:
 
 \[
 Y=20+1.8R-1.2L.
 \]
 
-Observed:
+спостережуваний:
 
 \[
 Y^{obs}=\max(0,Y+\varepsilon).
 \]
 
-Experiment identity:
+ідентичність експерименту:
 
 \[
 ID=f(Hash(config)).
@@ -2529,16 +2529,16 @@ ID=f(Hash(config)).
 
 ### Дві помилки
 
-- config hash alone = full experiment identity;
-- notebook exists = reproducible.
+- конфігурація хеш самостійно = full ідентичність експерименту;
+- ноутбук exists = відтворюваний.
 
 ### Одне питання
 
-> Чи можу я через шість місяців перебудувати конкретний figure із dissertation без ручного guessing?
+> Чи можу я через шість місяців перебудувати конкретний figure із дисертація без ручного guessing?
 
 ### Наступний крок
 
-Run baseline twice, change only seed, then document experiment ID and commit.
+запуск базовий twice, зміна лише зерно генератора, тоді document experiment ID і коміт.
 
 ---
 
@@ -2546,17 +2546,17 @@ Run baseline twice, change only seed, then document experiment ID and commit.
 
 Складна математика не рятує слабко організований experiment.
 
-І навпаки — навіть проста model може стати сильним research artifact, якщо:
+І навпаки — навіть проста model може стати сильним дослідження артефакт, якщо:
 
-- inputs explicit;
-- config external;
-- randomness controlled;
-- verification present;
-- outputs generated;
-- metadata saved;
-- code version known.
+- вхідні дані явний;
+- конфігурація external;
+- випадковість контрольоване;
+- ПЕРЕВІРКА present;
+- результати згенерований;
+- метадані saved;
+- code версія відомий.
 
-Тому T1.L3 навчає не «як написати ще один Python script».
+Тому T1.L3 навчає не «як написати ще один Python скрипт».
 
 Він навчає:
 

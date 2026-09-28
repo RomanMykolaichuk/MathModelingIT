@@ -1,45 +1,45 @@
-# MathModelingIT MiniBook T2.L7
+# MathModelingIT · Мінікнига T2.L7
 
 ## Використання систем комп’ютерної математики в наукових дослідженнях
 
 ### Від шумних спостережень до відтворюваного наукового висновку
 
-> **Головна ідея книги:** науковий computational result — це не fitted curve і не одне число RMSE. Це ланцюг evidence: research question → hypothesis → data → model → calibration → verification → prediction → sensitivity → uncertainty → reproducibility → обережний scientific claim.
+> **Головна ідея книги:** науковий computational result — це не підігнана крива і не одне число RMSE. Це ланцюг докази: Дослідницьке питання → гіпотеза → дані → model → калібрування → ПЕРЕВІРКА → ПРОГНОЗ → чутливість → невизначеність → ВІДТВОРЮВАНІСТЬ → обережний науковий висновок.
 
 ---
 
 ## 0. Паспорт книги
 
-**Код заняття:** T2.L7  
-**Тип:** інтеграційний mini-research project  
-**Рівень:** підвищений  
+**Код заняття:** T2.L7 
+**Тип:** інтеграційний mini-research проєкт 
+**Рівень:** підвищений 
 **Орієнтовний час читання:** 80–95 хвилин.
 
 Після книги ви повинні вміти:
 
-- формулювати research question і testable hypothesis;
-- відокремлювати observations від model trajectory;
-- калібрувати \(q,k\) методом nonlinear least squares;
+- формулювати Дослідницьке питання і перевірювана гіпотеза;
+- відокремлювати спостереження від model траєкторія;
+- калібрувати \(q,k\) методом нелінійний метод найменших квадратів;
 - інтерпретувати RMSE без overclaim;
-- будувати fitted trajectory;
-- незалежно verify analytical solution через solve_ivp;
-- прогнозувати threshold time і horizon state;
-- виконувати scenario sensitivity по \(q\);
-- пояснювати residual bootstrap;
-- відрізняти uncertainty of recalibration від robustness fixed decision;
-- інтерпретувати finite/nonfinite threshold outcomes;
-- формувати deterministic experiment identity;
-- писати scientific conclusion, що не сильніший за evidence.
+- будувати підігнана траєкторія;
+- незалежно перевірити Аналітичний розв’язок через solve_ivp;
+- прогнозувати Час досягнення порогу і Стан на горизонті;
+- виконувати сценарій чутливість по \(q\);
+- пояснювати Бутстреп за нев’язками;
+- відрізняти невизначеність повторне калібрування від стійкість фіксоване рішення;
+- інтерпретувати скінченний/нескінченний поріг результати;
+- формувати детермінований ідентичність експерименту;
+- писати Науковий висновок, що не сильніший за докази.
 
 ---
 
 ## 1. Сцена: «Модель красиво підігнала дані. Чи можемо ми їй довіряти?»
 
-Уявімо, що є synthetic observations dynamic state.
+Уявімо, що є синтетичні спостереження динамічний state.
 
-На графіку dots лежать близько до smooth curve.
+На графіку dots лежать близько до гладку curve.
 
-Researcher запускає least_squares.
+дослідник запускає least_squares.
 
 Отримує:
 
@@ -53,56 +53,56 @@ RMSE\approx1.48.
 
 > «Модель підтверджена».
 
-Але одразу виникають questions:
+Але одразу виникають питання:
 
-- які parameters estimated?
-- чи parameter values stable?
-- чи fitted formula independently verified?
-- яка uncertainty threshold prediction?
+- які параметри оцінений?
+- чи параметр значення стійкий?
+- чи підігнаний формула independently перевірена?
+- яка невизначеність поріг ПРОГНОЗ?
 - що станеться, якщо \(q\) зміниться?
-- чи bootstrap interval conditional on chosen model?
-- чи можна exact experiment reproduce?
-- чи small RMSE distinguishes alternative model structures?
+- чи бутстреп-інтервал умовний на обраний model?
+- чи можна точний experiment reproduce?
+- чи малий RMSE розрізняє альтернатива model structures?
 
 Саме цим T2.L7 відрізняється від простого curve fitting.
 
 <figure>
-  <img src="figures/fig_01_research_workflow.svg" alt="Повний research workflow">
-  <figcaption><strong>Рис. 1.</strong> T2.L7 з’єднує всі попередні теми в один research workflow: question, data, calibration, verification, sensitivity, uncertainty, metadata та claim.</figcaption>
+ <img src="figures/fig_01_research_workflow.svg" alt="Повний research workflow">
+ <figcaption><strong>Рис. 1.</strong> T2.L7 з’єднує всі попередні теми в один дослідницький робочий процес: питання, дані, калібрування, ПЕРЕВІРКА, чутливість, невизначеність, метадані та висновок.</figcaption>
 </figure>
 
 ---
 
-## 2. Research question
+## 2. Дослідницьке питання
 
-Lesson question:
+Lesson питання:
 
 > **Наскільки надійно за шумними спостереженнями можна оцінити параметри динамічної системи та спрогнозувати час досягнення заданого порогу?**
 
 Це питання має дві частини:
 
-1. parameter estimation;
-2. predictive reliability.
+1. оцінювання параметрів;
+2. надійність прогнозу.
 
-Calibration без prediction uncertainty відповідає лише на першу.
-
----
-
-## 3. Hypothesis
-
-Working hypothesis:
-
-> calibrated model відновить \(q,k\) із малою похибкою, а bootstrap покаже вузький, але ненульовий interval uncertainty threshold prediction.
-
-Hypothesis must be linked to observable evidence:
-
-- calibrated values near synthetic generating parameters;
-- RMSE small;
-- interval finite and not zero-width.
+калібрування без невизначеність прогнозу відповідає лише на першу.
 
 ---
 
-## 4. Dynamic model
+## 3. гіпотеза
+
+Робоча гіпотеза:
+
+> відкалібрована модель відновить \(q,k\) із малою похибкою, а бутстреп покаже вузький, але ненульовий інтервал невизначеність поріг ПРОГНОЗ.
+
+гіпотеза необхідно be linked до observable докази:
+
+- відкалібрований значення поблизу синтетичний генерувальний параметри;
+- RMSE малий;
+- інтервал скінченний і не zero-width.
+
+---
+
+## 4. динамічна модель
 
 \[
 \frac{dS}{dt}=q-kS,
@@ -112,7 +112,7 @@ Hypothesis must be linked to observable evidence:
 S(0)=S_0.
 \]
 
-Analytical solution:
+Аналітичний розв’язок:
 
 \[
 S(t)=
@@ -123,21 +123,21 @@ S_0-\frac{q}{k}
 \right)e^{-kt}.
 \]
 
-Same mathematical core as T2.L6.
+той самий mathematical основний як T2.L6.
 
-But research role is different.
+але дослідження role є різний.
 
-T2.L6: derive and verify.
+T2.L6: derive і перевірити.
 
-T2.L7: estimate parameters from noisy data and quantify uncertainty.
+T2.L7: оцінка параметри з шумний дані і quantify невизначеність.
 
 ---
 
-## 5. Synthetic data
+## 5. Синтетичні дані
 
-Observed pairs:
+спостережуваний pairs:
 
-| t | observed S |
+| t | спостережуваний S |
 |---:|---:|
 | 0 | 18.5724 |
 | 2 | 38.5600 |
@@ -151,37 +151,37 @@ Observed pairs:
 | 18 | 103.0635 |
 | 20 | 107.7626 |
 
-Data intentionally contain noise.
+дані intentionally contain шум.
 
-Thus parameters cannot be read directly from one point.
-
----
-
-## 6. Why synthetic data are useful here
-
-Synthetic data allow a controlled teaching environment:
-
-- model structure known;
-- expected parameters roughly known;
-- no sensitive data;
-- reproducible baseline;
-- calibration can be checked.
-
-But successful recovery on synthetic data does not prove performance on real data.
-
-Synthetic test is verification/training stage.
+отже параметри cannot be read безпосередньо з один точка.
 
 ---
 
-## 7. Calibration objective
+## 6. чому Синтетичні дані є корисний тут
 
-Let observations:
+Синтетичні дані дозволяти контрольоване навчальний середовище:
+
+- структура моделі відомий;
+- очікуваний параметри приблизно відомий;
+- no чутливий дані;
+- відтворюваний базовий;
+- калібрування може be checked.
+
+але successful recovery на Синтетичні дані робить не довести результативність на реальні дані.
+
+синтетичний тест є ПЕРЕВІРКА/training stage.
+
+---
+
+## 7. Ціль калібрування
+
+Let спостереження:
 
 \[
 y_i.
 \]
 
-Model prediction:
+Model ПРОГНОЗ:
 
 \[
 \hat y_i(q,k)=S(t_i;q,k).
@@ -193,14 +193,14 @@ Residual:
 r_i(q,k)=\hat y_i-y_i.
 \]
 
-Least squares minimizes:
+метод найменших квадратів мінімізує:
 
 \[
 J(q,k)=
 \sum_i r_i(q,k)^2.
 \]
 
-SciPy least_squares estimates:
+SciPy least_squares оцінки:
 
 \[
 \hat q,\hat k.
@@ -208,29 +208,29 @@ SciPy least_squares estimates:
 
 ---
 
-## 8. Why nonlinear least squares
+## 8. чому нелінійний метод найменших квадратів
 
-Model is nonlinear in \(k\) because:
+Model є нелінійний у \(k\) тому що:
 
 \[
 e^{-kt}
 \]
 
-and:
+і:
 
 \[
 q/k.
 \]
 
-Thus ordinary linear regression formulation does not directly match parameter structure.
+отже звичайна лінійний регресія формулювання робить не безпосередньо match параметр структура.
 
-Use nonlinear least squares.
+використовувати нелінійний метод найменших квадратів.
 
 ---
 
-## 9. Calibrated baseline
+## 9. відкалібрований базовий
 
-Exact current control values:
+точний поточний контрольні значення:
 
 \[
 \hat q
@@ -244,7 +244,7 @@ Exact current control values:
 0.0985939001.
 \]
 
-Estimated equilibrium:
+оцінений рівновага:
 
 \[
 \hat S^*
@@ -259,11 +259,11 @@ RMSE:
 RMSE\approx1.4821542085.
 \]
 
-These agree closely with synthetic generating scale \(q\approx12,k\approx0.1\).
+ці узгоджуються близько з синтетичний генерувальний масштаб \(q\approx12,k\approx0.1\).
 
 <figure>
-  <img src="figures/fig_02_calibration_fit.svg" alt="Calibration fit">
-  <figcaption><strong>Рис. 2.</strong> Calibration minimizes residuals between noisy observations and analytical trajectory. A visually close fit is evidence about fit quality, not proof of model truth.</figcaption>
+ <img src="figures/fig_02_calibration_fit.svg" alt="Calibration fit">
+ <figcaption><strong>Рис. 2.</strong> калібрування мінімізує нев’язки між шумний спостереження і analytical траєкторія. візуально close підгонка є докази про якість підгонки, не доказ model truth.</figcaption>
 </figure>
 
 ---
@@ -279,20 +279,20 @@ RMSE=
 }.
 \]
 
-It measures typical residual magnitude in output units.
+It measures типову residual величину у результат одиницях.
 
-Smaller is better **relative to context**.
+Smaller є кращий **відносний до context**.
 
-RMSE does not say:
+RMSE робить не say:
 
-- assumptions correct;
-- parameters unique;
-- predictions unbiased outside observed range;
-- no alternative model fits equally well.
+- припущення правильний;
+- параметри унікальні;
+- прогнози unbiased поза спостережуваний діапазон;
+- no альтернатива model fits однаково well.
 
 ---
 
-## 11. Residuals
+## 11. нев’язки
 
 Residual:
 
@@ -302,45 +302,45 @@ e_i=y_i-\hat y_i.
 
 Inspect:
 
-- sign pattern;
-- trend over time;
-- changing variance;
+- sign шаблон;
+- trend над час;
+- зміною дисперсія;
 - outliers;
 - autocorrelation.
 
-If residuals show structure, model may be missing mechanism.
+якщо нев’язки показати структура, model може be missing механізм.
 
-A scalar RMSE can hide this.
+ scalar RMSE може hide це.
 
 ---
 
 ## 12. Identifiability connection
 
-From T2.L6:
+з T2.L6:
 
 \[
 S^*=q/k.
 \]
 
-Equilibrium alone identifies ratio, not both parameters separately.
+рівновага самостійно ідентифікує ratio, не обидва параметри окремо.
 
-Transient trajectory:
+перехідний траєкторія:
 
 \[
 e^{-kt}
 \]
 
-contains information about \(k\).
+містить інформація про \(k\).
 
-Therefore time-series observations help identify both.
+тому time-series спостереження допомагають ідентифікувати обидва.
 
-This is a strong example of symbolic theory informing calibration.
+це є сильний приклад символьний theory informing калібрування.
 
 ---
 
-## 13. Initial guesses
+## 13. Початкові наближення
 
-least_squares starts from:
+least_squares початкові точки з:
 
 \[
 q_0=10,
@@ -348,17 +348,17 @@ q_0=10,
 k_0=0.08.
 \]
 
-For well-behaved baseline it converges to control fit.
+для коректного базовий it збігається до control підгонка.
 
-In nonlinear calibration, starting point can matter.
+у нелінійний калібрування, starting точка може matter.
 
-A stronger research workflow may test multiple starts.
+ сильнішого дослідницький робочий процес може тест кілька початкові точки.
 
 ---
 
-## 14. Parameter bounds
+## 14. Межі параметрів
 
-Implementation constrains:
+реалізація constrains:
 
 \[
 q>0,
@@ -368,56 +368,56 @@ q>0,
 k>0.
 \]
 
-This encodes domain meaning.
+це encodes предметна область зміст.
 
-Without bounds optimizer could explore physically meaningless regions.
+без межі оптимізатор could досліджувати фізично беззмістовні regions.
 
 ---
 
-## 15. Fit is not validation
+## 15. підгонка є не валідація
 
-The statement:
+ твердження:
 
 > RMSE <2.
 
-supports:
+підтримує:
 
-> model fits this synthetic dataset reasonably closely.
+> model fits це синтетичний dataset reasonably близько.
 
-It does not establish:
+It робить не establish:
 
-> real process obeys \(dS/dt=q-kS\).
+> реальний процес obeys \(dS/dt=q-kS\).
 
-Validation requires independent real/authorized data or domain evidence.
+валідація потребує незалежний реальний/дозволені дані або предметна область докази.
 
 ---
 
-# PREDICTION
+# ПРОГНОЗ
 
-## 16. Threshold time
+## 16. Час досягнення порогу
 
-Threshold:
+поріг:
 
 \[
 S=80.
 \]
 
-Using calibrated parameters:
+використання відкалібровані параметри:
 
 \[
 t_{80}
 \approx9.1648572165.
 \]
 
-This is point estimate.
+це є Точкова оцінка.
 
 It answers:
 
-> under fitted model, when does trajectory reach 80?
+> за підігнаний model, коли робить траєкторія досягають 80?
 
 ---
 
-## 17. Horizon state
+## 17. Стан на горизонті
 
 Horizon:
 
@@ -425,70 +425,70 @@ Horizon:
 t=20.
 \]
 
-Prediction:
+ПРОГНОЗ:
 
 \[
 S(20)
 \approx106.8197556402.
 \]
 
-Again, point estimate conditional on \(\hat q,\hat k\).
+знову, Точкова оцінка умовний на \(\hat q,\hat k\).
 
 ---
 
-## 18. Point estimate is not uncertainty
+## 18. Точкова оцінка є не невизначеність
 
-A single number:
+ single кількість:
 
 \[
 9.1649
 \]
 
-does not tell:
+робить не tell:
 
-- how sensitive it is to data noise;
-- how parameters co-vary;
-- how often threshold might be unreachable under resampled fits.
+- як чутливий it є до дані шум;
+- як параметри co-vary;
+- як часто поріг може be недосяжний за перевибіркових fits.
 
-Need uncertainty analysis.
-
----
-
-# VERIFICATION
-
-## 19. Analytical trajectory
-
-Calibration uses analytical formula.
-
-To verify implementation, use independent numerical ODE solver.
+Need аналіз невизначеності.
 
 ---
 
-## 20. Correct initial-condition origin
+# ПЕРЕВІРКА
 
-Important hardened rule:
+## 19. Analytical траєкторія
+
+калібрування використовує analytical формула.
+
+до перевірити реалізація, використовувати незалежний чисельний ODE розв’язувач.
+
+---
+
+## 20. правильний initial-condition origin
+
+важливий hardened rule:
 
 \[
 S_0
 \]
 
-is defined at:
+є defined у:
 
 \[
 t=0.
 \]
 
-If requested output grid starts at \(t=5\), numerical solver must still integrate from zero to requested times.
+якщо запитаний результат сітка початкові точки у \(t=5\), чисельний розв’язувач необхідно усе ще integrate з нуль до запитаний times.
 
-Earlier wrong implementation could reinterpret \(S_0\) as state at first requested time.
+Earlier неправильний реалізація could reinterpret \(S_0\) як state у спочатку запитаний час.
 
-That was fixed.
+що було фіксований.
 
 ---
 
-## 21. Nonzero-start control case
+## 21. Nonzero-start контрольний приклад
 
-For:
+для:
 
 \[
 t=[5,6,7],
@@ -506,15 +506,15 @@ q=10,
 k=0.1,
 \]
 
-analytical/numerical first requested state is about:
+analytical/чисельний спочатку запитаний state є про:
 
 \[
 S(5)\approx51.4775.
 \]
 
-Not 20.
+не 20.
 
-This test protects the mathematical meaning of initial condition.
+це тест захищає mathematical зміст початкова умова.
 
 ---
 
@@ -529,151 +529,151 @@ e_{max}
 |S_{analytical}(t)-S_{numerical}(t)|.
 \]
 
-Tests require:
+тести потребувати:
 
 \[
 e_{max}<10^{-6}.
 \]
 
-Experiment usually obtains error around \(10^{-9}\).
+Experiment зазвичай obtains похибка близько \(10^{-9}\).
 
 <figure>
-  <img src="figures/fig_03_verification.svg" alt="Analytical versus numerical verification">
-  <figcaption><strong>Рис. 3.</strong> Independent solve_ivp verifies numerical consistency of the calibrated analytical trajectory. Agreement supports implementation, not empirical adequacy.</figcaption>
+ <img src="figures/fig_03_verification.svg" alt="Analytical versus numerical verification">
+ <figcaption><strong>Рис. 3.</strong> незалежний solve_ivp verifies чисельний узгодженість відкалібрований analytical траєкторія. збіг підтримує реалізація, не empirical адекватність.</figcaption>
 </figure>
 
 ---
 
-## 23. What verification proves
+## 23. що ПЕРЕВІРКА доводить
 
-It supports:
+It підтримує:
 
-- analytical formula implemented correctly;
-- numerical solver initialized at correct time;
-- trajectories consistent.
+- analytical формула реалізована правильно;
+- чисельний розв’язувач initialized у правильний час;
+- траєкторії узгоджені.
 
-It does not prove:
+It робить не довести:
 
-- model structure true;
-- synthetic data representative;
-- parameter estimates unbiased.
+- структура моделі істинний;
+- Синтетичні дані репрезентативний;
+- параметр оцінки unbiased.
 
 ---
 
-# SCENARIO / SENSITIVITY
+# СЦЕНАРІЇ / ЧУТЛИВІСТЬ
 
-## 24. Vary q
+## 24. змінювати q
 
-Config uses multipliers:
+конфігурація використовує multipliers:
 
 \[
 0.8,\ 0.9,\ 1.0,\ 1.1,\ 1.2.
 \]
 
-For each:
+для кожен:
 
 \[
 q'=m\hat q.
 \]
 
-Hold calibrated \(k\) fixed.
+Hold відкалібрований \(k\) фіксований.
 
 Calculate:
 
-- equilibrium;
+- рівновага;
 - \(S(20)\);
-- time to threshold 80.
+- час до поріг 80.
 
 ---
 
-## 25. Expected direction
+## 25. очікуваний напрям
 
-As \(q\) increases:
+як \(q\) збільшує:
 
 \[
 S^*=\frac qk
 \]
 
-increases.
+збільшує.
 
-Horizon state increases.
+Стан на горизонті збільшує.
 
-Threshold 80 is reached sooner.
+поріг 80 є reached sooner.
 
-Tests verify:
+тести перевірити:
 
-- \(S(20)\) monotonic increasing;
-- threshold time monotonic decreasing.
+- \(S(20)\) монотонно зростає;
+- Час досягнення порогу монотонно decreasing.
 
 ---
 
-## 26. Sensitivity is conditional
+## 26. чутливість є умовний
 
-This experiment changes q only.
+це experiment зміни q лише.
 
-It assumes k fixed.
+It assumes k фіксований.
 
-Conclusion:
+висновок:
 
-> response to q under fixed calibrated k.
+> відгук до q за фіксований відкалібрований k.
 
-Not:
+не:
 
-> complete uncertainty of system.
+> complete невизначеність система.
 
 <figure>
-  <img src="figures/fig_04_sensitivity.svg" alt="Sensitivity to q">
-  <figcaption><strong>Рис. 4.</strong> q-sensitivity asks a controlled “what if?” question: increasing replenishment raises the horizon state and generally reduces time to the threshold.</figcaption>
+ <img src="figures/fig_04_sensitivity.svg" alt="Sensitivity to q">
+ <figcaption><strong>Рис. 4.</strong> q-sensitivity ставить контрольоване “що якщо?” питання: зростає поповнення підвищує Стан на горизонті і зазвичай зменшує час до поріг.</figcaption>
 </figure>
 
 ---
 
 ## 27. One-factor limitation
 
-If q and k uncertain together, one-factor sensitivity can miss interaction/correlation.
+якщо q і k невизначені разом, однофакторний аналіз чутливості може пропустити взаємодія/correlation.
 
 Possible extension:
 
-- 2D grid;
-- joint bootstrap;
-- response surface.
+- 2D сітка;
+- joint бутстреп;
+- відгук поверхня.
 
-T2.L7 baseline keeps one-factor scenario for interpretability.
-
----
-
-# BOOTSTRAP UNCERTAINTY
-
-## 28. Why bootstrap
-
-We have one noisy dataset.
-
-Want to know:
-
-> how much might fitted parameters and predictions vary because observations contain noise?
-
-Residual bootstrap approximates this uncertainty.
+T2.L7 базовий зберігає one-factor сценарій для interpretability.
 
 ---
 
-## 29. Residual bootstrap steps
+# НЕВИЗНАЧЕНІСТЬ БУТСТРЕП
 
-1. Fit model to original observations.
-2. Compute fitted values.
-3. Compute residuals:
+## 28. чому бутстреп
+
+We мають один шумний dataset.
+
+Want до know:
+
+> як much може підігнаний параметри і прогнози змінювати тому що спостереження contain шум?
+
+Бутстреп за нев’язками approximates це невизначеність.
+
+---
+
+## 29. Бутстреп за нев’язками кроки
+
+1. підгонка model до original спостереження.
+2. Compute підігнаний значення.
+3. Compute нев’язки:
    \[
    e_i=y_i-\hat y_i.
    \]
-4. Sample residuals with replacement.
-5. Create synthetic bootstrap dataset:
+4. вибірка нев’язки з поверненням.
+5. Create синтетичний бутстреп dataset:
    \[
    y_i^{(b)}=\hat y_i+e_i^*.
    \]
 6. Recalibrate q,k.
-7. Recompute threshold and horizon prediction.
+7. Recompute поріг і horizon ПРОГНОЗ.
 8. Repeat.
 
-Baseline:
+базовий:
 
 \[
 B=500,
@@ -685,46 +685,46 @@ seed=2026.
 
 ---
 
-## 30. Recalibration is crucial
+## 30. повторне калібрування є crucial
 
-Each bootstrap replication estimates new:
+кожен бутстреп повторення оцінки новий:
 
 \[
 \hat q^{(b)},
 \hat k^{(b)}.
 \]
 
-Therefore bootstrap distribution represents:
+тому бутстреп розподіл represents:
 
-> **uncertainty of re-estimated parameters/predictions under residual-resampling assumptions.**
+> **невизначеність re-estimated параметри/прогнози за residual-resampling припущення.**
 
-It is not performance distribution of one fixed parameter pair.
+It є не результативність розподіл один фіксований параметр pair.
 
 ---
 
-## 31. This is not fixed-decision robustness
+## 31. це є не fixed-decision стійкість
 
-Suppose we freeze:
+припустімо we freeze:
 
 \[
 \hat q,\hat k
 \]
 
-and perturb environment.
+і perturb середовище.
 
-That asks another question.
+що ставить інший питання.
 
-Current bootstrap asks:
+поточний бутстреп ставить:
 
-> if we observed another noise realization and recalibrated, how would estimates/predictions vary?
+> якщо we спостережуваний інший шум реалізація і recalibrated, як would оцінки/прогнози змінювати?
 
-Keep these concepts separate.
+Keep ці concepts окремий.
 
 ---
 
-## 32. Bootstrap threshold distribution
+## 32. бутстреп поріг розподіл
 
-For current 500-replication baseline:
+для поточний 500-повторення базовий:
 
 \[
 P_{2.5}
@@ -742,30 +742,30 @@ P_{97.5}
 \approx9.5252.
 \]
 
-Mean:
+середнє:
 
 \[
 \approx9.2020.
 \]
 
-Point estimate:
+Точкова оцінка:
 
 \[
 9.1649.
 \]
 
-The point lies inside bootstrap interval.
+ точка lies всередині бутстреп-інтервал.
 
 <figure>
-  <img src="figures/fig_05_bootstrap.svg" alt="Bootstrap threshold distribution">
-  <figcaption><strong>Рис. 5.</strong> Residual bootstrap generates a distribution of recalibrated threshold predictions. The interval is conditional on the residual-resampling and model assumptions.</figcaption>
+ <img src="figures/fig_05_bootstrap.svg" alt="Bootstrap threshold distribution">
+ <figcaption><strong>Рис. 5.</strong> Бутстреп за нев’язками generates розподіл recalibrated поріг прогнози. інтервал є умовний на residual-resampling і припущення моделі.</figcaption>
 </figure>
 
 ---
 
-## 33. Horizon bootstrap
+## 33. Horizon бутстреп
 
-For \(S(20)\), current bootstrap approximately gives:
+для \(S(20)\), поточний бутстреп приблизно дає:
 
 \[
 P_{2.5}\approx104.8995,
@@ -781,95 +781,95 @@ median:
 P_{97.5}\approx108.4714.
 \]
 
-Mean:
+середнє:
 
 \[
 106.7153.
 \]
 
-This quantifies calibration/data-noise uncertainty in horizon prediction.
+це quantifies калібрування/data-noise невизначеність у horizon ПРОГНОЗ.
 
 ---
 
-## 34. Bootstrap interval is not universal truth
+## 34. бутстреп-інтервал є не universal truth
 
-It is conditional on:
+It є умовний на:
 
-- chosen model structure;
-- residual bootstrap procedure;
-- observed data;
-- number of replications;
-- seed for exact run.
+- обраний структура моделі;
+- Бутстреп за нев’язками procedure;
+- спостережуваний дані;
+- кількість повторення;
+- зерно генератора для точний запуск.
 
-If residual assumptions wrong, interval may misrepresent uncertainty.
+якщо residual припущення неправильний, інтервал може misrepresent невизначеність.
 
 ---
 
-## 35. Residual bootstrap assumptions
+## 35. Бутстреп за нев’язками припущення
 
-Implicitly residuals treated as exchangeable enough to resample.
+Implicitly нев’язки вважаються як взаємозамінними достатньо до resample.
 
-If residual variance changes with time or residuals correlated, simple residual bootstrap may be inadequate.
+якщо residual дисперсія зміни з час або нев’язки корельований, простий Бутстреп за нев’язками може be неадекватним.
 
 Possible extensions:
 
-- wild bootstrap;
-- block bootstrap;
-- parametric bootstrap.
+- wild бутстреп;
+- block бутстреп;
+- parametric бутстреп.
 
 ---
 
-# UNREACHED THRESHOLDS
+# НЕДОСЯЖНІ ПОРОГИ
 
-## 36. Threshold may be unreachable
+## 36. поріг може be недосяжний
 
-For some parameter combinations equilibrium can lie below target.
+для деяких параметр комбінацій рівновага може лежати нижче цільового значення.
 
-Then:
+тоді:
 
 \[
 t_{threshold}=\infty.
 \]
 
-This is meaningful.
+це є meaningful.
 
-It means under that model trajectory never reaches threshold.
+It означає за що model траєкторія ніколи досягає поріг.
 
 ---
 
-## 37. Why silently dropping infinity is dangerous
+## 37. чому мовчки відкидання infinity є небезпечний
 
-Suppose bootstrap times:
+припустімо бутстреп times:
 
 \[
 [10,20,\infty,\infty,\infty].
 \]
 
-Finite mean:
+скінченний середнє:
 
 \[
 15.
 \]
 
-If report only 15, you hide that 60% runs never reach threshold.
+якщо report лише 15, you hide що 60% запуски ніколи досягають поріг.
 
-This was a red-team finding and is now explicitly handled.
+це було red-team висновок і є now explicitly обробляється.
 
 ---
 
-## 38. Hardened summary
+## 38. Hardened підсумок
 
 quantile_summary reports:
 
-- conditional mean;
-- conditional median;
+- умовне середнє;
+- умовна медіана;
 - finite_share;
 - nonfinite_share;
 - positive_infinity_share;
 - n_total;
 - n_finite.
 
-For example:
+для приклад:
 
 \[
 finite\_share=0.4,
@@ -879,92 +879,92 @@ finite\_share=0.4,
 nonfinite\_share=0.6.
 \]
 
-This makes conditioning visible.
+це робить conditioning видимою.
 
 <figure>
-  <img src="figures/fig_06_finite_nonfinite.svg" alt="Finite and nonfinite threshold outcomes">
-  <figcaption><strong>Рис. 6.</strong> A finite conditional mean must be reported together with the share of simulations that actually reach the threshold.</figcaption>
+ <img src="figures/fig_06_finite_nonfinite.svg" alt="Finite and nonfinite threshold outcomes">
+ <figcaption><strong>Рис. 6.</strong> скінченний умовне середнє необхідно be подавати разом з частка моделювання що фактично досягають поріг.</figcaption>
 </figure>
 
 ---
 
-## 39. Baseline finite share
+## 39. базовий частка скінченних значень
 
-For current 500 bootstrap replications around fitted data:
+для поточний 500 бутстреп повторення близько підігнаний дані:
 
 \[
 finite\_share=1.0.
 \]
 
-All bootstrap fits reach threshold 80.
+усі бутстреп fits досягають поріг 80.
 
-This is a baseline property.
+це є базовий property.
 
-In other scenarios it may not hold.
+у інший сценарії it може не hold.
 
 ---
 
-# REPRODUCIBILITY
+# ВІДТВОРЮВАНІСТЬ
 
-## 40. Config records scientific intent
+## 40. конфігурація фіксує науковий задум
 
 experiment_config stores:
 
-- research question;
-- hypothesis;
+- Дослідницьке питання;
+- гіпотеза;
 - s0;
-- threshold;
+- поріг;
 - horizon;
 - q multipliers;
-- bootstrap replications;
-- seed.
+- бутстреп повторення;
+- зерно генератора.
 
-This is stronger than parameters scattered in notebook.
-
----
-
-## 41. Experiment hash includes data
-
-Unlike T1.L3 config-only hash, T2.L7 experiment hash payload includes:
-
-- config;
-- rounded observations;
-- model identity string.
-
-Thus data changes alter experiment ID.
-
-This closes an earlier provenance gap.
+це є сильнішого ніж параметри scattered у ноутбук.
 
 ---
 
-## 42. Baseline experiment identity
+## 41. хеш експерименту містить дані
 
-Current canonical experiment:
+на відміну від T1.L3 config-only хеш, T2.L7 хеш експерименту набір даних містить:
+
+- конфігурація;
+- rounded спостереження;
+- model ідентичність string.
+
+отже дані зміни alter experiment ID.
+
+це closes earlier походження даних і результату gap.
+
+---
+
+## 42. базовий ідентичність експерименту
+
+поточний canonical experiment:
 
 ~~~text
 t2_l7_92787dfc5ccd
 ~~~
 
-This is deterministic for same payload.
+це є детермінований для той самий набір даних.
 
-It does not replace Git commit or dependency info, but it identifies model+config+data payload.
+It робить не замінює коміт Git або залежність info, але it ідентифікує model+конфігурація+дані набір даних.
 
 ---
 
-## 43. Metadata
+## 43. метадані
 
 experiment.py stores:
 
 - experiment ID;
 - model;
-- config;
-- calibrated parameters;
-- threshold uncertainty;
-- horizon uncertainty;
-- verification error;
-- Python/platform environment.
+- конфігурація;
+- відкалібровані параметри;
+- поріг невизначеність;
+- horizon невизначеність;
+- ПЕРЕВІРКА похибка;
+- Python/platform середовище.
 
-Outputs include:
+результати включати:
 
 - calibration_summary.csv;
 - scenario_results.csv;
@@ -975,149 +975,149 @@ Outputs include:
 
 ---
 
-## 44. Why metadata is part of evidence
+## 44. чому метадані є part докази
 
-A chart without metadata says:
+ chart без метадані says:
 
-> here is a distribution.
+> тут є розподіл.
 
-Metadata lets us answer:
+метадані lets us відповідати:
 
-- which data?
-- which seed?
-- how many bootstraps?
-- which threshold?
-- which fit?
-- which model?
+- який дані?
+- який зерно генератора?
+- як багато bootstraps?
+- який поріг?
+- який підгонка?
+- який model?
 
-This is research traceability.
-
----
-
-# SCIENTIFIC INTERPRETATION
-
-## 45. What the model shows
-
-Supported:
-
-> the chosen dynamic model can be calibrated to the synthetic observations with RMSE around 1.48 and parameters near the generating scale.
-
-Supported:
-
-> analytical and numerical implementations agree within strict numerical tolerance.
-
-Supported:
-
-> threshold prediction under calibrated model is around 9.165 and residual bootstrap gives nonzero uncertainty around it.
+це є дослідження traceability.
 
 ---
 
-## 46. What the model does not show
+# НАУКОВА ІНТЕРПРЕТАЦІЯ
 
-Not established:
+## 45. що model показує
 
-- true real system follows this ODE;
-- errors are iid/exchangeable;
-- q,k remain constant;
-- threshold definition operationally valid;
-- bootstrap interval covers all uncertainty;
-- calibration unique under all starting points/model structures.
+Supported:
 
-These are limitations.
+> обраний динамічна модель може be відкалібрований до синтетичні спостереження з RMSE близько 1.48 і параметри поблизу генерувальний масштаб.
+
+Supported:
+
+> analytical і чисельний реалізації узгоджуються у межах суворого чисельний допуск.
+
+Supported:
+
+> поріг ПРОГНОЗ за відкалібрована модель є близько 9.165 і Бутстреп за нев’язками дає nonzero невизначеність близько it.
 
 ---
 
-## 47. Small RMSE can hide wrong structure
+## 46. що model робить не показати
 
-Two different model forms can fit observed window similarly.
+не established:
 
-Example:
+- істинний реальний система follows це ODE;
+- похибки є iid/взаємозамінними;
+- q,k remain сталий;
+- поріг визначення предметно valid;
+- бутстреп-інтервал covers усі невизначеність;
+- калібрування унікальні за усі starting точки/model structures.
 
-- exponential approach;
+ці є обмеження.
+
+---
+
+## 47. малий RMSE може hide неправильний структура
+
+Two різний model форми може підгонка спостережуваний діапазон similarly.
+
+приклад:
+
+- експоненційний approach;
 - flexible polynomial;
 - logistic curve.
 
-A low RMSE only measures fit in observed data.
+ низький RMSE лише measures підгонка у спостережуваний дані.
 
-Model comparison and out-of-sample validation needed for stronger structural claim.
-
----
-
-## 48. Calibration uncertainty vs model-form uncertainty
-
-Bootstrap varies data noise within fixed model form.
-
-It does not vary equation itself.
-
-Thus interval omits structural uncertainty.
-
-This distinction should appear in dissertation methodology.
+Model comparison і out-of-sample валідація потрібні для сильнішого structural висновок.
 
 ---
 
-## 49. Sensitivity vs uncertainty
+## 48. калібрування невизначеність vs невизначеність форми моделі
 
-Sensitivity:
+бутстреп змінюється дані шум у межах фіксований форма моделі.
 
-> deliberately change q and observe response.
+It робить не змінювати рівняння itself.
 
-Uncertainty:
+отже інтервал omits structural невизначеність.
 
-> quantify plausible variation in estimates/predictions due to noisy data.
-
-Different questions.
-
-Both needed.
+це відмінність слід appear у дисертація методологія.
 
 ---
 
-## 50. Verification vs validation
+## 49. чутливість vs невизначеність
 
-Verification:
+чутливість:
 
-> equations/code agree.
+> навмисно зміна q і спостерігати відгук.
 
-Validation:
+невизначеність:
 
-> model adequate for target real process.
+> quantify правдоподібну варіативність у оцінки/прогнози через до шумний дані.
 
-T2.L7 provides strong verification.
+різний питання.
 
-Real-data validation remains future task.
-
----
-
-## 51. Research conclusion template
-
-A strong conclusion:
-
-> Using synthetic observations and the model \(dS/dt=q-kS\), nonlinear least squares estimated \(q=11.9159\) and \(k=0.098594\) with RMSE 1.482. The fitted model predicts threshold \(S=80\) at \(t=9.1649\) and \(S(20)=106.8198\). Analytical and solve_ivp trajectories agree within the numerical tolerance. A 500-replication residual bootstrap gives a 95% empirical interval for threshold time of approximately [8.942; 9.525]. These results quantify calibration and residual-resampling uncertainty under the selected model; they do not validate the model for a real system.
-
-That is evidence-bounded language.
+обидва потрібні.
 
 ---
 
-# BREAK THE MODEL
+## 50. ПЕРЕВІРКА vs валідація
 
-## 52. Break: change time origin
+ПЕРЕВІРКА:
 
-If numerical integration starts at first requested time instead of zero, \(S_0\) gets reinterpreted.
+> рівняння/code узгоджуються.
 
-This can produce internally smooth but wrong trajectory.
+валідація:
 
-Lesson test protects against it.
+> model adequate для цільового значення реальний процес.
+
+T2.L7 provides сильний ПЕРЕВІРКА.
+
+Real-data валідація залишається future робота.
 
 ---
 
-## 53. Break: threshold above equilibrium
+## 51. дослідження висновок template
 
-If:
+ сильний висновок:
+
+> використання синтетичні спостереження і model \(dS/dt=q-kS\), нелінійний метод найменших квадратів оцінений \(q=11.9159\) і \(k=0.098594\) з RMSE 1.482. підігнаний model predicts поріг \(S=80\) у \(t=9.1649\) і \(S(20)=106.8198\). Analytical і solve_ivp траєкторії узгоджуються у межах чисельний допуск. 500-повторення Бутстреп за нев’язками дає 95% empirical інтервал для Час досягнення порогу приблизно [8.942; 9.525]. ці results quantify калібрування і residual-resampling невизначеність за selected model; they робити не validate model для реальний система.
+
+що є evidence-bounded мовою.
+
+---
+
+# Зламай модель
+
+## 52. злам: зміна час origin
+
+якщо чисельний інтегрування початкові точки у спочатку запитаний час instead нуль, \(S_0\) gets переосмислити.
+
+це може produce внутрішньо гладку але неправильний траєкторія.
+
+Lesson тест захищає against it.
+
+---
+
+## 53. злам: поріг вище рівновага
+
+якщо:
 
 \[
 threshold>S^*,
 \]
 
-and \(S_0<S^*\), threshold unreachable.
+і \(S_0<S^*\), поріг недосяжний.
 
 Return:
 
@@ -1125,37 +1125,37 @@ Return:
 \infty.
 \]
 
-Do not force a number.
+робити не force кількість.
 
 ---
 
-## 54. Break: poor starting parameters
+## 54. злам: poor starting параметри
 
-Nonlinear least squares can be sensitive to initialization in harder problems.
+нелінійний метод найменших квадратів може be чутливий до ініціалізації у складніших problems.
 
-Test multiple starts if landscape uncertain.
-
----
-
-## 55. Break: heteroskedastic residuals
-
-If noise grows with S, residual resampling assumes wrong structure.
-
-Need weighted least squares or different bootstrap.
+тест кілька початкові точки якщо ландшафт невизначені.
 
 ---
 
-## 56. Break: correlated residuals
+## 55. злам: гетероскедастичні нев’язки
 
-Time-series residual correlation violates naive exchangeability.
+якщо шум зростає з S, residual повторне вибіркування assumes неправильний структура.
 
-Block/bootstrap or explicit error model may be needed.
+Need зважений метод найменших квадратів або різний бутстреп.
 
 ---
 
-## 57. Break: parameter drift
+## 56. злам: корельований нев’язки
 
-If q or k changes over time:
+Time-series residual correlation violates просту exchangeability.
+
+Block/бутстреп або явний похибка model може be потрібні.
+
+---
+
+## 57. злам: дрейф параметрів
+
+якщо q або k зміни над час:
 
 \[
 q=q(t),
@@ -1163,27 +1163,27 @@ q=q(t),
 k=k(t),
 \]
 
-constant-parameter ODE can fit average behavior but miss mechanism.
+constant-parameter ODE може підгонка середнє поведінку але пропустити механізм.
 
 ---
 
-## 58. Break: alternate model
+## 58. злам: альтернативна model
 
-Try nonlinear loss:
+Try нелінійний втрати:
 
 \[
 \frac{dS}{dt}=q-kS^\gamma.
 \]
 
-If \(\gamma\ne1\) materially improves validated fit, baseline structure may be insufficient.
+якщо \(\gamma\ne1\) суттєво покращує валідовану підгонка, базовий структура може be недостатньою.
 
-Model comparison becomes research question.
+Model comparison стає Дослідницьке питання.
 
 ---
 
-# PYTHON WITHOUT FEAR
+# PYTHON БЕЗ СТРАХУ
 
-## 59. Calibration
+## 59. калібрування
 
 ~~~python
 fit = calibrate_parameters(
@@ -1193,7 +1193,7 @@ fit = calibrate_parameters(
 )
 ~~~
 
-Check:
+перевірка:
 
 \[
 q\approx11.916,
@@ -1203,7 +1203,7 @@ k\approx0.09859.
 
 ---
 
-## 60. Prediction
+## 60. ПРОГНОЗ
 
 ~~~python
 t80 = time_to_threshold(
@@ -1222,7 +1222,7 @@ Control:
 
 ---
 
-## 61. Scenario batch
+## 61. сценарій batch
 
 ~~~python
 scenarios = scenario_batch(
@@ -1234,14 +1234,14 @@ scenarios = scenario_batch(
 )
 ~~~
 
-Verify directions:
+перевірити directions:
 
-- s_horizon increasing;
+- s_horizon зростає;
 - time_to_threshold decreasing.
 
 ---
 
-## 62. Bootstrap
+## 62. бутстреп
 
 ~~~python
 boot = bootstrap_calibration(
@@ -1255,11 +1255,11 @@ boot = bootstrap_calibration(
 )
 ~~~
 
-Exact repeatability with same seed is unit-tested.
+точний repeatability з той самий зерно генератора є перевірено тестами.
 
 ---
 
-## 63. Quantile summary
+## 63. квантиль підсумок
 
 ~~~python
 summary = quantile_summary(
@@ -1268,7 +1268,7 @@ summary = quantile_summary(
 )
 ~~~
 
-Always inspect:
+завжди inspect:
 
 - p2_5;
 - median;
@@ -1278,11 +1278,11 @@ Always inspect:
 
 ---
 
-# RESEARCH TRANSFER
+# Перенесення в дослідження
 
-## 64. Transfer to dissertation
+## 64. Transfer до дисертація
 
-Use template:
+використовувати template:
 
 ~~~text
 Research question:
@@ -1322,88 +1322,88 @@ Allowed scientific claim:
 
 ---
 
-## 65. Example transfer
+## 65. приклад transfer
 
-Suppose a dissertation studies response time of an information-processing subsystem.
+припустімо дисертація досліджує відгук час information-processing subsystem.
 
-Possible workflow:
+Possible робочий процес:
 
-1. define dynamic/statistical model;
-2. collect authorized observations;
+1. визначити динамічний/статистичну model;
+2. collect дозволені спостереження;
 3. calibrate;
-4. verify code on known cases;
-5. perform scenarios;
-6. bootstrap parameter/prediction uncertainty;
-7. validate on held-out data;
-8. record experiment ID and commit.
+4. перевірити code на відомий cases;
+5. perform сценарії;
+6. бутстреп параметр/невизначеність прогнозу;
+7. validate на held-out дані;
+8. record experiment ID і коміт.
 
-The method transfers without copying military-sensitive values.
+ метод переноситься без копіювання military-sensitive значення.
 
 ---
 
-## 66. Research evidence pyramid
+## 66. дослідження докази pyramid
 
 <figure>
-  <img src="figures/fig_07_evidence_pyramid.svg" alt="Research evidence pyramid">
-  <figcaption><strong>Рис. 7.</strong> A fitted curve is only the bottom layer. Stronger evidence adds verification, sensitivity, uncertainty, reproducibility and external/domain validation.</figcaption>
+ <img src="figures/fig_07_evidence_pyramid.svg" alt="Research evidence pyramid">
+ <figcaption><strong>Рис. 7.</strong> підігнана крива є лише bottom layer. сильнішого докази adds ПЕРЕВІРКА, чутливість, невизначеність, ВІДТВОРЮВАНІСТЬ і external/предметна область валідація.</figcaption>
 </figure>
 
 Layers:
 
-1. fit;
-2. verification;
-3. sensitivity;
-4. uncertainty;
-5. reproducibility;
-6. validation.
+1. підгонка;
+2. ПЕРЕВІРКА;
+3. чутливість;
+4. невизначеність;
+5. ВІДТВОРЮВАНІСТЬ;
+6. валідація.
 
 ---
 
 ## 67. Research-grade checklist
 
-Before publication ask:
+до публікація ask:
 
-- question explicit?
-- hypothesis testable?
-- data provenance known?
-- model assumptions explicit?
-- calibration reproducible?
-- residuals inspected?
-- numerical implementation verified?
-- scenario logic justified?
-- bootstrap assumptions stated?
-- unreachable outcomes visible?
-- experiment ID recorded?
-- Git/environment recorded?
-- conclusion conditional?
+- питання явний?
+- гіпотеза testable?
+- дані походження даних і результату відомий?
+- припущення моделі явний?
+- калібрування відтворюваний?
+- нев’язки inspected?
+- чисельний реалізація перевірена?
+- сценарій logic justified?
+- бутстреп припущення stated?
+- недосяжний результати видимою?
+- experiment ID зафіксований?
+- Git/середовище зафіксований?
+- висновок умовний?
 
 ---
 
-## 68. Relationship to previous MiniBooks
+## 68. Relationship до попередніх MiniBooks
 
 T2.L7 integrates:
 
-- T1.L2 uncertainty;
-- T1.L3 reproducibility;
-- T1.L4 method selection;
-- T2.L3 nonlinear optimization ideas;
-- T2.L6 symbolic/numeric verification.
+- T1.L2 невизначеність;
+- T1.L3 ВІДТВОРЮВАНІСТЬ;
+- T1.L4 Вибір методу;
+- T2.L3 нелінійний оптимізація ideas;
+- T2.L6 символьний/numeric ПЕРЕВІРКА.
 
-It is the course’s research synthesis.
+It є course’s дослідження synthesis.
 
 ---
 
-## 69. One-page summary
+## 69. One-page підсумок
 
-### Five ideas
+### П’ять головних ідей
 
-1. Calibration is only one stage of research evidence.
-2. Small RMSE does not validate model structure.
-3. Independent solve_ivp checks computational consistency.
-4. Bootstrap quantifies recalibration uncertainty under explicit assumptions.
-5. Scientific conclusion must preserve conditions, uncertainty and limitations.
+1. калібрування є лише один stage дослідження докази.
+2. малий RMSE робить не validate структура моделі.
+3. незалежний solve_ivp перевірки computational узгодженість.
+4. бутстреп quantifies невизначеність повторного калібрування за явний припущення.
+5. Науковий висновок необхідно preserve conditions, невизначеність і обмеження.
 
-### Three formulas
+### Три формули
 
 Model:
 
@@ -1411,57 +1411,57 @@ Model:
 \frac{dS}{dt}=q-kS.
 \]
 
-Least-squares objective:
+Least-squares цільова функція:
 
 \[
 J(q,k)=\sum_i(\hat y_i-y_i)^2.
 \]
 
-Threshold summary must pair conditional quantiles with:
+поріг підсумок необхідно pair умовний квантилі з:
 
 \[
 finite\_share=
 \frac{n_{finite}}{n_{total}}.
 \]
 
-### Two errors
+### Дві типові помилки
 
-- narrow bootstrap interval = model truth;
-- small RMSE = validation.
+- narrow бутстреп-інтервал = model truth;
+- малий RMSE = валідація.
 
-### One question
+### Одне питання
 
-> What evidence would still be needed before I use this calibrated model to make a real-world scientific claim?
+> що докази would усе ще be потрібні до I використовувати це відкалібрована модель до робити реальний науковий висновок?
 
-### Next step
+### Наступний крок
 
-Reproduce experiment ID, calibration, verification, q-sensitivity and bootstrap before changing any assumptions.
+Reproduce experiment ID, калібрування, ПЕРЕВІРКА, q-sensitivity і бутстреп до зміною будь-який припущення.
 
 <figure>
-  <img src="figures/fig_08_claim_boundary.svg" alt="Boundary of scientific claim">
-  <figcaption><strong>Рис. 8.</strong> The allowed claim is bounded by data, model form, calibration, verification and uncertainty assumptions. Beyond that boundary begins speculation.</figcaption>
+ <img src="figures/fig_08_claim_boundary.svg" alt="Boundary of scientific claim">
+ <figcaption><strong>Рис. 8.</strong> allowed висновок є обмежений за допомогою дані, форма моделі, калібрування, ПЕРЕВІРКА і невизначеність припущення. поза що boundary починається спекуляція.</figcaption>
 </figure>
 
 ---
 
 ## 70. Фінальна думка
 
-The most dangerous computational result is not one with a visible error.
+ most небезпечний computational result є не один з видимою похибка.
 
-It is one that looks precise, fits nicely, and quietly carries assumptions nobody wrote down.
+It є один що виглядає точним, fits гарно, і непомітно містить припущення ніхто записав down.
 
-T2.L7 builds the opposite habit.
+T2.L7 формує протилежну звичку.
 
-A research result should say:
+ дослідження result слід say:
 
-- what question was asked;
-- what model was assumed;
-- what data were used;
-- what was estimated;
-- how implementation was verified;
-- how uncertainty was quantified;
-- how sensitive prediction is;
-- how experiment can be reproduced;
-- and what the result **does not** prove.
+- що питання було asked;
+- що model було assumed;
+- що дані були використано;
+- що було оцінений;
+- як реалізація було перевірена;
+- як невизначеність було quantified;
+- як чутливий ПРОГНОЗ є;
+- як experiment може be reproduced;
+- і що result **робить не** довести.
 
-That is the difference between a calculation and a defensible computational research claim.
+що є різниця між обчислення і обґрунтований computational дослідження висновок.

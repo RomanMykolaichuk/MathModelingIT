@@ -1,4 +1,4 @@
-# MathModelingIT MiniBook T2.L6
+# MathModelingIT · Мінікнига T2.L6
 
 ## Системи комп'ютерної математики та їх можливості для математичного моделювання
 
@@ -10,39 +10,39 @@
 
 ## 0. Паспорт книги
 
-**Код заняття:** T2.L6  
-**Тема:** системи комп’ютерної математики та їх можливості  
-**Рівень:** середній  
-**Орієнтовний час читання:** 70–85 хвилин  
-**Попередні знання:** похідна, інтеграл, просте ODE, Python functions, NumPy.
+**Код заняття:** T2.L6 
+**Тема:** системи комп’ютерної математики та їх можливості 
+**Рівень:** середній 
+**Орієнтовний час читання:** 70–85 хвилин 
+**Попередні знання:** похідна, інтеграл, просте ODE, Python функції, NumPy.
 
 Після книги ви повинні вміти:
 
-- задавати symbolic variables/functions у SymPy;
-- формулювати differential equation;
-- виводити equilibrium;
-- читати closed-form solution;
-- виконувати symbolic residual verification;
-- інтегрувати symbolic expression;
-- обчислювати symbolic sensitivity;
+- задавати символьний змінні/функції у SymPy;
+- формулювати differential рівняння;
+- виводити рівновага;
+- читати розв’язок у замкненій формі;
+- виконувати символьна нев’язка ПЕРЕВІРКА;
+- інтегрувати символьний вираз;
+- обчислювати символьний чутливість;
 - використовувати lambdify;
-- незалежно перевіряти trajectory через solve_ivp;
-- оцінювати numerical error;
-- знаходити threshold time;
-- проводити parameter sensitivity;
-- пояснювати, коли symbolic solution є перевагою, а коли numerical method необхідний.
+- незалежно перевіряти траєкторія через solve_ivp;
+- оцінювати чисельний похибка;
+- знаходити Час досягнення порогу;
+- проводити чутливість до параметрів;
+- пояснювати, коли символьний розв’язок є перевагою, а коли чисельний метод необхідний.
 
 ---
 
 ## 1. Сцена: «Формула є. Але чому ми їй довіряємо?»
 
-Уявімо synthetic dynamic system.
+Уявімо синтетичний динамічний система.
 
 Є state \(S(t)\).
 
-У систему постійно надходить resource with rate \(q\).
+У систему постійно надходить ресурс з rate \(q\).
 
-Втрати proportional to current state:
+Втрати proportional до поточний state:
 
 \[
 kS.
@@ -60,26 +60,26 @@ kS.
 S(0)=S_0.
 \]
 
-Хтось запускає SymPy й отримує formula.
+Хтось запускає SymPy й отримує формула.
 
 І каже:
 
 > «Готово. Комп’ютер дав розв’язок».
 
-Але сильніший researcher запитає:
+Але сильніший дослідник запитає:
 
-- чи formula satisfies ODE?
-- чи initial condition виконується?
-- що означає equilibrium?
-- як parameter \(k\) впливає на state?
-- чи numerical integrator дає ту саму trajectory?
-- що буде, якщо symbolic solution unavailable?
+- чи формула satisfies ODE?
+- чи початкова умова виконується?
+- що означає рівновага?
+- як параметр \(k\) впливає на state?
+- чи чисельний інтегратор дає ту саму траєкторія?
+- що буде, якщо символьний розв’язок недоступний?
 
-Саме ці questions перетворюють CAS із «калькулятора» на research tool.
+Саме ці питання перетворюють CAS із «калькулятора» на дослідницький інструмент.
 
 <figure>
-  <img src="figures/fig_01_symbolic_numeric_pipeline.svg" alt="Symbolic-to-numeric pipeline">
-  <figcaption><strong>Рис. 1.</strong> Сильний workflow: formulation → symbolic solution → symbolic verification → lambdify → independent numerical solve → sensitivity → interpretation.</figcaption>
+ <img src="figures/fig_01_symbolic_numeric_pipeline.svg" alt="Symbolic-to-numeric pipeline">
+ <figcaption><strong>Рис. 1.</strong> Сильний робочий процес: формулювання → символьний розв’язок → символьний ПЕРЕВІРКА → lambdify → незалежний чисельний solve → чутливість → інтерпретація.</figcaption>
 </figure>
 
 ---
@@ -95,15 +95,15 @@ S(0)=S_0.
 Де:
 
 - \(S(t)\) — state;
-- \(q\) — constant inflow;
-- \(k>0\) — proportional loss coefficient;
-- \(S_0\) — initial state.
+- \(q\) — сталий приплив;
+- \(k>0\) — пропорційні втрати коефіцієнт;
+- \(S_0\) — початковий стан.
 
-Model is linear first-order ODE.
+Model є лінійний first-order ODE.
 
 ---
 
-## 3. Інтуїція balance law
+## 3. Інтуїція баланс law
 
 Right side:
 
@@ -113,7 +113,7 @@ q-kS.
 
 Це:
 
-> inflow − loss.
+> inflow − втрати.
 
 Якщо:
 
@@ -121,7 +121,7 @@ q-kS.
 q>kS,
 \]
 
-state grows.
+state зростає.
 
 Якщо:
 
@@ -129,41 +129,41 @@ state grows.
 q<kS,
 \]
 
-state decreases.
+state зменшує.
 
-If equal:
+якщо equal:
 
 \[
 q=kS,
 \]
 
-state stops changing.
+state stops зміною.
 
-That gives equilibrium.
+що дає рівновага.
 
 ---
 
-## 4. Equilibrium
+## 4. рівновага
 
-At equilibrium:
+у рівновага:
 
 \[
 \frac{dS}{dt}=0.
 \]
 
-Thus:
+отже:
 
 \[
 q-kS^*=0.
 \]
 
-Therefore:
+тому:
 
 \[
 S^*=\frac{q}{k}.
 \]
 
-Baseline:
+базовий:
 
 \[
 q=12,
@@ -181,15 +181,15 @@ S^*=\frac{12}{0.1}=120.
 
 ---
 
-## 5. Why equilibrium matters
+## 5. чому рівновага має значення
 
-Equilibrium is not just an algebraic intermediate.
+рівновага є не just алгебраїчний intermediate.
 
 It answers:
 
-> to what level does the system tend if parameters remain constant?
+> до що рівень робить система tend якщо параметри remain сталий?
 
-If:
+якщо:
 
 \[
 S_0<S^*,
@@ -197,7 +197,7 @@ S_0<S^*,
 
 state rises.
 
-If:
+якщо:
 
 \[
 S_0>S^*,
@@ -205,22 +205,22 @@ S_0>S^*,
 
 state falls.
 
-Baseline:
+базовий:
 
 \[
 S_0=20<120.
 \]
 
-Hence trajectory rises toward 120.
+Hence траєкторія rises до 120.
 
 <figure>
-  <img src="figures/fig_02_equilibrium_direction.svg" alt="Direction toward equilibrium">
-  <figcaption><strong>Рис. 2.</strong> Знак \(q-kS\) визначає напрям руху state: нижче equilibrium trajectory зростає, вище — спадає.</figcaption>
+ <img src="figures/fig_02_equilibrium_direction.svg" alt="Direction toward equilibrium">
+ <figcaption><strong>Рис. 2.</strong> Знак \(q-kS\) визначає напрям руху state: нижче рівновага траєкторія зростає, вище — спадає.</figcaption>
 </figure>
 
 ---
 
-## 6. Closed-form solution
+## 6. розв’язок у замкненій формі
 
 Аналітичний розв’язок:
 
@@ -241,7 +241,7 @@ S_0-\frac{q}{k}
 \frac{q}{k}=S^*
 \]
 
-— equilibrium.
+— рівновага.
 
 Друга:
 
@@ -249,39 +249,39 @@ S_0-\frac{q}{k}
 \left(S_0-S^*\right)e^{-kt}
 \]
 
-— transient deviation.
+— перехідний відхилення.
 
 ---
 
-## 7. What exponential term means
+## 7. що експоненційний член означає
 
 \[
 e^{-kt}
 \]
 
-decays toward zero.
+decays до нуль.
 
-Thus:
+отже:
 
 \[
 S(t)\rightarrow S^*.
 \]
 
-Parameter \(k\) controls decay speed.
+параметр \(k\) controls спад speed.
 
-Large \(k\):
+великий \(k\):
 
-- stronger proportional loss;
-- faster convergence;
-- lower equilibrium \(q/k\).
+- сильнішого пропорційні втрати;
+- faster збіжність;
+- lower рівновага \(q/k\).
 
-So \(k\) affects both level and speed.
+So \(k\) affects обидва рівень і speed.
 
 ---
 
-## 8. Initial condition check
+## 8. початкова умова перевірка
 
-At:
+у:
 
 \[
 t=0,
@@ -291,7 +291,7 @@ t=0,
 e^0=1.
 \]
 
-Therefore:
+тому:
 
 \[
 S(0)=
@@ -300,13 +300,13 @@ S(0)=
 \left(S_0-\frac{q}{k}\right)=S_0.
 \]
 
-This is simple manual verification.
+це є простий ручний ПЕРЕВІРКА.
 
 ---
 
-## 9. Baseline trajectory
+## 9. базова траєкторія
 
-Parameters:
+параметри:
 
 \[
 q=12,\quad
@@ -314,13 +314,13 @@ k=0.10,\quad
 S_0=20.
 \]
 
-Solution:
+розв’язок:
 
 \[
 S(t)=120-100e^{-0.1t}.
 \]
 
-At:
+у:
 
 \[
 t=10
@@ -332,18 +332,18 @@ we get:
 S(10)\approx83.2121.
 \]
 
-This is a source-of-truth test value.
+це є source-of-truth тест значення.
 
 <figure>
-  <img src="figures/fig_03_baseline_trajectory.svg" alt="Baseline trajectory toward equilibrium">
-  <figcaption><strong>Рис. 3.</strong> Baseline state starts at 20 and monotonically approaches equilibrium 120. At \(t=10\), \(S\approx83.2121\).</figcaption>
+ <img src="figures/fig_03_baseline_trajectory.svg" alt="Baseline trajectory toward equilibrium">
+ <figcaption><strong>Рис. 3.</strong> базовий state початкові точки у 20 і monotonically approaches рівновага 120. у \(t=10\), \(S\approx83.2121\).</figcaption>
 </figure>
 
 ---
 
 ## 10. SymPy model
 
-Symbolic setup:
+символьний setup:
 
 ~~~python
 t = sp.symbols("t", nonnegative=True)
@@ -361,11 +361,11 @@ ode = sp.Eq(
 )
 ~~~
 
-This code mirrors notation.
+це code mirrors notation.
 
 ---
 
-## 11. Why symbolic assumptions matter
+## 11. чому символьний припущення matter
 
 We declare:
 
@@ -373,19 +373,19 @@ We declare:
 k>0.
 \]
 
-Why?
+чому?
 
-Because:
+тому що:
 
-- equilibrium requires division by \(k\);
-- model meaning says proportional loss positive;
-- simplification can use positivity.
+- рівновага потребує division за допомогою \(k\);
+- model зміст says пропорційні втрати додатний;
+- спрощення може використовувати positivity.
 
-Symbolic systems reason better when assumptions explicit.
+символьний системи reason кращий коли припущення явний.
 
 ---
 
-## 12. Symbolic equilibrium
+## 12. символьний рівновага
 
 SymPy solves:
 
@@ -399,17 +399,17 @@ Result:
 S_{eq}=\frac{q}{k}.
 \]
 
-This is not difficult manually.
+це є не difficult manually.
 
-The point is not convenience.
+ точка є не convenience.
 
-The point is creating a symbolic object usable later.
+ точка є creating символьний object usable пізніше.
 
 ---
 
-## 13. Symbolic verification
+## 13. символьний ПЕРЕВІРКА
 
-Take candidate solution \(S_c(t)\).
+Take candidate розв’язок \(S_c(t)\).
 
 Compute residual:
 
@@ -420,13 +420,13 @@ R(t)=
 (q-kS_c).
 \]
 
-If candidate is exact:
+якщо candidate є точний:
 
 \[
 R(t)=0.
 \]
 
-In code:
+у code:
 
 ~~~python
 residual = sp.simplify(
@@ -437,64 +437,64 @@ assert residual == 0
 ~~~
 
 <figure>
-  <img src="figures/fig_04_residual_verification.svg" alt="Symbolic residual verification">
-  <figcaption><strong>Рис. 4.</strong> Residual check verifies the equation structurally for symbolic parameters, not only at several numerical points.</figcaption>
+ <img src="figures/fig_04_residual_verification.svg" alt="Symbolic residual verification">
+ <figcaption><strong>Рис. 4.</strong> Residual перевірка verifies рівняння structurally для символьний параметри, не лише у кілька чисельний точки.</figcaption>
 </figure>
 
 ---
 
-## 14. Why residual check stronger than spot checks
+## 14. чому residual перевірка сильнішого ніж точкові перевірки
 
-Suppose we test:
+припустімо we тест:
 
 \[
 t=0,5,10.
 \]
 
-Candidate matches three points.
+Candidate matches three точки.
 
-Could still be wrong elsewhere.
+Could усе ще be неправильний elsewhere.
 
-Symbolic residual:
+символьна нев’язка:
 
 \[
 R(t)\equiv0
 \]
 
-checks identity under stated symbolic assumptions.
+перевірки ідентичність за stated символьний припущення.
 
-This is stronger evidence for algebraic correctness.
-
----
-
-## 15. But symbolic residual does not validate the real model
-
-Residual zero proves:
-
-> formula solves equation.
-
-It does not prove:
-
-- equation describes real process;
-- q constant;
-- k constant;
-- proportional-loss assumption true.
-
-Again:
-
-> verification ≠ validation.
+це є сильнішого докази для алгебраїчний correctness.
 
 ---
 
-## 16. Symbolic differentiation
+## 15. але символьна нев’язка робить не validate реальний model
 
-Equilibrium:
+Residual нуль доводить:
+
+> формула solves рівняння.
+
+It робить не довести:
+
+- рівняння describes реальний процес;
+- q сталий;
+- k сталий;
+- proportional-loss припущення істинний.
+
+знову:
+
+> ПЕРЕВІРКА ≠ валідація.
+
+---
+
+## 16. символьне диференціювання
+
+рівновага:
 
 \[
 S^*=\frac{q}{k}.
 \]
 
-Sensitivity to \(q\):
+чутливість до \(q\):
 
 \[
 \frac{\partial S^*}{\partial q}
@@ -502,7 +502,7 @@ Sensitivity to \(q\):
 \frac{1}{k}.
 \]
 
-Sensitivity to \(k\):
+чутливість до \(k\):
 
 \[
 \frac{\partial S^*}{\partial k}
@@ -510,7 +510,7 @@ Sensitivity to \(k\):
 -\frac{q}{k^2}.
 \]
 
-These formulas show structure before any numbers.
+ці formulas показати структура до будь-який numbers.
 
 ---
 
@@ -520,9 +520,9 @@ These formulas show structure before any numbers.
 \frac{1}{k}>0.
 \]
 
-Equilibrium grows when inflow grows.
+рівновага зростає коли inflow зростає.
 
-At:
+у:
 
 \[
 k=0.1,
@@ -532,7 +532,7 @@ k=0.1,
 \frac{\partial S^*}{\partial q}=10.
 \]
 
-Locally, +1 in q changes equilibrium by +10.
+Locally, +1 у q зміни рівновага за допомогою +10.
 
 ---
 
@@ -542,25 +542,25 @@ Locally, +1 in q changes equilibrium by +10.
 -\frac{q}{k^2}<0.
 \]
 
-Increasing loss coefficient lowers equilibrium.
+зростає коефіцієнт втрат lowers рівновага.
 
-Baseline:
+базовий:
 
 \[
 -\frac{12}{0.1^2}=-1200.
 \]
 
-This large derivative reflects units and scale.
+це великий похідна reflects одиницях і масштаб.
 
-Do not interpret magnitude without units.
+робити не interpret величину без одиницях.
 
 ---
 
-## 19. Relative sensitivity
+## 19. відносний чутливість
 
-Absolute derivative may look huge.
+Absolute похідна може look huge.
 
-A dimensionless elasticity is often useful:
+ безрозмірна еластичність є часто корисний:
 
 \[
 E_k=
@@ -568,7 +568,7 @@ E_k=
 \frac{k}{S^*}.
 \]
 
-For:
+для:
 
 \[
 S^*=\frac{q}{k},
@@ -580,17 +580,17 @@ we get:
 E_k=-1.
 \]
 
-So 1% increase in \(k\) gives approximately 1% decrease in equilibrium.
+So 1% збільшення у \(k\) дає приблизно 1% зменшення у рівновага.
 
-This is often more interpretable.
+це є часто більше interpretable.
 
 ---
 
-## 20. Symbolic integration
+## 20. символьне інтегрування
 
-Sometimes question is not state at a moment.
+інколи питання є не state у moment.
 
-We need cumulative exposure:
+We need накопичений вплив:
 
 \[
 A(T)=\int_0^T S(t)\,dt.
@@ -608,7 +608,7 @@ S_0-\frac{q}{k}
 \frac{1-e^{-kT}}{k}.
 \]
 
-Baseline:
+базовий:
 
 \[
 A(10)\approx567.8794.
@@ -616,30 +616,30 @@ A(10)\approx567.8794.
 
 ---
 
-## 21. What cumulative state means
+## 21. що накопичений state означає
 
-Depends on domain.
+залежить на предметна область.
 
 Could represent:
 
-- accumulated availability;
-- cumulative load;
+- accumulated доступність;
+- накопичений навантаження;
 - total exposure;
-- area under state curve.
+- area за state curve.
 
-In synthetic lesson no operational interpretation is imposed.
+у синтетичний lesson no operational інтерпретація є заданий.
 
-The important idea:
+ важливий idea:
 
-> symbolic solution enables derived quantities.
+> символьний розв’язок дозволяє похідні величини.
 
 ---
 
-## 22. Threshold time
+## 22. Час досягнення порогу
 
-Question:
+питання:
 
-> when does \(S(t)\) first reach target \(H\)?
+> коли робить \(S(t)\) спочатку досягають цільового значення \(H\)?
 
 Solve:
 
@@ -649,7 +649,7 @@ S^*+
 (S_0-S^*)e^{-kt}.
 \]
 
-Then:
+тоді:
 
 \[
 e^{-kt}
@@ -657,7 +657,7 @@ e^{-kt}
 \frac{H-S^*}{S_0-S^*}.
 \]
 
-Therefore:
+тому:
 
 \[
 t=
@@ -668,13 +668,13 @@ t=
 \right).
 \]
 
-For:
+для:
 
 \[
 H=80
 \]
 
-baseline:
+базовий:
 
 \[
 t\approx9.1629.
@@ -682,61 +682,61 @@ t\approx9.1629.
 
 ---
 
-## 23. Threshold validity
+## 23. поріг validity
 
-Target must lie between:
+цільового значення необхідно лежати між:
 
 \[
 S_0
 \]
 
-and:
+і:
 
 \[
 S^*.
 \]
 
-If target 150:
+якщо цільового значення 150:
 
 \[
 150>120,
 \]
 
-baseline trajectory never reaches it.
+базова траєкторія ніколи досягає it.
 
-Model raises ValueError.
+Model підвищує ValueError.
 
-This is semantic validation.
+це є semantic валідація.
 
 ---
 
-## 24. Equilibrium threshold
+## 24. рівновага поріг
 
-If target exactly:
+якщо цільового значення точно:
 
 \[
 H=S^*,
 \]
 
-trajectory approaches asymptotically.
+траєкторія approaches асимптотично.
 
-It does not reach in finite time.
+It робить не досягають у скінченний час.
 
-Thus:
+отже:
 
 \[
 t=\infty.
 \]
 
-This is a beautiful example where mathematical nuance matters.
+це є наочний приклад де mathematical нюанс має значення.
 
 ---
 
 ## 25. Lambdify bridge
 
-Symbolic expression useful for reasoning.
+символьний вираз корисний для reasoning.
 
-But to plot arrays, use:
+але до графік arrays, використовувати:
 
 ~~~python
 fn = sp.lambdify(
@@ -752,11 +752,11 @@ Now:
 values = fn(times, 12, 0.1, 20)
 ~~~
 
-This bridges symbolic and numerical worlds.
+це bridges символьний і чисельний worlds.
 
 ---
 
-## 26. Why not rewrite formula manually
+## 26. чому не rewrite формула manually
 
 We could manually code:
 
@@ -765,29 +765,29 @@ seq = q/k
 return seq + (s0-seq)*np.exp(-k*t)
 ~~~
 
-Current package has analytical_solution() exactly like that.
+поточний пакет має analytical_solution() точно like що.
 
-But lambdify adds verification:
+але lambdify adds ПЕРЕВІРКА:
 
-> symbolic expression and direct numerical implementation agree.
+> символьний вираз і direct чисельний реалізація узгоджуються.
 
-Test checks it.
+тест перевірки it.
 
 ---
 
-## 27. Independent numerical solution
+## 27. незалежний чисельний розв’язок
 
-Use solve_ivp on:
+використовувати solve_ivp на:
 
 \[
 \frac{dS}{dt}=q-kS.
 \]
 
-Numerical integrator does not use closed-form solution.
+чисельний інтегратор робить не використовувати розв’язок у замкненій формі.
 
-Therefore it is partially independent computational pathway.
+тому it є частково незалежний computational шлях.
 
-If trajectories agree, confidence increases.
+якщо траєкторії узгоджуються, довірчий збільшує.
 
 ---
 
@@ -807,57 +807,57 @@ result = solve_ivp(
 )
 ~~~
 
-Strict tolerances support high agreement.
+суворого tolerances підтримувати високий збіг.
 
 ---
 
-## 29. Error metric
+## 29. похибка показник
 
-Compare:
+порівнювати:
 
 \[
 e_i=
 |S_{analytical}(t_i)-S_{numerical}(t_i)|.
 \]
 
-Maximum:
+максимум:
 
 \[
 e_{max}=\max_i e_i.
 \]
 
-Test requires:
+тест потребує:
 
 \[
 e_{max}<10^{-6}.
 \]
 
 <figure>
-  <img src="figures/fig_05_three_trajectories.svg" alt="Analytical, lambdified and solve_ivp trajectories">
-  <figcaption><strong>Рис. 5.</strong> Analytical NumPy, lambdified SymPy and independent solve_ivp trajectories should overlap within numerical tolerance.</figcaption>
+ <img src="figures/fig_05_three_trajectories.svg" alt="Analytical, lambdified and solve_ivp trajectories">
+ <figcaption><strong>Рис. 5.</strong> Analytical NumPy, lambdified SymPy і незалежний solve_ivp траєкторії слід збігатися у межах чисельний допуск.</figcaption>
 </figure>
 
 ---
 
-## 30. Agreement is evidence, not proof of adequacy
+## 30. збіг є докази, не доказ адекватність
 
-Three implementations agree.
+Three реалізації узгоджуються.
 
-This supports:
+це підтримує:
 
 - derivation;
 - coding;
-- numerical integration.
+- чисельний інтегрування.
 
-Does not prove:
+робить не довести:
 
-- model structure correct for real system.
+- структура моделі правильний для реальний система.
 
-This distinction repeats across course.
+це відмінність repeats через course.
 
 ---
 
-## 31. Parameter experiment in k
+## 31. параметр experiment у k
 
 Fix:
 
@@ -869,7 +869,7 @@ q=12,
 S_0=20.
 \]
 
-Vary:
+змінювати:
 
 \[
 k\in
@@ -888,173 +888,173 @@ Results:
 
 ---
 
-## 32. Why equilibrium decreases
+## 32. чому рівновага зменшує
 
-Formula:
+формула:
 
 \[
 S^*=\frac{q}{k}.
 \]
 
-Increasing denominator reduces ratio.
+зростає denominator зменшує ratio.
 
-Derivative confirms:
+похідна confirms:
 
 \[
 \frac{\partial S^*}{\partial k}<0.
 \]
 
-Thus numerical table, formula and derivative tell same story.
+отже чисельний table, формула і похідна tell той самий story.
 
 <figure>
-  <img src="figures/fig_06_k_sensitivity.svg" alt="Sensitivity to loss coefficient k">
-  <figcaption><strong>Рис. 6.</strong> Increasing \(k\) lowers both equilibrium and \(S(10)\). Symbolic sensitivity explains the direction before numerical experiment.</figcaption>
+ <img src="figures/fig_06_k_sensitivity.svg" alt="Sensitivity to loss coefficient k">
+ <figcaption><strong>Рис. 6.</strong> зростає \(k\) lowers обидва рівновага і \(S(10)\). символьний чутливість explains напрям до чисельний experiment.</figcaption>
 </figure>
 
 ---
 
-## 33. Why S(10) is not simply equilibrium
+## 33. чому S(10) є не simply рівновага
 
-At finite time:
+у скінченний час:
 
 \[
 S(10)\ne S^*
 \]
 
-unless system already at equilibrium or enough time passed.
+unless система вже у рівновага або достатньо час passed.
 
-Transient term still matters.
+перехідний член усе ще має значення.
 
-Therefore:
+тому:
 
-- equilibrium sensitivity;
-- finite-horizon sensitivity
+- рівновага чутливість;
+- finite-horizon чутливість
 
-are related but distinct.
+є related але distinct.
 
 ---
 
-## 34. Time scale
+## 34. час масштаб
 
-Exponential decay characteristic time:
+експоненційний спад характерний час:
 
 \[
 \tau=\frac{1}{k}.
 \]
 
-Baseline:
+базовий:
 
 \[
 \tau=10.
 \]
 
-This gives intuition.
+це дає інтуїція.
 
-After several \(\tau\), transient becomes small.
+після кілька \(\tau\), перехідний стає малий.
 
 Higher \(k\):
 
 - smaller \(\tau\);
-- faster convergence.
+- faster збіжність.
 
 ---
 
-## 35. Half-life of deviation
+## 35. Half-life відхилення
 
-Deviation:
+відхилення:
 
 \[
 D(t)=S(t)-S^*.
 \]
 
-Then:
+тоді:
 
 \[
 D(t)=D(0)e^{-kt}.
 \]
 
-Time for deviation halve:
+час для відхилення halve:
 
 \[
 t_{1/2}=
 \frac{\ln2}{k}.
 \]
 
-Baseline:
+базовий:
 
 \[
 t_{1/2}\approx6.93.
 \]
 
-This is another derived symbolic insight.
+це є інший похідні символьний insight.
 
 ---
 
-## 36. CAS as structure explorer
+## 36. CAS як структура explorer
 
 SymPy helps ask:
 
-- equilibrium?
-- derivative?
+- рівновага?
+- похідна?
 - integral?
-- threshold equation?
-- asymptotic behavior?
-- simplification?
+- поріг рівняння?
+- asymptotic поведінку?
+- спрощення?
 
-This is more valuable than only numerical substitution.
-
----
-
-## 37. Symbolic expression growth
-
-Not every model yields elegant closed form.
-
-For nonlinear or coupled systems SymPy may:
-
-- return implicit form;
-- return special functions;
-- fail to solve;
-- generate huge expression.
-
-This is not failure of modeling.
-
-It signals need for numerical methods.
+це є більше цінний ніж лише чисельний підстановка.
 
 ---
 
-## 38. Numerical methods are not second-class
+## 37. символьний вираз growth
 
-If symbolic solution unavailable, solve_ivp may still be correct tool.
+не кожен model yields елегантна closed форма.
 
-The goal is not:
+для нелінійний або coupled системи SymPy може:
 
-> always find closed form.
+- return implicit форма;
+- return спеціальні функції;
+- fail до solve;
+- generate huge вираз.
 
-The goal:
+це є не відмова modeling.
 
-> choose representation suitable for question and verify it.
+It signals need для чисельний методи.
 
 ---
 
-## 39. Symbolic vs numerical comparison
+## 38. чисельний методи є не second-class
 
-### Symbolic strengths
+якщо символьний розв’язок недоступний, solve_ivp може усе ще be правильний інструмент.
 
-- exact structure;
-- derivatives;
+ goal є не:
+
+> завжди find closed форма.
+
+ goal:
+
+> choose представлення придатний для питання і перевірити it.
+
+---
+
+## 39. символьний vs чисельний comparison
+
+### символьний strengths
+
+- точний структура;
+- похідні;
 - integrals;
-- simplification;
-- parameter dependence.
+- спрощення;
+- параметр dependence.
 
-### Numerical strengths
+### чисельний strengths
 
 - complex models;
-- nonlinear systems;
-- time-varying coefficients;
-- large systems;
-- direct simulation.
+- нелінійний системи;
+- time-varying коефіцієнти;
+- великий системи;
+- direct моделювання.
 
-Best workflow often combines both.
+найкращий робочий процес часто combines обидва.
 
 ---
 
@@ -1066,13 +1066,13 @@ Model assumes:
 k>0.
 \]
 
-If:
+якщо:
 
 \[
 k=0,
 \]
 
-equilibrium formula:
+рівновага формула:
 
 \[
 q/k
@@ -1080,69 +1080,69 @@ q/k
 
 undefined.
 
-But ODE becomes:
+але ODE стає:
 
 \[
 \frac{dS}{dt}=q.
 \]
 
-Solution:
+розв’язок:
 
 \[
 S=S_0+qt.
 \]
 
-So k=0 is not impossible process.
+So k=0 є не impossible process.
 
-It is outside current formula branch.
+It є поза поточний формула branch.
 
 ---
 
-## 41. Зламай модель: q changes with time
+## 41. Зламай модель: q зміни з час
 
-Suppose:
+припустімо:
 
 \[
 q=q(t).
 \]
 
-Then:
+тоді:
 
 \[
 \frac{dS}{dt}=q(t)-kS.
 \]
 
-Closed form may still exist for simple q(t), but baseline formula no longer valid.
+Closed форма може усе ще exist для простий q(t), але базовий формула no longer valid.
 
 Need re-derive.
 
 ---
 
-## 42. Зламай модель: nonlinear loss
+## 42. Зламай модель: нелінійний втрати
 
-Suppose:
+припустімо:
 
 \[
 \frac{dS}{dt}=q-kS^2.
 \]
 
-Equilibrium:
+рівновага:
 
 \[
 S^*=\sqrt{q/k}.
 \]
 
-Dynamics nonlinear.
+динаміка нелінійний.
 
-Different sensitivity and trajectory.
+різний чутливість і траєкторія.
 
-This is genuine model-class change.
+це є genuine model-class зміна.
 
 ---
 
-## 43. Зламай модель: delay
+## 43. Зламай модель: затримка
 
-Suppose loss depends on past:
+припустімо втрати залежить на past:
 
 \[
 \frac{dS}{dt}
@@ -1150,47 +1150,47 @@ Suppose loss depends on past:
 q-kS(t-\tau).
 \]
 
-Now delay differential equation.
+Now затримка differential рівняння.
 
-Baseline ODE tools insufficient.
+базовий ODE інструменти недостатньою.
 
 ---
 
-## 44. Зламай model: threshold process
+## 44. Зламай model: поріг process
 
-Loss may activate only when:
+втрати може activate лише коли:
 
 \[
 S>S_c.
 \]
 
-Then piecewise model.
+тоді piecewise model.
 
-Symbolic and numerical approach changes.
+символьний і чисельний approach зміни.
 
 ---
 
-## 45. Validation hierarchy
+## 45. валідація hierarchy
 
 <figure>
-  <img src="figures/fig_07_verification_hierarchy.svg" alt="Verification hierarchy">
-  <figcaption><strong>Рис. 7.</strong> Mathematical derivation, residual check, lambdify agreement and solve_ivp agreement verify computation at different levels; domain adequacy remains a separate question.</figcaption>
+ <img src="figures/fig_07_verification_hierarchy.svg" alt="Verification hierarchy">
+ <figcaption><strong>Рис. 7.</strong> Mathematical derivation, residual перевірка, lambdify збіг і solve_ivp збіг перевірити computation у різний levels; предметна область адекватність залишається окремий питання.</figcaption>
 </figure>
 
 Levels:
 
 1. formulate ODE;
-2. derive solution;
+2. derive розв’язок;
 3. residual=0;
-4. initial condition;
-5. lambdify agreement;
-6. solve_ivp agreement;
-7. parameter experiment plausibility;
-8. domain validation.
+4. початкова умова;
+5. lambdify збіг;
+6. solve_ivp збіг;
+7. параметр experiment plausibility;
+8. предметна область валідація.
 
 ---
 
-## 46. Python без страху: equilibrium
+## 46. Python без страху: рівновага
 
 ~~~python
 value = equilibrium(
@@ -1200,7 +1200,7 @@ value = equilibrium(
 assert value == 120
 ~~~
 
-Control test.
+Control тест.
 
 ---
 
@@ -1215,7 +1215,7 @@ s10 = analytical_solution(
 )
 ~~~
 
-Expected:
+очікуваний:
 
 \[
 83.2120558829.
@@ -1223,7 +1223,7 @@ Expected:
 
 ---
 
-## 48. Python без страху: cumulative
+## 48. Python без страху: накопичений
 
 ~~~python
 area = cumulative_state(
@@ -1234,7 +1234,7 @@ area = cumulative_state(
 )
 ~~~
 
-Expected:
+очікуваний:
 
 \[
 567.8794411714.
@@ -1242,7 +1242,7 @@ Expected:
 
 ---
 
-## 49. Python без страху: threshold
+## 49. Python без страху: поріг
 
 ~~~python
 t80 = threshold_time(
@@ -1253,7 +1253,7 @@ t80 = threshold_time(
 )
 ~~~
 
-Expected:
+очікуваний:
 
 \[
 9.1629073187.
@@ -1261,7 +1261,7 @@ Expected:
 
 ---
 
-## 50. Python без страху: verification error
+## 50. Python без страху: ПЕРЕВІРКА похибка
 
 ~~~python
 err = max_symbolic_numeric_error(
@@ -1273,61 +1273,61 @@ err = max_symbolic_numeric_error(
 assert err < 1e-6
 ~~~
 
-This is explicit numerical criterion.
+це є явний чисельний критерій.
 
 ---
 
-## 51. Predict before Run
+## 51. Predict до запуск
 
-Before sensitivity table, predict.
+до чутливість table, predict.
 
-If \(k\) increases:
+якщо \(k\) збільшує:
 
-1. equilibrium?
-2. convergence speed?
+1. рівновага?
+2. збіжність speed?
 3. S(10)?
-4. threshold time to 80?
+4. Час досягнення порогу до 80?
 
-Think before computation.
+Think до computation.
 
 ---
 
 ## 52. k affects two mechanisms
 
-Increasing \(k\):
+зростає \(k\):
 
 - lowers \(S^*=q/k\);
-- makes exponent \(e^{-kt}\) decay faster.
+- робить exponent \(e^{-kt}\) спад faster.
 
-These effects can pull finite-horizon state in nontrivial ways across different initial conditions.
+ці effects може pull finite-Стан на горизонті у nontrivial ways через різний initial conditions.
 
-Baseline both support lower S(10).
+базовий обидва підтримувати lower S(10).
 
 ---
 
-## 53. Scenario: S0 above equilibrium
+## 53. сценарій: S0 вище рівновага
 
-Suppose:
+припустімо:
 
 \[
 S_0=180>S^*=120.
 \]
 
-Then trajectory decreases toward 120.
+тоді траєкторія зменшує до 120.
 
-Same formula.
+той самий формула.
 
-This illustrates how initial state changes direction but not equilibrium.
+це illustrates як початковий стан зміни напрям але не рівновага.
 
 ---
 
-## 54. Scenario: S0 exactly equilibrium
+## 54. сценарій: S0 точно рівновага
 
 \[
 S_0=S^*.
 \]
 
-Then transient coefficient zero:
+тоді перехідний коефіцієнт нуль:
 
 \[
 S_0-S^*=0.
@@ -1341,119 +1341,119 @@ S(t)=S^*
 
 for all t.
 
-This is valuable control case.
+це є цінний контрольний приклад.
 
 ---
 
-## 55. Scenario: q increase
+## 55. сценарій: q збільшення
 
-If:
+якщо:
 
 \[
 q\uparrow,
 \]
 
-equilibrium increases linearly:
+рівновага збільшує linearly:
 
 \[
 S^*=\frac{q}{k}.
 \]
 
-Derivative constant for fixed k:
+похідна сталий для фіксований k:
 
 \[
 1/k.
 \]
 
-This is simpler sensitivity than k.
+це є simpler чутливість ніж k.
 
 ---
 
-## 56. Parameter identifiability intuition
+## 56. параметр identifiability інтуїція
 
-Suppose only equilibrium observed:
+припустімо лише рівновага спостережуваний:
 
 \[
 S^*=120.
 \]
 
-Many pairs satisfy:
+багато pairs satisfy:
 
 \[
 q/k=120.
 \]
 
-For example:
+для приклад:
 
 \[
 q=12,k=0.1
 \]
 
-and:
+і:
 
 \[
 q=24,k=0.2.
 \]
 
-Equilibrium alone cannot identify both.
+рівновага самостійно cannot ідентифікувати обидва.
 
-Trajectory speed helps identify k.
+траєкторія speed helps ідентифікувати k.
 
-This is a deep research insight from symbolic structure.
+це є deep дослідження insight з символьний структура.
 
 ---
 
-## 57. Why time-series data matters
+## 57. чому time-series дані має значення
 
-Transient term:
+перехідний член:
 
 \[
 e^{-kt}
 \]
 
-contains k directly.
+містить k безпосередньо.
 
-Thus observations over time can distinguish parameter pairs with same equilibrium.
+отже спостереження над час може distinguish параметр pairs з той самий рівновага.
 
-Symbolic model helps design data collection.
-
----
-
-## 58. From solving to experimental design
-
-This is why CAS matters in research.
-
-It can reveal:
-
-- which quantities depend on parameters;
-- which observations identify them;
-- which derivative is zero/nonzero;
-- which measurement horizon informative.
-
-Symbolic analysis informs experiment design.
+символьний model helps план дані collection.
 
 ---
 
-## 59. Reproducibility
+## 58. з solving до experimental план
 
-A complete T2.L6 experiment should save:
+це є чому CAS має значення у дослідження.
 
-- symbolic form;
-- baseline parameters;
-- time grid;
+It може reveal:
+
+- який величини depend на параметри;
+- який спостереження ідентифікувати them;
+- який похідна є нуль/nonzero;
+- який вимірювання horizon інформативний.
+
+символьний аналіз informs план експерименту.
+
+---
+
+## 59. ВІДТВОРЮВАНІСТЬ
+
+ complete T2.L6 experiment слід зберігати:
+
+- символьний форма;
+- базовий параметри;
+- час сітка;
 - solve_ivp tolerances;
 - comparison table;
-- sensitivity table;
-- summary;
-- code commit.
+- чутливість table;
+- підсумок;
+- code коміт.
 
-Then agreement can be rebuilt.
+тоді збіг може be rebuilt.
 
 ---
 
-## 60. Numerical tolerance
+## 60. чисельний допуск
 
-solve_ivp uses:
+solve_ivp використовує:
 
 \[
 rtol=10^{-10},
@@ -1463,17 +1463,17 @@ rtol=10^{-10},
 atol=10^{-12}.
 \]
 
-These are algorithm settings.
+ці є алгоритм settings.
 
-They influence numerical error and runtime.
+They influence чисельний похибка і час виконання.
 
-Therefore they are part of reproducibility.
+тому they є part ВІДТВОРЮВАНІСТЬ.
 
 ---
 
-## 61. Error threshold vs exact equality
+## 61. похибка поріг vs точний equality
 
-Do not assert:
+робити не assert:
 
 \[
 S_{analytical}=S_{numerical}
@@ -1481,101 +1481,101 @@ S_{analytical}=S_{numerical}
 
 bit-for-bit.
 
-Numerical integration approximates.
+чисельний інтегрування approximates.
 
-Use tolerance:
+використовувати допуск:
 
 \[
 e_{max}<10^{-6}.
 \]
 
-This is correct computational reasoning.
+це є правильний computational reasoning.
 
 ---
 
-## 62. Floating point
+## 62. Floating точка
 
-Even analytical NumPy evaluation uses floating point.
+Even analytical NumPy оцінювання використовує floating точка.
 
-Symbolic expression exact in algebraic form.
+символьний вираз точний у алгебраїчний форма.
 
-Numerical substitution approximate.
+чисельний підстановка наближений.
 
-This difference matters.
+це різниця має значення.
 
 ---
 
-## 63. Symbolic simplification hazards
+## 63. символьний спрощення hazards
 
-Equivalent expressions may look different.
+Equivalent expressions може look різний.
 
-Example:
+приклад:
 
 \[
 S^*+(S_0-S^*)e^{-kt}
 \]
 
-and expanded form.
+і expanded форма.
 
-String comparison is weak.
+String comparison є weak.
 
-Use:
+використовувати:
 
 \[
 sp.simplify(expr_1-expr_2)==0.
 \]
 
-This checks equivalence structurally.
+це перевірки equivalence structurally.
 
 ---
 
-## 64. Model audit
+## 64. Model аудит
 
-### Symbolic audit
+### символьний аудит
 
-- assumptions explicit?
-- residual zero?
-- initial condition?
+- припущення явний?
+- residual нуль?
+- початкова умова?
 
-### Numerical audit
+### чисельний аудит
 
-- time grid valid?
-- solver success?
-- tolerance adequate?
-- max error?
+- час сітка valid?
+- розв’язувач успіх?
+- допуск adequate?
+- max похибка?
 
-### Sensitivity audit
+### чутливість аудит
 
-- parameter range meaningful?
-- trend explained by formulas?
+- параметр діапазон meaningful?
+- trend explained за допомогою formulas?
 
-### Scientific audit
+### науковий аудит
 
 - q/k meanings justified?
-- constant coefficients plausible?
-- linear loss adequate?
+- сталий коефіцієнти правдоподібну?
+- лінійний втрати adequate?
 
 ---
 
-## 65. Synthetic military context
+## 65. синтетичний military context
 
-Imagine \(S(t)\) as abstract readiness-support state in a training simulation.
+Imagine \(S(t)\) як abstract readiness-support state у training моделювання.
 
-\(q\) — synthetic replenishment intensity.
+\(q\) — синтетичний поповнення intensity.
 
-\(kS\) — synthetic proportional loss.
+\(kS\) — синтетичний пропорційні втрати.
 
-No actual readiness metric, logistics stock or operational coefficient is implied.
+No фактичний readiness показник, logistics запас або operational коефіцієнт є implied.
 
-The purpose is mathematical structure only.
+ purpose є mathematical структура лише.
 
 ---
 
-## 66. Research Transfer
+## 66. Перенесення в дослідження
 
-Question:
+питання:
 
-> Яку частину мого dissertation model варто спочатку formalize symbolically, а яку verify numerically?
+> Яку частину мого дисертація model варто спочатку формалізувати symbolically, а яку перевірити чисельно?
 
 Template:
 
@@ -1613,9 +1613,9 @@ Allowed conclusion:
 
 ---
 
-## 67. Example Research Transfer
+## 67. приклад Перенесення в дослідження
 
-Suppose process:
+припустімо process:
 
 \[
 \frac{dY}{dt}=a-bY.
@@ -1623,50 +1623,50 @@ Suppose process:
 
 Symbolically derive:
 
-- equilibrium;
-- transient;
-- derivative wrt parameters.
+- рівновага;
+- перехідний;
+- похідна wrt параметри.
 
-Numerically:
+чисельно:
 
 - solve_ivp;
-- compare;
-- sensitivity.
+- порівнювати;
+- чутливість.
 
-Then calibrate a,b from data in later work.
+тоді calibrate,b з дані у пізніше працювати.
 
 ---
 
-## 68. When symbolic method is especially useful
+## 68. коли символьний метод є especially корисний
 
-- small ODE;
-- algebraic equilibrium;
-- exact derivatives;
-- parameter relations;
+- малий ODE;
+- алгебраїчний рівновага;
+- точний похідні;
+- параметр relations;
 - transformations;
-- asymptotic analysis.
+- asymptotic аналіз.
 
 ---
 
-## 69. When numerical method is especially useful
+## 69. коли чисельний метод є especially корисний
 
-- nonlinear coupled systems;
-- time-varying coefficients;
+- нелінійний coupled системи;
+- time-varying коефіцієнти;
 - discontinuities;
-- no closed form;
-- large state dimension;
-- data-driven simulation.
+- no closed форма;
+- великий state dimension;
+- data-driven моделювання.
 
 ---
 
-## 70. Hybrid workflow
+## 70. Hybrid робочий процес
 
 <figure>
-  <img src="figures/fig_08_hybrid_method_map.svg" alt="Hybrid symbolic-numeric method map">
-  <figcaption><strong>Рис. 8.</strong> Symbolic and numerical methods are complementary: symbolic reasoning exposes structure, numerical computation explores cases where closed form is unavailable or inconvenient.</figcaption>
+ <img src="figures/fig_08_hybrid_method_map.svg" alt="Hybrid symbolic-numeric method map">
+ <figcaption><strong>Рис. 8.</strong> символьний і чисельний методи є complementary: символьний reasoning exposes структура, чисельний computation explores cases де closed форма є недоступний або inconvenient.</figcaption>
 </figure>
 
-Best practice:
+найкращий practice:
 
 \[
 Symbolic
@@ -1674,76 +1674,76 @@ Symbolic
 Numerical
 \]
 
-not competition.
+не конкуренція.
 
 ---
 
-## 71. Typical thinking errors
+## 71. типову thinking похибки
 
-### «SymPy gave formula → model correct»
-
-No.
-
-Formula may solve wrong equation.
-
-### «Residual zero → real system validated»
+### «SymPy gave формула → model правильний»
 
 No.
 
-Only equation verification.
+формула може solve неправильний рівняння.
 
-### «solve_ivp matches → two independent truths»
-
-They share same model assumptions.
-
-### «More digits → more scientific»
+### «Residual нуль → реальний система валідовану»
 
 No.
 
-Reporting precision must reflect data/model quality.
+лише рівняння ПЕРЕВІРКА.
 
-### «Numerical method worse because approximate»
+### «solve_ivp matches → two незалежний істини»
+
+They частка той самий припущення моделі.
+
+### «більше цифри → більше науковий»
 
 No.
 
-Often it is the only practical method.
+Reporting точність необхідно відображати дані/model якість.
+
+### «чисельний метод worse тому що наближений»
+
+No.
+
+часто it є лише практичний метод.
 
 ---
 
-## 72. Allowed conclusion
+## 72. Допустимий висновок
 
-Strong:
+сильний:
 
-> For synthetic ODE \(dS/dt=q-kS\) with \(q=12,k=0.1,S_0=20\), symbolic solution gives equilibrium 120, \(S(10)\approx83.2121\), cumulative state over [0,10] ≈567.8794 and threshold time to 80 ≈9.1629. Symbolic residual is exactly zero, and independent solve_ivp trajectory agrees with the analytical solution within \(10^{-6}\) on the tested grid.
+> для синтетичний ODE \(dS/dt=q-kS\) з \(q=12,k=0.1,S_0=20\), символьний розв’язок дає рівновага 120, \(S(10)\approx83.2121\), накопичений state над [0,10] ≈567.8794 і Час досягнення порогу до 80 ≈9.1629. символьна нев’язка є точно нуль, і незалежний solve_ivp траєкторія agrees з Аналітичний розв’язок у межах \(10^{-6}\) на tested сітка.
 
-Then limitation:
+тоді limitation:
 
-> These checks verify the mathematical/computational implementation, not the adequacy of constant inflow and proportional-loss assumptions for a real system.
+> ці перевірки перевірити mathematical/computational реалізація, не адекватність сталий приплив і proportional-loss припущення для реальний система.
 
 ---
 
 ## 73. Від MiniBook до practice
 
-Practical sequence:
+практичний послідовність:
 
-1. define symbols;
+1. визначити symbols;
 2. write ODE;
-3. derive solution;
-4. residual check;
-5. equilibrium;
-6. sensitivity derivatives;
+3. derive розв’язок;
+4. residual перевірка;
+5. рівновага;
+6. чутливість похідні;
 7. integral;
 8. lambdify;
 9. solve_ivp;
-10. error;
-11. k scenarios;
-12. interpretation.
+10. похибка;
+11. k сценарії;
+12. інтерпретація.
 
 ---
 
-## Поглиблення: dimensional analysis before symbolic manipulation
+## Поглиблення: розмірнісний аналіз до символьний перетворення
 
-Перед тим як натискати \`solve\`, корисно перевірити units.
+Перед тим як натискати \`solve\`, корисно перевірити одиницях.
 
 ODE:
 
@@ -1751,13 +1751,13 @@ ODE:
 \frac{dS}{dt}=q-kS.
 \]
 
-If \(S\) measured in state units and \(t\) in time, then:
+якщо \(S\) measured у state одиницях і \(t\) у час, тоді:
 
 \[
 [q]=\frac{S}{t},
 \]
 
-and because:
+і тому що:
 
 \[
 [kS]=\frac{S}{t},
@@ -1769,21 +1769,21 @@ we need:
 [k]=\frac{1}{t}.
 \]
 
-Therefore:
+тому:
 
 \[
 \frac{q}{k}
 \]
 
-has units \(S\), as required for equilibrium.
+має одиницях \(S\), як required для рівновага.
 
-This simple check catches many formulation errors before any CAS work.
+це простий перевірка catches багато формулювання похибки до будь-який CAS працювати.
 
 ---
 
 ## Поглиблення: nondimensionalization
 
-Define:
+визначити:
 
 \[
 s=\frac{S}{S^*},
@@ -1791,62 +1791,62 @@ s=\frac{S}{S^*},
 \tau=kt.
 \]
 
-Because:
+тому що:
 
 \[
 S^*=\frac{q}{k},
 \]
 
-the ODE becomes:
+ ODE стає:
 
 \[
 \frac{ds}{d\tau}=1-s.
 \]
 
-Now parameter \(q\) and \(k\) disappear from the dimensionless dynamics.
+Now параметр \(q\) і \(k\) зникають з безрозмірна динаміка.
 
-Solution:
+розв’язок:
 
 \[
 s(\tau)=1+(s_0-1)e^{-\tau}.
 \]
 
-This reveals a universal structure.
+це reveals universal структура.
 
-Different \(q,k\) cases are scaled versions of the same normalized process.
+різний \(q,k\) cases є масштабовані версії той самий нормалізований process.
 
-Symbolic tools help expose such simplifications.
+символьний інструменти допомагають expose такий simplifications.
 
 ---
 
-## Поглиблення: why nondimensionalization matters
+## Поглиблення: чому nondimensionalization має значення
 
-It can show:
+It може показати:
 
-- which parameter combinations truly matter;
-- natural time scale;
-- natural state scale;
-- how many independent dimensionless groups remain.
+- який параметр комбінацій справді matter;
+- natural час масштаб;
+- natural state масштаб;
+- як багато незалежний безрозмірна groups remain.
 
-In baseline:
+у базовий:
 
 \[
 \tau=kt
 \]
 
-shows \(1/k\) is time scale.
+показує \(1/k\) є час масштаб.
 
 \[
 S^*=q/k
 \]
 
-is state scale.
+є state масштаб.
 
-This is deeper than just computing numbers.
+це є глибше ніж just computing numbers.
 
 ---
 
-## Поглиблення: stability of equilibrium
+## Поглиблення: стійкість рівновага
 
 Let:
 
@@ -1854,13 +1854,13 @@ Let:
 u(t)=S(t)-S^*.
 \]
 
-Then:
+тоді:
 
 \[
 \frac{du}{dt}=-ku.
 \]
 
-Solution:
+розв’язок:
 
 \[
 u(t)=u(0)e^{-kt}.
@@ -1872,51 +1872,51 @@ Since \(k>0\):
 u(t)\rightarrow0.
 \]
 
-Therefore equilibrium is asymptotically stable.
+тому рівновага є асимптотично стійкий.
 
-This conclusion follows directly from transformed equation.
+це висновок follows безпосередньо з transformed рівняння.
 
-CAS can support algebra, but stability interpretation remains researcher’s task.
+CAS може підтримувати algebra, але стійкість інтерпретація залишається дослідник’s робота.
 
 ---
 
-## Поглиблення: if k < 0
+## Поглиблення: якщо k < 0
 
-Current model rejects \(k\le0\).
+поточний model rejects \(k\le0\).
 
-Why?
+чому?
 
-If \(k<0\), equation becomes:
+якщо \(k<0\), рівняння стає:
 
 \[
 \frac{dS}{dt}=q+|k|S.
 \]
 
-State grows exponentially.
+State зростає exponentially.
 
-The supposed “loss coefficient” becomes gain.
+ supposed “коефіцієнт втрат” стає виграш.
 
-So input validation encodes domain meaning.
+So вхідні дані валідація encodes предметна область зміст.
 
-This is a good example of semantic validation, not only numeric hygiene.
+це є good приклад semantic валідація, не лише numeric hygiene.
 
 ---
 
-## Поглиблення: identifiability from equilibrium only
+## Поглиблення: identifiability з рівновага лише
 
-If only long-run equilibrium observed:
+якщо лише long-run рівновага спостережуваний:
 
 \[
 S^*=120,
 \]
 
-then any pair satisfying:
+тоді будь-який pair satisfying:
 
 \[
 q=120k
 \]
 
-fits equilibrium.
+fits рівновага.
 
 Examples:
 
@@ -1932,15 +1932,15 @@ Examples:
 (6,0.05).
 \]
 
-Therefore equilibrium data alone cannot identify both parameters.
+тому рівновага дані самостійно cannot ідентифікувати обидва параметри.
 
-This is **structural identifiability intuition**.
+це є **structural identifiability інтуїція**.
 
 ---
 
-## Поглиблення: transient data identify k
+## Поглиблення: перехідний дані ідентифікувати k
 
-Normalized deviation:
+нормалізований відхилення:
 
 \[
 \frac{S(t)-S^*}{S_0-S^*}
@@ -1959,45 +1959,45 @@ Take log:
 -kt.
 \]
 
-Thus transient slope can reveal \(k\) when equilibrium known.
+отже перехідний slope може reveal \(k\) коли рівновага відомий.
 
-Then:
+тоді:
 
 \[
 q=kS^*.
 \]
 
-This connects symbolic derivation to experimental design.
+це пов’язує символьний derivation до experimental план.
 
 ---
 
-## Поглиблення: choosing observation times
+## Поглиблення: choosing спостереження times
 
-If all observations are taken very late:
+якщо усі спостереження є taken дуже late:
 
 \[
 t\gg1/k,
 \]
 
-then:
+тоді:
 
 \[
 e^{-kt}\approx0.
 \]
 
-Data mostly show equilibrium.
+дані mostly показати рівновага.
 
-Information about \(k\) from transient shape is weak.
+інформація про \(k\) з перехідний shape є weak.
 
-If all observations are too early, equilibrium poorly constrained.
+якщо усі спостереження є надто early, рівновага погано з обмеженнями.
 
-Therefore symbolic structure suggests collecting data across multiple time scales.
+тому символьний структура suggests збирання дані через кілька час scales.
 
 ---
 
-## Поглиблення: threshold time sensitivity
+## Поглиблення: Час досягнення порогу чутливість
 
-Threshold formula:
+поріг формула:
 
 \[
 t_H=
@@ -2008,156 +2008,156 @@ t_H=
 \right).
 \]
 
-This depends on \(k\) both:
+це залежить на \(k\) обидва:
 
-- directly through \(1/k\);
-- indirectly through \(S^*=q/k\).
+- безпосередньо через \(1/k\);
+- indirectly через \(S^*=q/k\).
 
-So threshold sensitivity can be more complex than equilibrium sensitivity.
+So поріг чутливість може be більше complex ніж рівновага чутливість.
 
-Numerical parameter sweep can complement symbolic differentiation.
+чисельний параметр sweep може complement символьне диференціювання.
 
 ---
 
-## Поглиблення: cumulative state as objective or constraint
+## Поглиблення: накопичений state як цільова функція або обмеження
 
 \[
 A(T)=\int_0^T S(t)\,dt.
 \]
 
-In a future optimization problem, \(A(T)\) could become:
+у future оптимізація задача, \(A(T)\) could become:
 
-- objective;
-- constraint;
-- exposure metric.
+- цільова функція;
+- обмеження;
+- exposure показник.
 
-Thus symbolic integration is not isolated exercise.
+отже символьне інтегрування є не isolated exercise.
 
-It can generate a derived quantity used downstream.
+It може generate похідні quantity використано downstream.
 
 ---
 
-## Поглиблення: analytical solution as benchmark
+## Поглиблення: Аналітичний розв’язок як benchmark
 
-When closed form exists, it provides excellent benchmark for numerical solver.
+коли closed форма exists, it provides excellent benchmark для чисельний розв’язувач.
 
-This is rare privilege.
+це є rare privilege.
 
-Use it to test:
+використовувати it до тест:
 
-- tolerance;
-- step choices;
+- допуск;
+- крок choices;
 - interpolation;
-- implementation.
+- реалізація.
 
-Then later, for a model with no closed form, you already trust the numerical pipeline more.
+тоді пізніше, для model з no closed форма, you вже trust чисельний pipeline більше.
 
 ---
 
-## Поглиблення: numerical error budget
+## Поглиблення: чисельний бюджет похибки
 
-Agreement criterion:
+збіг критерій:
 
 \[
 e_{max}<10^{-6}.
 \]
 
-But total computational discrepancy can have components:
+але total computational discrepancy може мають components:
 
-- truncation error;
-- solver tolerance;
+- truncation похибка;
+- розв’язувач допуск;
 - interpolation;
-- floating point;
-- time grid.
+- floating точка;
+- час сітка.
 
-A single tolerance does not explain all error.
+ single допуск робить не explain усі похибка.
 
-For baseline smooth ODE, solve_ivp with strict tolerances makes these tiny.
-
----
-
-## Поглиблення: convergence study
-
-A stronger numerical check:
-
-1. solve with tolerance set A;
-2. solve with tighter set B;
-3. compare trajectories;
-4. check stability of key outputs.
-
-If results stop changing materially, confidence increases.
-
-This is numerical convergence evidence.
+для базовий гладку ODE, solve_ivp з суворого tolerances робить ці tiny.
 
 ---
 
-## Поглиблення: time-grid independence
+## Поглиблення: дослідження збіжності
 
-solve_ivp internally chooses adaptive steps.
+ сильнішого чисельний перевірка:
 
-\`t_eval\` only requests output points.
+1. solve з допуск набір;
+2. solve з tighter набір B;
+3. порівнювати траєкторії;
+4. перевірка стійкість key результати.
 
-If user changes output grid from 121 to 61 points, underlying integration may still remain accurate.
+якщо results stop зміною суттєво, довірчий збільшує.
 
-But max error evaluated on grid may change slightly.
-
-Thus verification metric itself depends on evaluation design.
-
----
-
-## Поглиблення: symbolic expression complexity
-
-For larger systems, CAS can produce an expression so large that it is:
-
-- hard to read;
-- slow to evaluate;
-- numerically unstable.
-
-A closed form is not automatically the best computational representation.
-
-Sometimes numerical solution is more useful and reliable.
+це є чисельний збіжність докази.
 
 ---
 
-## Поглиблення: catastrophic cancellation
+## Поглиблення: незалежність від часової сітки
 
-Two algebraically equivalent expressions can behave differently numerically.
+solve_ivp внутрішньо chooses адаптивні кроки.
 
-For very small \(kt\), expression:
+\`t_eval\` лише запити результат точки.
+
+якщо user зміни результат сітка з 121 до 61 точки, underlying інтегрування може усе ще remain точним.
+
+але max похибка evaluated на сітка може зміна незначно.
+
+отже ПЕРЕВІРКА показник itself залежить на оцінювання план.
+
+---
+
+## Поглиблення: символьний вираз складність
+
+для larger системи, CAS може produce вираз so великий що it є:
+
+- hard до read;
+- slow до оцінювати;
+- чисельно unstable.
+
+ closed форма є не автоматично найкращий computational представлення.
+
+інколи чисельний розв’язок є більше корисний і reliable.
+
+---
+
+## Поглиблення: катастрофічна втрата точності
+
+Two algebraically equivalent expressions може поводитися differently чисельно.
+
+для дуже малий \(kt\), вираз:
 
 \[
 1-e^{-kt}
 \]
 
-can lose precision.
+може lose точність.
 
-Special numerical functions like \`expm1\` may be better.
+спеціальні чисельний функції like \`expm1\` може be кращий.
 
-This is an advanced reminder:
+це є advanced reminder:
 
-> symbolic equivalence does not guarantee identical floating-point stability.
+> символьний equivalence робить не guarantee identical floating-point стійкість.
 
 ---
 
-## Поглиблення: symbolic verification with assumptions
+## Поглиблення: символьний ПЕРЕВІРКА з припущення
 
-Simplification may depend on assumptions such as:
+спрощення може depend на припущення такий як:
 
 \[
 k>0.
 \]
 
-Without assumptions, SymPy may keep conditional expressions or fail to reduce.
+без припущення, SymPy може keep умовний expressions або fail до reduce.
 
-Therefore symbolic model should declare known domain restrictions.
+тому символьний model слід declare відомий предметна область restrictions.
 
-This makes mathematics explicit.
+це робить mathematics явний.
 
 ---
 
-## Поглиблення: exact vs floating-point constants
+## Поглиблення: точний vs floating-point constants
 
-SymPy distinguishes:
+SymPy розрізняє:
 
 \[
 \frac{1}{10}
@@ -2169,132 +2169,132 @@ from floating:
 0.1.
 \]
 
-Exact rationals preserve algebraic exactness longer.
+точний rationals preserve алгебраїчний exactness longer.
 
-For symbolic derivation, use exact objects where possible.
+для символьний derivation, використовувати точний objects де possible.
 
-For numerical evaluation, convert intentionally.
+для чисельний оцінювання, convert intentionally.
 
 ---
 
-## Поглиблення: solving ODE with dsolve
+## Поглиблення: solving ODE з dsolve
 
-One can ask SymPy:
+один може ask SymPy:
 
 ~~~python
 sp.dsolve(ode)
 ~~~
 
-But course model constructs known closed form directly after finding equilibrium.
+але course model constructs відомий closed форма безпосередньо після висновок рівновага.
 
-Why?
+чому?
 
-Because pedagogical goal is to understand structure:
+тому що pedagogical goal є до understand структура:
 
 \[
 equilibrium + transient.
 \]
 
-Automatic dsolve can hide this reasoning.
+Automatic dsolve може hide це reasoning.
 
-CAS should support thinking, not replace it.
+CAS слід підтримувати thinking, не замінює it.
 
 ---
 
-## Поглиблення: residual as reusable pattern
+## Поглиблення: residual як reusable шаблон
 
-Residual verification generalizes.
+Residual ПЕРЕВІРКА generalizes.
 
-For algebraic equation:
+для алгебраїчний рівняння:
 
 \[
 f(x)=0,
 \]
 
-check:
+перевірка:
 
 \[
 f(x^*)\approx0.
 \]
 
-For PDE/ODE candidate:
+для PDE/ODE candidate:
 
 \[
 R=\mathcal L(u)-f.
 \]
 
-For optimization constraints:
+для оптимізація обмеження:
 
 \[
 g(x)\le0.
 \]
 
-Residual thinking is a universal verification habit.
+Residual thinking є universal ПЕРЕВІРКА звичку.
 
 ---
 
-## Поглиблення: comparing independent representations
+## Поглиблення: comparing незалежний representations
 
-T2.L6 intentionally uses three representations:
+T2.L6 intentionally використовує three representations:
 
-1. symbolic expression;
+1. символьний вираз;
 2. hand-coded analytical NumPy;
-3. solve_ivp numerical integration.
+3. solve_ivp чисельний інтегрування.
 
-If all agree, common coding errors less likely.
+якщо усі узгоджуються, common coding похибки менше ймовірно.
 
-Yet they still share the same mathematical assumptions.
+Yet they усе ще частка той самий mathematical припущення.
 
-This is **implementation triangulation**, not empirical validation.
+це є **реалізація triangulation**, не empirical валідація.
 
 ---
 
-## Поглиблення: model validation would require data
+## Поглиблення: model валідація would потребувати дані
 
-To validate the ODE for a real process, we would need observations:
+до validate ODE для реальний процес, we would need спостереження:
 
 \[
 (t_i,S_i).
 \]
 
-Then compare:
+тоді порівнювати:
 
-- predicted trajectory;
-- residuals;
-- parameter estimates;
-- out-of-sample performance.
+- predicted траєкторія;
+- нев’язки;
+- параметр оцінки;
+- out-of-sample результативність.
 
-That moves beyond T2.L6 into calibration and research workflow.
+що moves поза T2.L6 у калібрування і дослідницький робочий процес.
 
 ---
 
-## Поглиблення: model calibration link to T2.L7
+## Поглиблення: model калібрування link до T2.L7
 
-Suppose \(q,k\) unknown.
+припустімо \(q,k\) unknown.
 
-Given data, estimate:
+Given дані, оцінка:
 
 \[
 \hat q,\hat k.
 \]
 
-Then:
+тоді:
 
 1. calibrate;
-2. assess residuals;
-3. quantify uncertainty;
-4. verify numerical solution;
+2. assess нев’язки;
+3. quantify невизначеність;
+4. перевірити чисельний розв’язок;
 5. predict thresholds/integrals.
 
-This is exactly how symbolic structure becomes part of scientific modeling.
+це є точно як символьний структура стає part науковий modeling.
 
 ---
 
-## Поглиблення: sensitivity beyond one parameter
+## Поглиблення: чутливість поза один параметр
 
-Current experiment varies \(k\) with fixed \(q\).
+поточний experiment змінюється \(k\) з фіксований \(q\).
 
-Could build grid:
+Could build сітка:
 
 \[
 q\in\{8,12,16\},
@@ -2302,35 +2302,35 @@ q\in\{8,12,16\},
 k\in\{0.05,0.1,0.15\}.
 \]
 
-Then study response surface:
+тоді study відгук поверхня:
 
 \[
 S(10;q,k).
 \]
 
-This exposes interactions in finite-time output even though ODE linear in S.
+це exposes interactions у finite-time результат even though ODE лінійний у S.
 
 ---
 
-## Поглиблення: contour map
+## Поглиблення: контурний map
 
-A contour of:
+ контурний:
 
 \[
 S(10;q,k)
 \]
 
-shows combinations yielding same finite-horizon state.
+показує комбінацій yielding той самий finite-Стан на горизонті.
 
-This can reveal parameter trade-offs.
+це може reveal параметр компроміси.
 
-It also helps explain identifiability: one observation may correspond to many parameter pairs.
+It також helps explain identifiability: один спостереження може correspond до багато параметр pairs.
 
 ---
 
-## Поглиблення: uncertainty propagation
+## Поглиблення: невизначеність propagation
 
-If:
+якщо:
 
 \[
 q\sim distribution,
@@ -2338,33 +2338,33 @@ q\sim distribution,
 k\sim distribution,
 \]
 
-then even exact formula produces uncertain:
+тоді even точний формула produces невизначені:
 
 \[
 S(t),S^*,t_H.
 \]
 
-Symbolic solution makes repeated evaluation cheap.
+символьний розв’язок робить repeated оцінювання cheap.
 
-Thus symbolic work can accelerate Monte Carlo uncertainty propagation.
+отже символьний працювати може accelerate Монте-Карло невизначеність propagation.
 
 ---
 
-## Поглиблення: symbolic sensitivity and Monte Carlo complement each other
+## Поглиблення: символьний чутливість і Монте-Карло complement кожен інший
 
-Derivative gives local effect:
+похідна дає локальний ефект:
 
 \[
 \frac{\partial S^*}{\partial k}.
 \]
 
-Monte Carlo parameter uncertainty gives global distribution.
+Монте-Карло параметр невизначеність дає глобальний розподіл.
 
-Use derivative for local understanding.
+використовувати похідна для локальний understanding.
 
-Use simulation for broader uncertainty.
+використовувати моделювання для broader невизначеність.
 
-Neither universally replaces the other.
+Neither universally replaces інший.
 
 ---
 
@@ -2372,27 +2372,27 @@ Neither universally replaces the other.
 
 Ask:
 
-1. Is q constant?
-2. Is k constant?
-3. Are losses proportional to S?
-4. Is there delay?
-5. Are there thresholds?
-6. Is system one-dimensional?
-7. Are observations noisy?
-8. Are parameters known?
-9. Is state continuous?
+1. є q сталий?
+2. є k сталий?
+3. є losses proportional до S?
+4. є там затримка?
+5. є там thresholds?
+6. є система one-dimensional?
+7. є спостереження шумний?
+8. є параметри відомий?
+9. є state неперервний?
 
-Each “no” suggests a model extension.
+кожен “no” suggests model extension.
 
 ---
 
-## Поглиблення: research-safe military example
+## Поглиблення: research-safe military приклад
 
-One may describe \(S(t)\) as a synthetic training-support indicator.
+один може describe \(S(t)\) як синтетичний training-support indicator.
 
-Do not map q, k, S0 to actual operational capacities without authorized data and domain justification.
+робити не map q, k, S0 до фактичний operational capacities без дозволені дані і предметна область justification.
 
-The transferable lesson is:
+ transferable lesson є:
 
 \[
 balance\ law
@@ -2408,9 +2408,9 @@ sensitivity.
 
 ---
 
-## Поглиблення: reporting precision
+## Поглиблення: reporting точність
 
-Tests store:
+тести store:
 
 \[
 83.2120558829.
@@ -2422,113 +2422,113 @@ Text reports:
 83.2121.
 \]
 
-This is intentional.
+це є intentional.
 
-Regression tests need tight values.
+регресія тести need вузько значення.
 
-Human interpretation does not need ten decimal places.
+Human інтерпретація робить не need ten десятковий знаки.
 
-Precision should match purpose.
+точність слід match purpose.
 
 ---
 
-## Поглиблення: a compact evidence table
+## Поглиблення: compact докази table
 
-| Claim | Evidence |
+| висновок | докази |
 |---|---|
-| formula solves ODE | symbolic residual = 0 |
-| initial condition correct | substitution \(t=0\) |
-| equilibrium 120 | \(q/k\) |
-| numerical implementation correct | lambdify/direct agreement |
-| ODE integration correct | solve_ivp error < \(10^{-6}\) |
-| k trend understood | derivative + scenario table |
-| real system adequate | **not established by lesson** |
+| формула solves ODE | символьна нев’язка = 0 |
+| початкова умова правильний | підстановка \(t=0\) |
+| рівновага 120 | \(q/k\) |
+| чисельний реалізація правильний | lambdify/direct збіг |
+| ODE інтегрування правильний | solve_ivp похибка < \(10^{-6}\) |
+| k trend understood | похідна + таблиця сценаріїв |
+| реальний система adequate | **не established за допомогою lesson** |
 
-This table prevents overclaiming.
+це table prevents overclaiming.
 
 ---
 
-## Поглиблення: від symbolic insight до research design
+## Поглиблення: від символьний insight до дослідження план
 
-Symbolic analysis can change not only how we solve model, but what experiment we design.
+символьний аналіз може зміна не лише як we solve model, але що experiment we план.
 
-For baseline:
+для базовий:
 
 \[
 S^*=\frac{q}{k}.
 \]
 
-This tells us equilibrium identifies ratio \(q/k\), not parameters separately.
+це tells us рівновага ідентифікує ratio \(q/k\), не параметри окремо.
 
-Transient:
+перехідний:
 
 \[
 e^{-kt}
 \]
 
-tells us early-time data contain information about \(k\).
+tells us early-time дані contain інформація про \(k\).
 
-Thus symbolic structure suggests:
+отже символьний структура suggests:
 
-- collect equilibrium-like late data;
-- collect transient early data.
+- collect equilibrium-like late дані;
+- collect перехідний early дані.
 
-This is an example of mathematics guiding measurement strategy.
+це є приклад mathematics guiding вимірювання strategy.
 
 ---
 
-## Поглиблення: sensitivity as experimental priority
+## Поглиблення: чутливість як experimental priority
 
-If:
+якщо:
 
 \[
 \left|\frac{\partial output}{\partial \theta}\right|
 \]
 
-is very small across relevant range, precise estimation of \(\theta\) may matter less for that output.
+є дуже малий через суттєвий діапазон, точним estimation \(\theta\) може matter менше для що результат.
 
-If derivative large, parameter uncertainty strongly affects prediction.
+якщо похідна великий, параметр невизначеність strongly affects ПРОГНОЗ.
 
-Sensitivity can guide where to invest measurement effort.
-
----
-
-## Поглиблення: local vs global sensitivity
-
-Symbolic derivative is local.
-
-For larger parameter changes, nonlinear effect may differ.
-
-Therefore pair:
-
-- symbolic derivative;
-- parameter sweep.
-
-This combination appears repeatedly in good modeling practice.
+чутливість може guide де до invest вимірювання effort.
 
 ---
 
-## Поглиблення: parameter sweep matrix
+## Поглиблення: локальний vs глобальний чутливість
 
-For q and k:
+символьний похідна є локальний.
+
+для larger параметр зміни, нелінійний ефект може differ.
+
+тому pair:
+
+- символьний похідна;
+- параметр sweep.
+
+це combination appears repeatedly у good modeling practice.
+
+---
+
+## Поглиблення: параметр sweep матриця
+
+для q і k:
 
 | q | k | S* | S(10) |
 |---:|---:|---:|---:|
-| 8 | .08 | 100 | ... |
-| 12 | .08 | 150 | ... |
-| 16 | .08 | 200 | ... |
-| 8 | .12 | 66.7 | ... |
-| 12 | .12 | 100 | ... |
+| 8 |.08 | 100 |... |
+| 12 |.08 | 150 |... |
+| 16 |.08 | 200 |... |
+| 8 |.12 | 66.7 |... |
+| 12 |.12 | 100 |... |
 
-This table shows both structural formula and finite-time effect.
+це table показує обидва structural формула і finite-time ефект.
 
 ---
 
-## Поглиблення: symbolic limit analysis
+## Поглиблення: символьний limit аналіз
 
-We can inspect limits.
+We може inspect limits.
 
-As:
+як:
 
 \[
 t\rightarrow\infty,
@@ -2538,7 +2538,7 @@ t\rightarrow\infty,
 S(t)\rightarrow q/k.
 \]
 
-As:
+як:
 
 \[
 k\rightarrow\infty
@@ -2546,35 +2546,35 @@ k\rightarrow\infty
 
 for fixed q and t>0, equilibrium tends to zero.
 
-As:
+як:
 
 \[
 k\rightarrow0^+,
 \]
 
-current closed-form expression has terms that look singular, but limit corresponds to linear-growth ODE.
+поточний closed-form вираз має terms що look singular, але limit corresponds до linear-growth ODE.
 
-Limit analysis can expose alternative branches.
+Limit аналіз може expose альтернатива branches.
 
 ---
 
 ## Поглиблення: checking limit k→0
 
-Original ODE with k=0:
+Original ODE з k=0:
 
 \[
 S=S_0+qt.
 \]
 
-A symbolic limit of closed-form expression can recover this.
+ символьний limit closed-form вираз може recover це.
 
-This is a powerful consistency check and a good CAS exercise.
+це є сильний узгодженість перевірка і good CAS exercise.
 
 ---
 
 ## Поглиблення: series expansion
 
-For small \(kt\):
+для малий \(kt\):
 
 \[
 e^{-kt}
@@ -2582,259 +2582,259 @@ e^{-kt}
 1-kt+\frac{(kt)^2}{2}-\cdots.
 \]
 
-Substitute into solution to get short-time approximation.
+Substitute у розв’язок до get short-time approximation.
 
-Leading behavior:
+Leading поведінку:
 
 \[
 S(t)\approx
 S_0+(q-kS_0)t.
 \]
 
-That matches initial derivative from ODE.
+що matches initial похідна з ODE.
 
-Another symbolic consistency check.
+інший символьний узгодженість перевірка.
 
 ---
 
-## Поглиблення: local linearization of nonlinear models
+## Поглиблення: локальний linearization нелінійний models
 
-In future nonlinear ODE:
+у future нелінійний ODE:
 
 \[
 \dot x=f(x),
 \]
 
-equilibrium \(x^*\) can be studied using derivative/Jacobian:
+рівновага \(x^*\) може be studied використання похідна/Jacobian:
 
 \[
 J=\frac{\partial f}{\partial x}\Big|_{x^*}.
 \]
 
-T2.L6 linear example prepares this idea.
+T2.L6 лінійний приклад prepares це idea.
 
 ---
 
-## Поглиблення: Jacobian for current model
+## Поглиблення: Jacobian для поточний model
 
 \[
 f(S)=q-kS.
 \]
 
-Derivative:
+похідна:
 
 \[
 \frac{df}{dS}=-k.
 \]
 
-Because:
+тому що:
 
 \[
 -k<0,
 \]
 
-equilibrium stable.
+рівновага стійкий.
 
-This is simplest possible Jacobian stability analysis.
+це є simplest possible Jacobian стійкість аналіз.
 
 ---
 
-## Поглиблення: symbolic matrix models
+## Поглиблення: символьний матриця models
 
-For vector state:
+для вектор state:
 
 \[
 \dot{\mathbf x}=A\mathbf x+\mathbf b.
 \]
 
-CAS can help:
+CAS може допомагають:
 
 - eigenvalues;
-- equilibrium;
-- matrix exponential;
-- symbolic Jacobian.
+- рівновага;
+- матриця експоненційний;
+- символьний Jacobian.
 
-Numerical methods then handle larger systems.
+чисельний методи тоді handle larger системи.
 
-T2.L6 scalar case is foundation.
+T2.L6 scalar випадок є foundation.
 
 ---
 
 ## Поглиблення: stiffness preview
 
-Some ODE systems contain very different time scales.
+деяких ODE системи contain дуже різний час scales.
 
-Then explicit numerical integrators may struggle.
+тоді явний чисельний integrators може struggle.
 
-Solver choice becomes important.
+розв’язувач вибір стає важливий.
 
-Current model is not stiff.
+поточний model є не stiff.
 
-But hybrid symbolic/numerical reasoning helps detect time scales.
+але hybrid символьний/чисельний reasoning helps detect час scales.
 
 ---
 
-## Поглиблення: event detection instead of closed-form threshold
+## Поглиблення: виявлення події instead closed-form поріг
 
-For complex ODE where threshold formula unavailable, solve_ivp can detect event:
+для complex ODE де поріг формула недоступний, solve_ivp може detect подія:
 
 \[
 S(t)-H=0.
 \]
 
-Thus threshold_time concept generalizes from analytic algebra to numerical event functions.
+отже threshold_time concept generalizes з analytic algebra до чисельний подія функції.
 
 ---
 
-## Поглиблення: comparing threshold methods
+## Поглиблення: comparing поріг методи
 
-For baseline:
+для базовий:
 
-1. analytical threshold formula;
-2. numerical event detection.
+1. analytical поріг формула;
+2. чисельний виявлення події.
 
-If they agree, event implementation verified.
+якщо they узгоджуються, подія реалізація перевірена.
 
-This can become future extension.
-
----
-
-## Поглиблення: cumulative integral numerically
-
-Similarly compare:
-
-- symbolic cumulative_state();
-- numerical quadrature of trajectory.
-
-This provides another independent verification channel.
+це може become future extension.
 
 ---
 
-## Поглиблення: triangulation design
+## Поглиблення: накопичений integral чисельно
 
-A rich validation matrix:
+Similarly порівнювати:
 
-| Quantity | Symbolic | Direct NumPy | SciPy |
+- символьний cumulative_state();
+- чисельний quadrature траєкторія.
+
+це provides інший незалежна перевірка channel.
+
+---
+
+## Поглиблення: triangulation план
+
+ rich валідація матриця:
+
+| Quantity | символьний | Direct NumPy | SciPy |
 |---|---|---|---|
-| S(t) | closed form | analytical_solution | solve_ivp |
+| S(t) | closed форма | analytical_solution | solve_ivp |
 | integral | integrate | cumulative_state | quadrature |
-| threshold | solve algebra | threshold_time | event detection |
-| sensitivity | diff | finite difference | scenario sweep |
+| поріг | solve algebra | threshold_time | виявлення події |
+| чутливість | diff | скінченний різниця | сценарій sweep |
 
-Agreement across rows strengthens implementation evidence.
+збіг через рядки strengthens реалізація докази.
 
 ---
 
-## Поглиблення: finite-difference sensitivity check
+## Поглиблення: скінченно-різницевий чутливість перевірка
 
-Symbolic:
+символьний:
 
 \[
 dS^*/dk=-q/k^2.
 \]
 
-Numerical finite difference:
+чисельний скінченний різниця:
 
 \[
 \frac{S^*(k+h)-S^*(k-h)}{2h}.
 \]
 
-Compare for small h.
+порівнювати для малий h.
 
-This checks symbolic derivative and numerical implementation.
+це перевірки символьний похідна і чисельний реалізація.
 
 ---
 
 ## Поглиблення: choosing h
 
-Too large:
+надто великий:
 
-- truncation error.
+- truncation похибка.
 
-Too small:
+надто малий:
 
 - floating-point cancellation.
 
-This is a classic numerical analysis trade-off.
+це є classic чисельний аналіз trade-off.
 
-CAS derivative avoids finite-difference approximation when exact expression available.
+CAS похідна уникає скінченно-різницевий approximation коли точний вираз доступний.
 
 ---
 
-## Поглиблення: documentation of assumptions beside formulas
+## Поглиблення: документація припущення beside formulas
 
-A formula should not travel alone.
+ формула слід не travel самостійно.
 
-For:
+для:
 
 \[
 S(t)=S^*+(S_0-S^*)e^{-kt}
 \]
 
-store assumptions:
+store припущення:
 
-- q constant;
-- k constant >0;
+- q сталий;
+- k сталий >0;
 - one-dimensional state;
 - no delays;
-- initial condition S0;
-- deterministic dynamics.
+- початкова умова S0;
+- детермінований динаміка.
 
-This prevents later misuse.
+це prevents пізніше misuse.
 
 ---
 
-## Поглиблення: symbolic notebooks and source files
+## Поглиблення: символьний notebooks і джерело файли
 
-Notebook is ideal for displaying SymPy derivation.
+ноутбук є ідеальний для displaying SymPy derivation.
 
-But reusable functions should live in src/model.py.
+але reusable функції слід зберігатися у src/model.py.
 
-Same principle as T1.L3.
+той самий principle як T1.L3.
 
-This enables tests and CI.
+це дозволяє тести і CI.
 
 ---
 
 ## Поглиблення: CAS versioning
 
-SymPy simplification/printing can change across versions.
+SymPy спрощення/printing може зміна через версії.
 
-Mathematical equivalence may remain.
+Mathematical equivalence може remain.
 
-Therefore tests should prefer structural equivalence:
+тому тести слід prefer structural equivalence:
 
 \[
 simplify(expr_1-expr_2)=0
 \]
 
-rather than exact string formatting.
+rather ніж точний string formatting.
 
 ---
 
-## Поглиблення: publication formula verification
+## Поглиблення: публікація формула ПЕРЕВІРКА
 
-Before placing formula in article:
+до placing формула у article:
 
 1. derive symbolically;
 2. simplify;
-3. residual check;
+3. residual перевірка;
 4. render LaTeX;
-5. compare notation with manuscript.
+5. порівнювати notation з manuscript.
 
-This reduces transcription errors between code and paper.
+це зменшує transcription похибки між code і paper.
 
 ---
 
-## 74. One-page summary
+## 74. One-page підсумок
 
 ### П’ять головних ідей
 
-1. CAS exposes mathematical structure.
-2. Residual zero verifies symbolic solution.
-3. Lambdify bridges symbolic and numerical representations.
-4. solve_ivp provides independent numerical verification.
-5. Verification of equation is not validation of real-world assumptions.
+1. CAS exposes mathematical структура.
+2. Residual нуль verifies символьний розв’язок.
+3. Lambdify bridges символьний і чисельний representations.
+4. solve_ivp provides незалежний чисельний ПЕРЕВІРКА.
+5. ПЕРЕВІРКА рівняння є не валідація реальний припущення.
 
 ### Три формули
 
@@ -2854,39 +2854,39 @@ S(t)=S^*+(S_0-S^*)e^{-kt}.
 
 ### Дві помилки
 
-- «SymPy solved it = research complete»;
-- «numerical match = real model adequate».
+- «SymPy solved it = дослідження complete»;
+- «чисельний match = реальний model adequate».
 
 ### Одне питання
 
-> Яку structural information моя symbolic model can reveal before I launch a numerical experiment?
+> Яку structural інформація моя символьний model може reveal до I launch чисельний experiment?
 
 ### Наступний крок
 
-Reproduce baseline, verify residual, compare solve_ivp and run k-sensitivity.
+Reproduce базовий, перевірити residual, порівнювати solve_ivp і запуск k-sensitivity.
 
 ---
 
 ## 75. Фінальна думка
 
-Computer algebra and numerical methods are strongest together.
+Computer algebra і чисельний методи є strongest разом.
 
-Symbolic layer answers:
+символьний layer answers:
 
-> what does the model imply structurally?
+> що робить model imply structurally?
 
-Numerical layer answers:
+чисельний layer answers:
 
-> what happens for these parameters and scenarios?
+> що happens для ці параметри і сценарії?
 
-Verification layer asks:
+ПЕРЕВІРКА layer ставить:
 
-> do independent representations agree?
+> робити незалежний representations узгоджуються?
 
-Research layer asks:
+дослідження layer ставить:
 
-> are assumptions meaningful for the object?
+> є припущення meaningful для object?
 
-A mature computational model moves through all four layers.
+ зріла computational model moves через усі four layers.
 
-That is the real capability T2.L6 is designed to build.
+що є реальний capability T2.L6 є designed до build.
