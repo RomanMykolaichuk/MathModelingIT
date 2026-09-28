@@ -1,4 +1,4 @@
-"""Scenario runner for T2.L3."""
+"""Запуск сценарного експерименту для T2.L3."""
 from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -45,13 +45,13 @@ def run(output_dir: str | Path = "../outputs"):
     Z = np.sin(1.7 * X) * np.cos(1.3 * Y) + 0.15 * X - 0.03 * (X * X + Y * Y)
     fig, ax = plt.subplots(figsize=(7, 5))
     cs = ax.contourf(X, Y, Z, levels=25)
-    ax.scatter(multi["x"], multi["y"], s=35, label="local optima from starts")
-    ax.scatter([grid["x"]], [grid["y"]], marker="*", s=140, label="grid-search best")
-    ax.set_title("Non-convex landscape: multi-start vs grid search")
+    ax.scatter(multi["x"], multi["y"], s=35, label="локальні оптимуми з різних початкових точок")
+    ax.scatter([grid["x"]], [grid["y"]], marker="*", s=140, label="найкращий результат пошуку по сітці")
+    ax.set_title("Неопукла поверхня: багатостартовий пошук і пошук по сітці")
     ax.set_xlabel("x")
     ax.set_ylabel("y")
     ax.legend()
-    fig.colorbar(cs, ax=ax, label="objective")
+    fig.colorbar(cs, ax=ax, label="цільова функція")
     fig.tight_layout()
     fig.savefig(output_dir / "nonconvex_contours.png", dpi=160)
     plt.close(fig)
@@ -61,8 +61,8 @@ def run(output_dir: str | Path = "../outputs"):
 
 if __name__ == "__main__":
     baseline, checks, sensitivity, multi, grid = run()
-    print("Baseline:", baseline)
-    print("Verification:", checks)
-    print("\nSensitivity:\n", sensitivity)
-    print("\nTop multi-start solutions:\n", multi.head())
-    print("\nGrid check:", grid)
+    print("Базовий сценарій:", baseline)
+    print("Перевірка:", checks)
+    print("\nЧутливість:\n", sensitivity)
+    print("\nНайкращі розв’язки багатостартового пошуку:\n", multi.head())
+    print("\nПеревірка пошуком по сітці:", grid)
