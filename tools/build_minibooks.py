@@ -168,14 +168,14 @@ def build_book(book_id: str, config: dict[str, str]) -> Path:
   </header>
   <div class="book-layout">
     <aside class="book-toc">
-      <p class="book-label">MINIBOOK · {book_id.upper()}</p>
+      <p class="book-label">МІНІКНИГА · {book_id.upper()}</p>
       {toc}
     </aside>
     <main class="book-content">
       {body}
       <section class="book-next">
         <p>Теорію пройдено. Наступний крок — перевірити інтуїцію експериментом.</p>
-        <a class="book-cta" href="{config['lab']}">{config.get('cta_label', f"Відкрити Lab {config['code']} →")}</a>
+        <a class="book-cta" href="{config['lab']}">{config.get('cta_label', f"Відкрити лабораторію {config['code']} →")}</a>
       </section>
     </main>
   </div>
