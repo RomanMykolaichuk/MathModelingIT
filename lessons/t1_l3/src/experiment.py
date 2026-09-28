@@ -1,4 +1,4 @@
-"""Config-driven experiment runner for T1.L3."""
+"""Запуск відтворюваного експерименту T1.L3 на основі конфігурації."""
 
 from __future__ import annotations
 
@@ -17,12 +17,12 @@ except ImportError:
 
 
 def canonical_json(data: dict[str, Any]) -> str:
-    """Return stable JSON representation used for hashing and reproducibility."""
+    """Повертає стабільне подання JSON для хешування та відтворюваності."""
     return json.dumps(data, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
 
 
 def config_hash(config: dict[str, Any]) -> str:
-    """Return short deterministic SHA-256 hash of experiment configuration."""
+    """Повертає короткий детермінований SHA-256 хеш конфігурації експерименту."""
     return hashlib.sha256(canonical_json(config).encode("utf-8")).hexdigest()[:12]
 
 
@@ -34,20 +34,20 @@ def validate_config(config: dict[str, Any]) -> None:
     required = {"seed", "replications", "model"}
     missing = required - set(config)
     if missing:
-        raise ValueError(f"Missing config keys: {sorted(missing)}")
+        raise ValueError(f"Відсутні ключі конфігурації: {sorted(missing)}")
     if int(config["replications"]) <= 0:
-        raise ValueError("replications must be positive")
+        raise ValueError("Кількість повторень має бути додатною")
     if float(config["model"]["noise_sd"]) < 0:
-        raise ValueError("noise_sd must be non-negative")
+        raise ValueError("noise_sd має бути невід’ємним")
 
 
 def run_experiment(config: dict[str, Any], scenarios: pd.DataFrame) -> pd.DataFrame:
-    """Run all scenarios and return one row per stochastic replication."""
+    """Виконує всі сценарії та повертає один рядок на кожне стохастичне повторення."""
     validate_config(config)
     needed = {"scenario_id", "resource", "load"}
     missing = needed - set(scenarios.columns)
     if missing:
-        raise ValueError(f"Missing scenario columns: {sorted(missing)}")
+        raise ValueError(f"Відсутні стовпці сценарію: {sorted(missing)}")
 
     rng = np.random.default_rng(int(config["seed"]))
     params = config["model"]
@@ -87,7 +87,7 @@ def run_experiment(config: dict[str, Any], scenarios: pd.DataFrame) -> pd.DataFr
 
 
 def summarize_results(results: pd.DataFrame) -> pd.DataFrame:
-    """Aggregate replications into interpretable scenario-level metrics."""
+    """Агрегує повторення у зрозумілі показники на рівні сценарію."""
     return (
         results.groupby(["scenario_id", "resource", "load"], as_index=False)
         .agg(
@@ -101,7 +101,7 @@ def summarize_results(results: pd.DataFrame) -> pd.DataFrame:
 
 
 def build_metadata(config: dict[str, Any], scenarios: pd.DataFrame) -> dict[str, Any]:
-    """Create deterministic metadata needed to identify the experiment."""
+    """Створює детерміновані метадані для однозначної ідентифікації експерименту."""
     return {
         "experiment_id": f"t1_l3_{config_hash(config)}",
         "config_hash": config_hash(config),
@@ -109,7 +109,7 @@ def build_metadata(config: dict[str, Any], scenarios: pd.DataFrame) -> dict[str,
         "replications": int(config["replications"]),
         "scenario_count": int(len(scenarios)),
         "model": config["model"],
-        "workflow_note": "Results are reproducible for the same code, config, data and software environment.",
+        "workflow_note": "Результати відтворюються за незмінних коду, конфігурації, даних і програмного середовища.",
     }
 
 
