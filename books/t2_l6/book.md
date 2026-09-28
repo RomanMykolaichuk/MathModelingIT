@@ -1,4 +1,4 @@
-# MathModelingIT · Мінікнига T2.L6
+# MathмодельingIT · Мінікнига T2.L6
 
 ## Системи комп'ютерної математики та їх можливості для математичного моделювання
 
@@ -78,7 +78,7 @@ S(0)=S_0.
 Саме ці питання перетворюють CAS із «калькулятора» на дослідницький інструмент.
 
 <figure>
- <img src="figures/fig_01_symbolic_numeric_pipeline.svg" alt="Symbolic-to-numeric pipeline">
+ <img src="figures/fig_01_symbolic_numeric_pipeline.svg" alt="символьно-чисельний процес">
  <figcaption><strong>Рис. 1.</strong> Сильний робочий процес: формулювання → символьний розв’язок → символьний ПЕРЕВІРКА → lambdify → незалежний чисельний розв’язання → чутливість → інтерпретація.</figcaption>
 </figure>
 
@@ -214,7 +214,7 @@ S_0=20<120.
 Hence траєкторія rises до 120.
 
 <figure>
- <img src="figures/fig_02_equilibrium_direction.svg" alt="Direction toward equilibrium">
+ <img src="figures/fig_02_equilibrium_direction.svg" alt="напрям до рівноваги">
  <figcaption><strong>Рис. 2.</strong> Знак \(q-kS\) визначає напрям руху стан: нижче рівновага траєкторія зростає, вище — спадає.</figcaption>
 </figure>
 
@@ -335,7 +335,7 @@ S(10)\approx83.2121.
 це є source-of-truth тест значення.
 
 <figure>
- <img src="figures/fig_03_baseline_trajectory.svg" alt="Baseline trajectory toward equilibrium">
+ <img src="figures/fig_03_базовий сценарій_trajectory.svg" alt="базовий сценарій trajectory toward equilibrium">
  <figcaption><strong>Рис. 3.</strong> базовий стан початкові точки у 20 і монотонно наближається до рівновага 120. у \(t=10\), \(S\approx83.2121\).</figcaption>
 </figure>
 
@@ -437,7 +437,7 @@ assert residual == 0
 ~~~
 
 <figure>
- <img src="figures/fig_04_residual_verification.svg" alt="Symbolic residual verification">
+ <img src="figures/fig_04_нев’язка_перевірка.svg" alt="символьна перевірка нев’язки">
  <figcaption><strong>Рис. 4.</strong> Перевірка нев’язки структурно перевіряє рівняння для символьний параметри, не лише у кілька чисельний точки.</figcaption>
 </figure>
 
@@ -833,7 +833,7 @@ e_{max}<10^{-6}.
 \]
 
 <figure>
- <img src="figures/fig_05_three_trajectories.svg" alt="Analytical, lambdified and solve_ivp trajectories">
+ <img src="figures/fig_05_three_trajectories.svg" alt="аналітична, перетворена через lambdify та чисельна траєкторії solve_ivp">
  <figcaption><strong>Рис. 5.</strong> аналітичний NumPy, lambdified SymPy і незалежний solve_ivp траєкторії слід збігатися у межах чисельний допуск.</figcaption>
 </figure>
 
@@ -907,7 +907,7 @@ S^*=\frac{q}{k}.
 отже чисельний таблиця, формула і похідна tell той самий story.
 
 <figure>
- <img src="figures/fig_06_k_sensitivity.svg" alt="Sensitivity to loss coefficient k">
+ <img src="figures/fig_06_k_чутливість.svg" alt="чутливість до коефіцієнта втрат k">
  <figcaption><strong>Рис. 6.</strong> зростає \(k\) lowers обидва рівновага і \(S(10)\). символьний чутливість explains напрям до чисельний експеримент.</figcaption>
 </figure>
 
@@ -1136,7 +1136,7 @@ S^*=\sqrt{q/k}.
 
 різний чутливість і траєкторія.
 
-це є genuine model-class зміна.
+це є genuine модель-class зміна.
 
 ---
 
@@ -1173,7 +1173,7 @@ S>S_c.
 ## 45. валідація ієрархія
 
 <figure>
- <img src="figures/fig_07_verification_hierarchy.svg" alt="Verification hierarchy">
+ <img src="figures/fig_07_перевірка_hierarchy.svg" alt="перевірка hierarchy">
  <figcaption><strong>Рис. 7.</strong> математичний виведення, Нев’язка перевірка, lambdify збіг і solve_ivp збіг перевірити обчислення у різний рівні; предметна область адекватність залишається окремий питання.</figcaption>
 </figure>
 
@@ -1353,7 +1353,7 @@ S(t)=S^*
 q\uparrow,
 \]
 
-рівновага збільшує linearly:
+рівновага збільшує лінійнийly:
 
 \[
 S^*=\frac{q}{k}.
@@ -1662,7 +1662,7 @@ Allowed conclusion:
 ## 70. гібридний робочий процес
 
 <figure>
- <img src="figures/fig_08_hybrid_method_map.svg" alt="Hybrid symbolic-numeric method map">
+ <img src="figures/fig_08_hybrid_метод_map.svg" alt="Hybrid symbolic-numeric метод map">
  <figcaption><strong>Рис. 8.</strong> символьний і чисельний методи є взаємодоповнювальними: символьний міркування exposes структура, чисельний обчислення досліджує випадки де закритий форма є недоступний або незручною.</figcaption>
 </figure>
 
@@ -2368,7 +2368,7 @@ Neither universally replaces інший.
 
 ---
 
-## Поглиблення: break-the-model контрольний список
+## Поглиблення: break-the-модель контрольний список
 
 запитати:
 
@@ -2386,7 +2386,7 @@ Neither universally replaces інший.
 
 ---
 
-## Поглиблення: research-safe військовий приклад
+## Поглиблення: дослідження-safe військовий приклад
 
 один може describe \(S(t)\) як синтетичний training-support показник.
 
@@ -2401,9 +2401,9 @@ equilibrium
 \rightarrow
 transient
 \rightarrow
-verification
+перевірка
 \rightarrow
-sensitivity.
+чутливість.
 \]
 
 ---
@@ -2552,7 +2552,7 @@ k\rightarrow\infty
 k\rightarrow0^+,
 \]
 
-поточний закритий-form вираз має terms що look singular, але границя corresponds до linear-growth ODE.
+поточний закритий-form вираз має terms що look singular, але границя corresponds до лінійний-growth ODE.
 
 границя аналіз може expose альтернатива branches.
 
@@ -2788,7 +2788,7 @@ store припущення:
 
 ноутбук є ідеальний для displaying SymPy виведення.
 
-але reusable функції слід зберігатися у src/model.py.
+але reusable функції слід зберігатися у src/модель.py.
 
 той самий принцип як T1.L3.
 
@@ -2863,7 +2863,7 @@ S(t)=S^*+(S_0-S^*)e^{-kt}.
 
 ### Наступний крок
 
-відтворити базовий, перевірити Нев’язка, порівнювати solve_ivp і запуск k-sensitivity.
+відтворити базовий, перевірити Нев’язка, порівнювати solve_ivp і запуск k-чутливість.
 
 ---
 

@@ -1,4 +1,4 @@
-# MathModelingIT · Мінікнига T2.L5
+# MathмодельingIT · Мінікнига T2.L5
 
 ## Засоби розв’язування задач множинного вибору
 
@@ -77,7 +77,7 @@
 Саме з цього починається багатокритеріальне моделювання.
 
 <figure>
- <img src="figures/fig_01_decision_problem.svg" alt="Від суб’єктивного вибору до формальної MCDA моделі">
+ <img src="figures/fig_01_decision_задача.svg" alt="Від суб’єктивного вибору до формальної MCDA моделі">
  <figcaption><strong>Рис. 1.</strong> MCDA перетворює нечітке «що краще?» на явну систему: альтернативи → критерії → типи критеріїв → ваги → метод → ранжування → чутливість → умовний висновок.</figcaption>
 </figure>
 
@@ -140,7 +140,7 @@ w_j\ge0,
 У базовий:
 
 \[
-w_{cost}=0.25,
+w_{витрати}=0.25,
 \]
 
 \[
@@ -259,7 +259,7 @@ r_{ij}=
 Це дуже зручно.
 
 <figure>
- <img src="figures/fig_02_normalization.svg" alt="Benefit і cost нормалізація">
+ <img src="figures/fig_02_normalization.svg" alt="виграш і витрати нормалізація">
  <figcaption><strong>Рис. 2.</strong> Нормалізація переводить різні шкали у спільну [0,1]. Для Вигода більші початкові значення стають кращими; для вартість напрям інвертується.</figcaption>
 </figure>
 
@@ -289,7 +289,7 @@ r_{ij}=
 Оскільки вартість — витратний критерій:
 
 \[
-r_{A,cost}=
+r_{A,витрати}=
 \frac{92-82}{92-70}
 =
 \frac{10}{22}
@@ -299,13 +299,13 @@ r_{A,cost}=
 Для B:
 
 \[
-r_{B,cost}=1.
+r_{B,витрати}=1.
 \]
 
 Для C:
 
 \[
-r_{C,cost}=0.
+r_{C,витрати}=0.
 \]
 
 Тобто найдешевша альтернатива отримала 1, найдорожча — 0.
@@ -436,7 +436,7 @@ C>D>B>A.
 - ≈ 0.4068.
 
 <figure>
- <img src="figures/fig_03_wsm_contributions.svg" alt="Внески критеріїв у WSM score">
+ <img src="figures/fig_03_wsm_contributions.svg" alt="Внески критеріїв у WSM оцінка">
  <figcaption><strong>Рис. 3.</strong> WSM оцінка є сумою зважених нормалізованих внесків. Один високий критерій значення може компенсувати інший низький.</figcaption>
 </figure>
 
@@ -612,9 +612,9 @@ TOPSIS питає:
 Корисно записати:
 
 \[
-Ranking=
+ранжування=
 f(
-Data,\ Types,\ Weights,\ Normalization,\ Method
+дані,\ Types,\ ваги,\ Normalization,\ метод
 ).
 \]
 
@@ -734,7 +734,7 @@ C.
 - висновок про «переможця» залежить від метод.
 
 <figure>
- <img src="figures/fig_05_sensitivity.svg" alt="Sensitivity ranking до ваги reliability">
+ <img src="figures/fig_05_чутливість.svg" alt="чутливість ранжування до ваги reliability">
  <figcaption><strong>Рис. 5.</strong> При малих значеннях ваги надійність WSM може перейти від C до B, тоді як TOPSIS зберігає C. Це приклад залежної від методу стійкості.</figcaption>
 </figure>
 
@@ -870,7 +870,7 @@ B — приблизно у:
 \]
 
 <figure>
- <img src="figures/fig_06_robustness.svg" alt="Robustness frequency first place">
+ <img src="figures/fig_06_стійкість.svg" alt="стійкість frequency first place">
  <figcaption><strong>Рис. 6.</strong> C є частим лідером, але не абсолютним. TOPSIS демонструє більшу мінливість першого місця, ніж WSM, за тієї самої моделі невизначеність ваги.</figcaption>
 </figure>
 
@@ -945,7 +945,7 @@ WSM дасть оцінки.
 Але сенс моделі зламаний.
 
 <figure>
- <img src="figures/fig_07_break_cost_benefit.svg" alt="Помилка cost як benefit">
+ <img src="figures/fig_07_break_витрати_виграш.svg" alt="Помилка витрати як виграш">
  <figcaption><strong>Рис. 7.</strong> Неправильний критерій тип не обов’язково викликає помилка програми. Він може тихо змінити напрям переваги й породити переконливий, але предметно хибний ранжування.</figcaption>
 </figure>
 
@@ -1249,7 +1249,7 @@ NaN,\quad +\infty,\quad -\infty.
 
 ---
 
-## Поглиблення: повна baseline-матриця після нормалізації
+## Поглиблення: повна базовий сценарій-матриця після нормалізації
 
 Нормалізацію корисно бачити не лише у формулі, а як повну таблицю.
 
@@ -1558,7 +1558,7 @@ WSM лідер — B.
 Наприклад:
 
 \[
-w_{cost},
+w_{витрати},
 \quad
 w_{reliability}.
 \]
@@ -1891,7 +1891,7 @@ w^{(2)}
 
 ### сценарій C — збалансований
 
-Baseline-like ваги.
+базовий сценарій-like ваги.
 
 Потім порівнюємо:
 

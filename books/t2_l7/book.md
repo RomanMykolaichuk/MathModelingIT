@@ -1,4 +1,4 @@
-# MathModelingIT · Мінікнига T2.L7
+# MathмодельingIT · Мінікнига T2.L7
 
 ## Використання систем комп’ютерної математики в наукових дослідженнях
 
@@ -11,7 +11,7 @@
 ## 0. Паспорт книги
 
 **Код заняття:** T2.L7 
-**Тип:** інтеграційний mini-research проєкт 
+**Тип:** інтеграційний мінідослідження проєкт 
 **Рівень:** підвищений 
 **Орієнтовний час читання:** 80–95 хвилин.
 
@@ -67,7 +67,7 @@ RMSE\approx1.48.
 Саме цим T2.L7 відрізняється від простого крива fitting.
 
 <figure>
- <img src="figures/fig_01_research_workflow.svg" alt="Повний research workflow">
+ <img src="figures/fig_01_дослідження_процес.svg" alt="Повний дослідницький процес">
  <figcaption><strong>Рис. 1.</strong> T2.L7 з’єднує всі попередні теми в один дослідницький робочий процес: питання, дані, калібрування, ПЕРЕВІРКА, чутливість, невизначеність, метадані та висновок.</figcaption>
 </figure>
 
@@ -262,7 +262,7 @@ RMSE\approx1.4821542085.
 ці узгоджуються близько з синтетичний генерувальний масштаб \(q\approx12,k\approx0.1\).
 
 <figure>
- <img src="figures/fig_02_calibration_fit.svg" alt="Calibration fit">
+ <img src="figures/fig_02_калібрування_fit.svg" alt="якість калібрування">
  <figcaption><strong>Рис. 2.</strong> калібрування мінімізує нев’язки між шумний спостереження і аналітичний траєкторія. візуально близький підгонка є докази про якість підгонки, не доказ модель істина.</figcaption>
 </figure>
 
@@ -538,7 +538,7 @@ e_{max}<10^{-6}.
 експеримент зазвичай obtains похибка близько \(10^{-9}\).
 
 <figure>
- <img src="figures/fig_03_verification.svg" alt="Analytical versus numerical verification">
+ <img src="figures/fig_03_перевірка.svg" alt="порівняння аналітичної та чисельної перевірки">
  <figcaption><strong>Рис. 3.</strong> незалежний solve_ivp verifies чисельний узгодженість відкалібрований аналітичний траєкторія. збіг підтримує реалізація, не емпіричний адекватність.</figcaption>
 </figure>
 
@@ -622,8 +622,8 @@ S^*=\frac qk
 > повний невизначеність система.
 
 <figure>
- <img src="figures/fig_04_sensitivity.svg" alt="Sensitivity to q">
- <figcaption><strong>Рис. 4.</strong> q-sensitivity ставить контрольоване “що якщо?” питання: зростає поповнення підвищує Стан на горизонті і зазвичай зменшує час до поріг.</figcaption>
+ <img src="figures/fig_04_чутливість.svg" alt="чутливість to q">
+ <figcaption><strong>Рис. 4.</strong> q-чутливість ставить контрольоване “що якщо?” питання: зростає поповнення підвищує Стан на горизонті і зазвичай зменшує час до поріг.</figcaption>
 </figure>
 
 ---
@@ -757,7 +757,7 @@ P_{97.5}
  точка lies всередині бутстреп-інтервал.
 
 <figure>
- <img src="figures/fig_05_bootstrap.svg" alt="Bootstrap threshold distribution">
+ <img src="figures/fig_05_bootstrap.svg" alt="бутстреп-розподіл порогового значення">
  <figcaption><strong>Рис. 5.</strong> Бутстреп за нев’язками формує розподіл повторно відкаліброваних прогнозів часу до порогу. інтервал є умовний на Нев’язка-resampling і припущення моделі.</figcaption>
 </figure>
 
@@ -859,7 +859,7 @@ t_{threshold}=\infty.
 
 ## 38. стійкий підсумок
 
-quantile_summary reports:
+quantile_підсумок reports:
 
 - умовне середнє;
 - умовна медіана;
@@ -908,7 +908,7 @@ finite\_share=1.0.
 
 ## 40. конфігурація фіксує науковий задум
 
-experiment_config stores:
+експеримент_config stores:
 
 - Дослідницьке питання;
 - гіпотеза;
@@ -953,7 +953,7 @@ t2_l7_92787dfc5ccd
 
 ## 43. метадані
 
-experiment.py stores:
+експеримент.py stores:
 
 - експеримент ID;
 - модель;
@@ -966,11 +966,11 @@ experiment.py stores:
 
 результати включати:
 
-- calibration_summary.csv;
-- scenario_results.csv;
+- калібрування_підсумок.csv;
+- scenario_результатs.csv;
 - bootstrap_predictions.csv;
-- summary.csv;
-- metadata.json;
+- підсумок.csv;
+- метадані.json;
 - рисунки.
 
 ---
@@ -1083,7 +1083,7 @@ Supported:
 
 T2.L7 забезпечує сильний ПЕРЕВІРКА.
 
-Real-data валідація залишається майбутнє робота.
+Real-дані валідація залишається майбутнє робота.
 
 ---
 
@@ -1131,7 +1131,7 @@ threshold>S^*,
 
 ## 54. злам: невдалий початковий параметри
 
-нелінійний метод найменших квадратів може бути чутливий до ініціалізації у складніших problems.
+нелінійний метод найменших квадратів може бути чутливий до ініціалізації у складніших задачаs.
 
 тест кілька початкові точки якщо ландшафт невизначені.
 
@@ -1344,7 +1344,7 @@ Allowed scientific claim:
 ## 66. піраміда доказовості дослідження
 
 <figure>
- <img src="figures/fig_07_evidence_pyramid.svg" alt="Research evidence pyramid">
+ <img src="figures/fig_07_evidence_pyramid.svg" alt="дослідження піраміда доказів">
  <figcaption><strong>Рис. 7.</strong> підігнана крива є лише нижній шар. сильнішого докази додає ПЕРЕВІРКА, чутливість, невизначеність, ВІДТВОРЮВАНІСТЬ і external/предметна область валідація.</figcaption>
 </figure>
 
@@ -1435,7 +1435,7 @@ finite\_share=
 
 ### Наступний крок
 
-відтворити експеримент ID, калібрування, ПЕРЕВІРКА, q-sensitivity і бутстреп до зміною будь-який припущення.
+відтворити експеримент ID, калібрування, ПЕРЕВІРКА, q-чутливість і бутстреп до зміною будь-який припущення.
 
 <figure>
  <img src="figures/fig_08_claim_boundary.svg" alt="Boundary of scientific claim">
