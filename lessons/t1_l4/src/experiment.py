@@ -23,12 +23,12 @@ def run_all(output_dir: str | Path = "../outputs"):
     ranking = weighted_sum_decision()
 
     summary = pd.DataFrame([
-        {"case": "A", "method": "numerical root", "tool": "SciPy", "result": num_root},
-        {"case": "B", "method": "symbolic", "tool": "SymPy", "result": str(sym_roots)},
-        {"case": "C", "method": "linear optimization", "tool": "SciPy linprog", "result": lp["objective"]},
-        {"case": "D", "method": "Monte Carlo", "tool": "NumPy", "result": risk},
-        {"case": "E", "method": "network", "tool": "NetworkX", "result": f"{path}; length={length}"},
-        {"case": "F", "method": "MCDA weighted sum", "tool": "pandas/NumPy", "result": ranking.iloc[0]["alternative"]},
+        {"case": "A", "method": "чисельне знаходження кореня", "tool": "SciPy", "result": num_root},
+        {"case": "B", "method": "символьний метод", "tool": "SymPy", "result": str(sym_roots)},
+        {"case": "C", "method": "лінійна оптимізація", "tool": "SciPy linprog", "result": lp["objective"]},
+        {"case": "D", "method": "Монте-Карло", "tool": "NumPy", "result": risk},
+        {"case": "E", "method": "мережевий метод", "tool": "NetworkX", "result": f"{path}; довжина={length}"},
+        {"case": "F", "method": "зважена сума MCDA", "tool": "pandas/NumPy", "result": ranking.iloc[0]["alternative"]},
     ])
     summary.to_csv(output_dir / "method_comparison.csv", index=False)
     ranking.to_csv(output_dir / "mcda_ranking.csv", index=False)
@@ -38,4 +38,4 @@ def run_all(output_dir: str | Path = "../outputs"):
 if __name__ == "__main__":
     summary, ranking = run_all()
     print(summary.to_string(index=False))
-    print("\nMCDA ranking:\n", ranking.to_string(index=False))
+    print("\nРанжування MCDA:\n", ranking.to_string(index=False))
