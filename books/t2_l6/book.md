@@ -183,7 +183,7 @@ S^*=\frac{12}{0.1}=120.
 
 ## 5. чому рівновага має значення
 
-рівновага є не лише алгебраїчний intermediate.
+рівновага є не лише алгебраїчний проміжні результати.
 
 це answers:
 
@@ -336,7 +336,7 @@ S(10)\approx83.2121.
 
 <figure>
  <img src="figures/fig_03_baseline_trajectory.svg" alt="Baseline trajectory toward equilibrium">
- <figcaption><strong>Рис. 3.</strong> базовий стан початкові точки у 20 і monotonically approaches рівновага 120. у \(t=10\), \(S\approx83.2121\).</figcaption>
+ <figcaption><strong>Рис. 3.</strong> базовий стан початкові точки у 20 і монотонно наближається до рівновага 120. у \(t=10\), \(S\approx83.2121\).</figcaption>
 </figure>
 
 ---
@@ -361,7 +361,7 @@ ode = sp.Eq(
 )
 ~~~
 
-це code mirrors notation.
+це код повторює позначення.
 
 ---
 
@@ -411,7 +411,7 @@ S_{eq}=\frac{q}{k}.
 
 Take кандидат розв’язок \(S_c(t)\).
 
-Compute residual:
+Compute Нев’язка:
 
 \[
 R(t)=
@@ -438,12 +438,12 @@ assert residual == 0
 
 <figure>
  <img src="figures/fig_04_residual_verification.svg" alt="Symbolic residual verification">
- <figcaption><strong>Рис. 4.</strong> Residual перевірка verifies рівняння structurally для символьний параметри, не лише у кілька чисельний точки.</figcaption>
+ <figcaption><strong>Рис. 4.</strong> Нев’язка перевірка verifies рівняння structurally для символьний параметри, не лише у кілька чисельний точки.</figcaption>
 </figure>
 
 ---
 
-## 14. чому residual перевірка сильнішого ніж точкові перевірки
+## 14. чому Нев’язка перевірка сильнішого ніж точкові перевірки
 
 припустімо ми тест:
 
@@ -451,7 +451,7 @@ assert residual == 0
 t=0,5,10.
 \]
 
-кандидат matches three точки.
+кандидат збігається three точки.
 
 може усе ще бути неправильний elsewhere.
 
@@ -469,7 +469,7 @@ R(t)\equiv0
 
 ## 15. але символьна нев’язка робить не validate реальний модель
 
-Residual нуль доводить:
+Нев’язка нуль доводить:
 
 > формула solves рівняння.
 
@@ -514,7 +514,7 @@ S^*=\frac{q}{k}.
 
 ---
 
-## 17. Interpreting \(\partial S^*/\partial q\)
+## 17. Інтерпретація \(\partial S^*/\partial q\)
 
 \[
 \frac{1}{k}>0.
@@ -536,7 +536,7 @@ Locally, +1 у q зміни рівновага за допомогою +10.
 
 ---
 
-## 18. Interpreting \(\partial S^*/\partial k\)
+## 18. Інтерпретація \(\partial S^*/\partial k\)
 
 \[
 -\frac{q}{k^2}<0.
@@ -1007,7 +1007,7 @@ SymPy helps ask:
 
 ## 37. символьний вираз зростання
 
-не кожен модель yields елегантна closed форма.
+не кожен модель yields елегантна закритий форма.
 
 для нелінійний або coupled системи SymPy може:
 
@@ -1022,13 +1022,13 @@ SymPy helps ask:
 
 ---
 
-## 38. чисельний методи є не second-class
+## 38. чисельний методи є не другорядними
 
 якщо символьний розв’язок недоступний, solve_ivp може усе ще бути правильний інструмент.
 
  goal є не:
 
-> завжди find closed форма.
+> завжди find закритий форма.
 
  goal:
 
@@ -1092,7 +1092,7 @@ undefined.
 S=S_0+qt.
 \]
 
-So k=0 є не impossible process.
+So k=0 є не неможливий процес.
 
 це є поза поточний формула branch.
 
@@ -1112,7 +1112,7 @@ q=q(t).
 \frac{dS}{dt}=q(t)-kS.
 \]
 
-Closed форма може усе ще exist для простий q(t), але базовий формула ні longer valid.
+закритий форма може усе ще exist для простий q(t), але базовий формула ні longer валідний.
 
 Need re-derive.
 
@@ -1174,14 +1174,14 @@ S>S_c.
 
 <figure>
  <img src="figures/fig_07_verification_hierarchy.svg" alt="Verification hierarchy">
- <figcaption><strong>Рис. 7.</strong> математичний derivation, residual перевірка, lambdify збіг і solve_ivp збіг перевірити computation у різний levels; предметна область адекватність залишається окремий питання.</figcaption>
+ <figcaption><strong>Рис. 7.</strong> математичний derivation, Нев’язка перевірка, lambdify збіг і solve_ivp збіг перевірити computation у різний рівні; предметна область адекватність залишається окремий питання.</figcaption>
 </figure>
 
-Levels:
+рівні:
 
 1. formulate ODE;
 2. derive розв’язок;
-3. residual=0;
+3. Нев’язка=0;
 4. початкова умова;
 5. lambdify збіг;
 6. solve_ivp збіг;
@@ -1292,14 +1292,14 @@ Think до computation.
 
 ---
 
-## 52. k affects two mechanisms
+## 52. k впливає на два механізми
 
 зростає \(k\):
 
 - lowers \(S^*=q/k\);
 - робить exponent \(e^{-kt}\) спад faster.
 
-ці effects може pull finite-Стан на горизонті у nontrivial ways через різний initial conditions.
+ці effects може pull finite-Стан на горизонті у нетривіальним чином через різний початкові умови.
 
 базовий обидва підтримувати lower S(10).
 
@@ -1447,7 +1447,7 @@ e^{-kt}
 - підсумок;
 - code коміт.
 
-тоді збіг може бути rebuilt.
+тоді збіг може бути перебудований.
 
 ---
 
@@ -1471,7 +1471,7 @@ atol=10^{-12}.
 
 ---
 
-## 61. похибка поріг vs точний equality
+## 61. похибка поріг vs точний рівність
 
 робити не assert:
 
@@ -1507,7 +1507,7 @@ e_{max}<10^{-6}.
 
 ## 63. символьний спрощення hazards
 
-Equivalent expressions може look різний.
+Еквівалентні вирази може look різний.
 
 приклад:
 
@@ -1525,7 +1525,7 @@ String порівняння є weak.
 sp.simplify(expr_1-expr_2)==0.
 \]
 
-це перевірки equivalence structurally.
+це перевірки структурну еквівалентність.
 
 ---
 
@@ -1534,12 +1534,12 @@ sp.simplify(expr_1-expr_2)==0.
 ### символьний аудит
 
 - припущення явний?
-- residual нуль?
+- Нев’язка нуль?
 - початкова умова?
 
 ### чисельний аудит
 
-- час сітка valid?
+- час сітка валідний?
 - розв’язувач успіх?
 - допуск adequate?
 - max похибка?
@@ -1547,11 +1547,11 @@ sp.simplify(expr_1-expr_2)==0.
 ### чутливість аудит
 
 - параметр діапазон meaningful?
-- trend explained за допомогою formulas?
+- тренд пояснено за допомогою formulas?
 
 ### науковий аудит
 
-- q/k meanings justified?
+- q/k зміст обґрунтовано?
 - сталий коефіцієнти правдоподібну?
 - лінійний втрати adequate?
 
@@ -1565,7 +1565,7 @@ Imagine \(S(t)\) як abstract readiness-support стан у training модел
 
 \(kS\) — синтетичний пропорційні втрати.
 
-ні фактичний readiness показник, logistics запас або операційний коефіцієнт є implied.
+ні фактичний readiness показник, logistics запас або операційний коефіцієнт є передбачається.
 
  purpose є математичний структура лише.
 
@@ -1621,7 +1621,7 @@ Allowed conclusion:
 \frac{dY}{dt}=a-bY.
 \]
 
-Symbolically derive:
+Символьно виведіть:
 
 - рівновага;
 - перехідний;
@@ -1643,7 +1643,7 @@ Symbolically derive:
 - алгебраїчний рівновага;
 - точний похідні;
 - параметр relations;
-- transformations;
+- перетворень;
 - asymptotic аналіз.
 
 ---
@@ -1653,8 +1653,8 @@ Symbolically derive:
 - нелінійний coupled системи;
 - time-varying коефіцієнти;
 - discontinuities;
-- ні closed форма;
-- великий стан dimension;
+- ні закритий форма;
+- великий стан вимір;
 - на основі даних моделювання.
 
 ---
@@ -1663,10 +1663,10 @@ Symbolically derive:
 
 <figure>
  <img src="figures/fig_08_hybrid_method_map.svg" alt="Hybrid symbolic-numeric method map">
- <figcaption><strong>Рис. 8.</strong> символьний і чисельний методи є complementary: символьний reasoning exposes структура, чисельний computation explores cases де closed форма є недоступний або inconvenient.</figcaption>
+ <figcaption><strong>Рис. 8.</strong> символьний і чисельний методи є взаємодоповнювальними: символьний reasoning exposes структура, чисельний обчислення досліджує випадки де закритий форма є недоступний або незручною.</figcaption>
 </figure>
 
-найкращий practice:
+найкращий практики:
 
 \[
 Symbolic
@@ -1686,13 +1686,13 @@ Numerical
 
 формула може розв’язання неправильний рівняння.
 
-### «Residual нуль → реальний система валідовану»
+### «Нев’язка нуль → реальний система валідовану»
 
 ні.
 
 лише рівняння ПЕРЕВІРКА.
 
-### «solve_ivp matches → two незалежний істини»
+### «solve_ivp збігається → two незалежний істини»
 
 вони частка той самий припущення моделі.
 
@@ -1716,20 +1716,20 @@ Reporting точність необхідно відображати дані/м
 
 > для синтетичний ODE \(dS/dt=q-kS\) з \(q=12,k=0.1,S_0=20\), символьний розв’язок дає рівновага 120, \(S(10)\approx83.2121\), накопичений стан над [0,10] ≈567.8794 і Час досягнення порогу до 80 ≈9.1629. символьна нев’язка є точно нуль, і незалежний solve_ivp траєкторія agrees з Аналітичний розв’язок у межах \(10^{-6}\) на tested сітка.
 
-тоді limitation:
+тоді обмеження:
 
 > ці перевірки перевірити математичний/обчислювальний реалізація, не адекватність сталий приплив і proportional-loss припущення для реальний система.
 
 ---
 
-## 73. Від мінікнига до practice
+## 73. Від мінікнига до практики
 
 практичний послідовність:
 
 1. визначити symbols;
 2. write ODE;
 3. derive розв’язок;
-4. residual перевірка;
+4. Нев’язка перевірка;
 5. рівновага;
 6. чутливість похідні;
 7. integral;
@@ -1775,7 +1775,7 @@ ODE:
 \frac{q}{k}
 \]
 
-має одиницях \(S\), як required для рівновага.
+має одиницях \(S\), як потрібний для рівновага.
 
 це простий перевірка catches багато формулювання похибки до будь-який CAS працювати.
 
@@ -1815,7 +1815,7 @@ s(\tau)=1+(s_0-1)e^{-\tau}.
 
 різний \(q,k\) cases є масштабовані версії той самий нормалізований process.
 
-символьний інструменти допомагають expose такий simplifications.
+символьний інструменти допомагають expose такий спрощення.
 
 ---
 
@@ -2039,7 +2039,7 @@ A(T)=\int_0^T S(t)\,dt.
 
 ## Поглиблення: Аналітичний розв’язок як еталон
 
-коли closed форма exists, це provides excellent еталон для чисельний розв’язувач.
+коли закритий форма exists, це provides excellent еталон для чисельний розв’язувач.
 
 це є rare privilege.
 
@@ -2050,7 +2050,7 @@ A(T)=\int_0^T S(t)\,dt.
 - interpolation;
 - реалізація.
 
-тоді пізніше, для модель з ні closed форма, ви вже trust чисельний pipeline більше.
+тоді пізніше, для модель з ні закритий форма, ви вже trust чисельний pipeline більше.
 
 ---
 
@@ -2113,7 +2113,7 @@ solve_ivp внутрішньо chooses адаптивні кроки.
 - slow до оцінювати;
 - чисельно unstable.
 
- closed форма є не автоматично найкращий обчислювальний представлення.
+ закритий форма є не автоматично найкращий обчислювальний представлення.
 
 інколи чисельний розв’язок є більше корисний і reliable.
 
@@ -2121,7 +2121,7 @@ solve_ivp внутрішньо chooses адаптивні кроки.
 
 ## Поглиблення: катастрофічна втрата точності
 
-Two algebraically equivalent expressions може поводитися differently чисельно.
+Two algebraically Еквівалентні вирази може поводитися differently чисельно.
 
 для дуже малий \(kt\), вираз:
 
@@ -2185,7 +2185,7 @@ SymPy розрізняє:
 sp.dsolve(ode)
 ~~~
 
-але course модель constructs відомий closed форма безпосередньо після висновок рівновага.
+але course модель constructs відомий закритий форма безпосередньо після висновок рівновага.
 
 чому?
 
@@ -2201,9 +2201,9 @@ CAS слід підтримувати thinking, не замінює це.
 
 ---
 
-## Поглиблення: residual як reusable шаблон
+## Поглиблення: Нев’язка як reusable шаблон
 
-Residual ПЕРЕВІРКА generalizes.
+Нев’язка ПЕРЕВІРКА generalizes.
 
 для алгебраїчний рівняння:
 
@@ -2229,7 +2229,7 @@ R=\mathcal L(u)-f.
 g(x)\le0.
 \]
 
-Residual thinking є універсальний ПЕРЕВІРКА звичку.
+Нев’язка thinking є універсальний ПЕРЕВІРКА звичку.
 
 ---
 
@@ -2368,7 +2368,7 @@ Neither universally replaces інший.
 
 ---
 
-## Поглиблення: break-the-model checklist
+## Поглиблення: break-the-model контрольний список
 
 Ask:
 
@@ -2388,7 +2388,7 @@ Ask:
 
 ## Поглиблення: research-safe військовий приклад
 
-один може describe \(S(t)\) як синтетичний training-support indicator.
+один може describe \(S(t)\) як синтетичний training-support показник.
 
 робити не map q, k, S0 до фактичний операційний capacities без дозволені дані і предметна область justification.
 
@@ -2504,7 +2504,7 @@ tells us early-time дані contain інформація про \(k\).
 - символьний похідна;
 - параметр sweep.
 
-це combination appears repeatedly у good modeling practice.
+це combination appears repeatedly у good modeling практики.
 
 ---
 
@@ -2552,7 +2552,7 @@ k\rightarrow\infty
 k\rightarrow0^+,
 \]
 
-поточний closed-form вираз має terms що look singular, але границя corresponds до linear-growth ODE.
+поточний закритий-form вираз має terms що look singular, але границя corresponds до linear-growth ODE.
 
 границя аналіз може expose альтернатива branches.
 
@@ -2566,7 +2566,7 @@ Original ODE з k=0:
 S=S_0+qt.
 \]
 
- символьний границя closed-form вираз може recover це.
+ символьний границя закритий-form вираз може recover це.
 
 це є сильний узгодженість перевірка і good CAS exercise.
 
@@ -2591,7 +2591,7 @@ S(t)\approx
 S_0+(q-kS_0)t.
 \]
 
-що matches initial похідна з ODE.
+що збігається initial похідна з ODE.
 
 інший символьний узгодженість перевірка.
 
@@ -2674,7 +2674,7 @@ T2.L6 scalar випадок є foundation.
 
 ---
 
-## Поглиблення: виявлення події натомість closed-form поріг
+## Поглиблення: виявлення події натомість закритий-form поріг
 
 для complex ODE де поріг формула недоступний, solve_ivp може detect подія:
 
@@ -2716,7 +2716,7 @@ Similarly порівнювати:
 
 | Quantity | символьний | прямий NumPy | SciPy |
 |---|---|---|---|
-| S(t) | closed форма | analytical_solution | solve_ivp |
+| S(t) | закритий форма | analytical_solution | solve_ivp |
 | integral | integrate | cumulative_state | quadrature |
 | поріг | розв’язання algebra | threshold_time | виявлення події |
 | чутливість | diff | скінченний різниця | сценарій sweep |
@@ -2755,7 +2755,7 @@ dS^*/dk=-q/k^2.
 
 - floating-point втрата точності.
 
-це є classic чисельний аналіз trade-off.
+це є classic чисельний аналіз компроміс.
 
 CAS похідна уникає скінченно-різницевий approximation коли точний вираз доступний.
 
@@ -2818,7 +2818,7 @@ simplify(expr_1-expr_2)=0
 
 1. derive symbolically;
 2. simplify;
-3. residual перевірка;
+3. Нев’язка перевірка;
 4. render LaTeX;
 5. порівнювати notation з manuscript.
 
@@ -2831,7 +2831,7 @@ simplify(expr_1-expr_2)=0
 ### П’ять головних ідей
 
 1. CAS exposes математичний структура.
-2. Residual нуль verifies символьний розв’язок.
+2. Нев’язка нуль verifies символьний розв’язок.
 3. Lambdify bridges символьний і чисельний представлення.
 4. solve_ivp provides незалежний чисельний ПЕРЕВІРКА.
 5. ПЕРЕВІРКА рівняння є не валідація реальний припущення.
@@ -2863,7 +2863,7 @@ S(t)=S^*+(S_0-S^*)e^{-kt}.
 
 ### Наступний крок
 
-Reproduce базовий, перевірити residual, порівнювати solve_ivp і запуск k-sensitivity.
+Reproduce базовий, перевірити Нев’язка, порівнювати solve_ivp і запуск k-sensitivity.
 
 ---
 
