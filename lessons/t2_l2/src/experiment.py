@@ -1,4 +1,4 @@
-"""Reproducible scenario experiment for T2.L2."""
+"""Відтворюваний сценарний експеримент для T2.L2."""
 
 from __future__ import annotations
 
@@ -46,7 +46,7 @@ def run_scenarios():
 
     scipy_baseline = solve_transport_scipy(costs, supply, demand)
     if abs(scipy_baseline.total_cost - baseline.total_cost) > 1e-6:
-        raise RuntimeError("PuLP and SciPy disagree on the baseline optimum.")
+        raise RuntimeError("PuLP і SciPy дають різні значення базового оптимуму.")
 
     record("close_S2_D3", costs, supply, demand, forbidden=[("S2", "D3")])
 
